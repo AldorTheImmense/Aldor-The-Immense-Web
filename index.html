@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aldor The Immense</title>
+  <link rel="icon" href="assets/AldorIcon.ico">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="title-row">
+      <img src="assets/AldorIcon.ico" alt="" class="app-icon">
+      <h1>Aldor The Immense</h1>
+    </div>
+    <nav class="tabs" aria-label="App sections">
+      <button class="tab active" data-tab="shop">Shop</button>
+      <button class="tab" data-tab="tables">Random Tables</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="shop" class="panel active-panel" aria-labelledby="shop-tab">
+      <div class="toolbar">
+        <button id="generateShop" class="primary">Generate Shop</button>
+        <button id="clearInventory">Clear Inventory</button>
+        <button id="editInventory">Edit Shop Inventory</button>
+      </div>
+
+      <div class="shop-layout">
+        <div class="shop-lists">
+          <section class="shop-section">
+            <div class="section-header">
+              <h2>Potions of Healing</h2>
+              <button id="regenPotions">Regenerate</button>
+            </div>
+            <ul id="potionsList" class="item-list"></ul>
+          </section>
+
+          <section class="shop-section">
+            <div class="section-header">
+              <h2>Scrolls</h2>
+              <button id="regenScrolls">Regenerate</button>
+            </div>
+            <ul id="scrollsList" class="item-list"></ul>
+          </section>
+
+          <section class="shop-section">
+            <div class="section-header">
+              <h2>Uncommon Items</h2>
+              <button id="regenUncommon">Regenerate</button>
+            </div>
+            <ul id="uncommonList" class="item-list"></ul>
+          </section>
+
+          <section class="shop-section">
+            <div class="section-header">
+              <h2>Rare Item</h2>
+              <button id="regenRare">Regenerate</button>
+            </div>
+            <ul id="rareList" class="item-list"></ul>
+          </section>
+
+          <p class="note">Double-click an item to remove one from the store as sold.</p>
+        </div>
+
+        <aside class="aldor-art" aria-label="Aldor artwork">
+          <img src="assets/aldor-the-immense.png" alt="Aldor the Immense in his shop">
+        </aside>
+      </div>
+    </section>
+
+    <section id="tables" class="panel" aria-labelledby="tables-tab">
+      <div class="tables-grid">
+        <section class="card">
+          <h2>Delerium Generation</h2>
+          <label class="check-row">
+            <input type="checkbox" id="outerCityCheck" checked>
+            <span>Outer City <span class="muted">(uncheck for Inner City)</span></span>
+          </label>
+          <label class="field-row">
+            <span>Successes</span>
+            <input id="successes" type="number" min="0" max="6" inputmode="numeric">
+          </label>
+          <button id="generateDelerium">Generate Delerium</button>
+          <pre id="deleriumOutput" class="output"></pre>
+        </section>
+
+        <section class="card compact-card">
+          <h2>Lucky Finds</h2>
+          <button id="generateLuckyFind">Generate Lucky Find</button>
+          <p id="luckyFindOutput" class="output-line"></p>
+        </section>
+
+        <section class="card compact-card">
+          <h2>Warped Ruins</h2>
+          <button id="generateWarpedRuin">Generate Warped Ruin</button>
+          <p id="warpedRuinOutput" class="output-line"></p>
+        </section>
+
+        <section class="card compact-card">
+          <h2>Common Locations</h2>
+          <button id="generateCommonLocation">Generate Common Location</button>
+          <p id="locationOutput" class="output-line"></p>
+        </section>
+
+        <section class="card encounter-card">
+          <h2>Random Encounters</h2>
+          <fieldset class="radio-row">
+            <legend>Encounter table</legend>
+            <label><input type="radio" name="encounterTable" value="outerCity" checked> Outer City</label>
+            <label><input type="radio" name="encounterTable" value="sewers"> Sewers</label>
+            <label><input type="radio" name="encounterTable" value="innerCity"> Inner City</label>
+          </fieldset>
+          <button id="generateEncounter">Generate Encounter</button>
+          <h3>Encounter Result:</h3>
+          <p id="encounterOutput" class="output-line"></p>
+          <div id="encounterDescription" class="description-output"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="inventoryDialog" class="inventory-dialog">
+    <form method="dialog" id="inventoryForm">
+      <div class="dialog-header">
+        <h2>Edit Inventory</h2>
+        <button value="close" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <div class="editor-grid">
+        <div>
+          <label class="field-stack">
+            <span>Inventory list</span>
+            <select id="inventoryType">
+              <option value="uncommon">Uncommon Items</option>
+              <option value="rare">Rare Items</option>
+            </select>
+          </label>
+          <select id="inventoryList" size="18" multiple></select>
+        </div>
+        <div class="editor-actions">
+          <button type="button" id="removeSelected">Remove Selected</button>
+          <button type="button" id="resetLists">Reset Lists to Defaults</button>
+        </div>
+      </div>
+      <div class="add-row">
+        <input id="newInventoryItem" type="text" placeholder="New item name">
+        <button type="button" id="addInventoryItem">Add</button>
+      </div>
+      <div class="dialog-actions">
+        <button id="saveInventory" value="save" class="primary">Save and Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
