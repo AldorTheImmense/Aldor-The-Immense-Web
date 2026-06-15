@@ -1254,8 +1254,6 @@ function renderList(elementId, listName) {
 
   items.forEach((item, index) => {
     const li = document.createElement("li");
-    li.title = "Double-click to remove one from the store";
-    li.addEventListener("dblclick", () => removeSoldItem(listName, index));
 
     const text = document.createElement("span");
     text.textContent = formatItem(item);
@@ -1419,7 +1417,8 @@ function generateOuterCityDelerium(successes) {
   if (successes >= 3) rewards.push(`${rollDice(3, 6)} delerium chips worth 10 gp each`);
   if (successes >= 4) rewards.push(`${rollDice(1, 6)} delerium fragments worth 100 gp each`);
   if (successes >= 5) rewards.push("1 delerium shard worth 500 gp");
-  return rewards.length ? rewards.join("\n") : "Nothing";
+  return rewards.length ? rewards.join("
+") : "Nothing";
 }
 
 function generateInnerCityDelerium(successes) {
@@ -1429,7 +1428,8 @@ function generateInnerCityDelerium(successes) {
   if (successes >= 3) rewards.push(`${rollDice(2, 6)} delerium fragments worth 100 gp each`);
   if (successes >= 4) rewards.push(`${rollDice(1, 6)} delerium shards worth 500 gp each`);
   if (successes >= 5) rewards.push("1 delerium crystal worth 1,000 gp");
-  return rewards.length ? rewards.join("\n") : "Nothing";
+  return rewards.length ? rewards.join("
+") : "Nothing";
 }
 
 function generateDelerium() {
@@ -1453,7 +1453,9 @@ function generateDelerium() {
   }
   const isOuter = byId("outerCityCheck").checked;
   const result = isOuter ? generateOuterCityDelerium(successes) : generateInnerCityDelerium(successes);
-  byId("deleriumOutput").textContent = `Result for ${isOuter ? "Outer" : "Inner"} City with ${successes} successes:\n\n${result}`;
+  byId("deleriumOutput").textContent = `Result for ${isOuter ? "Outer" : "Inner"} City with ${successes} successes:
+
+${result}`;
 }
 
 function selectedEncounterTable() {
@@ -1497,7 +1499,8 @@ function generateEncounter() {
       "",
       `2) ${encounterDisplayText(second)}`,
       getEncounterDescription(second.name)
-    ].join("\n");
+    ].join("
+");
   } else {
     byId("encounterDescription").textContent = getEncounterDescription(encounter.name);
   }
@@ -1516,8 +1519,8 @@ function generateWarpedRuin() {
 function generateLuckyFind() {
   const roll = Math.floor(Math.random() * 20) + 1;
   let resultText = DEFAULT_DATA.luckyFinds[roll - 1];
-  resultText = resultText.replace(/\b(\d+)d(\d+)\b/g, (_match, dice, sides) => String(rollDice(Number(dice), Number(sides))));
-  resultText = resultText.replace(/\b(\d+)\s*x\s*(\d+)\b/g, (_match, left, right) => String(Number(left) * Number(right)));
+  resultText = resultText.replace(/(\d+)d(\d+)/g, (_match, dice, sides) => String(rollDice(Number(dice), Number(sides))));
+  resultText = resultText.replace(/(\d+)\s*x\s*(\d+)/g, (_match, left, right) => String(Number(left) * Number(right)));
   byId("luckyFindOutput").textContent = `Lucky Find: ${resultText}`;
 }
 
