@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense</title>
-  <link rel="icon" href="assets/AldorIcon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="assets/AldorIcon.ico" type="image/x-icon">
+  <link rel="icon" href="assets/AldorIcon.ico">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,6 +25,8 @@
         <button id="generateShop" class="primary">Generate Shop</button>
         <button id="clearInventory">Clear Inventory</button>
         <button id="editInventory">Edit Shop Inventory</button>
+        <button id="showSaveCode">Copy Save Code</button>
+        <button id="showLoadCode">Load Save Code</button>
       </div>
 
       <div class="shop-layout">
@@ -149,6 +151,36 @@
       </div>
       <div class="dialog-actions">
         <button id="saveInventory" value="save" class="primary">Save and Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="saveCodeDialog" class="code-dialog">
+    <form method="dialog">
+      <div class="dialog-header">
+        <h2>Save Code</h2>
+        <button value="close" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <p class="note">Copy this code somewhere safe. Paste it into Load Save Code on another browser or computer to restore this shop.</p>
+      <textarea id="saveCodeText" class="code-box" readonly spellcheck="false"></textarea>
+      <div class="dialog-actions">
+        <button type="button" id="copySaveCode" class="primary">Copy Code</button>
+        <button value="close">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="loadCodeDialog" class="code-dialog">
+    <form method="dialog">
+      <div class="dialog-header">
+        <h2>Load Save Code</h2>
+        <button value="close" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <p class="note">Paste a save code below. Loading it will replace the current shop inventory and custom item lists.</p>
+      <textarea id="loadCodeText" class="code-box" spellcheck="false" placeholder="Paste save code here"></textarea>
+      <div class="dialog-actions">
+        <button type="button" id="loadSaveCode" class="primary">Load Code</button>
+        <button value="close">Cancel</button>
       </div>
     </form>
   </dialog>

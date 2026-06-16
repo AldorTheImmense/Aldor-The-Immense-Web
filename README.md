@@ -21,3 +21,8 @@ Open `index.html` in a browser.
 4. Save, then wait for GitHub Pages to publish the site.
 
 The app saves generated shop state and edited item lists in the browser using `localStorage`. That means each user/browser keeps its own saved copy.
+
+
+## Save codes
+
+Use **Copy Save Code** to copy the current shop inventory and custom item lists. Use **Load Save Code** on another browser or computer to restore them.

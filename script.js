@@ -1317,6 +1317,118 @@ function loadInventoryLists() {
   }
 }
 
+
+function openDialog(dialog) {
+  if (typeof dialog.showModal === "function") dialog.showModal();
+  else dialog.setAttribute("open", "open");
+}
+
+function closeDialog(dialog) {
+  if (typeof dialog.close === "function") dialog.close();
+  else dialog.removeAttribute("open");
+}
+
+function encodeSavePayload(payload) {
+  const json = JSON.stringify(payload);
+  const bytes = new TextEncoder().encode(json);
+  let binary = "";
+  bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+  return btoa(binary);
+}
+
+function decodeSavePayload(code) {
+  const cleaned = String(code || "").trim().replace(/\s+/g, "");
+  const binary = atob(cleaned);
+  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
+
+function buildSavePayload() {
+  return {
+    app: "Aldor The Immense",
+    version: 1,
+    savedAt: new Date().toISOString(),
+    shop: {
+      potions: state.potions,
+      scrolls: state.scrolls,
+      uncommonShopItems: state.uncommonShopItems,
+      rareShopItem: state.rareShopItem
+    },
+    inventoryLists: {
+      uncommonItems: state.uncommonItems,
+      rareItems: state.rareItems
+    }
+  };
+}
+
+function arrayOrFallback(value, fallback) {
+  return Array.isArray(value) ? value : fallback;
+}
+
+function showSaveCodeDialog() {
+  const code = encodeSavePayload(buildSavePayload());
+  const textArea = byId("saveCodeText");
+  textArea.value = code;
+  openDialog(byId("saveCodeDialog"));
+  textArea.focus();
+  textArea.select();
+}
+
+async function copySaveCodeToClipboard() {
+  const textArea = byId("saveCodeText");
+  textArea.focus();
+  textArea.select();
+
+  try {
+    await navigator.clipboard.writeText(textArea.value);
+    alert("Save code copied.");
+  } catch (_error) {
+    const copied = document.execCommand("copy");
+    alert(copied ? "Save code copied." : "Copy failed. Select the code and copy it manually.");
+  }
+}
+
+function showLoadCodeDialog() {
+  const textArea = byId("loadCodeText");
+  textArea.value = "";
+  openDialog(byId("loadCodeDialog"));
+  textArea.focus();
+}
+
+function applySavePayload(payload) {
+  const shop = payload.shop || {};
+  const inventoryLists = payload.inventoryLists || {};
+
+  state.potions = clone(arrayOrFallback(shop.potions, []));
+  state.scrolls = clone(arrayOrFallback(shop.scrolls, []));
+  state.uncommonShopItems = clone(arrayOrFallback(shop.uncommonShopItems, []));
+  state.rareShopItem = clone(arrayOrFallback(shop.rareShopItem, []));
+
+  state.uncommonItems = clone(arrayOrFallback(inventoryLists.uncommonItems, state.uncommonItems));
+  state.rareItems = clone(arrayOrFallback(inventoryLists.rareItems, state.rareItems));
+
+  saveShop();
+  saveInventoryLists();
+  renderShop();
+}
+
+function loadSaveCodeFromTextarea() {
+  const rawCode = byId("loadCodeText").value;
+  if (!rawCode.trim()) {
+    alert("Paste a save code first.");
+    return;
+  }
+
+  try {
+    const payload = decodeSavePayload(rawCode);
+    applySavePayload(payload);
+    closeDialog(byId("loadCodeDialog"));
+    alert("Save code loaded.");
+  } catch (_error) {
+    alert("That save code could not be loaded. Make sure you copied the whole code.");
+  }
+}
+
 function getScrollPrice(spellName, basePrice) {
   const materialCost = DEFAULT_DATA.costlyMaterialComponentGp[spellName] || 0;
   return basePrice + (materialCost * 2);
@@ -1543,9 +1655,7 @@ function renderInventoryEditor() {
 
 function openInventoryDialog() {
   renderInventoryEditor();
-  const dialog = byId("inventoryDialog");
-  if (typeof dialog.showModal === "function") dialog.showModal();
-  else dialog.setAttribute("open", "open");
+  openDialog(byId("inventoryDialog"));
 }
 
 function addInventoryItem() {
@@ -1587,6 +1697,10 @@ function bindEvents() {
   byId("regenRare").addEventListener("click", () => { generateRare(); renderShop(); saveShop(); });
 
   byId("editInventory").addEventListener("click", openInventoryDialog);
+  byId("showSaveCode").addEventListener("click", showSaveCodeDialog);
+  byId("copySaveCode").addEventListener("click", copySaveCodeToClipboard);
+  byId("showLoadCode").addEventListener("click", showLoadCodeDialog);
+  byId("loadSaveCode").addEventListener("click", loadSaveCodeFromTextarea);
   byId("inventoryType").addEventListener("change", renderInventoryEditor);
   byId("addInventoryItem").addEventListener("click", addInventoryItem);
   byId("newInventoryItem").addEventListener("keydown", (event) => {
