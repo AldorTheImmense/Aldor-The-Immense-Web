@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.9
+
+- Removed the Shop / DM Tools tab row from the sticky header.
+- Kept the quick navigation row for Shop, Delerium, Encounters, and Other Tables.
+- Updated the footer version number.
+
 ## v2.0.8
 
 - Changed first-time shop loading so the shop inventory starts empty until Generate Shop is clicked.
