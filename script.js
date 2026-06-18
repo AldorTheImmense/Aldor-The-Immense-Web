@@ -2083,8 +2083,77 @@ const MONSTERS_OF_DRAKKENHEIM_DATA = {
 
 const STORAGE_KEYS = {
   shop: "aldor.shopState.v1",
-  inventory: "aldor.inventoryLists.v1"
+  inventory: "aldor.inventoryLists.v1",
+  theme: "aldor.theme.v1",
+  encounterHistory: "aldor.encounterHistory.v1"
 };
+
+const APP_VERSION = "2.0.3";
+
+const FACTION_LABELS = {
+  hoodedLanterns: "Hooded Lanterns",
+  queensMen: "Queen's Men",
+  silverOrder: "Silver Order",
+  amethystAcademy: "Amethyst Academy",
+  fallingFire: "Falling Fire",
+  rivalAdventurers: "Rival Adventurers"
+};
+
+const ENCOUNTER_FACTIONS = {
+  "hooded lantern patrol": "hoodedLanterns",
+  "hooded lantern elites": "hoodedLanterns",
+  "queen's men looters": "queensMen",
+  "queen’s men looters": "queensMen",
+  "sneaky stealers": "queensMen",
+  "questing knight": "silverOrder",
+  "silver inquisition": "silverOrder",
+  "academy surveyor": "amethystAcademy",
+  "academy headhunter": "amethystAcademy",
+  "renegade mage": "amethystAcademy",
+  "pilgrims of the fallen fire": "fallingFire",
+  "the sanctified": "fallingFire",
+  "rival adventurers": "rivalAdventurers"
+};
+
+const LOW_IMPACT_ENCOUNTERS = new Set([
+  "run out of town",
+  "uninvited guests",
+  "wrong turn",
+  "going in circles",
+  "horribly lost",
+  "wandered into the garden",
+  "princess petunia",
+  "friendly doctor",
+  "have we met before?",
+  "stranger who?",
+  "curious snake",
+  "visions of the past",
+  "delerious for delerium",
+  "a helping hand",
+  "unnerving invitation"
+]);
+
+const DEADLY_ENCOUNTER_PATTERNS = [
+  /lord of the feast/i,
+  /crimson countess/i,
+  /black coach/i,
+  /grotesque/i,
+  /predator/i,
+  /courtly graces/i,
+  /tank you very much/i,
+  /harbinger comet/i,
+  /breach on the threshold/i,
+  /liminal onslaught/i,
+  /deadly delivery/i,
+  /blood crusade/i,
+  /otherworldly and chaotic/i,
+  /failed ritual/i,
+  /bound by hatred/i,
+  /hundreds of tails/i
+];
+
+let lastEncounterState = null;
+let encounterHistory = [];
 
 const state = {
   potions: [],
@@ -2149,9 +2218,6 @@ function renderList(elementId, listName) {
 
   items.forEach((item, index) => {
     const li = document.createElement("li");
-    li.title = "Double-click to remove one from the store";
-    li.addEventListener("dblclick", () => removeSoldItem(listName, index));
-
     const text = document.createElement("span");
     text.textContent = formatItem(item);
 
@@ -2439,32 +2505,184 @@ function generateInnerCityDelerium(successes) {
   return rewards.length ? rewards.join("\n") : "Nothing";
 }
 
+function currentDeleriumArea() {
+  return byId("outerCityCheck").checked ? "outer" : "inner";
+}
+
+function currentDeleriumAreaName() {
+  return currentDeleriumArea() === "outer" ? "Outer City" : "Inner City";
+}
+
+function generateDeleriumReward(area, successes) {
+  return area === "outer" ? generateOuterCityDelerium(successes) : generateInnerCityDelerium(successes);
+}
+
+function parsePositiveIntegerInput(id, fallback = 0) {
+  const input = byId(id);
+  if (!input) return fallback;
+  const value = Number(String(input.value || "").trim());
+  return Number.isInteger(value) && value > 0 ? value : fallback;
+}
+
+function adjustedRequiredSuccesses(partySize) {
+  return Math.max(1, Math.round((3 * partySize) / 4));
+}
+
+function adjustedFailureThreshold(partySize) {
+  return Math.max(1, Math.round((2 * partySize) / 4));
+}
+
+function updatePartySizeGuidance() {
+  const partySize = parsePositiveIntegerInput("partySize", 4);
+  const successes = adjustedRequiredSuccesses(partySize);
+  const failures = adjustedFailureThreshold(partySize);
+  const characterText = `${partySize} character${partySize === 1 ? "" : "s"}`;
+  const successText = `${successes}+ success${successes === 1 ? "" : "es"}`;
+  const failureText = `${failures}+ failed check${failures === 1 ? "" : "s"}`;
+
+  const guidance = byId("partySizeGuidance");
+  if (guidance) {
+    guidance.textContent = `For ${characterText}: ${successText} finds or rules out the search objective; ${failureText} triggers a random encounter.`;
+  }
+
+  const deleriumPartyTargetNote = byId("deleriumPartyTargetNote");
+  if (deleriumPartyTargetNote) {
+    deleriumPartyTargetNote.textContent = `For ${characterText}, ${successText} means the party finds what they are looking for if it can be found in the search area; otherwise they conclusively rule it out.`;
+  }
+
+  const deleriumFailureNote = byId("deleriumFailureNote");
+  if (deleriumFailureNote) {
+    deleriumFailureNote.textContent = `For ${characterText}, ${failureText} while searching triggers a random encounter.`;
+  }
+
+  const encounterSearchTargetNote = byId("encounterSearchTargetNote");
+  if (encounterSearchTargetNote) {
+    encounterSearchTargetNote.textContent = `For ${characterText}, ${successText} means the party finds what they are looking for if it can be found in the search area; otherwise they conclusively rule it out.`;
+  }
+
+  const encounterFailureTargetNote = byId("encounterFailureTargetNote");
+  if (encounterFailureTargetNote) {
+    encounterFailureTargetNote.textContent = `${failureText} triggers a random encounter, but enough successes still means they find what they sought.`;
+  }
+}
+
 function generateDelerium() {
   const input = byId("successes");
   const raw = input.value.trim();
   if (raw === "") {
-    alert("Please input a number of successes between 0 and 6.");
+    alert("Please input a number of successes.");
     input.focus();
     return;
   }
   const successes = Number(raw);
-  if (!Number.isInteger(successes)) {
-    alert("Please input a valid number of successes between 0 and 6.");
+  if (!Number.isInteger(successes) || successes < 0) {
+    alert("Please input a valid number of successes, 0 or higher.");
     input.focus();
     return;
   }
-  if (successes < 0 || successes > 6) {
-    alert("Successes must be between 0 and 6.");
-    input.focus();
+  const area = currentDeleriumArea();
+  const result = generateDeleriumReward(area, successes);
+  const partySize = parsePositiveIntegerInput("partySize", 4);
+  byId("deleriumOutput").textContent = [
+    `Manual result for ${currentDeleriumAreaName()} with ${successes} success${successes === 1 ? "" : "es"}:`,
+    "",
+    result,
+    "",
+    `Party-size reminder: for ${partySize} character${partySize === 1 ? "" : "s"}, use about ${adjustedRequiredSuccesses(partySize)} required success${adjustedRequiredSuccesses(partySize) === 1 ? "" : "es"} and ${adjustedFailureThreshold(partySize)}+ failed check${adjustedFailureThreshold(partySize) === 1 ? "" : "s"} for a random encounter.`
+  ].join("\n");
+}
+
+function parseDeleriumCheckRolls() {
+  const raw = byId("deleriumCheckRolls").value.trim();
+  if (!raw) return [];
+  return raw
+    .split(/[\s,;]+/)
+    .map((value) => Number(value.trim()))
+    .filter((value) => Number.isFinite(value));
+}
+
+function calculateDeleriumSearch() {
+  const rolls = parseDeleriumCheckRolls();
+  if (!rolls.length) {
+    alert("Enter the characters' check results first.");
+    byId("deleriumCheckRolls").focus();
     return;
   }
-  const isOuter = byId("outerCityCheck").checked;
-  const result = isOuter ? generateOuterCityDelerium(successes) : generateInnerCityDelerium(successes);
-  byId("deleriumOutput").textContent = `Result for ${isOuter ? "Outer" : "Inner"} City with ${successes} successes:\n\n${result}`;
+
+  const dc = 15;
+  const partySize = parsePositiveIntegerInput("partySize", 4);
+  const requiredSuccesses = adjustedRequiredSuccesses(partySize);
+  const failureThreshold = adjustedFailureThreshold(partySize);
+  let successes = 0;
+  let failures = 0;
+  const rollLines = [];
+
+  rolls.forEach((roll, index) => {
+    if (!Number.isInteger(roll)) {
+      rollLines.push(`Check ${index + 1}: ${roll} — ignored; not a whole number.`);
+      return;
+    }
+    if (roll >= dc + 5) {
+      successes += 2;
+      rollLines.push(`Check ${index + 1}: ${roll} — success + extra success.`);
+    } else if (roll >= dc) {
+      successes += 1;
+      rollLines.push(`Check ${index + 1}: ${roll} — success.`);
+    } else {
+      failures += 1;
+      rollLines.push(`Check ${index + 1}: ${roll} — failed check.`);
+    }
+  });
+
+  if (byId("cratersEdgeCheck").checked) {
+    successes += 1;
+    rollLines.push("Crater's Edge: +1 automatic success.");
+  }
+
+  const area = currentDeleriumArea();
+  const reward = generateDeleriumReward(area, successes);
+  const foundTarget = successes >= requiredSuccesses;
+  const randomEncounter = failures >= failureThreshold;
+  byId("successes").value = String(successes);
+
+  byId("deleriumOutput").textContent = [
+    `${currentDeleriumAreaName()} search helper`,
+    `DC: ${dc}`,
+    `Party size: ${partySize}`,
+    `Adjusted target: ${requiredSuccesses} success${requiredSuccesses === 1 ? "" : "es"}; ${failureThreshold}+ failed check${failureThreshold === 1 ? "" : "s"} triggers a random encounter.`,
+    "",
+    ...rollLines,
+    "",
+    `Total successes: ${successes}`,
+    `Failed checks: ${failures}`,
+    `Search objective: ${foundTarget ? "found / ruled out" : "not enough successes"}`,
+    `Random encounter triggered: ${randomEncounter ? "Yes" : "No"}`,
+    "",
+    "Delerium found:",
+    reward
+  ].join("\n");
 }
 
 function selectedEncounterTable() {
   return document.querySelector('input[name="encounterTable"]:checked').value;
+}
+
+function normaliseEncounterName(name) {
+  return String(name || "").trim().toLowerCase().replace(/[.!]+$/, "");
+}
+
+function encounterFaction(name) {
+  return ENCOUNTER_FACTIONS[normaliseEncounterName(name)] || null;
+}
+
+function factionEnabled(faction) {
+  if (!faction) return true;
+  const checkbox = document.querySelector(`.faction-filter[data-faction="${faction}"]`);
+  return !checkbox || checkbox.checked;
+}
+
+function isEncounterAllowed(name) {
+  return factionEnabled(encounterFaction(name));
 }
 
 function isMonstersOfDrakkenheimMode(tableName) {
@@ -2491,20 +2709,52 @@ function activeEncounterDescriptions(tableName) {
   return DEFAULT_DATA.encounterDescriptions;
 }
 
-function rollEncounter(tableName, ignoreDoubleTrouble = false) {
+function maxEncounterRoll(tableName) {
   const table = activeEncounterTable(tableName);
-  const maxRoll = Math.max(...table.map((entry) => entry.max));
-  let result;
-  do {
+  return Math.max(...table.map((entry) => entry.max));
+}
+
+function encounterRowForRoll(tableName, roll) {
+  const table = activeEncounterTable(tableName);
+  return table.find((entry) => roll >= entry.min && roll <= entry.max);
+}
+
+function rollEncounter(tableName, ignoreDoubleTrouble = false, manualRoll = null) {
+  const maxRoll = maxEncounterRoll(tableName);
+
+  if (manualRoll !== null) {
+    const roll = Number(manualRoll);
+    if (!Number.isInteger(roll) || roll < 1 || roll > maxRoll) {
+      return { error: `Manual roll must be a whole number between 1 and ${maxRoll}.` };
+    }
+    const row = encounterRowForRoll(tableName, roll);
+    if (!row) return { error: `No encounter found for roll ${roll}.` };
+    if (ignoreDoubleTrouble && normaliseEncounterName(row.name) === "double trouble") {
+      return { error: "Double Trouble cannot be used as a Double Trouble sub-roll." };
+    }
+    if (!isEncounterAllowed(row.name)) {
+      const faction = encounterFaction(row.name);
+      return {
+        error: `Roll ${roll} produced ${row.name}, but ${FACTION_LABELS[faction] || "that faction"} encounters are currently filtered out.`
+      };
+    }
+    return { name: row.name, roll, maxRoll, manual: true };
+  }
+
+  for (let attempt = 0; attempt < 1000; attempt += 1) {
     const roll = Math.floor(Math.random() * maxRoll) + 1;
-    const row = table.find((entry) => roll >= entry.min && roll <= entry.max);
-    result = { name: row ? row.name : "Unknown Encounter", roll, maxRoll };
-  } while (ignoreDoubleTrouble && result.name.toLowerCase() === "double trouble");
-  return result;
+    const row = encounterRowForRoll(tableName, roll);
+    if (!row) continue;
+    if (ignoreDoubleTrouble && normaliseEncounterName(row.name) === "double trouble") continue;
+    if (!isEncounterAllowed(row.name)) continue;
+    return { name: row.name, roll, maxRoll, manual: false };
+  }
+
+  return { error: "No available encounter could be generated with the current filters." };
 }
 
 function encounterDisplayText(encounter) {
-  return `${encounter.name} - rolled ${encounter.roll} on d${encounter.maxRoll}`;
+  return `${encounter.name} - rolled ${encounter.roll} on d${encounter.maxRoll}${encounter.manual ? " (manual roll)" : ""}`;
 }
 
 function lookupEncounterDescription(descriptions, name) {
@@ -2545,29 +2795,264 @@ function getEncounterDescription(name, tableName) {
   return fallbackDescription ? randomiseEncounterCounts(fallbackDescription) : "No description found for this encounter.";
 }
 
-function generateEncounter() {
-  const tableName = selectedEncounterTable();
-  const encounter = rollEncounter(tableName, false);
-  const modeSuffix = isMonstersOfDrakkenheimMode(tableName) ? " [Monsters of Drakkenheim]" : "";
-  byId("encounterOutput").textContent = `${encounterDisplayText(encounter)}${modeSuffix}`;
+function getEncounterDifficulty(encounter, tableName) {
+  const name = normaliseEncounterName(encounter.name);
+  const faction = encounterFaction(encounter.name);
 
-  if (encounter.name.toLowerCase() === "double trouble") {
-    const first = rollEncounter(tableName, true);
-    const second = rollEncounter(tableName, true);
-    byId("encounterDescription").textContent = [
-      getEncounterDescription(encounter.name, tableName),
-      "",
-      `1) ${encounterDisplayText(first)}`,
-      getEncounterDescription(first.name, tableName),
-      "",
-      `2) ${encounterDisplayText(second)}`,
-      getEncounterDescription(second.name, tableName)
-    ].join("\n");
-  } else {
-    byId("encounterDescription").textContent = getEncounterDescription(encounter.name, tableName);
+  if (name === "double trouble") {
+    return {
+      level: "deadly",
+      label: "Potentially deadly",
+      detail: "Double Trouble creates two encounter groups and can become a multi-sided fight. Review before running as written."
+    };
   }
 
-  byId("encounterLuckyFindOutput").textContent = generateEncounterLuckyFindCheck();
+  if (faction) {
+    return {
+      level: "variable",
+      label: "Faction encounter",
+      detail: `${FACTION_LABELS[faction]} result. Difficulty depends on current relationships, negotiation, and whether the faction becomes hostile.`
+    };
+  }
+
+  if (DEADLY_ENCOUNTER_PATTERNS.some((pattern) => pattern.test(encounter.name))) {
+    return {
+      level: "deadly",
+      label: "High danger",
+      detail: "This result can be severe or campaign-shaping. Consider party resources before running it as written."
+    };
+  }
+
+  if (LOW_IMPACT_ENCOUNTERS.has(name)) {
+    return {
+      level: "low",
+      label: "Low / utility",
+      detail: "This is mainly a navigation, social, clue, or support encounter unless the party escalates it."
+    };
+  }
+
+  if (tableName === "innerCity" || isMonstersOfDrakkenheimMode(tableName)) {
+    return {
+      level: "high",
+      label: "High risk",
+      detail: "Inner City or Monsters of Drakkenheim encounters may be more dangerous than the base table. Check the stat blocks before committing."
+    };
+  }
+
+  return {
+    level: "variable",
+    label: "Variable risk",
+    detail: "This may be combat, hazard, or social depending on how the party approaches it."
+  };
+}
+
+function buildEncounterDescription(encounterState) {
+  const tableName = encounterState.tableName;
+  const encounter = encounterState.encounter;
+
+  if (normaliseEncounterName(encounter.name) === "double trouble") {
+    return [
+      getEncounterDescription(encounter.name, tableName),
+      "",
+      `1) ${encounterDisplayText(encounterState.subEncounters[0])}`,
+      getEncounterDescription(encounterState.subEncounters[0].name, tableName),
+      "",
+      `2) ${encounterDisplayText(encounterState.subEncounters[1])}`,
+      getEncounterDescription(encounterState.subEncounters[1].name, tableName)
+    ].join("\n");
+  }
+
+  return getEncounterDescription(encounter.name, tableName);
+}
+
+function createEncounterState(encounter, tableName, luckyFindOverride = null) {
+  const stateObject = {
+    tableName,
+    mode: isMonstersOfDrakkenheimMode(tableName) ? "Monsters of Drakkenheim" : "Standard",
+    encounter,
+    subEncounters: [],
+    luckyFind: luckyFindOverride || rollLuckyFindResult(),
+    createdAt: new Date().toLocaleString()
+  };
+
+  if (normaliseEncounterName(encounter.name) === "double trouble") {
+    const first = rollEncounter(tableName, true);
+    const second = rollEncounter(tableName, true);
+    if (first.error || second.error) {
+      stateObject.description = first.error || second.error;
+    } else {
+      stateObject.subEncounters = [first, second];
+      stateObject.description = buildEncounterDescription(stateObject);
+    }
+  } else {
+    stateObject.description = buildEncounterDescription(stateObject);
+  }
+
+  return stateObject;
+}
+
+function renderEncounterState() {
+  if (!lastEncounterState) return;
+  const modeSuffix = lastEncounterState.mode === "Monsters of Drakkenheim" ? " [Monsters of Drakkenheim]" : "";
+  byId("encounterOutput").textContent = `${encounterDisplayText(lastEncounterState.encounter)}${modeSuffix}`;
+  byId("encounterDescription").textContent = lastEncounterState.description;
+  byId("encounterLuckyFindOutput").textContent = formatLuckyFind(lastEncounterState.luckyFind);
+}
+
+function historySummaryFromState(encounterState) {
+  const parts = [encounterDisplayText(encounterState.encounter)];
+  if (encounterState.subEncounters.length) {
+    parts.push(`Sub-rolls: ${encounterState.subEncounters.map((entry) => encounterDisplayText(entry)).join("; ")}`);
+  }
+  return parts.join(" | ");
+}
+
+function saveEncounterHistory() {
+  localStorage.setItem(STORAGE_KEYS.encounterHistory, JSON.stringify(encounterHistory.slice(0, 50)));
+}
+
+function loadEncounterHistory() {
+  try {
+    encounterHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.encounterHistory) || "[]");
+    if (!Array.isArray(encounterHistory)) encounterHistory = [];
+  } catch {
+    encounterHistory = [];
+  }
+}
+
+function addEncounterHistoryEntry(encounterState, action = "Generated") {
+  const entry = {
+    time: new Date().toLocaleString(),
+    action,
+    tableName: encounterState.tableName,
+    mode: encounterState.mode,
+    summary: historySummaryFromState(encounterState),
+    luckyFind: formatLuckyFind(encounterState.luckyFind),
+    description: encounterState.description
+  };
+  encounterHistory.unshift(entry);
+  encounterHistory = encounterHistory.slice(0, 50);
+  saveEncounterHistory();
+  renderEncounterHistory();
+}
+
+function renderEncounterHistory() {
+  const list = byId("encounterHistoryList");
+  if (!list) return;
+  list.innerHTML = "";
+  if (!encounterHistory.length) {
+    const empty = document.createElement("li");
+    empty.className = "muted";
+    empty.textContent = "No encounters generated yet.";
+    list.appendChild(empty);
+    return;
+  }
+  encounterHistory.forEach((entry) => {
+    const item = document.createElement("li");
+    const time = document.createElement("span");
+    time.className = "history-entry-time";
+    time.textContent = entry.time;
+    const title = document.createElement("div");
+    title.className = "history-entry-title";
+    title.textContent = `${entry.action}: ${entry.summary}`;
+    const meta = document.createElement("div");
+    meta.className = "history-entry-meta";
+    meta.textContent = `${entry.mode} ${entry.tableName} | ${entry.luckyFind}`;
+    item.append(time, title, meta);
+    list.appendChild(item);
+  });
+}
+
+function encounterHistoryAsText() {
+  return encounterHistory.map((entry) => [
+    entry.time,
+    `${entry.action}: ${entry.summary}`,
+    `${entry.mode} ${entry.tableName}`,
+    entry.luckyFind,
+    entry.description
+  ].join("\n")).join("\n\n---\n\n");
+}
+
+async function copyEncounterHistory() {
+  const text = encounterHistoryAsText();
+  if (!text) return;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    alert(text);
+  }
+}
+
+function clearEncounterHistory() {
+  if (!encounterHistory.length) return;
+  if (!confirm("Clear the encounter history log?")) return;
+  encounterHistory = [];
+  saveEncounterHistory();
+  renderEncounterHistory();
+}
+
+function readManualEncounterRoll() {
+  const input = byId("manualEncounterRoll");
+  const raw = input.value.trim();
+  if (!raw) return null;
+  const value = Number(raw);
+  return Number.isInteger(value) ? value : NaN;
+}
+
+function generateEncounter() {
+  const tableName = selectedEncounterTable();
+  const manualRoll = readManualEncounterRoll();
+  const encounter = rollEncounter(tableName, false, manualRoll);
+  if (encounter.error) {
+    byId("encounterOutput").textContent = encounter.error;
+    byId("encounterDescription").textContent = "";
+    byId("encounterLuckyFindOutput").textContent = "";
+    return;
+  }
+  lastEncounterState = createEncounterState(encounter, tableName);
+  renderEncounterState();
+  addEncounterHistoryEntry(lastEncounterState, manualRoll === null ? "Generated" : "Manual roll");
+}
+
+function rerollEncounterOnly() {
+  const tableName = selectedEncounterTable();
+  const encounter = rollEncounter(tableName, false);
+  if (encounter.error) {
+    byId("encounterOutput").textContent = encounter.error;
+    return;
+  }
+  const existingLuckyFind = lastEncounterState ? lastEncounterState.luckyFind : null;
+  lastEncounterState = createEncounterState(encounter, tableName, existingLuckyFind);
+  renderEncounterState();
+  addEncounterHistoryEntry(lastEncounterState, "Rerolled encounter");
+}
+
+function rerollLuckyFindOnly() {
+  if (!lastEncounterState) {
+    byId("encounterLuckyFindOutput").textContent = "Generate an encounter first.";
+    return;
+  }
+  lastEncounterState.luckyFind = rollLuckyFindResult();
+  renderEncounterState();
+}
+
+function rerollCountsOnly() {
+  if (!lastEncounterState) {
+    byId("encounterDescription").textContent = "Generate an encounter first.";
+    return;
+  }
+  lastEncounterState.description = buildEncounterDescription(lastEncounterState);
+  renderEncounterState();
+}
+
+function updateEncounterAreaNote() {
+  const tableName = selectedEncounterTable();
+  const manualRoll = byId("manualEncounterRoll");
+  if (manualRoll) {
+    const maxRoll = maxEncounterRoll(tableName);
+    manualRoll.max = String(maxRoll);
+    manualRoll.placeholder = `d${maxRoll}`;
+  }
 }
 
 function generateCommonLocation() {
@@ -2583,14 +3068,17 @@ function generateWarpedRuin() {
 function rollLuckyFindResult() {
   const roll = Math.floor(Math.random() * 20) + 1;
   let resultText = DEFAULT_DATA.luckyFinds[roll - 1];
-  resultText = resultText.replace(/(\d+)d(\d+)/g, (_match, dice, sides) => String(rollDice(Number(dice), Number(sides))));
-  resultText = resultText.replace(/(\d+)\s*x\s*(\d+)/g, (_match, left, right) => String(Number(left) * Number(right)));
+  resultText = resultText.replace(/\b(\d+)d(\d+)\b/gi, (_match, dice, sides) => String(rollDice(Number(dice), Number(sides))));
+  resultText = resultText.replace(/\b(\d+)\s*x\s*(\d+)\b/gi, (_match, left, right) => String(Number(left) * Number(right)));
   return { roll, resultText };
 }
 
-function generateEncounterLuckyFindCheck() {
-  const luckyFind = rollLuckyFindResult();
+function formatLuckyFind(luckyFind) {
   return `Lucky Find: rolled ${luckyFind.roll} on the Lucky Finds table — ${luckyFind.resultText}`;
+}
+
+function generateEncounterLuckyFindCheck() {
+  return formatLuckyFind(rollLuckyFindResult());
 }
 
 function generateArcaneAnomaly() {
@@ -2602,6 +3090,32 @@ function generateArcaneAnomaly() {
 function showTab(tabName) {
   document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === tabName));
   document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active-panel", panel.id === tabName));
+}
+
+function navigateToSection(tabName, targetId) {
+  showTab(tabName);
+  requestAnimationFrame(() => {
+    const target = byId(targetId);
+    if (target && target.tagName.toLowerCase() === "details") target.open = true;
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+
+function applyTheme(theme) {
+  const nextTheme = theme === "dark" ? "dark" : "light";
+  document.documentElement.dataset.theme = nextTheme;
+  const button = byId("themeToggle");
+  if (button) button.textContent = nextTheme === "dark" ? "Light mode" : "Dark mode";
+  localStorage.setItem(STORAGE_KEYS.theme, nextTheme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+  applyTheme(current === "dark" ? "light" : "dark");
+}
+
+function loadTheme() {
+  applyTheme(localStorage.getItem(STORAGE_KEYS.theme) || "light");
 }
 
 function currentInventoryArray() {
@@ -2654,9 +3168,21 @@ function resetInventoryLists() {
 
 function bindEvents() {
   document.querySelectorAll(".tab").forEach((button) => button.addEventListener("click", () => showTab(button.dataset.tab)));
+  document.querySelectorAll("[data-nav-tab][data-nav-target]").forEach((button) => {
+    button.addEventListener("click", () => navigateToSection(button.dataset.navTab, button.dataset.navTarget));
+  });
+
+  byId("themeToggle").addEventListener("click", toggleTheme);
 
   byId("generateShop").addEventListener("click", generateShop);
   byId("clearInventory").addEventListener("click", clearInventory);
+  ["regenPotions", "regenScrolls", "regenUncommon", "regenRare"].forEach((id) => {
+    const button = byId(id);
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      event.preventDefault();
+    });
+  });
   byId("regenPotions").addEventListener("click", () => { generatePotions(); renderShop(); saveShop(); });
   byId("regenScrolls").addEventListener("click", () => { generateScrolls(); renderShop(); saveShop(); });
   byId("regenUncommon").addEventListener("click", () => { generateUncommon(); renderShop(); saveShop(); });
@@ -2680,17 +3206,35 @@ function bindEvents() {
   byId("saveInventory").addEventListener("click", saveInventoryLists);
 
   byId("generateDelerium").addEventListener("click", generateDelerium);
+  byId("calculateDeleriumSearch").addEventListener("click", calculateDeleriumSearch);
+  byId("partySize").addEventListener("input", updatePartySizeGuidance);
+  byId("outerCityCheck").addEventListener("change", updatePartySizeGuidance);
+
   byId("generateEncounter").addEventListener("click", generateEncounter);
+  byId("rerollEncounterOnly").addEventListener("click", rerollEncounterOnly);
+  byId("rerollLuckyFindOnly").addEventListener("click", rerollLuckyFindOnly);
+  byId("rerollCountsOnly").addEventListener("click", rerollCountsOnly);
+  document.querySelectorAll('input[name="encounterTable"]').forEach((radio) => radio.addEventListener("change", updateEncounterAreaNote));
+  byId("monstersOfDrakkenheimMode").addEventListener("change", updateEncounterAreaNote);
+  document.querySelectorAll(".faction-filter").forEach((checkbox) => checkbox.addEventListener("change", updateEncounterAreaNote));
+  byId("copyEncounterHistory").addEventListener("click", copyEncounterHistory);
+  byId("clearEncounterHistory").addEventListener("click", clearEncounterHistory);
+
   byId("generateCommonLocation").addEventListener("click", generateCommonLocation);
   byId("generateWarpedRuin").addEventListener("click", generateWarpedRuin);
   byId("generateArcaneAnomaly").addEventListener("click", generateArcaneAnomaly);
 }
 
 function init() {
+  loadTheme();
   loadInventoryLists();
   loadShop();
+  loadEncounterHistory();
   bindEvents();
   renderShop();
+  renderEncounterHistory();
+  updatePartySizeGuidance();
+  updateEncounterAreaNote();
 }
 
 document.addEventListener("DOMContentLoaded", init);

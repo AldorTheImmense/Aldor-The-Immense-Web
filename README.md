@@ -1,45 +1,49 @@
 # Aldor The Immense
 
-Aldor The Immense is a browser-based helper site for Dungeon Masters running a *Dungeons of Drakkenheim* campaign.
+Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign.
 
-The deployed website provides quick-access tools for common table tasks, including shop generation, delerium searches, random encounters, arcane anomalies, and campaign utility rolls. It is designed to be used during prep or live at the table without needing players or DMs to install anything.
+The site brings several common table tools into one place so a DM can quickly generate shop inventory, delerium search results, random encounters, lucky finds, arcane anomalies, common locations, and warped ruins during prep or at the table.
+
+## Website deployment
+
+This project is designed to run as a static website, so it works well on GitHub Pages. Once deployed, users can open the site in a browser without installing anything.
+
+To publish on GitHub Pages:
+
+1. Upload the site files to your GitHub repository.
+2. Make sure `index.html`, `style.css`, `script.js`, `changelog.html`, and the `assets` folder are at the repository root.
+3. In the repository, go to **Settings → Pages**.
+4. Set the source to deploy from the `main` branch and `/root` folder.
+5. Save and wait for GitHub Pages to publish the site.
+
+The live site will usually be available at:
+
+```text
+https://your-username.github.io/your-repo-name/
+```
 
 ## Features
 
-- Generate Aldor's shop inventory, including potions, scrolls, uncommon items, and rare items.
-- Edit the available shop inventory lists directly in the browser.
-- Copy and load save codes to move shop state between browsers or computers.
-- Generate delerium search results with reminders for DCs, cumulative rewards, extra successes, failures, and Crater's Edge bonuses.
-- Generate random encounters for Outer City, Inner City, and Sewers.
-- Roll the Lucky Finds table automatically after each generated encounter.
-- Toggle Monsters of Drakkenheim mode for updated Outer City and Inner City encounter tables.
-- Roll listed encounter dice counts automatically while still showing the dice expression used.
-- Automatically roll a Lucky Find after every random encounter.
-- Generate Warped Ruins, Common Locations, and Arcane Anomalies.
+- Aldor shop generator for potions, scrolls, uncommon items, and rare items.
+- Editable shop inventory lists.
+- Save-code support for moving shop state between browsers or computers.
+- Delerium generation tools and a search helper that calculates successes, failures, DC +5 bonus successes, party-size scaling, and Crater's Edge bonus success.
+- Random encounter generator for Outer City, Inner City, and Sewers.
+- Monsters of Drakkenheim mode for updated Outer City and Inner City encounter tables.
+- Faction filters for encounter results.
+- Manual encounter roll input.
+- Automatic Lucky Finds roll after each generated encounter.
+- Encounter history log with date and time.
+- Reroll controls for encounter, lucky find, and enemy counts.
+- Arcane Anomalies generator.
+- Common Locations and Warped Ruins generators.
+- Collapsible sections, sticky navigation, mobile-friendly layout, and dark mode.
 
-## Using the website
+## Local use
 
-Open the GitHub Pages deployment for this repository in a browser. The site runs entirely in the browser, so it works without a server or database.
+You can also use the site without GitHub Pages:
 
-Most tools work by selecting the relevant table or mode, then pressing the matching generate button. Results appear immediately on the page.
+1. Download or clone the repository.
+2. Open `index.html` in a browser.
 
-## Save codes
-
-The shop state can be copied as a save code and loaded again later. This is useful when moving between devices, browsers, or sessions.
-
-The save code stores the current shop inventory and custom inventory lists. It is not encrypted, so do not use it for private information.
-
-## GitHub Pages
-
-This repository is intended to be deployed as a static GitHub Pages site. The main files are:
-
-- `index.html`
-- `style.css`
-- `script.js`
-- `assets/`
-
-For GitHub Pages deployment, these files should be at the root of the repository unless the Pages settings are configured differently.
-
-## Notes
-
-This is an unofficial table aid for DMs running Drakkenheim campaigns. It is intended to speed up play and reduce page-checking during sessions, not replace the campaign book or the DM's judgement.
+Most data is stored locally in the user's browser. Save codes can be copied and loaded elsewhere when a DM wants to move shop state between devices.
