@@ -175,7 +175,6 @@ summary.section-header button {
   padding: 0.9rem;
 }
 .card-wide, .encounter-card { grid-column: 1 / -1; }
-.grouped-tables-card, .arcane-card { min-height: 16rem; }
 .collapsible > summary {
   cursor: pointer;
   list-style: none;
@@ -227,6 +226,7 @@ details:not([open]) > :not(summary) { display: none; }
   margin-bottom: 0.85rem;
 }
 .encounter-notes-grid .info-note, .delerium-layout .tool-box { margin: 0; }
+.delerium-layout.single-column { grid-template-columns: 1fr; }
 .helper-grid {
   display: grid;
   grid-template-columns: minmax(150px, 220px) 1fr;
@@ -292,6 +292,22 @@ details:not([open]) > :not(summary) { display: none; }
   flex-wrap: wrap;
 }
 .radio-row legend { width: 100%; margin-bottom: 0.25rem; font-weight: 650; }
+
+
+.other-tables-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr);
+  gap: 0.85rem;
+  align-items: start;
+}
+.other-tables-panel {
+  min-height: 16rem;
+  padding: 0.1rem 0 0;
+}
+.arcane-panel .mini-table-section {
+  border-top: 0;
+  padding-top: 0.2rem;
+}
 
 .mini-table-section {
   padding: 0.75rem 0;
@@ -369,7 +385,7 @@ details:not([open]) > :not(summary) { display: none; }
 .changelog-card h2 { margin-top: 1.25rem; }
 
 @media (max-width: 900px) {
-  .shop-layout, .tables-grid, .editor-grid, .encounter-notes-grid, .delerium-layout, .encounter-options-grid, .helper-grid {
+  .shop-layout, .tables-grid, .editor-grid, .encounter-notes-grid, .delerium-layout, .encounter-options-grid, .helper-grid, .other-tables-grid {
     grid-template-columns: 1fr;
   }
   .aldor-art img { max-height: none; }

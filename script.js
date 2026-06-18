@@ -2088,7 +2088,7 @@ const STORAGE_KEYS = {
   encounterHistory: "aldor.encounterHistory.v1"
 };
 
-const APP_VERSION = "2.0.3";
+const APP_VERSION = "2.0.6";
 
 const FACTION_LABELS = {
   hoodedLanterns: "Hooded Lanterns",
@@ -2566,32 +2566,6 @@ function updatePartySizeGuidance() {
   }
 }
 
-function generateDelerium() {
-  const input = byId("successes");
-  const raw = input.value.trim();
-  if (raw === "") {
-    alert("Please input a number of successes.");
-    input.focus();
-    return;
-  }
-  const successes = Number(raw);
-  if (!Number.isInteger(successes) || successes < 0) {
-    alert("Please input a valid number of successes, 0 or higher.");
-    input.focus();
-    return;
-  }
-  const area = currentDeleriumArea();
-  const result = generateDeleriumReward(area, successes);
-  const partySize = parsePositiveIntegerInput("partySize", 4);
-  byId("deleriumOutput").textContent = [
-    `Manual result for ${currentDeleriumAreaName()} with ${successes} success${successes === 1 ? "" : "es"}:`,
-    "",
-    result,
-    "",
-    `Party-size reminder: for ${partySize} character${partySize === 1 ? "" : "s"}, use about ${adjustedRequiredSuccesses(partySize)} required success${adjustedRequiredSuccesses(partySize) === 1 ? "" : "es"} and ${adjustedFailureThreshold(partySize)}+ failed check${adjustedFailureThreshold(partySize) === 1 ? "" : "s"} for a random encounter.`
-  ].join("\n");
-}
-
 function parseDeleriumCheckRolls() {
   const raw = byId("deleriumCheckRolls").value.trim();
   if (!raw) return [];
@@ -2643,8 +2617,6 @@ function calculateDeleriumSearch() {
   const reward = generateDeleriumReward(area, successes);
   const foundTarget = successes >= requiredSuccesses;
   const randomEncounter = failures >= failureThreshold;
-  byId("successes").value = String(successes);
-
   byId("deleriumOutput").textContent = [
     `${currentDeleriumAreaName()} search helper`,
     `DC: ${dc}`,
@@ -3096,8 +3068,17 @@ function navigateToSection(tabName, targetId) {
   showTab(tabName);
   requestAnimationFrame(() => {
     const target = byId(targetId);
-    if (target && target.tagName.toLowerCase() === "details") target.open = true;
-    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!target) return;
+    if (target.tagName.toLowerCase() === "details") target.open = true;
+
+    const header = document.querySelector(".app-header");
+    const headerOffset = header ? header.offsetHeight : 0;
+    const margin = 12;
+    const targetTop = target.getBoundingClientRect().top + window.scrollY - headerOffset - margin;
+    window.scrollTo({
+      top: Math.max(0, targetTop),
+      behavior: "smooth"
+    });
   });
 }
 
@@ -3205,7 +3186,6 @@ function bindEvents() {
   byId("resetLists").addEventListener("click", resetInventoryLists);
   byId("saveInventory").addEventListener("click", saveInventoryLists);
 
-  byId("generateDelerium").addEventListener("click", generateDelerium);
   byId("calculateDeleriumSearch").addEventListener("click", calculateDeleriumSearch);
   byId("partySize").addEventListener("input", updatePartySizeGuidance);
   byId("outerCityCheck").addEventListener("change", updatePartySizeGuidance);

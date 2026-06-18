@@ -1,5 +1,28 @@
 # Changelog
 
+## v2.0.7
+
+- Removed the separate Delerium Manual Result section.
+- Moved the Outer City / Inner City checkbox into the Delerium Search Helper.
+- Updated the footer version number.
+
+## v2.0.6
+
+- Removed Arcane Anomalies from the top quick navigation because it now sits inside Other Random Tables.
+- Fixed quick navigation scrolling so Delerium and Random Encounters open at the top of their sections instead of being hidden under the sticky header.
+- Updated the footer version number.
+
+## v2.0.5
+
+- Fixed the collapsed Other Random Tables and Arcane Anomalies layout so collapsed sections no longer leave large empty boxes.
+- Moved Arcane Anomalies under Other Random Tables while keeping it on the right side.
+- Updated the footer version number.
+
+## v2.0.4
+
+- Removed the Website deployment section from the README.
+- Updated the footer version number.
+
 ## v2.0.3
 
 - Made Encounter History collapsed by default on page load.

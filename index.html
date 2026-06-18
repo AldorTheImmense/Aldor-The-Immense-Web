@@ -30,7 +30,6 @@
       <button type="button" data-nav-tab="tables" data-nav-target="delerium-card">Delerium</button>
       <button type="button" data-nav-tab="tables" data-nav-target="encounters-card">Encounters</button>
       <button type="button" data-nav-tab="tables" data-nav-target="other-tables-card">Other Tables</button>
-      <button type="button" data-nav-tab="tables" data-nav-target="arcane-card">Arcane Anomalies</button>
     </nav>
   </header>
 
@@ -88,23 +87,14 @@
             </ul>
           </div>
 
-          <div class="delerium-layout">
-            <div class="tool-box">
-              <h3>Manual result</h3>
-              <label class="check-row">
-                <input type="checkbox" id="outerCityCheck" checked>
-                <span>Outer City <span class="muted">(uncheck for Inner City)</span></span>
-              </label>
-              <label class="field-row">
-                <span>Successes</span>
-                <input id="successes" type="number" min="0" inputmode="numeric">
-              </label>
-              <button id="generateDelerium" type="button">Generate from Successes</button>
-            </div>
-
+          <div class="delerium-layout single-column">
             <div class="tool-box">
               <h3>Search helper</h3>
               <div class="helper-grid">
+                <label class="check-row compact-check">
+                  <input type="checkbox" id="outerCityCheck" checked>
+                  <span>Outer City <span class="muted">(uncheck for Inner City)</span></span>
+                </label>
                 <label class="field-row">
                   <span>Party size</span>
                   <input id="partySize" type="number" min="1" value="4" inputmode="numeric">
@@ -225,7 +215,7 @@
   </main>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.0.3</span>
+    <span>Aldor The Immense v2.0.7</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
