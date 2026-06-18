@@ -233,6 +233,123 @@ const DEFAULT_DATA = {
     "Water Walk",
     "Wind Wall"
   ],
+  "rareSpellScrolls": [
+    "Arcane Eye (4th)",
+    "Aura of Life (4th)",
+    "Aura of Purity (4th)",
+    "Banishment (4th)",
+    "Blight (4th)",
+    "Charm Monster (4th)",
+    "Compulsion (4th)",
+    "Confusion (4th)",
+    "Conjure Minor Elementals (4th)",
+    "Conjure Woodland Beings (4th)",
+    "Control Water (4th)",
+    "Death Ward (4th)",
+    "Dimension Door (4th)",
+    "Divination (4th)",
+    "Dominate Beast (4th)",
+    "Elemental Bane (4th)",
+    "Evard's Black Tentacles (4th)",
+    "Fabricate (4th)",
+    "Find Greater Steed (4th)",
+    "Fire Shield (4th)",
+    "Freedom of Movement (4th)",
+    "Galder's Speedy Courier (4th)",
+    "Gate Seal (4th)",
+    "Giant Insect (4th)",
+    "Grasping Vine (4th)",
+    "Gravity Sinkhole (4th)",
+    "Greater Invisibility (4th)",
+    "Guardian of Faith (4th)",
+    "Guardian of Nature (4th)",
+    "Hallucinatory Terrain (4th)",
+    "Ice Storm (4th)",
+    "Leomund's Secret Chest (4th)",
+    "Locate Creature (4th)",
+    "Mordenkainen's Faithful Hound (4th)",
+    "Mordenkainen's Private Sanctum (4th)",
+    "Otiluke's Resilient Sphere (4th)",
+    "Phantasmal Killer (4th)",
+    "Polymorph (4th)",
+    "Raulothim's Psychic Lance (4th)",
+    "Shadow Of Moil (4th)",
+    "Sickening Radiance (4th)",
+    "Spirit Of Death (4th)",
+    "Staggering Smite (4th)",
+    "Stone Shape (4th)",
+    "Stoneskin (4th)",
+    "Storm Sphere (4th)",
+    "Summon Aberration (4th)",
+    "Summon Construct (4th)",
+    "Summon Elemental (4th)",
+    "Summon Greater Demon (4th)",
+    "Vitriolic Sphere (4th)",
+    "Wall of Fire (4th)",
+    "Watery Sphere (4th)",
+    "Animate Objects (5th)",
+    "Antilife Shell (5th)",
+    "Awaken (5th)",
+    "Banishing Smite (5th)",
+    "Bigby's Hand (5th)",
+    "Circle of Power (5th)",
+    "Cloudkill (5th)",
+    "Commune (5th)",
+    "Commune with Nature (5th)",
+    "Cone of Cold (5th)",
+    "Conjure Elemental (5th)",
+    "Conjure Volley (5th)",
+    "Contact Other Plane (5th)",
+    "Contagion (5th)",
+    "Control Winds (5th)",
+    "Create Spelljamming Helm (5th)",
+    "Creation (5th)",
+    "Danse Macabre (5th)",
+    "Dawn (5th)",
+    "Destructive Wave (5th)",
+    "Dispel Evil and Good (5th)",
+    "Dominate Person (5th)",
+    "Dream (5th)",
+    "Enervation (5th)",
+    "Far Step (5th)",
+    "Flame Strike (5th)",
+    "Geas (5th)",
+    "Greater Restoration (5th)",
+    "Hallow (5th)",
+    "Hold Monster (5th)",
+    "Holy Weapon (5th)",
+    "Immolation (5th)",
+    "Infernal Calling (5th)",
+    "Insect Plague (5th)",
+    "Legend Lore (5th)",
+    "Maelstrom (5th)",
+    "Mass Cure Wounds (5th)",
+    "Mislead (5th)",
+    "Modify Memory (5th)",
+    "Negative Energy Flood (5th)",
+    "Passwall (5th)",
+    "Planar Binding (5th)",
+    "Raise Dead (5th)",
+    "Rary's Telepathic Bond (5th)",
+    "Reincarnate (5th)",
+    "Scrying (5th)",
+    "Seeming (5th)",
+    "Skill Empowerment (5th)",
+    "Steel Wind Strike (5th)",
+    "Summon Celestial (5th)",
+    "Summon Draconic Spirit (5th)",
+    "Swift Quiver (5th)",
+    "Synaptic Static (5th)",
+    "Telekinesis (5th)",
+    "Teleportation Circle (5th)",
+    "Temporal Shunt (5th)",
+    "Transmute Rock (5th)",
+    "Tree Stride (5th)",
+    "Wall of Force (5th)",
+    "Wall of Light (5th)",
+    "Wall of Stone (5th)",
+    "Wrath Of Nature (5th)"
+  ],
   "costlyMaterialComponentGp": {
     "Ceremony": 25,
     "Chromatic Orb": 50,
@@ -2088,7 +2205,7 @@ const STORAGE_KEYS = {
   encounterHistory: "aldor.encounterHistory.v1"
 };
 
-const APP_VERSION = "2.0.9";
+const APP_VERSION = "2.0.10";
 
 const FACTION_LABELS = {
   hoodedLanterns: "Hooded Lanterns",
@@ -3037,8 +3154,51 @@ function generateWarpedRuin() {
   byId("warpedRuinOutput").textContent = `Warped Ruin: ${DEFAULT_DATA.warpedRuins[roll - 1]}`;
 }
 
+function rollSpecificUncommonSpellScrolls(count) {
+  const scrollPools = [
+    { level: "2nd", spells: DEFAULT_DATA.level2Spells },
+    { level: "3rd", spells: DEFAULT_DATA.level3Spells }
+  ];
+  const scrolls = [];
+  for (let i = 0; i < count; i += 1) {
+    const pool = randomFrom(scrollPools);
+    scrolls.push(`${randomFrom(pool.spells)} (${pool.level})`);
+  }
+  return scrolls;
+}
+
+function rollSpecificRareSpellScrolls(count) {
+  const scrolls = [];
+  for (let i = 0; i < count; i += 1) {
+    scrolls.push(randomFrom(DEFAULT_DATA.rareSpellScrolls));
+  }
+  return scrolls;
+}
+
+function spellScrollPlural(count) {
+  return count === 1 ? "spell scroll" : "spell scrolls";
+}
+
 function rollLuckyFindResult() {
   const roll = Math.floor(Math.random() * 20) + 1;
+
+  if (roll === 12) {
+    const count = rollDice(1, 4);
+    const scrolls = rollSpecificUncommonSpellScrolls(count);
+    return {
+      roll,
+      resultText: `${count} ${spellScrollPlural(count)}: ${scrolls.join(", ")}.`
+    };
+  }
+
+  if (roll === 20) {
+    const scrolls = rollSpecificRareSpellScrolls(1);
+    return {
+      roll,
+      resultText: `1 rare spell scroll: ${scrolls[0]}.`
+    };
+  }
+
   let resultText = DEFAULT_DATA.luckyFinds[roll - 1];
   resultText = resultText.replace(/\b(\d+)d(\d+)\b/gi, (_match, dice, sides) => String(rollDice(Number(dice), Number(sides))));
   resultText = resultText.replace(/\b(\d+)\s*x\s*(\d+)\b/gi, (_match, left, right) => String(Number(left) * Number(right)));

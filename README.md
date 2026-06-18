@@ -15,7 +15,7 @@ The site brings several common table tools into one place so a DM can quickly ge
 - Monsters of Drakkenheim mode for updated Outer City and Inner City encounter tables.
 - Faction filters for encounter results.
 - Manual encounter roll input.
-- Automatic Lucky Finds roll after each generated encounter.
+- Automatic Lucky Finds roll after each generated encounter, including specific spell scroll results.
 - Encounter history log with date and time.
 - Reroll controls for encounter, lucky find, and enemy counts.
 - Arcane Anomalies generator.

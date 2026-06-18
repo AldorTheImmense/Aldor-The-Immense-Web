@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.0.10
+
+- Lucky Finds spell scroll results now choose specific spells.
+- Uncommon Lucky Finds scrolls use the app's level 2-3 shop scroll spell lists.
+- Rare Lucky Finds scrolls use the curated level 4-5 rare spell scroll list.
+- Updated the footer version number.
+
 ## v2.0.9
 
 - Removed the Shop / DM Tools tab row from the sticky header.
