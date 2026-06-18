@@ -1185,6 +1185,880 @@ const DEFAULT_DATA = {
   ]
 };
 
+const MONSTERS_OF_DRAKKENHEIM_DATA = {
+  "encounterDescriptions": {
+    "Run out of Town": "Characters get turned around badly, and arrive at the nearest edge of town.",
+    "Uninvited Guests": "The characters arrive at the nearest city gate.",
+    "Wrong Turn": "Characters find themselves back where they started an hour ago. I guess you took a wrong turn somewhere?",
+    "Troll Traveller": "A troll is heading through the ruins to join the trolls at King’s Gate. He wears a large pack containing raw contaminated meat, a tankard of rancid ale, 11 (2d10) gold, and a few sets of tools and trinkets. It is an elemental troll instead in the Inner City, and, if encountered near a bridge in the Inner City, there is an eldritch troll and a troll hag instead.",
+    "Menacing Manticore": "A manticore circles overhead looking for an easy meal. If it spots the characters, it swoops in to attack the most vulnerable member. It flies off towards the Inner City if reduced to less than half its hit points. Manticores in the Inner City may hunt in packs of 3 (1d6) normal ones and a shardmaul manticore.",
+    "Memories of Drakkenheim": "5 (2d4) last memories slowly follow the characters. They try to remain hidden and follow the party until one of the player characters is more than ten feet away from the others, then the shadows strike in an attempt to overwhelm the straggler. An arcane wraith leads these last memories when encountered in the Inner City.",
+    "Phase Webs": "Strange webs cover this section of the ruins and fill nearby buildings - some even span the streets themselves. 2 (1d4) eldritch crawlers resting in the dark corners come to investigate any disturbance of their webs. The webs are especially thick in regions of the Inner City, where there are 7 (2d6) crawlers instead.",
+    "Watching Gargoyles": "2 (1d4) wall gargoyles roaming overhead swoop down to attack. If encountered in the Inner City, there are 5 (1d8) instead alongside a tower dragon.",
+    "Ratling Scavangers": "10 (3d6) ratlings warriors hide down a nearby alley or passage awaiting unsuspecting prey.",
+    "Garmyr Hunters": "7 (2d6) garmyr warriors leading 2 (1d4) war dogs are stalking the streets for fresh meat. They are on keen lookout and watch for any signs of movement. In the Inner City the 3 (1d6) garmyr bloodhounds lead 7 (2d6) warriors and 7 (2d6) war dogs.",
+    "Hateful Dead": "A lone haze wight marches with 10 (3d6) haze husks. It commands its minions to attack any living creature they find, and raises any nearby corpses as reinforcements. Add 2 (1d4) additional haze wights when encountered in the Inner City.",
+    "Gibbering Flesh": "The walls here are covered in thick fleshy growths, parts of the walls, streets, and rubble have grown eyes and mouths that break away and form 2 (1d4) pyknic maunders. In the Inner City, it has become a protean abomination.",
+    "Ghost Lights": "2 (1d4) will-o-wisps attempt to lure passing characters towards a mirage of treasure or delerium in the Haze. In the Inner City, there are 7 (2d6) wisps instead.",
+    "Haze Haunt": "A warp witch moans and wails in the nearby building, scornfully mourning its miserable existence as it tries to remember its past. Add an additional 2 (1d4) warp witches when encountered in the Inner City.",
+    "Fresh News": "A graffiti stalks these streets in search of entertainment.",
+    "Lost Ones": "7 (2d6) delerium dregs and 3 (1d6) CR 1-2 dregs (Bloated, Displacer, Frenzied, Lurking, Spined or Tentacled) wander the streets ahead. They sorrowfully mutter nonsensical gibberish, but wail and screech when they encounter humanoids. Add 2 (1d4) haze hulks when encountered in the Inner City.",
+    "Shambling Husks": "7 (2d6) haze husks stumble and shuffle around the streets. In this unsettling gait, they play out scenes of their former everyday lives.",
+    "Old Alchemist’s Shop": "A decrepit alchemist’s shop that reeks of a chemical odor stands on a street corner. A pool of spilled chemicals has become an aggressive living biohazard. In the Inner City a chemystral is encountered instead.",
+    "Rat God Effigy": "2 (1d4) ratling warlocks of the Rat God are performing an unholy ritual. They are Concentrating on the ritual for 3 rounds until initiative count 20. If at least one warlock maintains concentration until then, a maw vermin appears. In the Inner City the warlocks are led by an oracle of the Rat God.",
+    "Infested Storage": "A bloated hive has made this small building into its home. There seems to be some materials left to claim in the building. In the Inner City the building is infested by a kronen and 7 (2d6) swarms of contaminated insects instead.",
+    "Swatting Insects!": "3 (1d6) loathsome gag flies annoy the characters, mindlessly trying to attack the most armored one.",
+    "Don’t Kick the Horses": "A bojack lies in an ambush near a corpse of a knight. It attacks whoever comes within its reach first. In the Inner City, 5 (2d4) loathsome gag flies swarm the characters if the bojack attacks.",
+    "Unhappy Customer": "A haze hulk is mindlessly destroying an abandonned store. It attacks the characters, yelling “I wish to speak to your manager!”, if it sees them. In the Inner City it is accompanied by a juggernaut hulk and a gutwrench dreg.",
+    "Fowl Play": "3 (1d6) lurking dregs watch 2 skretches fight to the death. The characters can bet on one of the monstrosities. On a loss, the dregs attack the group. On a win, the dregs pay in 5 (2d4) delerium chips and (6d6) gp.",
+    "Expedition 33": "3 (1d6) skeleton soldiers and 2 (1d4) skeleton archers roam the streets, hunting down monsters and humanoids alike. They are insane and still think that they are retaking the city. In the Inner City they are accompanied by 2 (1d4) skeleton mages.",
+    "Lights! Crystals! Action!": "A crystalline, frenzied and lambent dregs ask the characters to help them create the absolute perfomance of a play in a staged fight. If the characters agree, then the dregs uphold their end of the deal and pay them 50gp if two of the dregs are knocked unconscious, but not killed. In the Inner City, the frenzied dreg is replaced by a hunter hulk.",
+    "Renegade Mage": "An academy outcast is performing experiments on delerium. They are guarded by 2 (1d4) dretches. If encountered in the Inner City, the outcast has a hezrou which takes all damage dealt to the outcast, serving as their guard.",
+    "Insectoid Knight": "A bettle knight challenges the characters to a fight. Add an additional 2 (1d4) beetle knights when encountered in the Inner City.",
+    "Silk Works": "The characters stumble upon a dead end crawling with 7 (2d6) haze moth caterpillars. The creatures are not actively hostile, but will fight back if endangered. There’s a decent amount of silk in there to be worth 100gp if sold. In the Inner City 2 (1d4) of the caterpillas are replaced with chrysalises, and the price of silk is increased to 250gp.",
+    "Fractured Reality": "A reality cyst has taken root inside one of the abandoned buildings It is carefully hidden and feeds on the creatures passing by its lair. In the Inner City an effulgent cnidarian is ecountered instead.",
+    "Allopine Den": "The characters are attacked by 5 (2d4) allopines, who keep to the air and attack until the characters leave the area. The creatures do not pursue anyone beyong their territory.",
+    "Magehunter": "A phage hides in the area, it only attacks if the one of the characters has Spellcasting or Pact Magic and prioritizes the one with the highest available spell slots. In the Inner City the number of phages is increased by 3 (1d6).",
+    "Crystalline Horror": "2 (1d4) petrified crystalline dregs stand on this street, remains of their faces twisted in horror. A basilisk hunts in this area. In the Inner City, the dregs are not petrified and protect the basilisk.",
+    "Fungal Trollfestation": "The characters stumble upon a strange field of delerium-infused mushrooms. These are 10 (3d6) fungal trollings, which spring to life 2 (1d4) at a time per round to attack the characters until none are left. In the Inner City a troll hag is tending to these foul things, increasing their number to 14 (4d6) and waves to 5 (2d4).",
+    "Croaking Well": "2 (1d4) lob frogs wander around a semi-intact well, they are very territorial.",
+    "For Whom the Bell Tolls?": "A belfray attempts to ambush characters from the nearest rooftop. It immediately tries to fly away if less than half of the characters fail their save against its Sonic Blast.",
+    "Princess Petunia": "A lone giant ratling is wandering the streets in a tattered dress that is too small for it. It refers to itself as Princess Petunia and asks the characters for directions towards the nearest gathering of its kind.",
+    "Unnerving Invitation": "A ghoul priest gives characters a sealed letter of invitation to a ball held in the Inner City. A few moments later bells ring loudly and the ghoul yells: “I must away!”. It runs away into the nearest alleyway, ocassionally stumbling.",
+    "Just a Little Nibble": "Two Bloodied hazeblood vampires hide within the destroyed buildings, waiting for an opportune moment to ambush.",
+    "A Helping Hand": "The characters stumble upon an unnerving sight of a helpful hand running away on its fingers with a small satchel. In the Inner City, the characters encounter a digipide instead.",
+    "Have We Met Before?": "The characters encounter a group of eerily familiar looking adventurers that wish to share some of their findings - 7 (2d6) delerium chips, 3 (1d6) delerium fragments and 3 items rolled on Lucky Finds table. The only condition is that the characters do the same to the next adventurers they meet. Only an hour after the encounter the characters realize that the people they have met were just different combinations of their of physical traits.",
+    "Stranger Who?": "A psychophant in guise of an adventurer approaches the characters and offers to help them with some information. In exchange it asks for something memorable from the characters. The stranger seems to possess otherworldly knowledge and can give valuable hints for Personal Quests. As the characters pass the next building, they find the corpse of the person they’ve just met and the psychophant is nowhere to be seen.",
+    "Friendly Doctor": "A doctor (SQGtD) is wandering the streets. They offer to heal one of the characters for 20 (4d8+2) Hit Points. They only ask to take a blood sample as a price. They can provide two more healings, if offered a delerium fragment or a rare monster component.",
+    "Hooded Lantern Patrol": "5 (2d4) Hooded Lantern scouts led by an Hooded Lantern veteran are on a recon mission. If the characters are in trouble they step in to help them, but then demand the characters turn over half of whatever plunder they’ve found in the ruins, citing their authority under the “law” of Westemär and that “scavenging” in the ruins is technically prohibited without the assent of the Lord Commander.",
+    "Queen’s Men Looters": "7 (2d6) bandits led by a bandit captain are hoping for easy pickings. The bandits try to hide from the players until they appear wounded or in need of a rest, so canny characters might spot them before this happens.",
+    "Questing Knight": "A Silver Order paladin on a warhorse with a retinue of 7 (2d6) squires are searching for lost relics and holy sites in the ruins.",
+    "Academy Surveyor": "An academy mage of the Amethyst Academy and 2 (1d4) academy apprentices are conducting research in the ruins. In the Inner City it is 2 (1d4) academy mages led by a master mage instead.",
+    "Pilgrims of the Fallen Fire": "A group of 10 (3d6) pilgrims led by a missionary and a zealot are heading towards the crater.",
+    "Rival Adventurers": "Characters encounter a group of rival adventurers (see chapter 2).",
+    "Double Trouble": "Roll twice, ignoring this result on subsequent rolls. If two groups of monsters or NPCs are encountered, they’re fighting each other.",
+    "Horribly Lost": "The characters are badly turned around and become hopelessly lost in the ruins. They no longer know where they are anymore or what direction they are facing. They wander the city streets indefinitely, checking for random encounters as normal each hour. They don’t regain their bearings unless the circumstances of a random encounter lead them to clues or friendly NPCs who can help them.",
+    "Executioner’s Summons": "The characters stumble into Slaughterstone Square.",
+    "Going in Circles": "The characters lose their position and get lost. They no longer know where they are anymore or what direction they are facing. They must wander the city streets for the next 1d4 hours, after which they regain their original position. Check for random encounters as normal each hour. A random encounter could result in circumstances where the characters no longer become lost.",
+    "Lord of the Feast!": "The Lord of the Feast leads a warpack of 10 (3d6) garmyr warriors and 2 (2d4) hell hounds.",
+    "Crimson Countess": "The Crimson Countess hunts above with a retinue of 5 (2d4) hazewind harpy hunters.",
+    "Wandered into the Garden": "The characters arrive at the nearest edge of Queen’s Park Garden.",
+    "Sewer Monster": "An otyugh feasting on offal lurks near a sewer access point.",
+    "Stalking Vermin": "14 (4d6) ratling warriors and 5 (2d4) guttersnipes have set up an ambush. These ratlings use bait to lure prey towards a dead-end street or sewer passage where the guttersnipes lurk on high ground to snipe their quarry with ranged attacks.",
+    "Ratling Horde": "A warlock of the Rat God leads 2 (1d4) swarms of ratlings.",
+    "Ratling Raiders": "A ratling alchemist leads a group of 2 (1d4) giant ratlings and 3 (1d6) burrow wardens.",
+    "Ratling Infestation": "A ratling pathogenist performs wicked experiments on corpses of his bretheren.",
+    "Hundreds of Tails": "The characters stumble upon a site of a recent explosion, there are corpses of ratlings in different states of destruction all around. Suddenly, a rat king attacks. While in combat, a random character rolls on the Arcane Anomalies table at the Initiative count 20 every round.",
+    "Fallen Heroes": "5 (2d4) haze wights are all that remains of this former adventuring party. They believe any living humanoids they encounter are mutated monsters.",
+    "Garmyr Ravagers": "2 (1d4) garmyr berserkers with 3 (1d6) hell hounds are rampaging through the streets, howling loudly and starting fires.",
+    "Garmyr Bloodrite": "A garmyr thaumaturge is performing a vile blood ritual upon 10 (3d6) garmyr warriors. While the thaumaturge is alive, whenever a garmyr warrior is Bloodied, roll a d6. On a roll of 1, the warrior transforms into a Bloodied garmyr berserker, and on a roll of 6, its body violently convulses and explodes, dealing 14 (4d6) Piercing damage to all creatures within 10 feet of it on a failed save or half as much on a successful save",
+    "Overgrown Ruins": "Strange alien plants and oddly-shaped vines creep up a crumbling ruin. A dark growth shambler is tending to 2 (1d4) hypnotic eldritch blossoms that grow in the tangled mass.",
+    "Living Ruins": "Several inanimate parts of the ruins suddenly spring to life as 2 (1d4) contaminated elementals. Choose whichever type is most appropriate for the area.",
+    "Living City": "A living city dwells in the area, looking like a safe building to rest in.",
+    "Chimera Nest": "A chimera is nesting in a tall spire. Aggressive and territorial, it swoops down to rip apart any who wander around its turf.",
+    "Harpy Flock": "A pack of 10 (3d6) hazewind harpy hunters flies overhead surveying the ground for anything worth hunting.",
+    "Crone’s Band": "A hazewind harpy crone sits percheed up on a roof of the tallest building in the area while 2 (1d4) valkyries scout around for potential prey.",
+    "Lurking Wraiths": "2 (1d4) arcane wraiths flutter about seeking erratic magic, and fixate on whichever character is carrying the most delerium or magic items.",
+    "Gloaming Ray": "A cloaker flies through the dark rooftops above looking for prey.",
+    "Deep Ones": "10 (3d6) deep dregs and 1 deep knight occupy a sewer junction or are emerging from a sewer exit.",
+    "Stalking Tree": "An oak troll stalks the characters from behind the buildings. If they try to approach it, it tries to hide into its shroud of leaves.",
+    "The Black Coach": "The characters encounter a mysterious black coach pulled by a hunter hulk Henry and a juggernaut hulk Grunt. Inside the coach is the Pale Man. If the characters suffer from Contamination, he offers to ‘heal’ them at his estate. If attacked, the hulks swiftly pull the coach away, while the Pale Man mentally summons 14 (4d6) swarms of contaminated insects to distract the characters.",
+    "The Predator": "A striga, named Sarah, suddenly appears from a burst of Deep Haze and attacks the characters. Sarah fights for 2 (1d4) rounds or until Bloodied, after which she uses her Epic action or Reaction to disappear in another puff of Deep Haze. Perhaps, all that she seeks are her husband Rolf and their daughter.",
+    "Courtly Graces": "A nearby building is buzzing with activity, there seems to be some sort of gathering inside. On the doorsteps stands a grim custodian, who unless the characters have an invitation, refuses to let them in. Once the characters enter deeper into the building they see 7 (2d6) vampire spawns and a sanguine witch feasting upon all sorts of bloody dishes. The characters can choose to partake in the feast and friendly banter for an hour to gain the benefits of a Short Rest and Heroes’ Feast spell, but take 22 (4d10) Psychic damage and gain a random form of Drakkenheim Madness. If the characters enter without the invitation, the room is empty and they are assaulted by 7 (2d6) skin walkers - remains of the vampires’ victims.",
+    "Grotesque Emergence": "Deep Haze forms around the characters in a 60-foot Radius 20-foot thick dome. A moment later a grotesque gargantuan emerges from the Deep Haze. The creature fights the group until Bloodied, after which it escapes into the Deep Haze and disappears.",
+    "Patient Psychosis": "A wretched patient runs into the characters, they beg incoherently while cryings tears of blood. They die 2 (1d4) turns later and a disembodied psyche appears from their body.",
+    "Abandoned Experiments": "The street is wrecked with signs of carnage and bodies strewn around. All the corpses have been severely mutilated and modified. A few moments later a low rumbling begins to emit from 5 (2d4) corpses. They rise as scrap reautomatas.",
+    "Kidnapper": "A bodysnatcher has taken out 2 (1d4) adventurers or faction members and attempts to flee with them. If combat is not immediately instigated, it flees using Shadow Teleport.",
+    "Brutally Smart": "A cerebrograft controls 2 (1d4) innocent harvesters as they gather corpses of humanoids and monsters alike. The harvesters sing the song the about the Pale Man. Cerebrograft appears somewhat cunning trying not to instigate the fight if approached. If fight ensues, he target the weakest-looking character with Telekinetic Grip and hurl them away or towards the harvesters.",
+    "Contagious Outbreak": "A group of 4 (1d8) plague carriers suddenly lunges forward at the characters. They are mindless and will not stop their pursuit.",
+    "Tank You Very Much": "The party encounters a group of 6 creatures, 2 (1d4) of which are tankers and the rest are flesh golems. They seem docile at first, but should a different creature get within 30 feet of them or damage them, they will violently attack. Unafraid for their meaningless lives, they fight until death. Flesh golems especially will continue to target downed characters until they are turned into bloody pulp.",
+    "Lantern Duty": "A loud chorus of humming whistles can be heard nearby as the characters enter the street full of recently lit lanterns. Further down the road there are 2 (1d4) cyclopean hulks (or 3 (1d6) lamplighters if you own Dungeons of Drakkenheim: In Search of the Smuggler’s Secrets) working tirelessly on lighting up the road flames. They attack the characters if approached.",
+    "A Trail to Follow": "The characters take note of a peculiar trail of octarine mucus. If they follow the trail, they’ll soon run into a docile anomollusk.",
+    "The Play’s About to Begin": "The characters find a demonic statue of He Who Laughs Last. The demon lord mocks them for their futile efforts and urges them to continue this perfomance of naivety. If the statue is attacked, it transforms into a hostile oni, wielding a cane and wearing a circus ringmaster’s outfit. If defeated, the fiend bursts into hellish flames, leaving behind a ruby, worth 3d6 x 10gp.",
+    "Everything You Wish For With a Clause": "An altar with a wide bowl of oozing darkness stands in the middle of the pathway. The characters hear sweet whispers and promises while within 60 feet of it. It can be recognized as an illusion created by The Whispered Promise. Unless, the devil deems the characters worthy, it simply promises uncommon or rare magic items and wealth, explaining it as wishing to see them reach greatness. If any character agrees, The Whispered Promise will claim their soul, making them unable to be revived, and ask a steep price once said character reaches level 10.",
+    "Otherworldly Colours": "2 (1d4) warp marauders prowl around the area. They hunt down the characters, each attacking a different target.",
+    "Liminal Onslaught": "3 (1d6) liminal heralds appear around the group, telepathically assaulting the characters, proclaiming that they are disrupting the natural order of things.",
+    "Breach on the Threshold": "A strange and eerie melody fills the air. One round later a lurker on the threshold appears through a dimensional rift.",
+    "City Cat": "A displacer beast, acting much like a normal cat and demanding food. If fed Components from deep dregs, ratlings or harpies, the creature is happy and satisfied. It leaves gracefully leaving behind a Rare Aberration Component.",
+    "Failed Ritual": "The characters discover a ritual site with bits and pieces of clothing and flesh strewn around the area. There are an Uncommon Warlock spell scroll, material components for Find Familiar as well as an elongated humanoid skeleton. As soon as the characters approach the skeleton, it lifts into the air with octarine oozes forming its muscles and creating a mad and violent star spawn hulk (MPMM).",
+    "Bound by Hatred": "A cloaked fiendish host sits in the midddle of a ritual site. Should the characters interact with them, their head will turn unnaturally to stare at them with bloodshot eyes. They then hover into the air and scream maniacally about vengeance and sacrifices for freedom. The spirit inside was tricked once, it will never trust mortals or make bargains with them again.",
+    "Deadly Delivery": "A gigantic mutated pigeon crashes down onto the ground near the party. Each character rolls 1d6, and the one with the lowest roll is one on whom the pigeon falls. The mutated pigeon uses statblock of a roc, takes 21 (6d6) Bludgeoning damage because of the fall, has the Prone condition and is flailing in a bout of madness. Each creature on whose space the pigeon lands makes a DC 16 Dexterity saving throw, taking 21 (6d6) Bludgeoning damage on a failed save or half as much on a success. The main target makes the saving throw with Disadvantage. The pigeon has a scroll case containing 2 (1d4) Uncommon scrolls attached to its leg.",
+    "Blood Crusade": "2 crimson knights led by a dark confessor disguised as members of the Silver Order offer shelter and safe haven for a break. They lure characters into false sense of security and nicely ask them to give delerium or offer a blood sacrifice to the Flame. If refused, they attack characters in their camp.",
+    "Flaming Rodeo": "A brazen gorgon rushes along the street towards the characters. Inside clatter countless bones of many adventurers before it.",
+    "Otherworldly and Chaotic": "A blue slaad and a red slaad gather delerium in the area. They are not hostile from the start, but will attempt to take the delerium from characters if they have any. These slaads do not bleed, absolutely random harmless things occur instead. If the aberrations are defeated, 5 (2d4) delerium fragments can be found in the area.",
+    "Visions of the Past": "One of the characters stops in their tracks and stares into the sky. What they see before them is the city as it used to be - opulent and imperial. They stand there amidst the crowd of moving people. They see something coming from the sky. They see it crash through the Inscrutable Tower and fly down onto the city. A loud sound, a flash of light and they are back to the horrific present. The character gains Heroic Inspiration and a random Drakkenheim Madness until they finish a Short or Long Rest.",
+    "The Harbinger Comet": "As characters step into the area, they suddenly find themselves in barren wasteland filled with gargantuan spikes of delerium emerging from the ground. A single star in the sky seems to be closing in on them. No matter how much they run, the falling comet strikes the ground causing an eruption of octarine energy. Each character must succeed on a DC 18 Constitution saving throw or take 7 (2d6) Necrotic damage, 7 (2d6) Psychic damage and 7 (2d6) Radiant damage as well as gain one level of Contamination. After the flash of light, the characters are back to the present and 14 (4d6) delerium chips and a delerium shard are scattered around the area.",
+    "Apart in Time": "The characters enter a strange part of the ruins, where the buildings are destroyed yet sickly blue ghostly versions of their missing parts stand still mixed with the remaining stonework. In the middle of it all sit a ghoul lord seemingly holding hands with a similar sickly blue banshee, which is stuck on the Border Ethereal Plane, but is visible in this particular spot, which changes from time to time. The ghoul speaks Common as is not initially agressive, only getting hostile, if told to forget about the banshee.",
+    "Chaotic Fractions": "A fractal lepidoptera has passed through this area. Leaving behind chaotic patterns in the ruins. Each character must succeed on a DC 17 Charisma saving throw, or gain a random pattern as descrided in lepidotera’s Lair Effect. Keep track of how many times, the characters had this encounter. Every 3rd time it happens, they encounter the lepidoptera, which initially tries to simply move through them.",
+    "Flash of a Blade": "A night blade appears out of nowhere. He challenges one of the characters to a fair duel. The vampire fights until Bloodied after which he bows and swiftly disengages, leaving behind a rare spell scroll, if the fight was one on one.",
+    "Curious Snake": "A yuan-ti abomination, wearing plate armor and wielding two scimitars with sun and moon ornamentation, travels alongside a giant lizard with backpacks. The creature is friendly and offers to buy unique spell scrolls from the characters for 75% of their price. There’s a 30% chance that the yuan-ti considers spell scrolls unique, if they haven’t been offered to it before.",
+    "The Heritage of Cash": "Roll a d20. The number corresponds to encounters 11-30 from the Inner City Random Encounters table. The characters witness a tiefling questing knight of golden colour in heavy armor slaying all the monsters with a blade burning in radiant flame. The knight will then approach the characters, offering help, if they agree to spread the good name of the Cash family. The knight introduces himself as Jhonny Cash and will allow the characters to mitigate the next random encounter.",
+    "Delerious for Delerium": "A young woman chemist with long green hair is curious as the group approaches. She asks for their help finding something, though she cannot name or describe it adequately enough for any real help. When pressed for information, she gets increasingly irrate. If the party has Delerium in plain sight or attempts to harvest it near her, she attacks and attempts to rob them of all Delerium. She does not kill, only knocks out the characters.",
+    "Absolutely Wonderful Encounter": "Characters take note of a surprisingly intact sign “Your New Best Friend” and nearby stands an impossibly tall hooded figure. It appears to be docile and if approached emits a pleasant hum. It will also produce from within its robes a scroll of a Contaminated spell. The level of the spell is equal to the numbers of times that the characters have had this encounter, up to 5th level after which it resets. If attacked, the creature uses star warden statblock and dissappears if reduced to 0 Hit Points.",
+    "Hooded Lantern Elites": "Either Petra or Ansom lead a group of 5 (2d4) Hooded Lanterns veterans.",
+    "Sneaky Stealers": "A royal assassin and 2 (1d4) eldritch tricksters sneak through the rubble and mug wounded humanoids or kill weakened monstrosities to claim trophies. If encountered they hide and follow the characters for 2 (1d4) hours or until discovered. During this time characters roll on Lucky Finds table twice at take the lowest roll. These bandits don’t engage in direct combat unless forced, preferring to flee upon discovery, unless at least half of the characters are Bloodied.",
+    "Silver Inquisition": "A Silver Order cavalier on a griffon, flamekeeper and 2 (1d4) recruits scout the area. They kill monstrosities, slay Followers of the Fallen Fire, drive away mages of the Amethyst Academy and destroy any delerium they find. They demand characters to give any delerium that they have for it to be destroyed.",
+    "Academy Headhunter": "2 (1d4) invisible stalkers patrol the area, seeking out enemies of the Academy or malfeasant mages. They report back to a master mage located in the nearby ruins.",
+    "The Sanctified": "A sanctified soul, sanctified monk and 2 sanctified knights patrol the area, taking out monsters. They also attempt to drive away bandits and members of the Silver Order. These people never kill, unless one of their own was slain and not spared."
+  },
+  "encounterTables": {
+    "outerCity": [
+      {
+        "min": 1,
+        "max": 2,
+        "name": "Run out of Town"
+      },
+      {
+        "min": 3,
+        "max": 4,
+        "name": "Uninvited Guests"
+      },
+      {
+        "min": 5,
+        "max": 6,
+        "name": "Wrong Turn"
+      },
+      {
+        "min": 7,
+        "max": 8,
+        "name": "Troll Traveller"
+      },
+      {
+        "min": 9,
+        "max": 10,
+        "name": "Menacing Manticore"
+      },
+      {
+        "min": 11,
+        "max": 12,
+        "name": "Memories of Drakkenheim"
+      },
+      {
+        "min": 13,
+        "max": 14,
+        "name": "Phase Webs"
+      },
+      {
+        "min": 15,
+        "max": 16,
+        "name": "Watching Gargoyles"
+      },
+      {
+        "min": 17,
+        "max": 18,
+        "name": "Ratling Scavangers"
+      },
+      {
+        "min": 19,
+        "max": 20,
+        "name": "Garmyr Hunters"
+      },
+      {
+        "min": 21,
+        "max": 22,
+        "name": "Hateful Dead"
+      },
+      {
+        "min": 23,
+        "max": 24,
+        "name": "Gibbering Flesh"
+      },
+      {
+        "min": 25,
+        "max": 26,
+        "name": "Ghost Lights"
+      },
+      {
+        "min": 27,
+        "max": 28,
+        "name": "Haze Haunt"
+      },
+      {
+        "min": 29,
+        "max": 30,
+        "name": "Fresh News"
+      },
+      {
+        "min": 31,
+        "max": 32,
+        "name": "Lost Ones"
+      },
+      {
+        "min": 33,
+        "max": 34,
+        "name": "Shambling Husks"
+      },
+      {
+        "min": 35,
+        "max": 36,
+        "name": "Old Alchemist’s Shop"
+      },
+      {
+        "min": 37,
+        "max": 38,
+        "name": "Rat God Effigy"
+      },
+      {
+        "min": 39,
+        "max": 40,
+        "name": "Infested Storage"
+      },
+      {
+        "min": 41,
+        "max": 42,
+        "name": "Swatting Insects!"
+      },
+      {
+        "min": 43,
+        "max": 44,
+        "name": "Don’t Kick the Horses"
+      },
+      {
+        "min": 45,
+        "max": 46,
+        "name": "Unhappy Customer"
+      },
+      {
+        "min": 47,
+        "max": 48,
+        "name": "Fowl Play"
+      },
+      {
+        "min": 49,
+        "max": 50,
+        "name": "Expedition 33"
+      },
+      {
+        "min": 51,
+        "max": 52,
+        "name": "Lights! Crystals! Action!"
+      },
+      {
+        "min": 53,
+        "max": 54,
+        "name": "Renegade Mage"
+      },
+      {
+        "min": 55,
+        "max": 56,
+        "name": "Insectoid Knight"
+      },
+      {
+        "min": 57,
+        "max": 58,
+        "name": "Silk Works"
+      },
+      {
+        "min": 59,
+        "max": 60,
+        "name": "Fractured Reality"
+      },
+      {
+        "min": 61,
+        "max": 62,
+        "name": "Allopine Den"
+      },
+      {
+        "min": 63,
+        "max": 64,
+        "name": "Magehunter"
+      },
+      {
+        "min": 65,
+        "max": 66,
+        "name": "Crystalline Horror"
+      },
+      {
+        "min": 67,
+        "max": 68,
+        "name": "Fungal Trollfestation"
+      },
+      {
+        "min": 69,
+        "max": 70,
+        "name": "Croaking Well"
+      },
+      {
+        "min": 71,
+        "max": 72,
+        "name": "For Whom the Bell Tolls?"
+      },
+      {
+        "min": 73,
+        "max": 74,
+        "name": "Princess Petunia"
+      },
+      {
+        "min": 75,
+        "max": 76,
+        "name": "Unnerving Invitation"
+      },
+      {
+        "min": 77,
+        "max": 78,
+        "name": "Just a Little Nibble"
+      },
+      {
+        "min": 79,
+        "max": 80,
+        "name": "A Helping Hand"
+      },
+      {
+        "min": 81,
+        "max": 82,
+        "name": "Have We Met Before?"
+      },
+      {
+        "min": 83,
+        "max": 84,
+        "name": "Stranger Who?"
+      },
+      {
+        "min": 85,
+        "max": 86,
+        "name": "Friendly Doctor"
+      },
+      {
+        "min": 87,
+        "max": 88,
+        "name": "Hooded Lantern Patrol"
+      },
+      {
+        "min": 89,
+        "max": 90,
+        "name": "Queen’s Men Looters"
+      },
+      {
+        "min": 91,
+        "max": 92,
+        "name": "Questing Knight"
+      },
+      {
+        "min": 93,
+        "max": 94,
+        "name": "Academy Surveyor"
+      },
+      {
+        "min": 95,
+        "max": 96,
+        "name": "Pilgrims of the Fallen Fire"
+      },
+      {
+        "min": 97,
+        "max": 98,
+        "name": "Rival Adventurers"
+      },
+      {
+        "min": 99,
+        "max": 100,
+        "name": "Double Trouble"
+      }
+    ],
+    "innerCity": [
+      {
+        "min": 1,
+        "max": 1,
+        "name": "Horribly Lost"
+      },
+      {
+        "min": 2,
+        "max": 2,
+        "name": "Executioner’s Summons"
+      },
+      {
+        "min": 3,
+        "max": 3,
+        "name": "Going in Circles"
+      },
+      {
+        "min": 4,
+        "max": 4,
+        "name": "Lord of the Feast!"
+      },
+      {
+        "min": 5,
+        "max": 5,
+        "name": "Uninvited Guests"
+      },
+      {
+        "min": 6,
+        "max": 6,
+        "name": "Crimson Countess"
+      },
+      {
+        "min": 7,
+        "max": 7,
+        "name": "Wandered into the Garden"
+      },
+      {
+        "min": 8,
+        "max": 8,
+        "name": "Sewer Monster"
+      },
+      {
+        "min": 9,
+        "max": 9,
+        "name": "Stalking Vermin"
+      },
+      {
+        "min": 10,
+        "max": 10,
+        "name": "Ratling Horde"
+      },
+      {
+        "min": 11,
+        "max": 11,
+        "name": "Ratling Raiders"
+      },
+      {
+        "min": 12,
+        "max": 12,
+        "name": "Ratling Infestation"
+      },
+      {
+        "min": 13,
+        "max": 13,
+        "name": "Rat God Effigy"
+      },
+      {
+        "min": 14,
+        "max": 14,
+        "name": "Hundreds of Tails"
+      },
+      {
+        "min": 15,
+        "max": 15,
+        "name": "Hateful Dead"
+      },
+      {
+        "min": 16,
+        "max": 16,
+        "name": "Fallen Heroes"
+      },
+      {
+        "min": 17,
+        "max": 17,
+        "name": "Expedition 33"
+      },
+      {
+        "min": 18,
+        "max": 18,
+        "name": "Lost Ones"
+      },
+      {
+        "min": 19,
+        "max": 19,
+        "name": "Troll Traveller"
+      },
+      {
+        "min": 20,
+        "max": 20,
+        "name": "Fungal Trollfestation"
+      },
+      {
+        "min": 21,
+        "max": 21,
+        "name": "Phase Webs"
+      },
+      {
+        "min": 22,
+        "max": 22,
+        "name": "Gibbering Flesh"
+      },
+      {
+        "min": 23,
+        "max": 23,
+        "name": "Old Alchemist’s Shop"
+      },
+      {
+        "min": 24,
+        "max": 24,
+        "name": "Menacing Manticore"
+      },
+      {
+        "min": 25,
+        "max": 25,
+        "name": "Memories of Drakkenheim"
+      },
+      {
+        "min": 26,
+        "max": 26,
+        "name": "Ghost Lights"
+      },
+      {
+        "min": 27,
+        "max": 27,
+        "name": "Haze Haunt"
+      },
+      {
+        "min": 28,
+        "max": 28,
+        "name": "Watching Gargoyles"
+      },
+      {
+        "min": 29,
+        "max": 29,
+        "name": "Garmyr Hunters"
+      },
+      {
+        "min": 30,
+        "max": 30,
+        "name": "Garmyr Ravagers"
+      },
+      {
+        "min": 31,
+        "max": 31,
+        "name": "Garmyr Bloodrite"
+      },
+      {
+        "min": 32,
+        "max": 32,
+        "name": "Overgrown Ruins"
+      },
+      {
+        "min": 33,
+        "max": 33,
+        "name": "Living Ruins"
+      },
+      {
+        "min": 34,
+        "max": 34,
+        "name": "Living City"
+      },
+      {
+        "min": 35,
+        "max": 35,
+        "name": "Chimera Nest"
+      },
+      {
+        "min": 36,
+        "max": 36,
+        "name": "Harpy Flock"
+      },
+      {
+        "min": 37,
+        "max": 37,
+        "name": "Crone’s Band"
+      },
+      {
+        "min": 38,
+        "max": 38,
+        "name": "Lurking Wraiths"
+      },
+      {
+        "min": 39,
+        "max": 39,
+        "name": "Gloaming Ray"
+      },
+      {
+        "min": 40,
+        "max": 40,
+        "name": "Deep Ones"
+      },
+      {
+        "min": 41,
+        "max": 41,
+        "name": "Infested Storage"
+      },
+      {
+        "min": 42,
+        "max": 42,
+        "name": "Don’t Kick the Horses"
+      },
+      {
+        "min": 43,
+        "max": 43,
+        "name": "Unhappy Customer"
+      },
+      {
+        "min": 44,
+        "max": 44,
+        "name": "Lights! Crystals! Action!"
+      },
+      {
+        "min": 45,
+        "max": 45,
+        "name": "Renegade Mage"
+      },
+      {
+        "min": 46,
+        "max": 46,
+        "name": "Insectoid Knight"
+      },
+      {
+        "min": 47,
+        "max": 47,
+        "name": "Silk Works"
+      },
+      {
+        "min": 48,
+        "max": 48,
+        "name": "Fractured Reality"
+      },
+      {
+        "min": 49,
+        "max": 49,
+        "name": "Magehunter"
+      },
+      {
+        "min": 50,
+        "max": 50,
+        "name": "Crystalline Horror"
+      },
+      {
+        "min": 51,
+        "max": 51,
+        "name": "A Helping Hand"
+      },
+      {
+        "min": 52,
+        "max": 52,
+        "name": "Stalking Tree"
+      },
+      {
+        "min": 53,
+        "max": 53,
+        "name": "The Black Coach"
+      },
+      {
+        "min": 54,
+        "max": 54,
+        "name": "Unnerving Invitation"
+      },
+      {
+        "min": 55,
+        "max": 55,
+        "name": "The Predator"
+      },
+      {
+        "min": 56,
+        "max": 56,
+        "name": "Courtly Graces"
+      },
+      {
+        "min": 57,
+        "max": 57,
+        "name": "Grotesque Emergence"
+      },
+      {
+        "min": 58,
+        "max": 58,
+        "name": "Patient Psychosis"
+      },
+      {
+        "min": 59,
+        "max": 59,
+        "name": "Abandoned Experiments"
+      },
+      {
+        "min": 60,
+        "max": 60,
+        "name": "Kidnapper"
+      },
+      {
+        "min": 61,
+        "max": 61,
+        "name": "Brutally Smart"
+      },
+      {
+        "min": 62,
+        "max": 62,
+        "name": "Contagious Outbreak"
+      },
+      {
+        "min": 63,
+        "max": 63,
+        "name": "Tank You Very Much"
+      },
+      {
+        "min": 64,
+        "max": 64,
+        "name": "Lantern Duty"
+      },
+      {
+        "min": 65,
+        "max": 65,
+        "name": "A Trail to Follow"
+      },
+      {
+        "min": 66,
+        "max": 66,
+        "name": "The Play’s About to Begin"
+      },
+      {
+        "min": 67,
+        "max": 67,
+        "name": "Everything You Wish For With a Clause"
+      },
+      {
+        "min": 68,
+        "max": 68,
+        "name": "Otherworldly Colours"
+      },
+      {
+        "min": 69,
+        "max": 69,
+        "name": "Liminal Onslaught"
+      },
+      {
+        "min": 70,
+        "max": 70,
+        "name": "Breach on the Threshold"
+      },
+      {
+        "min": 71,
+        "max": 71,
+        "name": "City Cat"
+      },
+      {
+        "min": 72,
+        "max": 72,
+        "name": "Failed Ritual"
+      },
+      {
+        "min": 73,
+        "max": 73,
+        "name": "Bound by Hatred"
+      },
+      {
+        "min": 74,
+        "max": 74,
+        "name": "Deadly Delivery"
+      },
+      {
+        "min": 75,
+        "max": 75,
+        "name": "Blood Crusade"
+      },
+      {
+        "min": 76,
+        "max": 76,
+        "name": "Flaming Rodeo"
+      },
+      {
+        "min": 77,
+        "max": 77,
+        "name": "Otherworldly and Chaotic"
+      },
+      {
+        "min": 78,
+        "max": 78,
+        "name": "Visions of the Past"
+      },
+      {
+        "min": 79,
+        "max": 79,
+        "name": "The Harbinger Comet"
+      },
+      {
+        "min": 80,
+        "max": 80,
+        "name": "Apart in Time"
+      },
+      {
+        "min": 81,
+        "max": 81,
+        "name": "Chaotic Fractions"
+      },
+      {
+        "min": 82,
+        "max": 82,
+        "name": "Flash of a Blade"
+      },
+      {
+        "min": 83,
+        "max": 83,
+        "name": "Curious Snake"
+      },
+      {
+        "min": 84,
+        "max": 84,
+        "name": "The Heritage of Cash"
+      },
+      {
+        "min": 85,
+        "max": 85,
+        "name": "Delerious for Delerium"
+      },
+      {
+        "min": 86,
+        "max": 86,
+        "name": "Stranger Who?"
+      },
+      {
+        "min": 87,
+        "max": 87,
+        "name": "Friendly Doctor"
+      },
+      {
+        "min": 88,
+        "max": 88,
+        "name": "Absolutely Wonderful Encounter"
+      },
+      {
+        "min": 89,
+        "max": 89,
+        "name": "Rival Adventurers"
+      },
+      {
+        "min": 90,
+        "max": 90,
+        "name": "Hooded Lantern Patrol"
+      },
+      {
+        "min": 91,
+        "max": 91,
+        "name": "Hooded Lantern Elites"
+      },
+      {
+        "min": 92,
+        "max": 92,
+        "name": "Queen’s Men Looters"
+      },
+      {
+        "min": 93,
+        "max": 93,
+        "name": "Sneaky Stealers"
+      },
+      {
+        "min": 94,
+        "max": 94,
+        "name": "Questing Knight"
+      },
+      {
+        "min": 95,
+        "max": 95,
+        "name": "Silver Inquisition"
+      },
+      {
+        "min": 96,
+        "max": 96,
+        "name": "Academy Surveyor"
+      },
+      {
+        "min": 97,
+        "max": 97,
+        "name": "Academy Headhunter"
+      },
+      {
+        "min": 98,
+        "max": 98,
+        "name": "Pilgrims of the Fallen Fire"
+      },
+      {
+        "min": 99,
+        "max": 99,
+        "name": "The Sanctified"
+      },
+      {
+        "min": 100,
+        "max": 100,
+        "name": "Double Trouble"
+      }
+    ]
+  }
+};
+
 const STORAGE_KEYS = {
   shop: "aldor.shopState.v1",
   inventory: "aldor.inventoryLists.v1"
@@ -1571,9 +2445,33 @@ function selectedEncounterTable() {
   return document.querySelector('input[name="encounterTable"]:checked').value;
 }
 
+function isMonstersOfDrakkenheimMode(tableName) {
+  const checkbox = byId("monstersOfDrakkenheimMode");
+  return Boolean(
+    checkbox &&
+    checkbox.checked &&
+    tableName !== "sewers" &&
+    MONSTERS_OF_DRAKKENHEIM_DATA.encounterTables[tableName]
+  );
+}
+
+function activeEncounterTable(tableName) {
+  if (isMonstersOfDrakkenheimMode(tableName)) {
+    return MONSTERS_OF_DRAKKENHEIM_DATA.encounterTables[tableName];
+  }
+  return DEFAULT_DATA.encounterTables[tableName];
+}
+
+function activeEncounterDescriptions(tableName) {
+  if (isMonstersOfDrakkenheimMode(tableName)) {
+    return MONSTERS_OF_DRAKKENHEIM_DATA.encounterDescriptions;
+  }
+  return DEFAULT_DATA.encounterDescriptions;
+}
+
 function rollEncounter(tableName, ignoreDoubleTrouble = false) {
-  const table = DEFAULT_DATA.encounterTables[tableName];
-  const maxRoll = tableName === "sewers" ? 20 : 100;
+  const table = activeEncounterTable(tableName);
+  const maxRoll = Math.max(...table.map((entry) => entry.max));
   let result;
   do {
     const roll = Math.floor(Math.random() * maxRoll) + 1;
@@ -1587,30 +2485,45 @@ function encounterDisplayText(encounter) {
   return `${encounter.name} - rolled ${encounter.roll} on d${encounter.maxRoll}`;
 }
 
-function getEncounterDescription(name) {
-  const key = String(name).trim().replace(/!+$/, "");
-  return DEFAULT_DATA.encounterDescriptions[key] || "No description found for this encounter.";
+function lookupEncounterDescription(descriptions, name) {
+  const key = String(name).trim();
+  if (descriptions[key]) return descriptions[key];
+
+  const normalisedKey = key.replace(/[.!]+$/, "");
+  const matchingKey = Object.keys(descriptions).find(
+    (descriptionKey) => descriptionKey.replace(/[.!]+$/, "") === normalisedKey
+  );
+  return matchingKey ? descriptions[matchingKey] : "";
+}
+
+function getEncounterDescription(name, tableName) {
+  const activeDescription = lookupEncounterDescription(activeEncounterDescriptions(tableName), name);
+  if (activeDescription) return activeDescription;
+
+  const fallbackDescription = lookupEncounterDescription(DEFAULT_DATA.encounterDescriptions, name);
+  return fallbackDescription || "No description found for this encounter.";
 }
 
 function generateEncounter() {
   const tableName = selectedEncounterTable();
   const encounter = rollEncounter(tableName, false);
-  byId("encounterOutput").textContent = encounterDisplayText(encounter);
+  const modeSuffix = isMonstersOfDrakkenheimMode(tableName) ? " [Monsters of Drakkenheim]" : "";
+  byId("encounterOutput").textContent = `${encounterDisplayText(encounter)}${modeSuffix}`;
 
   if (encounter.name.toLowerCase() === "double trouble") {
     const first = rollEncounter(tableName, true);
     const second = rollEncounter(tableName, true);
     byId("encounterDescription").textContent = [
-      getEncounterDescription(encounter.name),
+      getEncounterDescription(encounter.name, tableName),
       "",
       `1) ${encounterDisplayText(first)}`,
-      getEncounterDescription(first.name),
+      getEncounterDescription(first.name, tableName),
       "",
       `2) ${encounterDisplayText(second)}`,
-      getEncounterDescription(second.name)
+      getEncounterDescription(second.name, tableName)
     ].join("\n");
   } else {
-    byId("encounterDescription").textContent = getEncounterDescription(encounter.name);
+    byId("encounterDescription").textContent = getEncounterDescription(encounter.name, tableName);
   }
 }
 
