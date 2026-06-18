@@ -1,5 +1,117 @@
 # Changelog
 
+## v2.3.0
+- Marked the Drakkenheim Route Map as a stable feature set.
+- Clarified the Road type control so Side roads / rubble explicitly says it is half speed.
+- Added a compact Map route rules collapsible under the route controls.
+- Added reminders for changing pace or road type before the next click when only part of an hour changes movement conditions.
+- Updated the footer version number.
+
+## v2.2.16
+- Replaced native browser tooltips on map pins with instant themed map tooltips.
+- Added compact themed tooltip styling for landmarks, route markers, rest spots, and route segments.
+- Hid map tooltips while panning, zooming, or scrolling the map.
+
+## v2.2.15
+- Updated Map landmark pop-out routing so clicking a landmark ends the current exploration hour at that landmark when it can be reached with the remaining time.
+- Applied the same endpoint behaviour to saved short rest spots in the landmark pop-out.
+
+## v2.2.14
+- Rebuilt the Map zoom control as a custom vertical slider that can be dragged smoothly.
+- Kept the zoom control fixed over the map's top-right corner instead of letting it scroll with the map contents.
+- Improved the zoom slider hit area and thumb behaviour.
+
+## v2.2.13
+- Fixed the Map zoom slider so it is visibly overlaid in the top-right corner of the map.
+- Moved the zoom widget out of the map content flow so it no longer gets pushed below the map image.
+
+## v2.2.12
+- Moved the Map zoom control onto the map as a vertical slider in the top-right corner.
+- Added a compact reset button beside the map zoom slider.
+- Added right-click hold-and-drag panning for the map when zoomed in.
+- Updated map help text to mention zooming and right-click panning.
+
+## v2.2.11
+- Added custom duration support for every map log event type.
+- Moved the map landmark list into a draggable pop-out window.
+- Added map zoom controls with a reset button.
+- Added a Road type control for main roads versus side roads / rubble.
+- Side roads / rubble can be used for only part of an exploration hour and travel at half speed.
+- Updated route line styling and exploration log output for side-road segments.
+
+## v2.2.10
+- Moved Add Log Event into a draggable pop-out window.
+- Renamed the custom event duration label to Custom duration (minutes).
+- Fixed custom event durations so they use the entered minute value instead of always logging one hour.
+- Added safe-haven return handling when double-clicking EV, CD, or EM at the end of a route hour.
+
+## v2.2.9
+- Simplified the Map exploration log so bracketed route breakdowns only appear when an exploration hour uses multiple different paces.
+- Single-pace hours now display as a single total, even if they were plotted with several clicks.
+
+## v2.2.8
+- Added a day start time to the Drakkenheim Map so the exploration log can show times of day.
+- Added time ranges to safe-haven travel, route hours, and logged map events.
+- Updated logged events so standard events take one hour.
+- Added custom event duration for custom map notes.
+- Added tracked event time to the route summary.
+- Added a draggable Map Help window with user-facing instructions for the map page.
+- Included map day start time and event durations in save/load data.
+
+## v2.2.7
+- Baked in the latest manually corrected Drakkenheim map landmark coordinates.
+- Moved map landmark pin positioning into a draggable pop-out window.
+- Kept the main Map controls cleaner with a single Open Pin Mover button.
+
+## v2.2.6
+- Re-added manual landmark pin positioning on the Drakkenheim Map page.
+- Added a Road to Camp Dawn safe-haven landmark.
+- Added save/load support for landmark pin overrides again.
+- Adding an approach from Emberwood Village, Eckerman Mill, or Camp Dawn now starts an empty route at the matching road landmark.
+- Kept double-click landmark routing behaviour for ending the current exploration hour at a landmark.
+
+## v2.2.5
+- Prevented text selection on map landmark, route, and rest spot pins to make double-clicking smoother.
+- Updated route plotting so the party can change travel pace during an incomplete exploration hour.
+- Changed route hour tracking to use time spent within the hour rather than locking the whole hour to the first selected pace.
+- Added different route line styles for fast, normal, and slow pace segments.
+- Updated the exploration log to show mixed-pace hours with a short pace breakdown.
+
+## v2.2.4
+- Baked in the manually corrected Drakkenheim map landmark coordinates.
+- Removed the temporary landmark pin positioning tool.
+- Updated landmark pin handling so double-clicking a landmark can end the current exploration hour at that landmark when the remaining distance allows it.
+
+## v2.2.3
+- Added manual landmark pin positioning to the Drakkenheim Map page.
+- Added a landmark edit mode where pins can be selected and moved by clicking the correct spot on the map.
+- Added Copy Landmark Data so corrected coordinates can be sent back and baked into future versions.
+- Added Reset Pins to restore the built-in landmark positions.
+- Included landmark pin overrides in save/load data.
+
+## v2.2.2
+- Made the Drakkenheim map larger by moving the controls and route summary underneath the map.
+- Corrected and re-aligned the built-in map landmark markers to better match the numbered locations on the map, including swapping 05 and 08 and renaming the Emberwood road marker to EV.
+- Moved the Emberwood road marker to the edge of the road where it reaches the map border.
+- Simplified route hour markers so only the start and each hour endpoint are labelled; removed the old H1 / H2 segment text.
+- Changed the exploration log to summarise travel hour by hour instead of segment by segment.
+- Added map log events so you can record short rests, searches, getting lost, and custom notes in the exploration log.
+- Added save-code support for the new map log events.
+- Made the Deep Haze overlay stronger so the affected areas are easier to see.
+- Updated route undo so it removes the last full exploration hour instead of only the last segment.
+
+## v2.2.0
+
+- Added a new Drakkenheim Map page.
+- Added click-to-plot city routes using one-hour travel segments based on travel mode and pace.
+- Added normal map and Deep Haze overlay support.
+- Added fixed numbered landmark markers for key Drakkenheim locations.
+- Added safe-haven approach and return travel tracking for Emberwood Village, Camp Dawn, and Eckerman Mill.
+- Added up to three saved short rest spots on the map.
+- Added route summaries for distance, time, random encounter checks, fast pace reminders, sewer contamination checks, and flying-risk notes.
+- Expanded Save Code / Load Save Code to include map route, outside travel, Deep Haze overlay preference, and saved short rest spots.
+- Updated the footer version number.
+
 ## v2.1.12
 
 - Removed the Changelog button from the top header action bar.

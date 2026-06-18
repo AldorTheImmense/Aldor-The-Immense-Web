@@ -134,7 +134,7 @@ a { color: var(--accent-strong); }
   top: 0;
   z-index: 10;
   box-shadow: 0 9px 28px var(--shadow);
-  overflow: hidden;
+  overflow: auto;
 }
 :root[data-theme="light"] .app-header {
   background: linear-gradient(180deg, rgba(88, 44, 30, 0.97), rgba(49, 25, 18, 0.97));
@@ -942,4 +942,475 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
   .faction-tools-grid, .compact-helper-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* v2.3.0 Drakkenheim route map */
+.map-card h2 {
+  margin-bottom: 0.4rem;
+}
+.map-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(320px, 1fr);
+  gap: 0.9rem;
+  align-items: start;
+}
+.map-view-panel {
+  grid-column: 1 / -1;
+  order: 1;
+}
+.map-controls-panel {
+  order: 2;
+}
+.map-summary-panel {
+  order: 3;
+}
+.map-control-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  align-items: end;
+}
+.map-check {
+  grid-column: 1 / -1;
+}
+.map-safehaven-row {
+  display: grid;
+  gap: 0.55rem;
+}
+.map-view-panel {
+  display: grid;
+  gap: 0.45rem;
+  grid-column: 1 / -1;
+  order: 1;
+}
+.map-event-grid {
+  display: grid;
+  gap: 0.55rem;
+}
+.map-log-subitem {
+  margin-left: 0.5rem;
+}
+.map-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel-deep);
+  box-shadow: var(--panel-shadow);
+  cursor: crosshair;
+  isolation: isolate;
+}
+.map-zoom-surface {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.map-base-image,
+.map-haze-image,
+.map-overlay-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.map-base-image,
+.map-haze-image {
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.map-haze-image {
+  opacity: 0.82;
+  mix-blend-mode: normal;
+  filter: saturate(1.18) contrast(1.08);
+  transition: opacity 180ms ease;
+}
+.map-haze-image.hidden {
+  opacity: 0;
+}
+.map-overlay-svg {
+  z-index: 3;
+  pointer-events: auto;
+}
+.map-route-line {
+  fill: none;
+  stroke: var(--accent-strong);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 10px rgba(240, 210, 138, 0.65));
+}
+.map-route-segment {
+  stroke: var(--accent-strong);
+  stroke-width: 7;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 10px rgba(240, 210, 138, 0.65));
+}
+.map-route-segment.pace-fast {
+  stroke: var(--accent-strong);
+  stroke-dasharray: none;
+}
+.map-route-segment.pace-normal {
+  stroke: var(--haze);
+  stroke-dasharray: 18 10;
+}
+.map-route-segment.pace-slow {
+  stroke: var(--success);
+  stroke-dasharray: 4 10;
+}
+.map-route-segment.open-hour {
+  opacity: 0.82;
+  filter: drop-shadow(0 0 12px rgba(162, 95, 255, 0.72));
+}
+
+.map-route-marker circle {
+  fill: rgba(8, 7, 10, 0.88);
+  stroke: var(--accent-strong);
+  stroke-width: 4;
+  filter: drop-shadow(0 0 8px rgba(240, 210, 138, 0.5));
+}
+.map-route-marker.start circle {
+  stroke: var(--success);
+}
+.map-route-marker.open-hour-end circle {
+  stroke: var(--haze);
+  filter: drop-shadow(0 0 8px rgba(162, 95, 255, 0.7));
+}
+.map-route-marker text,
+.map-rest-marker text,
+.map-landmark-marker text {
+  fill: #fff4d0;
+  font: 700 22px "Segoe UI", system-ui, sans-serif;
+  pointer-events: none;
+}
+.map-landmark-marker {
+  cursor: pointer;
+  pointer-events: auto;
+}
+.map-landmark-marker circle {
+  fill: rgba(22, 13, 32, 0.78);
+  stroke: rgba(240, 210, 138, 0.8);
+  stroke-width: 3;
+}
+.map-landmark-marker:hover circle {
+  fill: rgba(162, 95, 255, 0.72);
+  stroke: #fff4d0;
+  filter: drop-shadow(0 0 12px rgba(162, 95, 255, 0.75));
+}
+.map-landmark-marker.safe-haven circle {
+  fill: rgba(49, 117, 144, 0.82);
+  stroke: rgba(191, 235, 255, 0.9);
+}
+.map-rest-marker {
+  cursor: pointer;
+  pointer-events: auto;
+}
+.map-rest-marker path {
+  fill: rgba(86, 189, 134, 0.82);
+  stroke: #f5ffe9;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 10px rgba(86, 189, 134, 0.75));
+}
+.map-rest-marker:hover path {
+  fill: rgba(126, 227, 169, 0.96);
+  filter: drop-shadow(0 0 15px rgba(126, 227, 169, 0.95));
+}
+.compact-list {
+  margin: 0.45rem 0 0;
+  padding-left: 1.2rem;
+  line-height: 1.45;
+}
+.compact-list li + li {
+  margin-top: 0.35rem;
+}
+.compact-list button {
+  padding: 0.12rem 0.42rem;
+  margin-left: 0.35rem;
+  font-size: 0.82rem;
+}
+.map-landmark-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.4rem;
+  max-height: 280px;
+  overflow: auto;
+}
+.map-landmark-list button {
+  width: 100%;
+  text-align: left;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.83rem;
+}
+
+@media (max-width: 1120px) {
+  .map-layout {
+    grid-template-columns: 1fr;
+  }
+  .map-stage {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .map-control-grid {
+    grid-template-columns: 1fr;
+  }
+  .map-landmark-list {
+    max-height: 220px;
+  }
+  .mobile-bottom-nav {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  .mobile-bottom-nav button {
+    font-size: 0.72rem;
+    padding-inline: 0.15rem;
+  }
+}
+
+
+
+/* v2.2.5 map interaction polish */
+.map-overlay-svg,
+.map-overlay-svg *,
+.map-landmark-marker,
+.map-landmark-marker text,
+.map-route-marker,
+.map-route-marker text,
+.map-rest-marker,
+.map-rest-marker text {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+
+/* v2.2.6 landmark editing and safe-haven routing */
+.map-landmark-editor {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.map-landmark-editor.active {
+  border-left: 3px solid var(--haze);
+  padding-left: 0.65rem;
+}
+
+.map-landmark-marker.selected circle {
+  fill: rgba(162, 95, 255, 0.92);
+  stroke: #fff4d0;
+  stroke-width: 5;
+  filter: drop-shadow(0 0 16px rgba(162, 95, 255, 0.95));
+}
+
+
+/* v2.2.7 draggable map pin editor */
+.map-pin-editor-window {
+  width: min(460px, calc(100vw - 2rem));
+}
+
+
+/* v2.2.8 map help and time tracking */
+.map-help-window {
+  width: min(560px, calc(100vw - 2rem));
+}
+
+.map-help-body h3 {
+  margin: 0.85rem 0 0.25rem;
+  color: var(--accent-strong);
+}
+
+.map-help-body p {
+  margin: 0.25rem 0 0.65rem;
+}
+
+
+/* v2.2.10 log event pop-out */
+.map-event-window {
+  width: min(460px, calc(100vw - 2rem));
+}
+
+
+/* v2.2.11 map zoom, landmarks, and side roads */
+.map-route-segment.terrain-sideRoad {
+  stroke-width: 5;
+  opacity: 0.72;
+}
+
+.map-zoom-control output {
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.map-landmark-window,
+.map-event-window {
+  width: min(460px, calc(100vw - 2rem));
+}
+
+.map-landmark-window .floating-window-body {
+  max-height: min(620px, calc(100vh - 8rem));
+}
+
+
+/* v2.2.14 vertical zoom and right-click pan */
+.map-stage-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.map-stage {
+  cursor: crosshair;
+  max-width: none;
+}
+
+.map-stage.is-panning {
+  cursor: grabbing;
+}
+
+.map-zoom-widget {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 50;
+  width: 58px;
+  padding: 0.55rem 0.38rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(12, 10, 18, 0.94);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05) inset;
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  backdrop-filter: blur(6px);
+  user-select: none;
+  pointer-events: auto;
+}
+
+.map-zoom-widget output {
+  color: var(--accent-strong);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.map-zoom-rail {
+  position: relative;
+  width: 16px;
+  height: 164px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(255,255,255,0.16);
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.map-zoom-rail:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 3px;
+}
+
+.map-zoom-fill {
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  height: 0%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--accent-strong), var(--haze));
+  pointer-events: none;
+}
+
+.map-zoom-thumb {
+  position: absolute;
+  left: 50%;
+  bottom: 0%;
+  width: 22px;
+  height: 22px;
+  min-height: 0;
+  padding: 0;
+  transform: translate(-50%, 50%);
+  border-radius: 50%;
+  border: 2px solid rgba(12, 10, 18, 0.9);
+  background: var(--accent-strong);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.55);
+  cursor: ns-resize;
+  pointer-events: none;
+}
+
+.map-zoom-rail.is-dragging .map-zoom-thumb {
+  transform: translate(-50%, 50%) scale(1.08);
+}
+
+.map-zoom-widget button {
+  min-height: 0;
+  padding: 0.28rem 0.35rem;
+  font-size: 0.68rem;
+  border-radius: 999px;
+}
+
+
+/* v2.3.0 themed map tooltips */
+.map-pin-tooltip {
+  position: absolute;
+  z-index: 70;
+  max-width: 240px;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid rgba(240, 210, 138, 0.58);
+  border-radius: 0.45rem;
+  background:
+    linear-gradient(180deg, rgba(162, 95, 255, 0.18), rgba(0, 0, 0, 0.08)),
+    rgba(12, 10, 18, 0.95);
+  color: #f6e8b6;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.52), 0 0 16px rgba(162, 95, 255, 0.18);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  user-select: none;
+  white-space: normal;
+}
+
+.map-pin-tooltip[hidden] {
+  display: none;
+}
+
+
+/* v2.3.0 stable map route rules */
+.map-route-rules {
+  margin: 0.65rem 0 0.85rem;
+  padding: 0.62rem 0.75rem;
+  border: 1px solid rgba(240, 210, 138, 0.32);
+  border-radius: var(--radius-sm);
+  background:
+    linear-gradient(135deg, rgba(162, 95, 255, 0.12), rgba(0, 0, 0, 0.08)),
+    rgba(12, 10, 18, 0.5);
+}
+
+.map-route-rules summary {
+  cursor: pointer;
+  color: var(--accent-strong);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.map-route-rules ul {
+  margin: 0.55rem 0 0;
+  padding-left: 1.15rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.map-route-rules li + li {
+  margin-top: 0.32rem;
 }

@@ -30,6 +30,7 @@
     <nav class="quick-nav" aria-label="Quick navigation">
       <button type="button" data-nav-tab="shop" data-nav-target="shop">Shop</button>
       <button type="button" data-nav-tab="factions" data-nav-target="factions">Factions</button>
+      <button type="button" data-nav-tab="map" data-nav-target="map">Map</button>
       <button type="button" data-nav-tab="tables" data-nav-target="delerium-card">Delerium</button>
       <button type="button" data-nav-tab="tables" data-nav-target="encounters-card">Encounters</button>
       <button type="button" data-nav-tab="tables" data-nav-target="other-tables-card">Other Tables</button>
@@ -205,6 +206,114 @@
     </div>
   </div>
 
+  <div id="mapPinEditorWindow" class="floating-window map-pin-editor-window" role="dialog" aria-modal="false" aria-labelledby="mapPinEditorTitle" hidden>
+    <div id="mapPinEditorWindowHandle" class="floating-window-header">
+      <div>
+        <h2 id="mapPinEditorTitle">Map Pin Mover</h2>
+        <p>Choose a landmark, then click the corrected point on the map.</p>
+      </div>
+      <button id="closeMapPinEditorWindow" type="button" class="icon-button" aria-label="Close map pin mover">×</button>
+    </div>
+
+    <div class="floating-window-body">
+      <div id="mapLandmarkEditorPanel" class="map-landmark-editor">
+        <label class="field-stack">
+          <span>Landmark to move</span>
+          <select id="mapLandmarkEditSelect"></select>
+        </label>
+        <p class="inline-note">Turn moving on, then click a landmark pin to select it or click the map to move the selected landmark. Changes are saved in this browser and included in save codes.</p>
+        <div class="action-row compact-action-row">
+          <button id="toggleLandmarkEditMode" type="button">Move Landmark Pins</button>
+          <button id="copyMapLandmarkData" type="button">Copy Landmark Data</button>
+          <button id="resetMapLandmarkPositions" type="button">Reset Pins</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="mapHelpWindow" class="floating-window map-help-window" role="dialog" aria-modal="false" aria-labelledby="mapHelpTitle" hidden>
+    <div id="mapHelpWindowHandle" class="floating-window-header">
+      <div>
+        <h2 id="mapHelpTitle">Route Map Help</h2>
+        <p>Quick guide for planning a run into Drakkenheim.</p>
+      </div>
+      <button id="closeMapHelpWindow" type="button" class="icon-button" aria-label="Close map help">×</button>
+    </div>
+
+    <div class="floating-window-body map-help-body">
+      <h3>1. Set the start time</h3>
+      <p>Use <strong>Day starts</strong> for the time the party leaves its safe haven. If the party leaves Emberwood at 08:00, set 08:00 before adding the approach.</p>
+
+      <h3>2. Add approach travel</h3>
+      <p>Choose Emberwood Village, Camp Dawn, or Eckerman Mill, then press <strong>Add Approach</strong>. If no city route is already plotted, the route starts from that road marker on the map.</p>
+
+      <h3>3. Plot city movement</h3>
+      <p>Click the map or a landmark to draw travel. Change pace or road type before the next click if the party switches movement style during the same exploration hour. Side roads / rubble are half speed.</p>
+      <p>Fast, normal, and slow paces use different line styles. When an hour is not fully used, the next click continues the same hour. Double-click to end the current hour leg at that point or landmark.</p>
+      <p>Use the vertical zoom slider on the map to zoom in. Hold right-click and drag on the map to pan around while zoomed.</p>
+
+      <h3>4. Record events</h3>
+      <p>Use <strong>Add Event</strong> for short rests, searching, wrong turns, and other interruptions. Standard events add one hour. Custom notes can use their own duration.</p>
+
+      <h3>5. Rest spots and pins</h3>
+      <p><strong>Add Short Rest Spot</strong> saves a known safe place on the map. The party can route back to it later without searching again. <strong>Open Pin Mover</strong> is only for correcting landmark positions.</p>
+    </div>
+  </div>
+
+
+  <div id="mapEventWindow" class="floating-window map-event-window" role="dialog" aria-modal="false" aria-labelledby="mapEventWindowTitle" hidden>
+    <div id="mapEventWindowHandle" class="floating-window-header">
+      <div>
+        <h2 id="mapEventWindowTitle">Add Log Event</h2>
+        <p>Record time spent during the route.</p>
+      </div>
+      <button id="closeMapEventWindow" type="button" class="icon-button" aria-label="Close log event window">×</button>
+    </div>
+
+    <div class="floating-window-body">
+      <div class="map-event-grid">
+        <label class="field-stack">
+          <span>Event type</span>
+          <select id="mapEventType">
+            <option value="shortRest">Short rest</option>
+            <option value="searchDelerium">Search for delerium</option>
+            <option value="searchObjective">Search for a specific thing</option>
+            <option value="searchRestSpot">Search for a short rest spot</option>
+            <option value="getLost">Get lost / wrong turn</option>
+            <option value="custom">Custom note</option>
+          </select>
+        </label>
+        <label class="field-stack" id="mapEventCustomField">
+          <span>Details</span>
+          <input id="mapEventCustomText" type="text" placeholder="Optional details">
+        </label>
+        <label class="field-stack" id="mapEventCustomDurationField">
+          <span>Duration (minutes)</span>
+          <input id="mapEventCustomDuration" type="number" min="1" step="5" value="60" inputmode="numeric">
+        </label>
+        <p class="inline-note">Default is 60 minutes. Change it for any event when the activity takes more or less time.</p>
+        <button id="addMapEvent" type="button">Add Event</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="mapLandmarkWindow" class="floating-window map-landmark-window" role="dialog" aria-modal="false" aria-labelledby="mapLandmarkWindowTitle" hidden>
+    <div id="mapLandmarkWindowHandle" class="floating-window-header">
+      <div>
+        <h2 id="mapLandmarkWindowTitle">Map Landmarks</h2>
+        <p>Click a landmark to route towards it.</p>
+      </div>
+      <button id="closeMapLandmarkWindow" type="button" class="icon-button" aria-label="Close landmarks">×</button>
+    </div>
+
+    <div class="floating-window-body">
+      <div id="mapLandmarkList" class="map-landmark-list"></div>
+    </div>
+  </div>
+
+
   <main>
     <section id="shop" class="panel active-panel" aria-labelledby="shop-tab">
       <div class="toolbar">
@@ -263,6 +372,154 @@
               </div>
               <div id="factionClockList" class="faction-clock-list"></div>
             </section>
+          </div>
+        </article>
+      </div>
+    </section>
+
+
+
+    <section id="map" class="panel" aria-labelledby="map-tab">
+      <div class="tables-grid">
+        <article id="map-card" class="card card-wide map-card">
+          <h2>Drakkenheim Route Map</h2>
+          <p class="inline-note">Click the map to set the party's starting point. Each later click adds one exploration hour in that direction, using the selected travel mode and pace.</p>
+
+          <div class="map-layout">
+            <section class="map-view-panel">
+              <div class="map-stage-wrap">
+                <div id="drakkenheimMapStage" class="map-stage" aria-label="Interactive Drakkenheim map">
+                  <div id="mapZoomSurface" class="map-zoom-surface">
+                    <img class="map-base-image" src="assets/drakkenheim-map.webp" alt="Map of Drakkenheim">
+                    <img id="deepHazeMapOverlay" class="map-haze-image" src="assets/drakkenheim-deep-haze.webp" alt="Deep Haze overlay map" aria-hidden="true">
+                    <svg id="mapOverlaySvg" class="map-overlay-svg" viewBox="0 0 2048 2048" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                      <g id="mapRouteSvg"></g>
+                      <g id="mapRestSpotSvg"></g>
+                      <g id="mapLandmarkSvg"></g>
+                    </svg>
+                  </div>
+                </div>
+                <div id="mapPinTooltip" class="map-pin-tooltip" role="tooltip" hidden></div>
+                <div class="map-zoom-widget" aria-label="Map zoom controls">
+                  <output id="mapZoomValue">100%</output>
+                  <div id="mapZoomRail" class="map-zoom-rail" role="slider" tabindex="0" aria-label="Map zoom" aria-valuemin="100" aria-valuemax="300" aria-valuenow="100">
+                    <div id="mapZoomFill" class="map-zoom-fill"></div>
+                    <button id="mapZoomThumb" class="map-zoom-thumb" type="button" aria-label="Drag to zoom map"></button>
+                  </div>
+                  <input id="mapZoom" type="hidden" value="1">
+                  <button id="resetMapZoom" type="button" title="Reset map zoom">Reset</button>
+                </div>
+              </div>
+              <p class="inline-note">Click numbered landmark pins to route towards them. The map distance is approximate and intended for Drakkenheim's abstract urban exploration rules.</p>
+            </section>
+
+            <section class="tool-box map-controls-panel">
+              <h3>Route controls</h3>
+              <div class="map-control-grid">
+                <label class="field-stack">
+                  <span>Travel mode</span>
+                  <select id="mapTravelMode">
+                    <option value="streets">Streets</option>
+                    <option value="sewers">Sewers</option>
+                    <option value="boat">Boat / river</option>
+                    <option value="landVehicle">Land vehicle / portage</option>
+                    <option value="flying">Flying</option>
+                  </select>
+                </label>
+                <label class="field-stack">
+                  <span>Travel pace</span>
+                  <select id="mapTravelPace">
+                    <option value="fast">Fast</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="slow">Slow</option>
+                  </select>
+                </label>
+                <label class="field-stack">
+                  <span>Road type</span>
+                  <select id="mapTerrain">
+                    <option value="mainRoad" selected>Main roads</option>
+                    <option value="sideRoad">Side roads / rubble — half speed</option>
+                  </select>
+                </label>
+                <label class="field-stack">
+                  <span>Day starts</span>
+                  <input id="mapDayStartTime" type="time" value="08:00">
+                </label>
+                <label class="check-row compact-check map-check">
+                  <input type="checkbox" id="showDeepHazeOverlay" checked>
+                  <span>Show Deep Haze overlay</span>
+                </label>
+              </div>
+              <p id="mapPaceNote" class="inline-note"></p>
+              <p id="mapModeNote" class="inline-note"></p>
+
+              <details class="map-route-rules">
+                <summary>Map route rules</summary>
+                <ul>
+                  <li>Each city exploration hour is built from the clicks you plot on the map.</li>
+                  <li>If the party changes pace or road type mid-hour, change the control before the next click.</li>
+                  <li><strong>Main roads</strong> use normal speed. <strong>Side roads / rubble</strong> is difficult terrain and moves at half speed.</li>
+                  <li>Double-click a point or landmark to end the current hour early there, if the party can reach it.</li>
+                </ul>
+              </details>
+
+              <div class="action-row compact-action-row">
+                <button id="undoMapSegment" type="button">Undo Last Hour</button>
+                <button id="clearMapRoute" type="button">Clear Route</button>
+                <button id="openMapHelp" type="button">Map Help</button>
+              </div>
+
+              <h3>Safe haven travel</h3>
+              <p class="inline-note">Travel to and from the city outskirts is tracked separately from city exploration.</p>
+              <div class="map-safehaven-row">
+                <label class="field-stack">
+                  <span>Safe haven</span>
+                  <select id="mapSafeHaven">
+                    <option value="emberwood">Emberwood Village — 2 hours</option>
+                    <option value="campDawn">Camp Dawn — 1 hour</option>
+                    <option value="eckermanMill">Eckerman Mill — 20 minutes</option>
+                  </select>
+                </label>
+                <div class="action-row compact-action-row">
+                  <button id="addApproachTravel" type="button">Add Approach</button>
+                  <button id="addReturnTravel" type="button">Add Return</button>
+                  <button id="clearOutsideTravel" type="button">Clear</button>
+                </div>
+              </div>
+              <ul id="mapOutsideTravelList" class="compact-list"></ul>
+
+              <h3>Short rest spots</h3>
+              <p class="inline-note">Save up to 3 safe short rest spots. Once saved, the party can return there without searching again.</p>
+              <div class="action-row compact-action-row">
+                <button id="addShortRestSpotMode" type="button">Add Short Rest Spot</button>
+              </div>
+              <ol id="mapRestSpotList" class="compact-list"></ol>
+
+              <h3>Landmark pin positions</h3>
+              <p class="inline-note">Use this if a built-in landmark pin needs correcting.</p>
+              <div class="action-row compact-action-row">
+                <button id="openMapPinEditor" type="button">Open Pin Mover</button>
+              </div>
+            </section>
+
+            <aside class="tool-box map-summary-panel">
+              <h3>Route summary</h3>
+              <div id="mapRouteSummary" class="description-output compact-output empty-state">No route plotted yet. Click the map to place the party's starting point.</div>
+              <h3>Exploration log</h3>
+              <ol id="mapRouteSegmentList" class="compact-list"></ol>
+
+              <h3>Add log event</h3>
+              <p class="inline-note">Record short rests, searches, wrong turns, or other time spent during the route.</p>
+              <div class="action-row compact-action-row">
+                <button id="openMapEventWindow" type="button">Add Log Event</button>
+              </div>
+
+              <h3>Landmarks</h3>
+              <p class="inline-note">Open the landmark list in a movable pop-out.</p>
+              <div class="action-row compact-action-row">
+                <button id="openMapLandmarkWindow" type="button">Open Landmarks</button>
+              </div>
+            </aside>
           </div>
         </article>
       </div>
@@ -412,13 +669,14 @@
   <nav class="mobile-bottom-nav" aria-label="Mobile quick actions">
     <button type="button" data-nav-tab="shop" data-nav-target="shop">Shop</button>
     <button type="button" data-nav-tab="factions" data-nav-target="factions">Factions</button>
+    <button type="button" data-nav-tab="map" data-nav-target="map">Map</button>
     <button type="button" data-nav-tab="tables" data-nav-target="delerium-card">Delerium</button>
     <button type="button" data-nav-tab="tables" data-nav-target="encounters-card">Encounters</button>
     <button type="button" data-open-conditions>Conditions</button>
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.1.12</span>
+    <span>Aldor The Immense v2.3.0</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
@@ -475,7 +733,7 @@
         <h2>Load Save Code</h2>
         <button value="close" class="icon-button" aria-label="Close">×</button>
       </div>
-      <p class="note">Paste a save code below. Loading it will replace the current shop inventory, custom item lists, faction reputation, and faction clocks.</p>
+      <p class="note">Paste a save code below. Loading it will replace the current shop inventory, custom item lists, faction reputation, faction clocks, and map data.</p>
       <textarea id="loadCodeText" class="code-box" spellcheck="false" placeholder="Paste save code here"></textarea>
       <div class="dialog-actions">
         <button type="button" id="loadSaveCode" class="primary">Load Code</button>

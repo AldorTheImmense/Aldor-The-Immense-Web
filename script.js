@@ -2208,10 +2208,11 @@ const STORAGE_KEYS = {
   sound: "aldor.sound.v1",
   factionReputation: "aldor.factionReputation.v1",
   factionClocks: "aldor.factionClocks.v1",
-  factionClockGoals: "aldor.factionClockGoals.v1"
+  factionClockGoals: "aldor.factionClockGoals.v1",
+  mapTools: "aldor.mapTools.v1"
 };
 
-const APP_VERSION = "2.1.12";
+const APP_VERSION = "2.3.0";
 
 const FACTION_LABELS = {
   hoodedLanterns: "Hooded Lanterns",
@@ -2318,6 +2319,78 @@ const DRAKKENHEIM_RUMOURS = [
   { min: 97, max: 100, text: "Many of the monsters lurking in Drakkenheim are in fact its former inhabitants, twisted by fell magic. They can be made docile by showing them a token of their former life." }
 ];
 
+
+const MAP_SIZE = 2048;
+const MAP_PIXELS_PER_MILE = 505;
+
+const MAP_SAFE_HAVENS = {
+  emberwood: { label: "Emberwood Village", minutes: 120, landmarkId: "EV" },
+  campDawn: { label: "Camp Dawn", minutes: 60, landmarkId: "CD" },
+  eckermanMill: { label: "Eckerman Mill", minutes: 20, landmarkId: "EM" }
+};
+
+const MAP_LANDMARKS = [
+  { id: "EV", label: "Road to Emberwood Village", x: 1555, y: 1888, type: "safe-haven" },
+  { id: "EM", label: "Road to Eckerman Mill", x: 158, y: 358, type: "safe-haven" },
+  { id: "CD", label: "Road to Camp Dawn", x: 157, y: 1832, type: "safe-haven" },
+  { id: "01", label: "College Gate", x: 700, y: 568 },
+  { id: "02", label: "King's Gate", x: 1358, y: 652 },
+  { id: "03", label: "Champion's Gate", x: 1111, y: 1095 },
+  { id: "04", label: "Temple Gate", x: 767, y: 1109 },
+  { id: "05", label: "Shepherd's Gate", x: 628, y: 778 },
+  { id: "06", label: "Rat's Nest Tavern", x: 530, y: 858 },
+  { id: "07", label: "Reed Manor", x: 697, y: 413 },
+  { id: "08", label: "Stick's Ferry", x: 829, y: 1313 },
+  { id: "09", label: "Drakkenheim Garrison", x: 687, y: 719 },
+  { id: "10", label: "Inscrutable Tower", x: 832, y: 593 },
+  { id: "11", label: "Saint Vitruvio's Cathedral", x: 845, y: 915 },
+  { id: "12", label: "Cosmological Clocktower", x: 1063, y: 816 },
+  { id: "13", label: "Saint Selina's Monastery", x: 987, y: 1157 },
+  { id: "14", label: "Slaughterstone Square", x: 1202, y: 711 },
+  { id: "16", label: "Kleinberg Estate", x: 1206, y: 542 },
+  { id: "17", label: "Black Ivory Inn", x: 1522, y: 616 },
+  { id: "18", label: "Buckledown Row", x: 1520, y: 891 },
+  { id: "19", label: "Spokes Smithy", x: 1354, y: 1151 },
+  { id: "20", label: "Chapel of Saint Brenna", x: 1246, y: 1428 },
+  { id: "21", label: "Rose Theatre", x: 702, y: 918 }
+];
+
+const MAP_EVENT_TYPES = {
+  shortRest: "Short rest",
+  searchDelerium: "Search for delerium",
+  searchObjective: "Search for a specific thing",
+  searchRestSpot: "Search for a short rest spot",
+  getLost: "Get lost / wrong turn",
+  custom: "Custom note"
+};
+
+const MAP_MODE_NOTES = {
+  streets: "Streets: Fast 1 mile/hour, Normal ½ mile/hour, Slow ¼ mile/hour. Check for random encounters each exploration hour.",
+  sewers: "Sewers: movement is half street pace. After each sewer hour, characters must make a DC 10 Constitution save or gain one contamination level.",
+  boat: "Boat / river: uses abstract river travel. The app treats each plotted river segment as 1 mile/hour; aquatic or sewer-dwelling threats are at the DM's discretion.",
+  landVehicle: "Land vehicle / portage: vehicles are impractical in the ruins. The app treats each segment as ¼ mile/hour.",
+  flying: "Flying: fast abstract travel. The app treats each segment as 2 miles/hour, but hostile gargoyles or harpies may notice at the DM's discretion."
+};
+
+const MAP_MODE_LABELS = {
+  streets: "Streets",
+  sewers: "Sewers",
+  boat: "Boat / river",
+  landVehicle: "Land vehicle / portage",
+  flying: "Flying"
+};
+
+const MAP_PACE_LABELS = {
+  fast: "Fast",
+  normal: "Normal",
+  slow: "Slow"
+};
+
+const MAP_TERRAIN_LABELS = {
+  mainRoad: "Main roads",
+  sideRoad: "Side roads / rubble — half speed"
+};
+
 const ENCOUNTER_FACTIONS = {
   "hooded lantern patrol": "hoodedLanterns",
   "hooded lantern elites": "hoodedLanterns",
@@ -2377,6 +2450,18 @@ let pinnedConditions = [];
 let factionReputation = {};
 let factionClocks = {};
 let factionClockGoals = {};
+let mapRoutePoints = [];
+let mapRouteSegments = [];
+let mapRestSpots = [];
+let mapOutsideTrips = [];
+let mapEvents = [];
+let mapLandmarkOverrides = {};
+let editingMapLandmarks = false;
+let selectedMapLandmarkIndex = 0;
+let addingMapRestSpot = false;
+let mapClickTimer = null;
+let mapPanState = null;
+let mapZoomDragState = null;
 let soundEnabled = false;
 let audioContext = null;
 
@@ -2556,6 +2641,17 @@ function buildSavePayload() {
       reputation: factionReputation,
       clocks: factionClocks,
       clockGoals: factionClockGoals
+    },
+    mapTools: {
+      routePoints: mapRoutePoints,
+      routeSegments: mapRouteSegments,
+      restSpots: mapRestSpots,
+      outsideTrips: mapOutsideTrips,
+      events: mapEvents,
+      landmarkOverrides: mapLandmarkOverrides,
+      startTime: currentMapStartTime(),
+      zoom: currentMapZoom(),
+      deepHazeVisible: byId("showDeepHazeOverlay") ? byId("showDeepHazeOverlay").checked : true
     }
   };
 }
@@ -2598,6 +2694,7 @@ function applySavePayload(payload) {
   const shop = payload.shop || {};
   const inventoryLists = payload.inventoryLists || {};
   const factionTools = payload.factionTools || {};
+  const mapTools = payload.mapTools || {};
 
   state.potions = clone(arrayOrFallback(shop.potions, []));
   state.scrolls = clone(arrayOrFallback(shop.scrolls, []));
@@ -2612,11 +2709,24 @@ function applySavePayload(payload) {
   factionClockGoals = { ...defaultFactionClockGoals(), ...(factionTools.clockGoals || {}) };
   normaliseFactionToolsState();
 
+  mapRoutePoints = clone(arrayOrFallback(mapTools.routePoints, []));
+  mapRouteSegments = clone(arrayOrFallback(mapTools.routeSegments, []));
+  mapRestSpots = clone(arrayOrFallback(mapTools.restSpots, []));
+  mapOutsideTrips = clone(arrayOrFallback(mapTools.outsideTrips, []));
+  mapEvents = clone(arrayOrFallback(mapTools.events, []));
+  mapLandmarkOverrides = mapTools.landmarkOverrides && typeof mapTools.landmarkOverrides === "object" ? clone(mapTools.landmarkOverrides) : {};
+  if (byId("mapDayStartTime")) byId("mapDayStartTime").value = typeof mapTools.startTime === "string" && mapTools.startTime ? mapTools.startTime : "08:00";
+  if (byId("mapZoom")) byId("mapZoom").value = Math.max(1, Math.min(3, Number(mapTools.zoom) || 1));
+  if (byId("showDeepHazeOverlay")) byId("showDeepHazeOverlay").checked = mapTools.deepHazeVisible !== false;
+  normaliseMapToolsState();
+
   saveShop();
   saveInventoryLists();
   saveFactionTools();
+  saveMapTools();
   renderShop();
   renderFactionTools();
+  renderMapTools();
 }
 
 function loadSaveCodeFromTextarea() {
@@ -3125,6 +3235,1149 @@ function generateRumour() {
 function renderFactionTools() {
   renderFactionReputations();
   renderFactionConflictClocks();
+}
+
+function defaultMapToolsState() {
+  return {
+    routePoints: [],
+    routeSegments: [],
+    restSpots: [],
+    outsideTrips: [],
+    events: [],
+    landmarkOverrides: {},
+    startTime: "08:00",
+    zoom: 1,
+    deepHazeVisible: true
+  };
+}
+
+function normaliseMapPoint(point) {
+  return {
+    x: Math.max(0, Math.min(MAP_SIZE, Number(point && point.x) || 0)),
+    y: Math.max(0, Math.min(MAP_SIZE, Number(point && point.y) || 0)),
+    label: point && point.label ? String(point.label) : ""
+  };
+}
+
+function normaliseLandmarkOverride(value) {
+  if (!value || typeof value !== "object") return null;
+  return {
+    x: Math.max(0, Math.min(MAP_SIZE, Number(value.x) || 0)),
+    y: Math.max(0, Math.min(MAP_SIZE, Number(value.y) || 0))
+  };
+}
+
+function activeMapLandmark(landmark, index) {
+  const override = mapLandmarkOverrides && landmark ? normaliseLandmarkOverride(mapLandmarkOverrides[landmark.id]) : null;
+  return {
+    ...landmark,
+    index,
+    x: override ? override.x : landmark.x,
+    y: override ? override.y : landmark.y
+  };
+}
+
+function activeMapLandmarks() {
+  return MAP_LANDMARKS.map((landmark, index) => activeMapLandmark(landmark, index));
+}
+
+function activeMapLandmarkById(id) {
+  return activeMapLandmarks().find((landmark) => landmark.id === id) || null;
+}
+
+function safeHavenKeyForLandmarkId(landmarkId) {
+  return Object.keys(MAP_SAFE_HAVENS).find((key) => MAP_SAFE_HAVENS[key].landmarkId === landmarkId) || null;
+}
+
+function normaliseMapToolsState() {
+  mapRoutePoints = arrayOrFallback(mapRoutePoints, []).map(normaliseMapPoint);
+  const normalisedSegments = [];
+  arrayOrFallback(mapRouteSegments, []).forEach((segment, index) => {
+    const fallbackHourIndex = Number.isFinite(Number(segment.hourIndex)) ? Number(segment.hourIndex) : index;
+    const mode = MAP_MODE_LABELS[segment.mode] ? segment.mode : "streets";
+    const pace = MAP_PACE_LABELS[segment.pace] ? segment.pace : "normal";
+    const terrain = MAP_TERRAIN_LABELS[segment.terrain] ? segment.terrain : "mainRoad";
+    const distanceMiles = Math.max(0, Number(segment.distanceMiles) || 0);
+    const speed = Math.max(0.001, mapSpeedMilesPerHour(mode, pace, terrain));
+    normalisedSegments.push({
+      mode,
+      pace,
+      terrain,
+      distanceMiles,
+      segmentHours: Math.max(0, Number(segment.segmentHours) || (distanceMiles / speed)),
+      hours: Math.max(0, Number(segment.hours) || 0),
+      hourIndex: Math.max(0, Math.floor(fallbackHourIndex)),
+      hourComplete: segment.hourComplete !== false
+    });
+  });
+  mapRouteSegments = normalisedSegments;
+  if (mapRouteSegments.length > Math.max(0, mapRoutePoints.length - 1)) {
+    mapRouteSegments = mapRouteSegments.slice(0, Math.max(0, mapRoutePoints.length - 1));
+  }
+  mapRestSpots = arrayOrFallback(mapRestSpots, []).slice(0, 3).map((spot, index) => ({
+    ...normaliseMapPoint(spot),
+    name: String((spot && spot.name) || `Short rest spot ${index + 1}`)
+  }));
+  mapOutsideTrips = arrayOrFallback(mapOutsideTrips, []).filter((trip) => trip && MAP_SAFE_HAVENS[trip.haven]).map((trip) => ({
+    type: trip.type === "return" ? "return" : "approach",
+    haven: trip.haven,
+    minutes: MAP_SAFE_HAVENS[trip.haven].minutes
+  }));
+  mapEvents = arrayOrFallback(mapEvents, []).map((event, index) => {
+    const type = MAP_EVENT_TYPES[event && event.type] ? event.type : "custom";
+    const parsedDuration = Math.floor(Number(event && event.durationMinutes));
+    return {
+      type,
+      label: String((event && event.label) || `Event ${index + 1}`),
+      afterHours: Math.max(0, Math.floor(Number(event && event.afterHours) || 0)),
+      durationMinutes: Number.isFinite(parsedDuration) && parsedDuration > 0 ? parsedDuration : 60
+    };
+  });
+  const normalisedOverrides = {};
+  if (mapLandmarkOverrides && typeof mapLandmarkOverrides === "object") {
+    MAP_LANDMARKS.forEach((landmark) => {
+      const override = normaliseLandmarkOverride(mapLandmarkOverrides[landmark.id]);
+      if (override) normalisedOverrides[landmark.id] = override;
+    });
+  }
+  mapLandmarkOverrides = normalisedOverrides;
+  selectedMapLandmarkIndex = Math.max(0, Math.min(MAP_LANDMARKS.length - 1, Number(selectedMapLandmarkIndex) || 0));
+}
+function saveMapTools() {
+  const hazeCheckbox = byId("showDeepHazeOverlay");
+  localStorage.setItem(STORAGE_KEYS.mapTools, JSON.stringify({
+    routePoints: mapRoutePoints,
+    routeSegments: mapRouteSegments,
+    restSpots: mapRestSpots,
+    outsideTrips: mapOutsideTrips,
+    events: mapEvents,
+    landmarkOverrides: mapLandmarkOverrides,
+    startTime: currentMapStartTime(),
+    zoom: currentMapZoom(),
+    deepHazeVisible: hazeCheckbox ? hazeCheckbox.checked : true
+  }));
+}
+
+function loadMapTools() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.mapTools) || "{}");
+    mapRoutePoints = clone(arrayOrFallback(parsed.routePoints, []));
+    mapRouteSegments = clone(arrayOrFallback(parsed.routeSegments, []));
+    mapRestSpots = clone(arrayOrFallback(parsed.restSpots, []));
+    mapOutsideTrips = clone(arrayOrFallback(parsed.outsideTrips, []));
+    mapEvents = clone(arrayOrFallback(parsed.events, []));
+    mapLandmarkOverrides = parsed.landmarkOverrides && typeof parsed.landmarkOverrides === "object" ? clone(parsed.landmarkOverrides) : {};
+    const startInput = byId("mapDayStartTime");
+    if (startInput) startInput.value = typeof parsed.startTime === "string" && parsed.startTime ? parsed.startTime : "08:00";
+    const zoomInput = byId("mapZoom");
+    if (zoomInput) zoomInput.value = Math.max(1, Math.min(3, Number(parsed.zoom) || 1));
+    const hazeCheckbox = byId("showDeepHazeOverlay");
+    if (hazeCheckbox) hazeCheckbox.checked = parsed.deepHazeVisible !== false;
+  } catch {
+    const defaults = defaultMapToolsState();
+    mapRoutePoints = defaults.routePoints;
+    mapRouteSegments = defaults.routeSegments;
+    mapRestSpots = defaults.restSpots;
+    mapOutsideTrips = defaults.outsideTrips;
+    mapEvents = defaults.events;
+    mapLandmarkOverrides = defaults.landmarkOverrides;
+    const startInput = byId("mapDayStartTime");
+    if (startInput) startInput.value = defaults.startTime;
+    const zoomInput = byId("mapZoom");
+    if (zoomInput) zoomInput.value = defaults.zoom;
+  }
+  normaliseMapToolsState();
+}
+
+function currentMapMode() {
+  const input = byId("mapTravelMode");
+  return input && MAP_MODE_LABELS[input.value] ? input.value : "streets";
+}
+
+function currentMapPace() {
+  const input = byId("mapTravelPace");
+  return input && MAP_PACE_LABELS[input.value] ? input.value : "normal";
+}
+
+function currentMapTerrain() {
+  const input = byId("mapTerrain");
+  return input && MAP_TERRAIN_LABELS[input.value] ? input.value : "mainRoad";
+}
+
+function mapSpeedMilesPerHour(mode = currentMapMode(), pace = currentMapPace(), terrain = currentMapTerrain()) {
+  let speed;
+  if (mode === "sewers") {
+    if (pace === "fast") speed = 0.5;
+    else if (pace === "slow") speed = 0.125;
+    else speed = 0.25;
+  } else if (mode === "boat") {
+    speed = 1;
+  } else if (mode === "landVehicle") {
+    speed = 0.25;
+  } else if (mode === "flying") {
+    speed = 2;
+  } else if (pace === "fast") {
+    speed = 1;
+  } else if (pace === "slow") {
+    speed = 0.25;
+  } else {
+    speed = 0.5;
+  }
+
+  if (terrain === "sideRoad" && mode !== "boat" && mode !== "flying") {
+    speed *= 0.5;
+  }
+
+  return speed;
+}
+
+function formatHoursFromMinutes(minutes) {
+  if (!minutes) return "0 minutes";
+  if (minutes % 60 === 0) {
+    const hours = minutes / 60;
+    return `${hours} hour${hours === 1 ? "" : "s"}`;
+  }
+  if (minutes > 60) {
+    const hours = Math.floor(minutes / 60);
+    const remaining = minutes % 60;
+    return `${hours} hour${hours === 1 ? "" : "s"} ${remaining} minutes`;
+  }
+  return `${minutes} minutes`;
+}
+
+function currentMapStartTime() {
+  const input = byId("mapDayStartTime");
+  return input && input.value ? input.value : "08:00";
+}
+
+function currentMapZoom() {
+  const input = byId("mapZoom");
+  return input ? Math.max(1, Math.min(3, Number(input.value) || 1)) : 1;
+}
+
+function setMapZoom(value, { save = true } = {}) {
+  const input = byId("mapZoom");
+  const zoom = Math.max(1, Math.min(3, Number(value) || 1));
+  if (input) input.value = String(Math.round(zoom * 100) / 100);
+  applyMapZoom();
+  if (save) saveMapTools();
+}
+
+function updateMapZoomControl(zoom) {
+  const output = byId("mapZoomValue");
+  const rail = byId("mapZoomRail");
+  const fill = byId("mapZoomFill");
+  const thumb = byId("mapZoomThumb");
+  const percentage = ((zoom - 1) / 2) * 100;
+  if (output) output.textContent = `${Math.round(zoom * 100)}%`;
+  if (fill) fill.style.height = `${percentage}%`;
+  if (thumb) thumb.style.bottom = `${percentage}%`;
+  if (rail) {
+    rail.setAttribute("aria-valuenow", String(Math.round(zoom * 100)));
+    rail.setAttribute("aria-valuetext", `${Math.round(zoom * 100)}%`);
+  }
+}
+
+function applyMapZoom() {
+  const zoom = currentMapZoom();
+  const stage = byId("drakkenheimMapStage");
+  const surface = byId("mapZoomSurface");
+  updateMapZoomControl(zoom);
+  if (surface) {
+    const previousWidth = surface.offsetWidth || stage?.clientWidth || 1;
+    const previousHeight = surface.offsetHeight || stage?.clientHeight || 1;
+    const centreX = stage ? (stage.scrollLeft + (stage.clientWidth / 2)) / previousWidth : 0.5;
+    const centreY = stage ? (stage.scrollTop + (stage.clientHeight / 2)) / previousHeight : 0.5;
+
+    surface.style.width = `${zoom * 100}%`;
+
+    if (stage) {
+      requestAnimationFrame(() => {
+        const newWidth = surface.offsetWidth || previousWidth;
+        const newHeight = surface.offsetHeight || previousHeight;
+        stage.scrollLeft = Math.max(0, (centreX * newWidth) - (stage.clientWidth / 2));
+        stage.scrollTop = Math.max(0, (centreY * newHeight) - (stage.clientHeight / 2));
+      });
+    }
+  }
+}
+
+function zoomValueFromRailPointer(event) {
+  const rail = byId("mapZoomRail");
+  if (!rail) return currentMapZoom();
+  const rect = rail.getBoundingClientRect();
+  const ratio = Math.max(0, Math.min(1, (rect.bottom - event.clientY) / rect.height));
+  return Math.round((1 + (ratio * 2)) * 20) / 20;
+}
+
+function startMapZoomDrag(event) {
+  hideMapTooltip();
+  const rail = byId("mapZoomRail");
+  if (!rail || (event.button && event.button !== 0)) return;
+  event.preventDefault();
+  event.stopPropagation();
+  mapZoomDragState = { pointerId: event.pointerId };
+  rail.classList.add("is-dragging");
+  rail.setPointerCapture(event.pointerId);
+  setMapZoom(zoomValueFromRailPointer(event));
+}
+
+function moveMapZoomDrag(event) {
+  const rail = byId("mapZoomRail");
+  if (!rail || !mapZoomDragState || mapZoomDragState.pointerId !== event.pointerId) return;
+  event.preventDefault();
+  event.stopPropagation();
+  setMapZoom(zoomValueFromRailPointer(event));
+}
+
+function endMapZoomDrag(event) {
+  const rail = byId("mapZoomRail");
+  if (!rail || !mapZoomDragState || mapZoomDragState.pointerId !== event.pointerId) return;
+  mapZoomDragState = null;
+  rail.classList.remove("is-dragging");
+  if (rail.hasPointerCapture(event.pointerId)) rail.releasePointerCapture(event.pointerId);
+}
+
+function adjustMapZoomFromKeyboard(event) {
+  const keys = ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft", "Home", "End", "PageUp", "PageDown"];
+  if (!keys.includes(event.key)) return;
+  event.preventDefault();
+  const current = currentMapZoom();
+  let next = current;
+  if (event.key === "ArrowUp" || event.key === "ArrowRight") next = current + 0.05;
+  if (event.key === "ArrowDown" || event.key === "ArrowLeft") next = current - 0.05;
+  if (event.key === "PageUp") next = current + 0.25;
+  if (event.key === "PageDown") next = current - 0.25;
+  if (event.key === "Home") next = 1;
+  if (event.key === "End") next = 3;
+  setMapZoom(next);
+}
+
+function startMapPan(event) {
+  hideMapTooltip();
+  const stage = byId("drakkenheimMapStage");
+  if (!stage || event.button !== 2) return;
+  if (event.target.closest(".map-zoom-widget")) return;
+
+  event.preventDefault();
+  mapPanState = {
+    pointerId: event.pointerId,
+    startX: event.clientX,
+    startY: event.clientY,
+    scrollLeft: stage.scrollLeft,
+    scrollTop: stage.scrollTop
+  };
+  stage.classList.add("is-panning");
+  stage.setPointerCapture(event.pointerId);
+}
+
+function moveMapPan(event) {
+  const stage = byId("drakkenheimMapStage");
+  if (!stage || !mapPanState || mapPanState.pointerId !== event.pointerId) return;
+  event.preventDefault();
+  stage.scrollLeft = mapPanState.scrollLeft - (event.clientX - mapPanState.startX);
+  stage.scrollTop = mapPanState.scrollTop - (event.clientY - mapPanState.startY);
+}
+
+function endMapPan(event) {
+  const stage = byId("drakkenheimMapStage");
+  if (!stage || !mapPanState || mapPanState.pointerId !== event.pointerId) return;
+  mapPanState = null;
+  stage.classList.remove("is-panning");
+  if (stage.hasPointerCapture(event.pointerId)) stage.releasePointerCapture(event.pointerId);
+}
+
+function preventMapContextMenu(event) {
+  if (event.target.closest(".map-zoom-widget")) return;
+  event.preventDefault();
+}
+
+function mapTooltipTarget(event) {
+  return event.target && event.target.closest ? event.target.closest("[data-map-tooltip]") : null;
+}
+
+function positionMapTooltip(event) {
+  const tooltip = byId("mapPinTooltip");
+  const wrap = document.querySelector(".map-stage-wrap");
+  if (!tooltip || !wrap || tooltip.hidden) return;
+
+  const rect = wrap.getBoundingClientRect();
+  let left = event.clientX - rect.left + 14;
+  let top = event.clientY - rect.top + 16;
+
+  const tooltipWidth = tooltip.offsetWidth || 180;
+  const tooltipHeight = tooltip.offsetHeight || 40;
+
+  if (left + tooltipWidth > rect.width - 10) left = event.clientX - rect.left - tooltipWidth - 14;
+  if (top + tooltipHeight > rect.height - 10) top = event.clientY - rect.top - tooltipHeight - 14;
+
+  tooltip.style.left = `${Math.max(8, left)}px`;
+  tooltip.style.top = `${Math.max(8, top)}px`;
+}
+
+function showMapTooltip(event) {
+  if (mapPanState || mapZoomDragState) return;
+  const target = mapTooltipTarget(event);
+  const tooltip = byId("mapPinTooltip");
+  if (!target || !tooltip) return;
+  tooltip.textContent = target.dataset.mapTooltip || "";
+  tooltip.hidden = !tooltip.textContent;
+  positionMapTooltip(event);
+}
+
+function moveMapTooltip(event) {
+  const tooltip = byId("mapPinTooltip");
+  if (!tooltip || tooltip.hidden) return;
+  if (!mapTooltipTarget(event)) {
+    hideMapTooltip();
+    return;
+  }
+  positionMapTooltip(event);
+}
+
+function hideMapTooltip() {
+  const tooltip = byId("mapPinTooltip");
+  if (tooltip) tooltip.hidden = true;
+}
+
+function parseMapTimeToMinutes(value) {
+  const match = String(value || "08:00").match(/^(\d{1,2}):(\d{2})$/);
+  if (!match) return 8 * 60;
+  const hours = Math.max(0, Math.min(23, Number(match[1]) || 0));
+  const minutes = Math.max(0, Math.min(59, Number(match[2]) || 0));
+  return (hours * 60) + minutes;
+}
+
+function formatMapClock(totalMinutes) {
+  const minutes = Math.max(0, Math.floor(Number(totalMinutes) || 0));
+  const day = Math.floor(minutes / 1440);
+  const withinDay = ((minutes % 1440) + 1440) % 1440;
+  const hours = Math.floor(withinDay / 60);
+  const mins = withinDay % 60;
+  const label = `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
+  return day > 0 ? `Day ${day + 1}, ${label}` : label;
+}
+
+function formatMapTimeRange(startMinutes, durationMinutes) {
+  const duration = Math.max(0, Math.floor(Number(durationMinutes) || 0));
+  return `${formatMapClock(startMinutes)}–${formatMapClock(startMinutes + duration)}`;
+}
+
+function mapEventDuration(event) {
+  const duration = Math.floor(Number(event && event.durationMinutes) || 0);
+  return Math.max(0, duration);
+}
+
+function formatMiles(value) {
+  return `${(Math.round(value * 100) / 100).toFixed(2)} mile${Math.abs(value - 1) < 0.005 ? "" : "s"}`;
+}
+
+function updateMapModeNotes() {
+  const mode = currentMapMode();
+  const pace = currentMapPace();
+  const terrain = currentMapTerrain();
+  const speed = mapSpeedMilesPerHour(mode, pace, terrain);
+  const openHour = currentMapHourInfo();
+  const paceNote = byId("mapPaceNote");
+  const modeNote = byId("mapModeNote");
+  if (paceNote) {
+    if (openHour && openHour.remainingMiles > 0.005) {
+      paceNote.textContent = `Current exploration hour: ${Math.round(openHour.usedHours * 60)} minutes used, ${Math.round(openHour.remainingHours * 60)} minutes remaining. At the current pace, that is ${formatMiles(openHour.remainingMiles)}. You can change pace before the next click, or double-click to end the hour early at the clicked location.`;
+    } else {
+      paceNote.textContent = `Next route hour allows ${formatMiles(speed)} of travel at ${MAP_PACE_LABELS[pace].toLowerCase()} pace / ${MAP_MODE_LABELS[mode].toLowerCase()} / ${MAP_TERRAIN_LABELS[terrain].toLowerCase()}.`;
+    }
+  }
+  if (modeNote) {
+    modeNote.textContent = MAP_MODE_NOTES[mode] || "";
+  }
+}
+function mapClickPoint(event) {
+  const stage = byId("drakkenheimMapStage");
+  const surface = byId("mapZoomSurface") || stage;
+  const rect = surface.getBoundingClientRect();
+  const x = ((event.clientX - rect.left) / rect.width) * MAP_SIZE;
+  const y = ((event.clientY - rect.top) / rect.height) * MAP_SIZE;
+  return normaliseMapPoint({ x, y });
+}
+
+function pointDistance(a, b) {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+function mapSegmentHours(segment) {
+  const explicit = Number(segment && segment.segmentHours);
+  if (Number.isFinite(explicit) && explicit > 0) return explicit;
+  const mode = segment && MAP_MODE_LABELS[segment.mode] ? segment.mode : "streets";
+  const pace = segment && MAP_PACE_LABELS[segment.pace] ? segment.pace : "normal";
+  const terrain = segment && MAP_TERRAIN_LABELS[segment.terrain] ? segment.terrain : "mainRoad";
+  const speed = Math.max(0.001, mapSpeedMilesPerHour(mode, pace, terrain));
+  return Math.max(0, Number(segment && segment.distanceMiles) || 0) / speed;
+}
+
+function currentMapHourInfo() {
+  if (!mapRouteSegments.length) return null;
+  const last = mapRouteSegments[mapRouteSegments.length - 1];
+  if (last.hourComplete !== false) return null;
+  const hourIndex = Number.isFinite(Number(last.hourIndex)) ? Number(last.hourIndex) : 0;
+  const hourSegments = mapRouteSegments.filter((segment) => Number(segment.hourIndex) === hourIndex);
+  const usedHours = Math.min(1, hourSegments.reduce((total, segment) => total + mapSegmentHours(segment), 0));
+  const usedMiles = hourSegments.reduce((total, segment) => total + (Number(segment.distanceMiles) || 0), 0);
+  const currentMode = currentMapMode();
+  const currentPace = currentMapPace();
+  const currentTerrain = currentMapTerrain();
+  const currentSpeed = mapSpeedMilesPerHour(currentMode, currentPace, currentTerrain);
+  const remainingHours = Math.max(0, 1 - usedHours);
+  return {
+    hourIndex,
+    usedHours,
+    usedMiles,
+    remainingHours,
+    currentMode,
+    currentPace,
+    currentTerrain,
+    currentSpeed,
+    remainingMiles: remainingHours * currentSpeed
+  };
+}
+
+function nextMapHourIndex() {
+  if (!mapRouteSegments.length) return 0;
+  const last = mapRouteSegments[mapRouteSegments.length - 1];
+  const lastIndex = Number.isFinite(Number(last.hourIndex)) ? Number(last.hourIndex) : mapRouteSegments.length - 1;
+  return last.hourComplete === false ? lastIndex : lastIndex + 1;
+}
+
+function mapHourIsComplete(hourIndex) {
+  const hourSegments = mapRouteSegments.filter((segment) => Number(segment.hourIndex) === Number(hourIndex));
+  return hourSegments.some((segment) => segment.hourComplete !== false);
+}
+
+function getMapHourSummaries() {
+  const summaries = [];
+  mapRouteSegments.forEach((segment, index) => {
+    const hourIndex = Number(segment.hourIndex) || 0;
+    let summary = summaries.find((entry) => entry.hourIndex === hourIndex);
+    if (!summary) {
+      summary = {
+        hourIndex,
+        hourNumber: hourIndex + 1,
+        distanceMiles: 0,
+        usedHours: 0,
+        complete: false,
+        startPointIndex: index,
+        endPointIndex: index + 1,
+        paces: new Set(),
+        terrains: new Set(),
+        modes: new Set(),
+        parts: []
+      };
+      summaries.push(summary);
+    }
+    const distanceMiles = Number(segment.distanceMiles) || 0;
+    const segmentTime = mapSegmentHours(segment);
+    summary.distanceMiles += distanceMiles;
+    summary.usedHours += segmentTime;
+    summary.complete = summary.complete || segment.hourComplete !== false;
+    summary.endPointIndex = index + 1;
+    const terrain = MAP_TERRAIN_LABELS[segment.terrain] ? segment.terrain : "mainRoad";
+    summary.paces.add(segment.pace);
+    summary.terrains.add(terrain);
+    summary.modes.add(segment.mode);
+    summary.parts.push({
+      mode: segment.mode,
+      pace: segment.pace,
+      terrain,
+      distanceMiles,
+      segmentHours: segmentTime
+    });
+  });
+  summaries.forEach((summary) => {
+    summary.usedHours = Math.min(1, summary.usedHours);
+    summary.remainingHours = Math.max(0, 1 - summary.usedHours);
+    summary.mode = summary.modes.size === 1 ? [...summary.modes][0] : "mixed";
+    summary.pace = summary.paces.size === 1 ? [...summary.paces][0] : "mixed";
+    summary.terrain = summary.terrains.size === 1 ? [...summary.terrains][0] : "mixed";
+  });
+  summaries.sort((a, b) => a.hourIndex - b.hourIndex);
+  return summaries;
+}
+
+function mapEventContextLabel(afterHours) {
+  if (afterHours <= 0) return "Before city exploration";
+  return `After hour ${afterHours}`;
+}
+
+function buildMapEventLabel(event) {
+  if (!event) return "Event";
+  if (event.type === "custom") return event.label;
+  return event.label;
+}
+
+function addMapStart(point) {
+  const startPoint = normaliseMapPoint(point);
+  mapRoutePoints = [startPoint];
+  mapRouteSegments = [];
+  addingMapRestSpot = false;
+  saveMapTools();
+  renderMapTools();
+  playUiSound("success");
+  return { type: "start", reachedTarget: true, end: startPoint };
+}
+
+function addMapSegmentToward(targetPoint, endCurrentHourEarly = false) {
+  if (!mapRoutePoints.length) {
+    return addMapStart(targetPoint);
+  }
+
+  const start = mapRoutePoints[mapRoutePoints.length - 1];
+  const target = normaliseMapPoint(targetPoint);
+  const distancePixels = pointDistance(start, target);
+  if (distancePixels < 4) return { type: "ignored", reachedTarget: false, end: start };
+
+  const openHour = currentMapHourInfo();
+  const hourIndex = openHour ? openHour.hourIndex : nextMapHourIndex();
+  const mode = currentMapMode();
+  const pace = currentMapPace();
+  const terrain = currentMapTerrain();
+  const speed = Math.max(0.001, mapSpeedMilesPerHour(mode, pace, terrain));
+  const remainingHours = openHour ? openHour.remainingHours : 1;
+  const remainingMiles = remainingHours * speed;
+  const remainingPixels = remainingMiles * MAP_PIXELS_PER_MILE;
+  if (remainingPixels <= 1) return { type: "blocked", reachedTarget: false, end: start };
+
+  const ratio = Math.min(1, remainingPixels / distancePixels);
+  const end = normaliseMapPoint({
+    x: start.x + ((target.x - start.x) * ratio),
+    y: start.y + ((target.y - start.y) * ratio),
+    label: target.label || ""
+  });
+  const distanceMiles = pointDistance(start, end) / MAP_PIXELS_PER_MILE;
+  const segmentHours = distanceMiles / speed;
+  const reachedTarget = ratio >= 0.999;
+  const hourComplete = endCurrentHourEarly || !reachedTarget || segmentHours >= remainingHours - 0.005;
+
+  mapRoutePoints.push(end);
+  mapRouteSegments.push({
+    mode,
+    pace,
+    terrain,
+    distanceMiles,
+    segmentHours,
+    hours: hourComplete ? 1 : 0,
+    hourIndex,
+    hourComplete
+  });
+  saveMapTools();
+  renderMapTools();
+  playUiSound(hourComplete ? "roll" : "success");
+  return { type: "segment", reachedTarget, end, hourComplete, hourIndex };
+}
+
+function addHourlyMapSegmentToward(targetPoint) {
+  addMapSegmentToward(targetPoint, false);
+}
+function addMapRestSpot(point) {
+  if (mapRestSpots.length >= 3) {
+    alert("You already have 3 saved short rest spots. Delete one before adding another.");
+    addingMapRestSpot = false;
+    renderMapTools();
+    return;
+  }
+  const name = prompt("Name this short rest spot:", `Short rest spot ${mapRestSpots.length + 1}`) || `Short rest spot ${mapRestSpots.length + 1}`;
+  mapRestSpots.push({ ...normaliseMapPoint(point), name: name.trim() || `Short rest spot ${mapRestSpots.length + 1}` });
+  addingMapRestSpot = false;
+  saveMapTools();
+  renderMapTools();
+  playUiSound("success");
+}
+
+function pointFromMapEvent(event) {
+  const landmarkElement = event.target.closest ? event.target.closest("[data-landmark-index]") : null;
+  if (landmarkElement) {
+    const landmarkIndex = Number(landmarkElement.dataset.landmarkIndex);
+    const landmark = activeMapLandmarks()[landmarkIndex];
+    if (!landmark) return null;
+    return {
+      x: landmark.x,
+      y: landmark.y,
+      label: `${landmark.id}. ${landmark.label}`,
+      landmarkId: landmark.id,
+      landmarkType: landmark.type || "",
+      safeHavenKey: safeHavenKeyForLandmarkId(landmark.id)
+    };
+  }
+
+  const restElement = event.target.closest ? event.target.closest("[data-rest-index]") : null;
+  if (restElement) {
+    const spot = mapRestSpots[Number(restElement.dataset.restIndex)];
+    if (!spot) return null;
+    return { x: spot.x, y: spot.y, label: `Short rest spot: ${spot.name}` };
+  }
+
+  return mapClickPoint(event);
+}
+
+function handleMapPoint(point, endCurrentHourEarly = false) {
+  if (!point) return null;
+  if (addingMapRestSpot) {
+    addMapRestSpot(point);
+    return { type: "restSpot", reachedTarget: true, end: normaliseMapPoint(point) };
+  } else if (!mapRoutePoints.length) {
+    return addMapStart(point);
+  } else {
+    return addMapSegmentToward(point, endCurrentHourEarly);
+  }
+}
+
+function handleMapClick(event) {
+  if (event.button && event.button !== 0) return;
+  if (event.target.closest(".map-zoom-widget")) return;
+  if (mapPanState) return;
+  if (editingMapLandmarks) {
+    event.preventDefault();
+    handleMapLandmarkEditClick(event);
+    return;
+  }
+  const point = pointFromMapEvent(event);
+  if (mapClickTimer) clearTimeout(mapClickTimer);
+  mapClickTimer = setTimeout(() => {
+    mapClickTimer = null;
+    handleMapPoint(point, false);
+  }, 210);
+}
+
+function handleMapDoubleClick(event) {
+  if (event.button && event.button !== 0) return;
+  if (event.target.closest(".map-zoom-widget")) return;
+  event.preventDefault();
+  event.stopPropagation();
+  if (editingMapLandmarks) {
+    handleMapLandmarkEditClick(event);
+    return;
+  }
+  const point = pointFromMapEvent(event);
+  if (mapClickTimer) {
+    clearTimeout(mapClickTimer);
+    mapClickTimer = null;
+  }
+  const hadRoute = mapRoutePoints.length > 0;
+  const result = handleMapPoint(point, true);
+  if (hadRoute && point && point.safeHavenKey && result && result.reachedTarget) {
+    addOutsideTravel("return", point.safeHavenKey);
+  }
+}
+function renderMapLandmarkEditor() {
+  const panel = byId("mapLandmarkEditorPanel");
+  const toggle = byId("toggleLandmarkEditMode");
+  const select = byId("mapLandmarkEditSelect");
+  if (panel) panel.classList.toggle("active", editingMapLandmarks);
+  if (toggle) toggle.textContent = editingMapLandmarks ? "Finish Moving Pins" : "Move Landmark Pins";
+  if (select) {
+    const currentValue = String(selectedMapLandmarkIndex);
+    select.innerHTML = MAP_LANDMARKS.map((landmark, index) => `<option value="${index}">${escapeHtml(`${landmark.id}. ${landmark.label}`)}</option>`).join("");
+    select.value = currentValue;
+  }
+}
+
+function handleMapLandmarkEditClick(event) {
+  const landmarkElement = event.target.closest ? event.target.closest("[data-landmark-index]") : null;
+  if (landmarkElement) {
+    selectedMapLandmarkIndex = Number(landmarkElement.dataset.landmarkIndex) || 0;
+    renderMapTools();
+    playUiSound("success");
+    return;
+  }
+  const landmark = MAP_LANDMARKS[selectedMapLandmarkIndex];
+  if (!landmark) return;
+  const point = mapClickPoint(event);
+  mapLandmarkOverrides[landmark.id] = { x: point.x, y: point.y };
+  saveMapTools();
+  renderMapTools();
+  playUiSound("success");
+}
+
+function toggleMapLandmarkEditing() {
+  editingMapLandmarks = !editingMapLandmarks;
+  addingMapRestSpot = false;
+  renderMapTools();
+  playUiSound(editingMapLandmarks ? "success" : "reset");
+}
+
+function resetMapLandmarkPositions() {
+  if (!confirm("Reset all landmark pins to their current baked-in default positions?")) return;
+  mapLandmarkOverrides = {};
+  selectedMapLandmarkIndex = 0;
+  saveMapTools();
+  renderMapTools();
+  playUiSound("reset");
+}
+
+async function copyMapLandmarkData() {
+  const data = activeMapLandmarks().map((landmark) => ({
+    id: landmark.id,
+    label: landmark.label,
+    x: Math.round(landmark.x),
+    y: Math.round(landmark.y),
+    ...(landmark.type ? { type: landmark.type } : {})
+  }));
+  const text = JSON.stringify(data, null, 2);
+  try {
+    await navigator.clipboard.writeText(text);
+    alert("Landmark data copied.");
+  } catch (_error) {
+    prompt("Copy this landmark data:", text);
+  }
+}
+
+function renderMapLandmarks() {
+  const svg = byId("mapLandmarkSvg");
+  const list = byId("mapLandmarkList");
+  const landmarks = activeMapLandmarks();
+  if (svg) {
+    svg.innerHTML = landmarks.map((landmark, index) => `
+      <g class="map-landmark-marker ${landmark.type === "safe-haven" ? "safe-haven" : ""} ${editingMapLandmarks && index === selectedMapLandmarkIndex ? "selected" : ""}" data-landmark-index="${index}" data-map-tooltip="${escapeHtml(`${landmark.id}. ${landmark.label}`)}" transform="translate(${landmark.x} ${landmark.y})">
+        <circle r="15"></circle>
+        <text text-anchor="middle" dominant-baseline="central">${landmark.id}</text>
+      </g>
+    `).join("");
+  }
+  if (list) {
+    const fixedLandmarkButtons = landmarks.map((landmark, index) => `<button type="button" data-landmark-button="${index}">${landmark.id}. ${escapeHtml(landmark.label)}</button>`).join("");
+    const restButtons = mapRestSpots.map((spot, index) => `<button type="button" data-rest-button="${index}">R${index + 1}. ${escapeHtml(spot.name)} <span class="muted">(short rest)</span></button>`).join("");
+    list.innerHTML = `${fixedLandmarkButtons}${restButtons}`;
+    list.querySelectorAll("[data-landmark-button]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const landmarkIndex = Number(button.dataset.landmarkButton);
+        const landmark = landmarks[landmarkIndex];
+        if (!landmark) return;
+        const point = { x: landmark.x, y: landmark.y, label: `${landmark.id}. ${landmark.label}` };
+        if (editingMapLandmarks) {
+          selectedMapLandmarkIndex = landmarkIndex || 0;
+          renderMapTools();
+        } else if (addingMapRestSpot) addMapRestSpot(point);
+        else if (!mapRoutePoints.length) addMapStart(point);
+        else addMapSegmentToward(point, true);
+      });
+    });
+    list.querySelectorAll("[data-rest-button]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const spot = mapRestSpots[Number(button.dataset.restButton)];
+        if (!spot) return;
+        const point = { x: spot.x, y: spot.y, label: `Short rest spot: ${spot.name}` };
+        if (!mapRoutePoints.length) addMapStart(point);
+        else addMapSegmentToward(point, true);
+      });
+    });
+  }
+  renderMapLandmarkEditor();
+}
+
+function renderMapRoute() {
+  const routeLayer = byId("mapRouteSvg");
+  const restLayer = byId("mapRestSpotSvg");
+  const hourSummaries = getMapHourSummaries();
+  if (routeLayer) {
+    const segments = mapRouteSegments.map((segment, index) => {
+      const a = mapRoutePoints[index];
+      const b = mapRoutePoints[index + 1];
+      if (!a || !b) return "";
+      const hourComplete = mapHourIsComplete(segment.hourIndex);
+      const paceClass = MAP_PACE_LABELS[segment.pace] ? `pace-${segment.pace}` : "pace-normal";
+      const modeClass = MAP_MODE_LABELS[segment.mode] ? `mode-${segment.mode}` : "mode-streets";
+      const terrainClass = MAP_TERRAIN_LABELS[segment.terrain] ? `terrain-${segment.terrain}` : "terrain-mainRoad";
+      const segmentTimeMinutes = Math.round(mapSegmentHours(segment) * 60);
+      const tooltip = `Hour ${(Number(segment.hourIndex) || 0) + 1}: ${formatMiles(Number(segment.distanceMiles) || 0)} at ${MAP_PACE_LABELS[segment.pace] || "Normal"} pace, ${MAP_TERRAIN_LABELS[segment.terrain] || "Main roads"} (${segmentTimeMinutes} min)`;
+      return `<line class="map-route-segment ${paceClass} ${modeClass} ${terrainClass} ${hourComplete ? "complete" : "open-hour"}" data-map-tooltip="${escapeHtml(tooltip)}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"></line>`;
+    }).join("");
+
+    const markerIndexes = [];
+    if (mapRoutePoints.length) markerIndexes.push({ pointIndex: 0, label: "S", title: mapRoutePoints[0].label || "Route start", classes: "start" });
+    hourSummaries.forEach((summary) => {
+      const endpoint = mapRoutePoints[summary.endPointIndex];
+      if (!endpoint) return;
+      markerIndexes.push({
+        pointIndex: summary.endPointIndex,
+        label: String(summary.hourNumber),
+        title: `${summary.complete ? "End" : "Current end"} of hour ${summary.hourNumber}`,
+        classes: `${summary.complete ? "complete" : "open-hour-end"}`
+      });
+    });
+
+    const markers = markerIndexes.map((marker) => {
+      const point = mapRoutePoints[marker.pointIndex];
+      if (!point) return "";
+      return `
+      <g class="map-route-marker ${marker.classes}" data-map-tooltip="${escapeHtml(point.label || marker.title)}" transform="translate(${point.x} ${point.y})">
+        <circle r="12"></circle>
+        <text text-anchor="middle" dominant-baseline="central">${marker.label}</text>
+      </g>`;
+    }).join("");
+
+    routeLayer.innerHTML = `${segments}${markers}`;
+  }
+  if (restLayer) {
+    restLayer.innerHTML = mapRestSpots.map((spot, index) => `
+      <g class="map-rest-marker" data-rest-index="${index}" data-map-tooltip="${escapeHtml(`Short rest spot: ${spot.name}`)}" transform="translate(${spot.x} ${spot.y})">
+        <path d="M0,-18 L5,-5 L18,0 L5,5 L0,18 L-5,5 L-18,0 L-5,-5 Z"></path>
+        <text text-anchor="middle" dominant-baseline="central">R${index + 1}</text>
+      </g>
+    `).join("");
+  }
+}
+
+function renderOutsideTravel() {
+  const list = byId("mapOutsideTravelList");
+  if (!list) return;
+  if (!mapOutsideTrips.length) {
+    list.innerHTML = `<li class="empty-state">No safe-haven approach or return travel added.</li>`;
+    return;
+  }
+  list.innerHTML = mapOutsideTrips.map((trip, index) => {
+    const haven = MAP_SAFE_HAVENS[trip.haven];
+    const label = trip.type === "return" ? `Return to ${haven.label}` : `Approach from ${haven.label}`;
+    return `<li>${escapeHtml(label)} — ${formatHoursFromMinutes(trip.minutes)} <button type="button" data-remove-outside-trip="${index}" aria-label="Remove outside travel">×</button></li>`;
+  }).join("");
+  list.querySelectorAll("[data-remove-outside-trip]").forEach((button) => {
+    button.addEventListener("click", () => {
+      mapOutsideTrips.splice(Number(button.dataset.removeOutsideTrip), 1);
+      saveMapTools();
+      renderMapTools();
+    });
+  });
+}
+
+function renderMapRestSpots() {
+  const list = byId("mapRestSpotList");
+  if (!list) return;
+  if (!mapRestSpots.length) {
+    list.innerHTML = `<li class="empty-state">No saved short rest spots yet.</li>`;
+    return;
+  }
+  list.innerHTML = mapRestSpots.map((spot, index) => `
+    <li><strong>R${index + 1}</strong> ${escapeHtml(spot.name)} <button type="button" data-delete-rest-spot="${index}">Delete</button></li>
+  `).join("");
+  list.querySelectorAll("[data-delete-rest-spot]").forEach((button) => {
+    button.addEventListener("click", () => {
+      mapRestSpots.splice(Number(button.dataset.deleteRestSpot), 1);
+      saveMapTools();
+      renderMapTools();
+      playUiSound("reset");
+    });
+  });
+}
+
+function renderMapRouteSummary() {
+  const summary = byId("mapRouteSummary");
+  const segmentList = byId("mapRouteSegmentList");
+  if (!summary || !segmentList) return;
+
+  const hourSummaries = getMapHourSummaries();
+  const cityHours = hourSummaries.length;
+  const cityMiles = hourSummaries.reduce((total, segment) => total + (Number(segment.distanceMiles) || 0), 0);
+  const outsideMinutes = mapOutsideTrips.reduce((total, trip) => total + (Number(trip.minutes) || 0), 0);
+  const eventMinutes = mapEvents.reduce((total, event) => total + mapEventDuration(event), 0);
+  const trackedMinutes = (cityHours * 60) + outsideMinutes + eventMinutes;
+  const startMinutes = parseMapTimeToMinutes(currentMapStartTime());
+  const currentMinutes = startMinutes + trackedMinutes;
+  const sewerHours = hourSummaries.filter((hour) => hour.parts.some((segment) => segment.mode === "sewers")).length;
+  const fastHours = hourSummaries.filter((hour) => hour.parts.some((segment) => segment.pace === "fast" && (segment.mode === "streets" || segment.mode === "sewers"))).length;
+  const flyingHours = hourSummaries.filter((hour) => hour.parts.some((segment) => segment.mode === "flying")).length;
+  const openHour = currentMapHourInfo();
+
+  const lines = [];
+  if (!mapRoutePoints.length && !mapOutsideTrips.length && !mapEvents.length) {
+    summary.classList.add("empty-state");
+    summary.textContent = "No route plotted yet. Add an approach or click the map to place the party's starting point.";
+  } else {
+    summary.classList.remove("empty-state");
+    lines.push(`Day starts: ${formatMapClock(startMinutes)}.`);
+    if (cityHours || cityMiles) lines.push(`City route: ${formatMiles(cityMiles)} over ${cityHours} exploration hour${cityHours === 1 ? "" : "s"}.`);
+    if (openHour && openHour.remainingMiles > 0.005) lines.push(`Current hour is incomplete: ${Math.round(openHour.usedHours * 60)} minutes used, ${Math.round(openHour.remainingHours * 60)} minutes remaining. Double-click a point to end this hour early.`);
+    if (outsideMinutes) lines.push(`Safe-haven travel: ${formatHoursFromMinutes(outsideMinutes)}.`);
+    if (eventMinutes) lines.push(`Logged event time: ${formatHoursFromMinutes(eventMinutes)}.`);
+    lines.push(`Tracked time: ${formatHoursFromMinutes(trackedMinutes)}.`);
+    lines.push(`Current time: ${formatMapClock(currentMinutes)}.`);
+    lines.push(`Random encounter checks: ${cityHours} city exploration hour${cityHours === 1 ? "" : "s"}. Timed events may also call for checks at the DM's discretion.`);
+    if (fastHours) lines.push(`Fast pace: ${fastHours} hour${fastHours === 1 ? "" : "s"}; each character rolls twice and takes the lower result for encounter checks.`);
+    if (sewerHours) lines.push(`Sewers: ${sewerHours} hour${sewerHours === 1 ? "" : "s"}; after each sewer hour, characters make a DC 10 Constitution save or gain one contamination level.`);
+    if (flyingHours) lines.push(`Flying: ${flyingHours} hour${flyingHours === 1 ? "" : "s"}; hostile gargoyles or harpies may notice at the DM's discretion.`);
+    if (mapEvents.length) lines.push(`Logged events: ${mapEvents.length}.`);
+    summary.textContent = lines.join("\n");
+  }
+
+  const logItems = [];
+  let cursorMinutes = startMinutes;
+
+  mapOutsideTrips.forEach((trip) => {
+    const haven = MAP_SAFE_HAVENS[trip.haven];
+    if (!haven) return;
+    const label = trip.type === "return" ? `Return to ${haven.label}` : `Approach from ${haven.label}`;
+    logItems.push(`<li><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, trip.minutes))}</strong> — ${escapeHtml(label)} <span class="muted">(${formatHoursFromMinutes(trip.minutes)})</span></li>`);
+    cursorMinutes += Number(trip.minutes) || 0;
+  });
+
+  mapEvents.forEach((event, index) => {
+    if (Number(event.afterHours) <= 0) {
+      const duration = mapEventDuration(event);
+      logItems.push(`<li><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, duration))}</strong> — ${escapeHtml(buildMapEventLabel(event))} <span class="muted">(${formatHoursFromMinutes(duration)})</span> <button type="button" data-delete-map-event="${index}">Delete</button></li>`);
+      cursorMinutes += duration;
+    }
+  });
+
+  hourSummaries.forEach((segment) => {
+    const modeLabel = segment.mode === "mixed" ? "Mixed modes" : (MAP_MODE_LABELS[segment.mode] || "Travel");
+    const paceLabel = segment.pace === "mixed" ? "Mixed paces" : (MAP_PACE_LABELS[segment.pace] || "Normal");
+    const terrainLabel = segment.terrain === "mixed" ? "Mixed road types" : (MAP_TERRAIN_LABELS[segment.terrain] || "Main roads");
+    const uniquePaces = new Set(segment.parts.map((part) => part.pace));
+    const uniqueTerrains = new Set(segment.parts.map((part) => part.terrain || "mainRoad"));
+    const partBreakdown = (uniquePaces.size > 1 || uniqueTerrains.size > 1)
+      ? ` <span class="muted">(${segment.parts.map((part) => `${MAP_PACE_LABELS[part.pace] || "Normal"}, ${MAP_TERRAIN_LABELS[part.terrain] || "Main roads"} ${formatMiles(part.distanceMiles)}`).join("; ")})</span>`
+      : "";
+    const completion = segment.complete ? "" : ` <span class="muted">(in progress — ${Math.round(segment.remainingHours * 60)} min remaining in this hour)</span>`;
+    logItems.push(`<li><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, 60))}</strong> — Hour ${segment.hourNumber}: ${modeLabel}, ${paceLabel}, ${terrainLabel}: ${formatMiles(Number(segment.distanceMiles) || 0)}${partBreakdown}${completion}</li>`);
+    cursorMinutes += 60;
+    mapEvents.forEach((event, index) => {
+      if (Number(event.afterHours) === segment.hourNumber) {
+        const duration = mapEventDuration(event);
+        logItems.push(`<li class="map-log-subitem"><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, duration))}</strong> — ${escapeHtml(buildMapEventLabel(event))} <span class="muted">(${formatHoursFromMinutes(duration)})</span> <button type="button" data-delete-map-event="${index}">Delete</button></li>`);
+        cursorMinutes += duration;
+      }
+    });
+  });
+
+  if (!logItems.length) {
+    segmentList.innerHTML = `<li class="empty-state">No safe-haven travel, exploration hours, or map events logged yet.</li>`;
+  } else {
+    segmentList.innerHTML = logItems.join("");
+    segmentList.querySelectorAll("[data-delete-map-event]").forEach((button) => {
+      button.addEventListener("click", () => {
+        mapEvents.splice(Number(button.dataset.deleteMapEvent), 1);
+        saveMapTools();
+        renderMapTools();
+        playUiSound("reset");
+      });
+    });
+  }
+}
+
+function renderMapTools() {
+  applyMapZoom();
+  updateMapModeNotes();
+  const hazeOverlay = byId("deepHazeMapOverlay");
+  const hazeCheckbox = byId("showDeepHazeOverlay");
+  if (hazeOverlay && hazeCheckbox) hazeOverlay.classList.toggle("hidden", !hazeCheckbox.checked);
+  if (editingMapLandmarks) addingMapRestSpot = false;
+  const addRestButton = byId("addShortRestSpotMode");
+  if (addRestButton) {
+    addRestButton.textContent = addingMapRestSpot ? "Click Map to Place Rest Spot" : "Add Short Rest Spot";
+    addRestButton.disabled = !addingMapRestSpot && mapRestSpots.length >= 3;
+  }
+  renderMapLandmarks();
+  const customField = byId("mapEventCustomField");
+  const eventType = byId("mapEventType");
+  if (customField && eventType) customField.hidden = eventType.value !== "custom" && eventType.value !== "searchObjective";
+  renderMapRoute();
+  renderOutsideTravel();
+  renderMapRestSpots();
+  renderMapRouteSummary();
+}
+
+function undoMapSegment() {
+  if (!mapRoutePoints.length) return;
+  if (mapRoutePoints.length === 1) {
+    mapRoutePoints = [];
+    mapRouteSegments = [];
+  } else if (mapRouteSegments.length) {
+    const lastHourIndex = Number(mapRouteSegments[mapRouteSegments.length - 1].hourIndex) || 0;
+    while (mapRouteSegments.length && (Number(mapRouteSegments[mapRouteSegments.length - 1].hourIndex) || 0) === lastHourIndex) {
+      mapRouteSegments.pop();
+      mapRoutePoints.pop();
+    }
+    if (!mapRouteSegments.length && mapRoutePoints.length > 1) {
+      mapRoutePoints = [mapRoutePoints[0]];
+    }
+  }
+  saveMapTools();
+  renderMapTools();
+  playUiSound("reset");
+}
+
+function clearMapRoute() {
+  if (!mapRoutePoints.length && !mapRouteSegments.length) return;
+  if (!confirm("Clear the current city route?")) return;
+  mapRoutePoints = [];
+  mapRouteSegments = [];
+  mapEvents = [];
+  saveMapTools();
+  renderMapTools();
+  playUiSound("reset");
+}
+
+function startRouteFromSafeHaven(havenKey) {
+  const haven = MAP_SAFE_HAVENS[havenKey];
+  if (!haven || !haven.landmarkId || mapRoutePoints.length) return;
+  const landmark = activeMapLandmarkById(haven.landmarkId);
+  if (!landmark) return;
+  mapRoutePoints = [{ x: landmark.x, y: landmark.y, label: `${landmark.id}. ${landmark.label}` }];
+}
+
+function addOutsideTravel(type, forcedHavenKey = null) {
+  const select = byId("mapSafeHaven");
+  const havenKey = forcedHavenKey && MAP_SAFE_HAVENS[forcedHavenKey]
+    ? forcedHavenKey
+    : (select && MAP_SAFE_HAVENS[select.value] ? select.value : "emberwood");
+  mapOutsideTrips.push({ type, haven: havenKey, minutes: MAP_SAFE_HAVENS[havenKey].minutes });
+  if (type === "approach") startRouteFromSafeHaven(havenKey);
+  saveMapTools();
+  renderMapTools();
+  playUiSound("success");
+}
+
+function clearOutsideTravel() {
+  mapOutsideTrips = [];
+  saveMapTools();
+  renderMapTools();
+  playUiSound("reset");
+}
+
+function addMapEvent() {
+  const select = byId("mapEventType");
+  const customInput = byId("mapEventCustomText");
+  const durationInput = byId("mapEventCustomDuration");
+  const type = select && MAP_EVENT_TYPES[select.value] ? select.value : "shortRest";
+  let label = MAP_EVENT_TYPES[type];
+  const customText = customInput ? String(customInput.value || "").trim() : "";
+  if ((type === "custom" || type === "searchObjective") && !customText) {
+    alert(type === "custom" ? "Enter a custom event note first." : "Enter what the party is searching for.");
+    return;
+  }
+  const durationMinutes = Math.max(0, Math.floor(Number(durationInput && durationInput.value) || 0));
+  if (!durationMinutes) {
+    alert("Enter how many minutes the event takes.");
+    return;
+  }
+  if (type === "searchObjective") label = `${MAP_EVENT_TYPES[type]} — ${customText}`;
+  else if (type === "custom") label = customText;
+  const hourCount = getMapHourSummaries().length;
+  mapEvents.push({ type, label, afterHours: hourCount, durationMinutes });
+  if (customInput) customInput.value = "";
+  if (durationInput) durationInput.value = "60";
+  closeMapEventWindow();
+  saveMapTools();
+  renderMapTools();
+  playUiSound("success");
+}
+
+function beginAddShortRestSpot() {
+  if (mapRestSpots.length >= 3) {
+    alert("You already have 3 saved short rest spots. Delete one before adding another.");
+    return;
+  }
+  editingMapLandmarks = false;
+  addingMapRestSpot = !addingMapRestSpot;
+  renderMapTools();
 }
 
 function selectedEncounterTable() {
@@ -3871,6 +5124,255 @@ function closeConditionsWindow() {
   if (windowElement) windowElement.hidden = true;
 }
 
+function openMapPinEditorWindow() {
+  const windowElement = byId("mapPinEditorWindow");
+  if (!windowElement) return;
+  windowElement.hidden = false;
+
+  if (!windowElement.dataset.positioned) {
+    windowElement.style.top = "132px";
+    windowElement.style.right = "24px";
+    windowElement.style.left = "auto";
+    windowElement.dataset.positioned = "true";
+  }
+  renderMapLandmarkEditor();
+  playUiSound("open");
+}
+
+function closeMapPinEditorWindow() {
+  const windowElement = byId("mapPinEditorWindow");
+  if (windowElement) windowElement.hidden = true;
+  editingMapLandmarks = false;
+  renderMapTools();
+}
+
+function openMapHelpWindow() {
+  const windowElement = byId("mapHelpWindow");
+  if (!windowElement) return;
+  windowElement.hidden = false;
+
+  if (!windowElement.dataset.positioned) {
+    windowElement.style.top = "124px";
+    windowElement.style.left = "24px";
+    windowElement.style.right = "auto";
+    windowElement.dataset.positioned = "true";
+  }
+  playUiSound("open");
+}
+
+function closeMapHelpWindow() {
+  const windowElement = byId("mapHelpWindow");
+  if (windowElement) windowElement.hidden = true;
+}
+
+function openMapEventWindow() {
+  const windowElement = byId("mapEventWindow");
+  if (!windowElement) return;
+  windowElement.hidden = false;
+
+  if (!windowElement.dataset.positioned) {
+    windowElement.style.top = "156px";
+    windowElement.style.right = "34px";
+    windowElement.style.left = "auto";
+    windowElement.dataset.positioned = "true";
+  }
+  renderMapTools();
+  playUiSound("open");
+}
+
+function closeMapEventWindow() {
+  const windowElement = byId("mapEventWindow");
+  if (windowElement) windowElement.hidden = true;
+}
+
+function openMapLandmarkWindow() {
+  const windowElement = byId("mapLandmarkWindow");
+  if (!windowElement) return;
+  windowElement.hidden = false;
+
+  if (!windowElement.dataset.positioned) {
+    windowElement.style.top = "176px";
+    windowElement.style.left = "34px";
+    windowElement.style.right = "auto";
+    windowElement.dataset.positioned = "true";
+  }
+  renderMapLandmarks();
+  playUiSound("open");
+}
+
+function closeMapLandmarkWindow() {
+  const windowElement = byId("mapLandmarkWindow");
+  if (windowElement) windowElement.hidden = true;
+}
+
+function makeMapLandmarkWindowDraggable() {
+  const windowElement = byId("mapLandmarkWindow");
+  const handle = byId("mapLandmarkWindowHandle");
+  if (!windowElement || !handle) return;
+
+  let dragState = null;
+
+  handle.addEventListener("pointerdown", (event) => {
+    if (event.target.closest("button")) return;
+    const rect = windowElement.getBoundingClientRect();
+    dragState = {
+      offsetX: event.clientX - rect.left,
+      offsetY: event.clientY - rect.top
+    };
+    windowElement.style.left = `${rect.left}px`;
+    windowElement.style.top = `${rect.top}px`;
+    windowElement.style.right = "auto";
+    windowElement.classList.add("is-dragging");
+    handle.setPointerCapture(event.pointerId);
+  });
+
+  handle.addEventListener("pointermove", (event) => {
+    if (!dragState) return;
+    const width = windowElement.offsetWidth;
+    const maxLeft = Math.max(0, window.innerWidth - width);
+    const left = Math.min(Math.max(0, event.clientX - dragState.offsetX), maxLeft);
+    const top = Math.min(Math.max(0, event.clientY - dragState.offsetY), Math.max(0, window.innerHeight - 44));
+    windowElement.style.left = `${left}px`;
+    windowElement.style.top = `${top}px`;
+  });
+
+  function endDrag(event) {
+    if (!dragState) return;
+    dragState = null;
+    windowElement.classList.remove("is-dragging");
+    if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+  }
+
+  handle.addEventListener("pointerup", endDrag);
+  handle.addEventListener("pointercancel", endDrag);
+}
+
+function makeMapEventWindowDraggable() {
+  const windowElement = byId("mapEventWindow");
+  const handle = byId("mapEventWindowHandle");
+  if (!windowElement || !handle) return;
+
+  let dragState = null;
+
+  handle.addEventListener("pointerdown", (event) => {
+    if (event.target.closest("button")) return;
+    const rect = windowElement.getBoundingClientRect();
+    dragState = {
+      offsetX: event.clientX - rect.left,
+      offsetY: event.clientY - rect.top
+    };
+    windowElement.style.left = `${rect.left}px`;
+    windowElement.style.top = `${rect.top}px`;
+    windowElement.style.right = "auto";
+    windowElement.classList.add("is-dragging");
+    handle.setPointerCapture(event.pointerId);
+  });
+
+  handle.addEventListener("pointermove", (event) => {
+    if (!dragState) return;
+    const width = windowElement.offsetWidth;
+    const maxLeft = Math.max(0, window.innerWidth - width);
+    const left = Math.min(Math.max(0, event.clientX - dragState.offsetX), maxLeft);
+    const top = Math.min(Math.max(0, event.clientY - dragState.offsetY), Math.max(0, window.innerHeight - 44));
+    windowElement.style.left = `${left}px`;
+    windowElement.style.top = `${top}px`;
+  });
+
+  function endDrag(event) {
+    if (!dragState) return;
+    dragState = null;
+    windowElement.classList.remove("is-dragging");
+    if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+  }
+
+  handle.addEventListener("pointerup", endDrag);
+  handle.addEventListener("pointercancel", endDrag);
+}
+
+function makeMapHelpWindowDraggable() {
+  const windowElement = byId("mapHelpWindow");
+  const handle = byId("mapHelpWindowHandle");
+  if (!windowElement || !handle) return;
+
+  let dragState = null;
+
+  handle.addEventListener("pointerdown", (event) => {
+    if (event.target.closest("button")) return;
+    const rect = windowElement.getBoundingClientRect();
+    dragState = {
+      offsetX: event.clientX - rect.left,
+      offsetY: event.clientY - rect.top
+    };
+    windowElement.style.left = `${rect.left}px`;
+    windowElement.style.top = `${rect.top}px`;
+    windowElement.style.right = "auto";
+    windowElement.classList.add("is-dragging");
+    handle.setPointerCapture(event.pointerId);
+  });
+
+  handle.addEventListener("pointermove", (event) => {
+    if (!dragState) return;
+    const width = windowElement.offsetWidth;
+    const maxLeft = Math.max(0, window.innerWidth - width);
+    const left = Math.min(Math.max(0, event.clientX - dragState.offsetX), maxLeft);
+    const top = Math.min(Math.max(0, event.clientY - dragState.offsetY), Math.max(0, window.innerHeight - 44));
+    windowElement.style.left = `${left}px`;
+    windowElement.style.top = `${top}px`;
+  });
+
+  function endDrag(event) {
+    if (!dragState) return;
+    dragState = null;
+    windowElement.classList.remove("is-dragging");
+    if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+  }
+
+  handle.addEventListener("pointerup", endDrag);
+  handle.addEventListener("pointercancel", endDrag);
+}
+
+function makeMapPinEditorWindowDraggable() {
+  const windowElement = byId("mapPinEditorWindow");
+  const handle = byId("mapPinEditorWindowHandle");
+  if (!windowElement || !handle) return;
+
+  let dragState = null;
+
+  handle.addEventListener("pointerdown", (event) => {
+    if (event.target.closest("button")) return;
+    const rect = windowElement.getBoundingClientRect();
+    dragState = {
+      offsetX: event.clientX - rect.left,
+      offsetY: event.clientY - rect.top
+    };
+    windowElement.style.left = `${rect.left}px`;
+    windowElement.style.top = `${rect.top}px`;
+    windowElement.style.right = "auto";
+    windowElement.classList.add("is-dragging");
+    handle.setPointerCapture(event.pointerId);
+  });
+
+  handle.addEventListener("pointermove", (event) => {
+    if (!dragState) return;
+    const width = windowElement.offsetWidth;
+    const maxLeft = Math.max(0, window.innerWidth - width);
+    const left = Math.min(Math.max(0, event.clientX - dragState.offsetX), maxLeft);
+    const top = Math.min(Math.max(0, event.clientY - dragState.offsetY), Math.max(0, window.innerHeight - 44));
+    windowElement.style.left = `${left}px`;
+    windowElement.style.top = `${top}px`;
+  });
+
+  function endDrag(event) {
+    if (!dragState) return;
+    dragState = null;
+    windowElement.classList.remove("is-dragging");
+    if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+  }
+
+  handle.addEventListener("pointerup", endDrag);
+  handle.addEventListener("pointercancel", endDrag);
+}
+
 function rollDrakkenheimMadness() {
   const roll = Math.floor(Math.random() * DRAKKENHEIM_MADNESS_TRAITS.length) + 1;
   const output = byId("drakkenheimMadnessOutput");
@@ -4026,6 +5528,57 @@ function bindEvents() {
   byId("resetAllFactionClocks").addEventListener("click", resetAllFactionClocks);
   byId("generateRumour").addEventListener("click", generateRumour);
 
+  byId("drakkenheimMapStage").addEventListener("click", handleMapClick);
+  byId("drakkenheimMapStage").addEventListener("dblclick", handleMapDoubleClick);
+  byId("drakkenheimMapStage").addEventListener("contextmenu", preventMapContextMenu);
+  byId("drakkenheimMapStage").addEventListener("pointerdown", startMapPan);
+  byId("drakkenheimMapStage").addEventListener("pointermove", moveMapPan);
+  byId("drakkenheimMapStage").addEventListener("pointerup", endMapPan);
+  byId("drakkenheimMapStage").addEventListener("pointercancel", endMapPan);
+  byId("mapOverlaySvg").addEventListener("pointerover", showMapTooltip);
+  byId("mapOverlaySvg").addEventListener("pointermove", moveMapTooltip);
+  byId("mapOverlaySvg").addEventListener("pointerout", hideMapTooltip);
+  byId("mapOverlaySvg").addEventListener("pointerdown", hideMapTooltip);
+  byId("drakkenheimMapStage").addEventListener("scroll", hideMapTooltip);
+  byId("mapTravelMode").addEventListener("change", () => { updateMapModeNotes(); renderMapRouteSummary(); });
+  byId("mapTravelPace").addEventListener("change", () => { updateMapModeNotes(); renderMapRouteSummary(); });
+  byId("mapTerrain").addEventListener("change", () => { updateMapModeNotes(); renderMapRouteSummary(); });
+  byId("mapZoomRail").addEventListener("pointerdown", startMapZoomDrag);
+  byId("mapZoomRail").addEventListener("pointermove", moveMapZoomDrag);
+  byId("mapZoomRail").addEventListener("pointerup", endMapZoomDrag);
+  byId("mapZoomRail").addEventListener("pointercancel", endMapZoomDrag);
+  byId("mapZoomRail").addEventListener("keydown", adjustMapZoomFromKeyboard);
+  byId("resetMapZoom").addEventListener("click", () => setMapZoom(1));
+  byId("showDeepHazeOverlay").addEventListener("change", () => { saveMapTools(); renderMapTools(); });
+  byId("mapDayStartTime").addEventListener("change", () => { saveMapTools(); renderMapTools(); });
+  byId("openMapHelp").addEventListener("click", openMapHelpWindow);
+  byId("closeMapHelpWindow").addEventListener("click", closeMapHelpWindow);
+  makeMapHelpWindowDraggable();
+  byId("openMapEventWindow").addEventListener("click", openMapEventWindow);
+  byId("closeMapEventWindow").addEventListener("click", closeMapEventWindow);
+  makeMapEventWindowDraggable();
+  byId("openMapLandmarkWindow").addEventListener("click", openMapLandmarkWindow);
+  byId("closeMapLandmarkWindow").addEventListener("click", closeMapLandmarkWindow);
+  makeMapLandmarkWindowDraggable();
+  byId("undoMapSegment").addEventListener("click", undoMapSegment);
+  byId("clearMapRoute").addEventListener("click", clearMapRoute);
+  byId("addApproachTravel").addEventListener("click", () => addOutsideTravel("approach"));
+  byId("addReturnTravel").addEventListener("click", () => addOutsideTravel("return"));
+  byId("clearOutsideTravel").addEventListener("click", clearOutsideTravel);
+  byId("addShortRestSpotMode").addEventListener("click", beginAddShortRestSpot);
+  byId("addMapEvent").addEventListener("click", addMapEvent);
+  byId("mapEventType").addEventListener("change", renderMapTools);
+  byId("openMapPinEditor").addEventListener("click", openMapPinEditorWindow);
+  byId("closeMapPinEditorWindow").addEventListener("click", closeMapPinEditorWindow);
+  makeMapPinEditorWindowDraggable();
+  byId("toggleLandmarkEditMode").addEventListener("click", toggleMapLandmarkEditing);
+  byId("mapLandmarkEditSelect").addEventListener("change", (event) => {
+    selectedMapLandmarkIndex = Number(event.target.value) || 0;
+    renderMapTools();
+  });
+  byId("copyMapLandmarkData").addEventListener("click", copyMapLandmarkData);
+  byId("resetMapLandmarkPositions").addEventListener("click", resetMapLandmarkPositions);
+
   byId("calculateDeleriumSearch").addEventListener("click", calculateDeleriumSearch);
   byId("partySize").addEventListener("input", updatePartySizeGuidance);
   byId("outerCityCheck").addEventListener("change", updatePartySizeGuidance);
@@ -4052,11 +5605,13 @@ function init() {
   loadShop();
   loadEncounterHistory();
   loadFactionTools();
+  loadMapTools();
   bindEvents();
   enhanceConditionsWindow();
   renderShop();
   renderEncounterHistory();
   renderFactionTools();
+  renderMapTools();
   updatePartySizeGuidance();
   updateEncounterAreaNote();
 }
