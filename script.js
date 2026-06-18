@@ -2088,7 +2088,7 @@ const STORAGE_KEYS = {
   encounterHistory: "aldor.encounterHistory.v1"
 };
 
-const APP_VERSION = "2.0.6";
+const APP_VERSION = "2.0.8";
 
 const FACTION_LABELS = {
   hoodedLanterns: "Hooded Lanterns",
@@ -2252,7 +2252,7 @@ function saveShop() {
 
 function loadShop() {
   const saved = localStorage.getItem(STORAGE_KEYS.shop);
-  const source = saved ? JSON.parse(saved) : DEFAULT_DATA.shopState;
+  const source = saved ? JSON.parse(saved) : {};
   state.potions = clone(source.potions || []);
   state.scrolls = clone(source.scrolls || []);
   state.uncommonShopItems = clone(source.uncommonShopItems || []);

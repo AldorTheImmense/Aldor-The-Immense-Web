@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.8
+
+- Changed first-time shop loading so the shop inventory starts empty until Generate Shop is clicked.
+- Existing saved shop inventories still load from the browser as normal.
+- Updated the footer version number.
+
 ## v2.0.7
 
 - Removed the separate Delerium Manual Result section.
