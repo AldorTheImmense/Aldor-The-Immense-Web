@@ -11,9 +11,11 @@ The deployed website provides quick-access tools for common table tasks, includi
 - Copy and load save codes to move shop state between browsers or computers.
 - Generate delerium search results with reminders for DCs, cumulative rewards, extra successes, failures, and Crater's Edge bonuses.
 - Generate random encounters for Outer City, Inner City, and Sewers.
+- Roll the Lucky Finds table automatically after each generated encounter.
 - Toggle Monsters of Drakkenheim mode for updated Outer City and Inner City encounter tables.
 - Roll listed encounter dice counts automatically while still showing the dice expression used.
-- Generate Lucky Finds, Warped Ruins, Common Locations, and Arcane Anomalies.
+- Automatically roll a Lucky Find after every random encounter.
+- Generate Warped Ruins, Common Locations, and Arcane Anomalies.
 
 ## Using the website
 

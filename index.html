@@ -105,6 +105,7 @@
                 <li>3 or more successes means the party finds what they are looking for if it can be found in the search area; otherwise they conclusively rule it out.</li>
                 <li>2 or more failed checks triggers a random encounter, but enough successes still means they find what they sought.</li>
                 <li>For parties larger or smaller than four characters, adjust the required successes proportionately.</li>
+                <li>After every generated encounter, the app rolls the Lucky Finds table and shows the result below the encounter.</li>
               </ul>
             </div>
             <div class="info-note">
@@ -128,6 +129,8 @@
           <h3>Encounter Result:</h3>
           <p id="encounterOutput" class="output-line"></p>
           <div id="encounterDescription" class="description-output"></div>
+          <h3>Lucky Find:</h3>
+          <p id="encounterLuckyFindOutput" class="output-line"></p>
         </section>
 
         <section class="card grouped-tables-card">
@@ -145,11 +148,6 @@
             <p id="warpedRuinOutput" class="output-line"></p>
           </div>
 
-          <div class="mini-table-section">
-            <h3>Lucky Finds</h3>
-            <button id="generateLuckyFind">Generate Lucky Find</button>
-            <p id="luckyFindOutput" class="output-line"></p>
-          </div>
         </section>
 
         <section class="card arcane-card">

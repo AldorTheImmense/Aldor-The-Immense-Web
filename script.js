@@ -2566,6 +2566,8 @@ function generateEncounter() {
   } else {
     byId("encounterDescription").textContent = getEncounterDescription(encounter.name, tableName);
   }
+
+  byId("encounterLuckyFindOutput").textContent = generateEncounterLuckyFindCheck();
 }
 
 function generateCommonLocation() {
@@ -2578,12 +2580,17 @@ function generateWarpedRuin() {
   byId("warpedRuinOutput").textContent = `Warped Ruin: ${DEFAULT_DATA.warpedRuins[roll - 1]}`;
 }
 
-function generateLuckyFind() {
+function rollLuckyFindResult() {
   const roll = Math.floor(Math.random() * 20) + 1;
   let resultText = DEFAULT_DATA.luckyFinds[roll - 1];
-  resultText = resultText.replace(/\b(\d+)d(\d+)\b/g, (_match, dice, sides) => String(rollDice(Number(dice), Number(sides))));
-  resultText = resultText.replace(/\b(\d+)\s*x\s*(\d+)\b/g, (_match, left, right) => String(Number(left) * Number(right)));
-  byId("luckyFindOutput").textContent = `Lucky Find: ${resultText}`;
+  resultText = resultText.replace(/(\d+)d(\d+)/g, (_match, dice, sides) => String(rollDice(Number(dice), Number(sides))));
+  resultText = resultText.replace(/(\d+)\s*x\s*(\d+)/g, (_match, left, right) => String(Number(left) * Number(right)));
+  return { roll, resultText };
+}
+
+function generateEncounterLuckyFindCheck() {
+  const luckyFind = rollLuckyFindResult();
+  return `Lucky Find: rolled ${luckyFind.roll} on the Lucky Finds table — ${luckyFind.resultText}`;
 }
 
 function generateArcaneAnomaly() {
@@ -2676,7 +2683,6 @@ function bindEvents() {
   byId("generateEncounter").addEventListener("click", generateEncounter);
   byId("generateCommonLocation").addEventListener("click", generateCommonLocation);
   byId("generateWarpedRuin").addEventListener("click", generateWarpedRuin);
-  byId("generateLuckyFind").addEventListener("click", generateLuckyFind);
   byId("generateArcaneAnomaly").addEventListener("click", generateArcaneAnomaly);
 }
 
