@@ -334,11 +334,7 @@ summary.section-header button {
   opacity: 0.92;
 }
 .aldor-art::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.44));
+  content: none;
 }
 
 .tables-grid {
