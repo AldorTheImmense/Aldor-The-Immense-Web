@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.10
+
+- Individual faction clock reset buttons now reset both clock progress and the editable faction goal.
+- Individual faction clock reset buttons now play the reset sound and flash the clock panel.
+- Preserved Delerium Search Helper DCs as Outer City DC 15 and Inner City DC 20.
+
 ## v2.1.9
 
 - Reset All on Faction Conflict Clocks now resets both clock progress and editable faction goals.

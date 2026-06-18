@@ -2211,7 +2211,7 @@ const STORAGE_KEYS = {
   factionClockGoals: "aldor.factionClockGoals.v1"
 };
 
-const APP_VERSION = "2.1.9";
+const APP_VERSION = "2.1.10";
 
 const FACTION_LABELS = {
   hoodedLanterns: "Hooded Lanterns",
@@ -3073,8 +3073,13 @@ function regressFactionClock(key) {
 
 function resetFactionClock(key) {
   factionClocks[key] = 0;
+  if (Object.prototype.hasOwnProperty.call(defaultFactionClockGoals(), key)) {
+    factionClockGoals[key] = defaultFactionClockGoals()[key];
+  }
   saveFactionTools();
   renderFactionConflictClocks();
+  flashResults("factionClockList");
+  playUiSound("reset");
 }
 
 function advanceAllFactionClocks() {
