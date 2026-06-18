@@ -1,4 +1,3 @@
-/* Aldor The Immense - browser version generated from the VB.NET project. */
 const DEFAULT_DATA = {
   "level1Spells": [
     "Absorb Elements",
