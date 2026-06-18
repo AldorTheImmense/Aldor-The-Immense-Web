@@ -28,6 +28,7 @@
 
     <nav class="quick-nav" aria-label="Quick navigation">
       <button type="button" data-nav-tab="shop" data-nav-target="shop">Shop</button>
+      <button type="button" data-nav-tab="factions" data-nav-target="factions">Factions</button>
       <button type="button" data-nav-tab="tables" data-nav-target="delerium-card">Delerium</button>
       <button type="button" data-nav-tab="tables" data-nav-target="encounters-card">Encounters</button>
       <button type="button" data-nav-tab="tables" data-nav-target="other-tables-card">Other Tables</button>
@@ -242,6 +243,32 @@
       </div>
     </section>
 
+    <section id="factions" class="panel" aria-labelledby="factions-tab">
+      <div class="tables-grid">
+        <article id="factions-card" class="card card-wide faction-card">
+          <h2>Faction Tools</h2>
+          <div class="faction-tools-grid">
+            <section class="tool-box faction-reputation-panel">
+              <h3>Faction Reputation Tracker</h3>
+              <p class="inline-note">Move a faction's standing to update its attitude towards the party.</p>
+              <div id="factionReputationList" class="faction-reputation-list"></div>
+            </section>
+
+            <section class="tool-box faction-clock-panel">
+              <h3>Faction Conflict Clocks</h3>
+              <p class="inline-note">Write each faction's current goal or conflict, then advance or regress the clock as the campaign changes.</p>
+              <div class="action-row compact-action-row">
+                <button id="advanceAllFactionClocks" type="button">Advance All</button>
+                <button id="regressAllFactionClocks" type="button">Regress All</button>
+                <button id="resetAllFactionClocks" type="button">Reset All</button>
+              </div>
+              <div id="factionClockList" class="faction-clock-list"></div>
+            </section>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <section id="tables" class="panel" aria-labelledby="tables-tab">
       <div class="tables-grid">
         <details id="delerium-card" class="card card-wide collapsible" open>
@@ -364,6 +391,13 @@
             <button id="generateWarpedRuin" type="button">Generate Warped Ruin</button>
             <p id="warpedRuinOutput" class="output-line empty-state">No warped ruin generated yet.</p>
           </div>
+
+          <div class="mini-table-section">
+            <h3>Rumour Generator</h3>
+            <p class="inline-note">Rolls a d100 Drakkenheim rumour.</p>
+            <button id="generateRumour" type="button">Generate Rumour</button>
+            <div id="rumourOutput" class="description-output compact-output empty-state">No rumour generated yet.</div>
+          </div>
         </details>
 
         <details id="arcane-card" class="card arcane-card collapsible" open>
@@ -378,13 +412,14 @@
 
   <nav class="mobile-bottom-nav" aria-label="Mobile quick actions">
     <button type="button" data-nav-tab="shop" data-nav-target="shop">Shop</button>
+    <button type="button" data-nav-tab="factions" data-nav-target="factions">Factions</button>
     <button type="button" data-nav-tab="tables" data-nav-target="delerium-card">Delerium</button>
     <button type="button" data-nav-tab="tables" data-nav-target="encounters-card">Encounters</button>
     <button type="button" data-open-conditions>Conditions</button>
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.1.5</span>
+    <span>Aldor The Immense v2.1.9</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
@@ -426,7 +461,7 @@
         <h2>Save Code</h2>
         <button value="close" class="icon-button" aria-label="Close">×</button>
       </div>
-      <p class="note">Copy this code somewhere safe. Paste it into Load Save Code on another browser or computer to restore this shop.</p>
+      <p class="note">Copy this code somewhere safe. Paste it into Load Save Code on another browser or computer to restore this app data.</p>
       <textarea id="saveCodeText" class="code-box" readonly spellcheck="false"></textarea>
       <div class="dialog-actions">
         <button type="button" id="copySaveCode" class="primary">Copy Code</button>
@@ -441,7 +476,7 @@
         <h2>Load Save Code</h2>
         <button value="close" class="icon-button" aria-label="Close">×</button>
       </div>
-      <p class="note">Paste a save code below. Loading it will replace the current shop inventory and custom item lists.</p>
+      <p class="note">Paste a save code below. Loading it will replace the current shop inventory, custom item lists, faction reputation, and faction clocks.</p>
       <textarea id="loadCodeText" class="code-box" spellcheck="false" placeholder="Paste save code here"></textarea>
       <div class="dialog-actions">
         <button type="button" id="loadSaveCode" class="primary">Load Code</button>

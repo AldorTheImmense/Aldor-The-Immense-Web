@@ -1,5 +1,45 @@
 # Changelog
 
+## v2.1.9
+
+- Reset All on Faction Conflict Clocks now resets both clock progress and editable faction goals.
+- Added distinct rising and falling sound cues for faction clock advance and regress actions.
+- Kept Faction Tools non-collapsible and preserved editable goal labels.
+- Preserved Delerium Search Helper DCs as Outer City DC 15 and Inner City DC 20.
+- Updated the footer version number.
+
+## v2.1.8
+
+- Made the Faction Tools card non-collapsible.
+- Changed faction clock goals from text boxes into editable labels.
+- Added sound feedback to individual Advance and Regress buttons.
+- Added colour-coded reputation attitudes from hostile red tones through neutral purple to cooperative green tones.
+- Preserved Delerium Search Helper DCs as Outer City DC 15 and Inner City DC 20.
+- Updated the footer version number.
+
+## v2.1.7
+
+- Moved Faction Tools into their own app page/panel separate from the random generator tools.
+- Moved the Rumour Generator into Other Random Tables.
+- Removed the Faction Pressure Generator.
+- Changed Faction Conflict Clocks so each faction has an editable custom conflict/goal.
+- Added regress controls for individual faction clocks and all faction clocks.
+- Removed the browser-save wording from the Faction Reputation Tracker.
+- Expanded Save Code / Load Save Code so one code now includes shop state, custom item lists, faction reputation, faction clocks, and custom faction goals.
+- Preserved Delerium Search Helper DCs as Outer City DC 15 and Inner City DC 20.
+- Updated the footer version number.
+
+## v2.1.6
+
+- Added a Faction Tools section.
+- Added a reputation tracker for the Hooded Lanterns, Queen's Men, Silver Order, Amethyst Academy, and Falling Fire.
+- Added faction attitude milestone text that updates from each faction's standing slider.
+- Added a faction pressure generator.
+- Added faction conflict clocks with individual and all-faction advance/reset controls.
+- Added a d100 Drakkenheim rumour generator.
+- Preserved Delerium Search Helper DCs as Outer City DC 15 and Inner City DC 20.
+- Updated the footer version number.
+
 ## v2.1.5
 
 - Added search/filter support to the Drakkenheim Conditions pop-out.

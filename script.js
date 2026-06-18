@@ -2205,10 +2205,13 @@ const STORAGE_KEYS = {
   encounterHistory: "aldor.encounterHistory.v1",
   conditionsPinned: "aldor.conditionsPinned.v1",
   quickConditions: "aldor.quickConditions.v1",
-  sound: "aldor.sound.v1"
+  sound: "aldor.sound.v1",
+  factionReputation: "aldor.factionReputation.v1",
+  factionClocks: "aldor.factionClocks.v1",
+  factionClockGoals: "aldor.factionClockGoals.v1"
 };
 
-const APP_VERSION = "2.1.5";
+const APP_VERSION = "2.1.9";
 
 const FACTION_LABELS = {
   hoodedLanterns: "Hooded Lanterns",
@@ -2268,6 +2271,53 @@ const CONDITION_QUICK_REFERENCES = {
 };
 
 
+
+const FACTION_TRACKER_DATA = [
+  { key: "hoodedLanterns", label: "Hooded Lanterns" },
+  { key: "queensMen", label: "Queen's Men" },
+  { key: "silverOrder", label: "Silver Order" },
+  { key: "amethystAcademy", label: "Amethyst Academy" },
+  { key: "fallingFire", label: "Falling Fire" }
+];
+
+const FACTION_ATTITUDE_MILESTONES = [
+  { max: -4, label: "Enemy", detail: "The faction treats the party as active enemies. They may attack, sabotage, expose, or refuse all aid." },
+  { max: -2, label: "Hostile", detail: "The faction obstructs the party and makes demands from a position of distrust." },
+  { max: -1, label: "Wary", detail: "The faction is suspicious. Cooperation requires payment, proof, or concessions." },
+  { max: 0, label: "Neutral", detail: "The faction is transactional. Jobs, trade, and information are possible at normal terms." },
+  { max: 2, label: "Cooperative", detail: "The faction offers leads, fair terms, and limited support when interests align." },
+  { max: 4, label: "Trusted", detail: "The faction gives priority access, sensitive information, and practical aid." },
+  { max: 5, label: "Allied", detail: "The faction actively supports the party and may spend resources or political capital on their behalf." }
+];
+
+const DRAKKENHEIM_RUMOURS = [
+  { min: 1, max: 4, text: "Don't go to Slaughterstone Square." },
+  { min: 5, max: 8, text: "The Trolls of King's Gate will let you pass for a price, but it will cost you an arm and a leg." },
+  { min: 9, max: 12, text: "Queen's Park Garden is filled with flowers unlike any you've ever seen, they glow with a strange colour to them and some people said they have immense healing properties." },
+  { min: 13, max: 16, text: "Someone has been selling potions out of the old Reed Manor." },
+  { min: 17, max: 20, text: "The Black Ivory Inn is up and running, and it sounds like business is booming too!" },
+  { min: 21, max: 24, text: "There is an invisible wall surrounding the old Rose Theatre." },
+  { min: 25, max: 28, text: "The Queen's Men run vicious fighting pits beneath Buckledown Row, which lead to their secret stronghold in the sewers. The Queen of Thieves will grant any request within her power to whomever can survive a bout with her monstrous champion, but none so far have claimed the prize." },
+  { min: 29, max: 32, text: "It's said the many gargoyles perched atop the City Walls come to life and attack any who dare attempt to scale the walls." },
+  { min: 33, max: 36, text: "The strange fishlike folk in the sewers are quite friendly, and have saved many desperate explorers." },
+  { min: 37, max: 40, text: "The Followers of the Falling Fire have gathered at Saint Selina's Monastery. It's deep within the Haze, so how do they manage to survive there?" },
+  { min: 41, max: 44, text: "Elias Drexel was a mighty general during the civil war, leading the Hooded Lanterns isn't even the first time he's tried to retake Drakkenheim." },
+  { min: 45, max: 48, text: "The Archmage of Drakkenheim died when the meteor fell, and the Amethyst Academy has yet to appoint a true successor." },
+  { min: 49, max: 52, text: "The Knights of the Silver Order have camped outside the city, I hear they have weapons that can torch a village in moments." },
+  { min: 53, max: 56, text: "The Noble Man, in his noble home. Withered, old, and all alone. His stare can chill you to the bone, a pale man on a pale throne." },
+  { min: 57, max: 60, text: "I heard there are delerium crystals the size of a horse within the crater. Imagine how much they'd be worth!" },
+  { min: 61, max: 64, text: "Deep beneath Drakkenheim are the remains of an ancient dragon. An old legend claims they may be resurrected in a time of need." },
+  { min: 65, max: 68, text: "The Crown of Westemär has the power to grant the monarch's every wish." },
+  { min: 69, max: 72, text: "A shrine to the Old Gods lies north of the castle, tended by an elfish druid with power over life and death." },
+  { min: 73, max: 76, text: "A dwarven clan from the Glimmer Mountains has laid claim to a rich field of delerium south of the Crater." },
+  { min: 77, max: 80, text: "Exploring the inner city is dangerous, and it's not just because of the monsters. Anywhere big chunks of the meteor landed are covered in the Deep Haze—the tower, the cathedral, the castle, or of course, the crater. It's a deathly fog that saps the body and clouds the mind... and that's only the beginning. What happens after—it's far worse." },
+  { min: 81, max: 84, text: "Queen Lenore's favourite place to spend time was the grotto in the garden, where she housed many exotic flowers." },
+  { min: 85, max: 88, text: "The inner city has become the hunting ground for a fearsome monstrosity known only as the Lord of The Feast. All who dare enter become his prey." },
+  { min: 89, max: 92, text: "A flock of harpies dwells in the Cosmological Clocktower. They viciously attack any who trespass on their territory, but they are deathly afraid of cats." },
+  { min: 93, max: 96, text: "Whispers say the ratlings serve a demonic god." },
+  { min: 97, max: 100, text: "Many of the monsters lurking in Drakkenheim are in fact its former inhabitants, twisted by fell magic. They can be made docile by showing them a token of their former life." }
+];
+
 const ENCOUNTER_FACTIONS = {
   "hooded lantern patrol": "hoodedLanterns",
   "hooded lantern elites": "hoodedLanterns",
@@ -2324,6 +2374,9 @@ const DEADLY_ENCOUNTER_PATTERNS = [
 let lastEncounterState = null;
 let encounterHistory = [];
 let pinnedConditions = [];
+let factionReputation = {};
+let factionClocks = {};
+let factionClockGoals = {};
 let soundEnabled = false;
 let audioContext = null;
 
@@ -2345,6 +2398,7 @@ const SHOP_EMPTY_MESSAGES = {
 
 const byId = (id) => document.getElementById(id);
 const clone = (value) => JSON.parse(JSON.stringify(value));
+const escapeHtml = (value) => String(value ?? "").replace(/[&<>"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char]));
 
 function rollDice(numDice, numSides) {
   let total = 0;
@@ -2497,6 +2551,11 @@ function buildSavePayload() {
     inventoryLists: {
       uncommonItems: state.uncommonItems,
       rareItems: state.rareItems
+    },
+    factionTools: {
+      reputation: factionReputation,
+      clocks: factionClocks,
+      clockGoals: factionClockGoals
     }
   };
 }
@@ -2538,6 +2597,7 @@ function showLoadCodeDialog() {
 function applySavePayload(payload) {
   const shop = payload.shop || {};
   const inventoryLists = payload.inventoryLists || {};
+  const factionTools = payload.factionTools || {};
 
   state.potions = clone(arrayOrFallback(shop.potions, []));
   state.scrolls = clone(arrayOrFallback(shop.scrolls, []));
@@ -2547,9 +2607,16 @@ function applySavePayload(payload) {
   state.uncommonItems = clone(arrayOrFallback(inventoryLists.uncommonItems, state.uncommonItems));
   state.rareItems = clone(arrayOrFallback(inventoryLists.rareItems, state.rareItems));
 
+  factionReputation = { ...defaultFactionReputation(), ...(factionTools.reputation || {}) };
+  factionClocks = { ...defaultFactionClocks(), ...(factionTools.clocks || {}) };
+  factionClockGoals = { ...defaultFactionClockGoals(), ...(factionTools.clockGoals || {}) };
+  normaliseFactionToolsState();
+
   saveShop();
   saveInventoryLists();
+  saveFactionTools();
   renderShop();
+  renderFactionTools();
 }
 
 function loadSaveCodeFromTextarea() {
@@ -2817,6 +2884,242 @@ function calculateDeleriumSearch() {
   markOutputReady("deleriumOutput");
   flashResults("deleriumOutput");
   playUiSound("success");
+}
+
+
+function factionDataByKey(key) {
+  return FACTION_TRACKER_DATA.find((faction) => faction.key === key) || FACTION_TRACKER_DATA[0];
+}
+
+function factionAttitudeForScore(score) {
+  const numericScore = Number(score);
+  return FACTION_ATTITUDE_MILESTONES.find((milestone) => numericScore <= milestone.max) || FACTION_ATTITUDE_MILESTONES[FACTION_ATTITUDE_MILESTONES.length - 1];
+}
+
+function factionAttitudeClass(label) {
+  return String(label || "neutral").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function defaultFactionReputation() {
+  return Object.fromEntries(FACTION_TRACKER_DATA.map((faction) => [faction.key, 0]));
+}
+
+function defaultFactionClocks() {
+  return Object.fromEntries(FACTION_TRACKER_DATA.map((faction) => [faction.key, 0]));
+}
+
+function defaultFactionClockGoals() {
+  return Object.fromEntries(FACTION_TRACKER_DATA.map((faction) => [faction.key, ""]));
+}
+
+function normaliseFactionToolsState() {
+  FACTION_TRACKER_DATA.forEach((faction) => {
+    factionReputation[faction.key] = Math.max(-5, Math.min(5, Number(factionReputation[faction.key]) || 0));
+    factionClocks[faction.key] = Math.max(0, Math.min(6, Number(factionClocks[faction.key]) || 0));
+    factionClockGoals[faction.key] = String(factionClockGoals[faction.key] || "");
+  });
+}
+
+function saveFactionTools() {
+  localStorage.setItem(STORAGE_KEYS.factionReputation, JSON.stringify(factionReputation));
+  localStorage.setItem(STORAGE_KEYS.factionClocks, JSON.stringify(factionClocks));
+  localStorage.setItem(STORAGE_KEYS.factionClockGoals, JSON.stringify(factionClockGoals));
+}
+
+function loadFactionTools() {
+  try {
+    factionReputation = { ...defaultFactionReputation(), ...JSON.parse(localStorage.getItem(STORAGE_KEYS.factionReputation) || "{}") };
+  } catch {
+    factionReputation = defaultFactionReputation();
+  }
+
+  try {
+    factionClocks = { ...defaultFactionClocks(), ...JSON.parse(localStorage.getItem(STORAGE_KEYS.factionClocks) || "{}") };
+  } catch {
+    factionClocks = defaultFactionClocks();
+  }
+
+  try {
+    factionClockGoals = { ...defaultFactionClockGoals(), ...JSON.parse(localStorage.getItem(STORAGE_KEYS.factionClockGoals) || "{}") };
+  } catch {
+    factionClockGoals = defaultFactionClockGoals();
+  }
+
+  normaliseFactionToolsState();
+}
+
+function renderFactionReputations() {
+  const container = byId("factionReputationList");
+  if (!container) return;
+  container.innerHTML = "";
+
+  FACTION_TRACKER_DATA.forEach((faction) => {
+    const score = factionReputation[faction.key] ?? 0;
+    const attitude = factionAttitudeForScore(score);
+    const row = document.createElement("div");
+    row.className = "faction-reputation-row";
+    row.dataset.attitude = factionAttitudeClass(attitude.label);
+
+    const heading = document.createElement("div");
+    heading.className = "faction-row-heading";
+    const name = document.createElement("strong");
+    name.textContent = faction.label;
+    const status = document.createElement("span");
+    status.className = "faction-attitude-label";
+    status.textContent = `${attitude.label} (${score > 0 ? "+" : ""}${score})`;
+    heading.append(name, status);
+
+    const slider = document.createElement("input");
+    slider.type = "range";
+    slider.min = "-5";
+    slider.max = "5";
+    slider.step = "1";
+    slider.value = String(score);
+    slider.className = "faction-slider";
+    slider.addEventListener("input", () => {
+      const nextScore = Number(slider.value);
+      factionReputation[faction.key] = nextScore;
+      const nextAttitude = factionAttitudeForScore(nextScore);
+      row.dataset.attitude = factionAttitudeClass(nextAttitude.label);
+      status.textContent = `${nextAttitude.label} (${nextScore > 0 ? "+" : ""}${nextScore})`;
+      detail.textContent = nextAttitude.detail;
+      saveFactionTools();
+    });
+
+    const scale = document.createElement("div");
+    scale.className = "faction-scale";
+    scale.innerHTML = "<span>Enemy</span><span>Neutral</span><span>Allied</span>";
+
+    const detail = document.createElement("p");
+    detail.className = "faction-attitude-detail";
+    detail.textContent = attitude.detail;
+
+    row.append(heading, slider, scale, detail);
+    container.appendChild(row);
+  });
+}
+
+function clockPips(value) {
+  const count = Math.max(0, Math.min(6, Number(value) || 0));
+  return Array.from({ length: 6 }, (_, index) => `<span class="clock-pip${index < count ? " filled" : ""}"></span>`).join("");
+}
+
+function renderFactionConflictClocks() {
+  const container = byId("factionClockList");
+  if (!container) return;
+  container.innerHTML = "";
+
+  FACTION_TRACKER_DATA.forEach((faction) => {
+    const value = factionClocks[faction.key] ?? 0;
+    const row = document.createElement("div");
+    row.className = "faction-clock-row";
+    const goalText = factionClockGoals[faction.key] || "Current conflict / goal";
+    row.innerHTML = `
+      <div class="faction-row-heading">
+        <strong>${faction.label}</strong>
+        <span>${value}/6</span>
+      </div>
+      <div class="faction-clock-goal-editor">
+        <div class="faction-clock-goal-label" data-clock-goal="${faction.key}" contenteditable="true" spellcheck="true" role="textbox" aria-label="${faction.label} current conflict or goal" title="Click to edit this faction goal">${escapeHtml(goalText)}</div>
+      </div>
+      <div class="clock-pips" aria-label="${faction.label} clock ${value} of 6">${clockPips(value)}</div>
+      <div class="clock-actions">
+        <button type="button" data-clock-action="regress" data-faction="${faction.key}">Regress</button>
+        <button type="button" data-clock-action="advance" data-faction="${faction.key}">Advance</button>
+        <button type="button" data-clock-action="reset" data-faction="${faction.key}">Reset</button>
+      </div>
+    `;
+    container.appendChild(row);
+  });
+
+  container.querySelectorAll("[data-clock-action]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const key = button.dataset.faction;
+      if (button.dataset.clockAction === "advance") advanceFactionClock(key);
+      else if (button.dataset.clockAction === "regress") regressFactionClock(key);
+      else resetFactionClock(key);
+    });
+  });
+
+  container.querySelectorAll("[data-clock-goal]").forEach((input) => {
+    input.addEventListener("input", () => {
+      factionClockGoals[input.dataset.clockGoal] = input.textContent.trim();
+      saveFactionTools();
+    });
+    input.addEventListener("blur", () => {
+      const cleaned = input.textContent.trim();
+      factionClockGoals[input.dataset.clockGoal] = cleaned;
+      if (!cleaned) input.textContent = "Current conflict / goal";
+      saveFactionTools();
+    });
+  });
+}
+
+function advanceFactionClock(key) {
+  factionClocks[key] = Math.min(6, (Number(factionClocks[key]) || 0) + 1);
+  saveFactionTools();
+  renderFactionConflictClocks();
+  flashResults("factionClockList");
+  playUiSound("advance");
+}
+
+function regressFactionClock(key) {
+  factionClocks[key] = Math.max(0, (Number(factionClocks[key]) || 0) - 1);
+  saveFactionTools();
+  renderFactionConflictClocks();
+  flashResults("factionClockList");
+  playUiSound("regress");
+}
+
+function resetFactionClock(key) {
+  factionClocks[key] = 0;
+  saveFactionTools();
+  renderFactionConflictClocks();
+}
+
+function advanceAllFactionClocks() {
+  FACTION_TRACKER_DATA.forEach((faction) => {
+    factionClocks[faction.key] = Math.min(6, (Number(factionClocks[faction.key]) || 0) + 1);
+  });
+  saveFactionTools();
+  renderFactionConflictClocks();
+  flashResults("factionClockList");
+  playUiSound("advance");
+}
+
+function regressAllFactionClocks() {
+  FACTION_TRACKER_DATA.forEach((faction) => {
+    factionClocks[faction.key] = Math.max(0, (Number(factionClocks[faction.key]) || 0) - 1);
+  });
+  saveFactionTools();
+  renderFactionConflictClocks();
+  flashResults("factionClockList");
+  playUiSound("regress");
+}
+
+function resetAllFactionClocks() {
+  if (!confirm("Reset all faction conflict clocks and goals?")) return;
+  factionClocks = defaultFactionClocks();
+  factionClockGoals = defaultFactionClockGoals();
+  saveFactionTools();
+  renderFactionConflictClocks();
+  flashResults("factionClockList");
+  playUiSound("reset");
+}
+
+function generateRumour() {
+  const roll = Math.floor(Math.random() * 100) + 1;
+  const result = DRAKKENHEIM_RUMOURS.find((rumour) => roll >= rumour.min && roll <= rumour.max) || DRAKKENHEIM_RUMOURS[DRAKKENHEIM_RUMOURS.length - 1];
+  const output = byId("rumourOutput");
+  output.textContent = `Rumour - rolled ${roll} on d100\n\n${result.text}`;
+  markOutputReady("rumourOutput");
+  flashResults("rumourOutput");
+  playUiSound("roll");
+}
+
+function renderFactionTools() {
+  renderFactionReputations();
+  renderFactionConflictClocks();
 }
 
 function selectedEncounterTable() {
@@ -3384,11 +3687,17 @@ function playUiSound(kind = "click") {
       click: 520,
       roll: 420,
       success: 660,
-      open: 360
+      open: 360,
+      advance: 440,
+      regress: 520,
+      reset: 260
     };
-    oscillator.type = kind === "roll" ? "triangle" : "sine";
+    oscillator.type = ["roll", "advance", "regress"].includes(kind) ? "triangle" : "sine";
     oscillator.frequency.setValueAtTime(frequencies[kind] || frequencies.click, now);
     if (kind === "roll") oscillator.frequency.exponentialRampToValueAtTime(220, now + 0.12);
+    if (kind === "advance") oscillator.frequency.exponentialRampToValueAtTime(760, now + 0.14);
+    if (kind === "regress") oscillator.frequency.exponentialRampToValueAtTime(240, now + 0.14);
+    if (kind === "reset") oscillator.frequency.exponentialRampToValueAtTime(180, now + 0.11);
     gain.gain.setValueAtTime(0.0001, now);
     gain.gain.exponentialRampToValueAtTime(0.06, now + 0.012);
     gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
@@ -3706,6 +4015,12 @@ function bindEvents() {
   byId("resetLists").addEventListener("click", resetInventoryLists);
   byId("saveInventory").addEventListener("click", saveInventoryLists);
 
+
+  byId("advanceAllFactionClocks").addEventListener("click", advanceAllFactionClocks);
+  byId("regressAllFactionClocks").addEventListener("click", regressAllFactionClocks);
+  byId("resetAllFactionClocks").addEventListener("click", resetAllFactionClocks);
+  byId("generateRumour").addEventListener("click", generateRumour);
+
   byId("calculateDeleriumSearch").addEventListener("click", calculateDeleriumSearch);
   byId("partySize").addEventListener("input", updatePartySizeGuidance);
   byId("outerCityCheck").addEventListener("change", updatePartySizeGuidance);
@@ -3731,10 +4046,12 @@ function init() {
   loadInventoryLists();
   loadShop();
   loadEncounterHistory();
+  loadFactionTools();
   bindEvents();
   enhanceConditionsWindow();
   renderShop();
   renderEncounterHistory();
+  renderFactionTools();
   updatePartySizeGuidance();
   updateEncounterAreaNote();
 }

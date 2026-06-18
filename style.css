@@ -351,7 +351,7 @@ summary.section-header button {
 .card {
   padding: 1rem;
 }
-.card-wide, .encounter-card { grid-column: 1 / -1; }
+.card-wide, .encounter-card, .faction-card { grid-column: 1 / -1; }
 .collapsible > summary {
   cursor: pointer;
   list-style: none;
@@ -794,7 +794,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
     bottom: 0;
     z-index: 20;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 0.35rem;
     padding: 0.45rem max(0.45rem, env(safe-area-inset-left)) calc(0.45rem + env(safe-area-inset-bottom)) max(0.45rem, env(safe-area-inset-right));
     border-top: 1px solid var(--border);
@@ -817,5 +817,129 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
   .header-actions .header-link,
   .header-actions button {
     width: 100%;
+  }
+}
+
+
+/* v2.1.8 faction tools */
+.faction-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 0.9rem;
+  align-items: start;
+}
+.faction-reputation-panel, .faction-clock-panel { grid-row: auto; }
+.faction-reputation-list, .faction-clock-list {
+  display: grid;
+  gap: 0.75rem;
+}
+.faction-reputation-row, .faction-clock-row {
+  padding: 0.75rem;
+  border: 1px solid var(--border-soft);
+  border-left: 4px solid var(--attitude-colour, var(--border-soft));
+  border-radius: 0.5rem;
+  background: rgba(0, 0, 0, 0.18);
+}
+.faction-reputation-row[data-attitude="enemy"] { --attitude-colour: #d14a4a; }
+.faction-reputation-row[data-attitude="hostile"] { --attitude-colour: #e06f4f; }
+.faction-reputation-row[data-attitude="wary"] { --attitude-colour: #d99a3d; }
+.faction-reputation-row[data-attitude="neutral"] { --attitude-colour: #a56cff; }
+.faction-reputation-row[data-attitude="cooperative"] { --attitude-colour: #55bd86; }
+.faction-reputation-row[data-attitude="trusted"] { --attitude-colour: #43d37f; }
+.faction-reputation-row[data-attitude="allied"] { --attitude-colour: #98df65; }
+.faction-row-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  align-items: center;
+  margin-bottom: 0.45rem;
+}
+.faction-row-heading strong {
+  color: var(--accent-strong);
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: 0.04em;
+}
+.faction-attitude-label {
+  color: var(--attitude-colour, var(--haze));
+  font-weight: 700;
+  text-align: right;
+  text-shadow: 0 0 10px rgba(162, 95, 255, 0.24);
+}
+.faction-slider {
+  width: 100%;
+  padding: 0;
+  box-shadow: none;
+  accent-color: var(--attitude-colour, var(--haze));
+}
+.faction-scale {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin-top: 0.18rem;
+}
+.faction-attitude-detail, .faction-clock-goal {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+  font-size: 0.9rem;
+}
+.faction-clock-goal-editor {
+  margin: 0.35rem 0 0.55rem;
+}
+.faction-clock-goal-label {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.28rem 0.48rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--text);
+  background: rgba(162, 95, 255, 0.10);
+  line-height: 1.35;
+  cursor: text;
+}
+.faction-clock-goal-label:hover,
+.faction-clock-goal-label:focus {
+  border-color: var(--haze);
+  background: rgba(162, 95, 255, 0.18);
+  outline: none;
+}
+.compact-helper-grid {
+  grid-template-columns: 1fr 1fr;
+}
+.compact-action-row {
+  margin-top: 0.25rem;
+}
+.clock-pips {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.28rem;
+  margin: 0.45rem 0;
+}
+.clock-pip {
+  min-height: 0.65rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.22);
+}
+.clock-pip.filled {
+  border-color: var(--accent-strong);
+  background: linear-gradient(90deg, var(--accent), var(--haze));
+  box-shadow: 0 0 12px rgba(162, 95, 255, 0.24);
+}
+.clock-actions {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-top: 0.55rem;
+}
+.clock-actions button {
+  padding: 0.3rem 0.55rem;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 980px) {
+  .faction-tools-grid, .compact-helper-grid {
+    grid-template-columns: 1fr;
   }
 }
