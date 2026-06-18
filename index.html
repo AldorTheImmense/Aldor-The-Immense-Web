@@ -74,11 +74,16 @@
 
     <section id="tables" class="panel" aria-labelledby="tables-tab">
       <div class="tables-grid">
-        <section class="card">
+        <section class="card card-wide">
           <h2>Delerium Generation</h2>
           <div class="info-note">
-            <strong>Delerium search reminders:</strong>
-            Outer City DC 15; Inner City DC 15. Exceeding the DC by 5 or more grants one additional success. Results are cumulative, so four successes finds 3d6 delerium chips and 1d6 fragments. Two or more failed checks while searching triggers a random encounter. Within a quarter mile of the Crater's Edge, characters receive one automatic additional success.
+            <ul class="info-list">
+              <li>Outer City DC 15; Inner City DC 15.</li>
+              <li>Exceeding the DC by 5 or more grants one additional success.</li>
+              <li>Results are cumulative: four successes finds 3d6 delerium chips and 1d6 fragments.</li>
+              <li>Two or more failed checks while searching triggers a random encounter.</li>
+              <li>Within a quarter mile of the Crater's Edge, characters receive one automatic additional success.</li>
+            </ul>
           </div>
           <label class="check-row">
             <input type="checkbox" id="outerCityCheck" checked>
@@ -92,40 +97,22 @@
           <pre id="deleriumOutput" class="output"></pre>
         </section>
 
-        <section class="card compact-card">
-          <h2>Lucky Finds</h2>
-          <button id="generateLuckyFind">Generate Lucky Find</button>
-          <p id="luckyFindOutput" class="output-line"></p>
-        </section>
-
-        <section class="card compact-card">
-          <h2>Warped Ruins</h2>
-          <button id="generateWarpedRuin">Generate Warped Ruin</button>
-          <p id="warpedRuinOutput" class="output-line"></p>
-        </section>
-
-        <section class="card compact-card">
-          <h2>Common Locations</h2>
-          <button id="generateCommonLocation">Generate Common Location</button>
-          <p id="locationOutput" class="output-line"></p>
-        </section>
-
-        <section class="card compact-card">
-          <h2>Arcane Anomalies</h2>
-          <button id="generateArcaneAnomaly">Generate Arcane Anomaly</button>
-          <p id="arcaneAnomalyRoll" class="output-line"></p>
-          <div id="arcaneAnomalyOutput" class="description-output compact-output"></div>
-        </section>
-
         <section class="card encounter-card">
-          <div class="card-heading">
-            <h2>Random Encounters</h2>
-            <div class="info-note encounter-dice-note">
-              <strong>Dice counts:</strong> entries written as average (dice), such as 7 (2d6), are rolled each time and shown as the rolled result plus the original dice expression.
+          <h2>Random Encounters</h2>
+          <div class="encounter-notes-grid">
+            <div class="info-note">
+              <ul class="info-list">
+                <li>3 or more successes means the party finds what they are looking for if it can be found in the search area; otherwise they conclusively rule it out.</li>
+                <li>2 or more failed checks triggers a random encounter, but enough successes still means they find what they sought.</li>
+                <li>For parties larger or smaller than four characters, adjust the required successes proportionately.</li>
+              </ul>
             </div>
-          </div>
-          <div class="info-note search-note">
-            <strong>Search reminders:</strong> 3 or more successes means the party finds what they are looking for if it can be found in the search area; otherwise they conclusively rule it out. 2 or more failed checks triggers a random encounter, but enough successes still means they find what they sought. For parties larger or smaller than four characters, adjust the required successes proportionately.
+            <div class="info-note">
+              <ul class="info-list">
+                <li>Entries written as average (dice), such as 7 (2d6), are rolled each time.</li>
+                <li>The result is shown as the rolled total plus the original dice expression, for example 11 (2d6).</li>
+              </ul>
+            </div>
           </div>
           <fieldset class="radio-row">
             <legend>Encounter table</legend>
@@ -141,6 +128,35 @@
           <h3>Encounter Result:</h3>
           <p id="encounterOutput" class="output-line"></p>
           <div id="encounterDescription" class="description-output"></div>
+        </section>
+
+        <section class="card grouped-tables-card">
+          <h2>Other Random Tables</h2>
+
+          <div class="mini-table-section">
+            <h3>Common Locations</h3>
+            <button id="generateCommonLocation">Generate Common Location</button>
+            <p id="locationOutput" class="output-line"></p>
+          </div>
+
+          <div class="mini-table-section">
+            <h3>Warped Ruins</h3>
+            <button id="generateWarpedRuin">Generate Warped Ruin</button>
+            <p id="warpedRuinOutput" class="output-line"></p>
+          </div>
+
+          <div class="mini-table-section">
+            <h3>Lucky Finds</h3>
+            <button id="generateLuckyFind">Generate Lucky Find</button>
+            <p id="luckyFindOutput" class="output-line"></p>
+          </div>
+        </section>
+
+        <section class="card arcane-card">
+          <h2>Arcane Anomalies</h2>
+          <button id="generateArcaneAnomaly">Generate Arcane Anomaly</button>
+          <p id="arcaneAnomalyRoll" class="output-line"></p>
+          <div id="arcaneAnomalyOutput" class="description-output compact-output"></div>
         </section>
       </div>
     </section>
