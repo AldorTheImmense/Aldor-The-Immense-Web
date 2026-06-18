@@ -1,6 +1,6 @@
 # Aldor The Immense
 
-Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign.
+Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign, styled as a dark gothic DM screen for use during prep or at the table.
 
 The site brings several common table tools into one place so a DM can quickly generate shop inventory, delerium search results, random encounters, lucky finds, arcane anomalies, common locations, and warped ruins during prep or at the table.
 
@@ -20,7 +20,7 @@ The site brings several common table tools into one place so a DM can quickly ge
 - Reroll controls for encounter, lucky find, and enemy counts.
 - Arcane Anomalies generator.
 - Common Locations and Warped Ruins generators.
-- Collapsible sections, sticky navigation, mobile-friendly layout, and dark mode.
+- Dark gothic DM screen styling, collapsible sections, sticky navigation, mobile-friendly layout, and theme toggle.
 
 ## Local use
 

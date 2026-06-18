@@ -12,7 +12,10 @@
     <div class="header-main">
       <div class="title-row">
         <img src="assets/AldorIcon.ico" alt="" class="app-icon">
-        <h1>Aldor The Immense</h1>
+        <div class="brand-copy">
+          <h1>Aldor The Immense</h1>
+          <p>A Drakkenheim DM Tool</p>
+        </div>
       </div>
       <div class="header-actions">
         <a class="header-link" href="changelog.html">Changelog</a>
@@ -114,14 +117,7 @@
 
         <details id="encounters-card" class="card encounter-card collapsible" open>
           <summary class="card-summary"><span>Random Encounters</span></summary>
-          <div class="encounter-notes-grid">
-            <div class="info-note">
-              <ul class="info-list">
-                <li id="encounterSearchTargetNote"></li>
-                <li id="encounterFailureTargetNote"></li>
-                <li>After every generated encounter, the app rolls the Lucky Finds table and shows the result below the encounter.</li>
-              </ul>
-            </div>
+          <div class="encounter-notes-grid single-note">
             <div class="info-note">
               <ul class="info-list">
                 <li>Entries written as average (dice), such as 7 (2d6), are rolled each time.</li>
@@ -169,7 +165,6 @@
 
           <h3>Encounter Result:</h3>
           <p id="encounterOutput" class="output-line"></p>
-          <p id="encounterDifficulty" class="difficulty-output"></p>
           <div id="encounterDescription" class="description-output"></div>
           <h3>Lucky Find:</h3>
           <p id="encounterLuckyFindOutput" class="output-line"></p>
@@ -211,7 +206,7 @@
   </main>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.0.10</span>
+    <span>Aldor The Immense v2.1.1</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 

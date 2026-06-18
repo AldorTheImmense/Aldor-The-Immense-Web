@@ -1,5 +1,18 @@
 # Changelog
 
+## v2.1.1
+
+- Removed the Random Encounters search/reminder note block from the encounter card.
+- Kept the dice-count rolling note in place.
+- Updated the footer version number.
+
+## v2.1.0
+
+- Added the first full visual redesign pass with a dark gothic Drakkenheim DM screen theme.
+- Restyled the header, quick navigation, cards, shop inventory, buttons, result panels, dialogs, changelog page, and mobile layout.
+- Made dark mode the default visual style for first-time visitors while keeping the existing theme toggle.
+- Updated the footer version number.
+
 ## v2.0.10
 
 - Lucky Finds spell scroll results now choose specific spells.
