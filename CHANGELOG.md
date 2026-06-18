@@ -1,5 +1,16 @@
 # Changelog
 
+## v2.1.12
+
+- Removed the Changelog button from the top header action bar.
+- Kept the footer changelog link as the only changelog navigation.
+- Updated the footer version number.
+
+## v2.1.11
+
+- Moved Copy Save Code and Load Save Code into the top header action bar.
+- Removed the Save Code buttons from the shop toolbar so save/load controls are available across the app.
+
 ## v2.1.10
 
 - Individual faction clock reset buttons now reset both clock progress and the editable faction goal.

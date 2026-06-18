@@ -2211,7 +2211,7 @@ const STORAGE_KEYS = {
   factionClockGoals: "aldor.factionClockGoals.v1"
 };
 
-const APP_VERSION = "2.1.10";
+const APP_VERSION = "2.1.12";
 
 const FACTION_LABELS = {
   hoodedLanterns: "Hooded Lanterns",

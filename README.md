@@ -11,7 +11,7 @@ The site brings several common table tools into one place so a DM can quickly ge
 
 - Aldor shop generator for potions, scrolls, uncommon items, and rare items.
 - Editable shop inventory lists.
-- Save-code support for moving shop state, custom item lists, faction reputation, and faction clocks between browsers or computers.
+- Top-bar Save Code controls for moving shop state, custom item lists, faction reputation, and faction clocks between browsers or computers.
 - Delerium search helper that calculates successes, failures, DC +5 bonus successes, party-size scaling, Crater's Edge bonus success, and the correct Outer City / Inner City DCs.
 - Random encounter generator for Outer City, Inner City, and Sewers.
 - Monsters of Drakkenheim mode for updated Outer City and Inner City encounter tables.
