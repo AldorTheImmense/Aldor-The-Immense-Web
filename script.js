@@ -1182,6 +1182,28 @@ const DEFAULT_DATA = {
     "1d4 greater healing potions.",
     "Artwork worth 250 gp.",
     "1 rare spell scroll."
+  ],
+  "arcaneAnomalies": [
+      "Gravity breaks within a 100-foot radius area for 1 hour. Creatures levitate in midair, and must move by pushing or pulling against a fixed object or surface within reach (such as a wall or a ceiling), which allows them to move as if they were climbing. Unattended objects float around randomly.",
+      "The nearest creature is affected by a hideous laughter spell (Save DC 15) but instead of laughing, the creature repeats unfathomable combinations of syllables and words.",
+      "Time skips a beat. Creatures within 60 feet experience a palpable feeling of vertigo followed by a powerful sensation of deja vu and are stunned for 1 round (No save).",
+      "The nearest creature becomes unstuck in time. It is affected by the blink spell for 1 minute. Instead of vanishing into the Ethereal Plane, the creature vanishes into a sliver of time in its past or possible future.",
+      "A prismatic burst of energy erupts in a 20-foot radius. Creatures in the area must succeed on a DC 15 Constitution saving throw or take 8d6 radiant damage and become blinded for 1 round. The smell of ozone fills the area, and wood transforms into glass.",
+      "Echoes of possible realities are briefly visible for 1 minute. When a creature within 60 feet is hit by an attack, a faint vision of the creature being killed by that attack appears.",
+      "Discordant music fills the mind of all creatures within 30 feet, who are affected as if by irresistible dance (Save DC 15).",
+      "A section of stone, water, air, or energy becomes an appropriate contaminated elemental.",
+      "An extraplanar creature is summoned and remains for 1 hour. The DM either chooses the creature or determines it randomly. It is friendly to the creature who triggered the anomaly.",
+      "All humanoid corpses within 120 feet animate as hostile haze husks. The shrieking undead beg frantically for forgiveness as they rip apart the living.",
+      "The shadows of 1d6 random creatures in the area animate and try to kill them. Once destroyed, the creatures don't cast a shadow for 24 hours.",
+      "All creatures within 60 feet become invisible for 1 min or until they attack or cast a spell.",
+      "Tendrils of life flow from the nearest creature to others. It must succeed on a DC 15 Constitution saving throw or take 8d8 necrotic damage, half on a success. The three nearest creatures within 60 feet each regain hit points equal to the damage taken.",
+      "A hypnotic pattern (save DC 15) appears. It creates scintillating impossible colours in shapes which are simply wrong. Creatures incapacitated by the spell weep uncontrollably.",
+      "A black tentacles spell appears in the area for 1 hour (Escape DC 15).",
+      "Objects within 60 feet come to life for the next hour, as if affected by the animate objects spell. They mumble awful truths, but are not otherwise hostile.",
+      "The nearest creature is polymorphed into an awakened shrub for 1 hour or until reduced to 0 hp (No save).",
+      "Time slows down for up to six randomly determined creatures within 120 feet of the anomaly. They are affected by the slow spell for 1 minute. (Save DC 15).",
+      "Time speeds up for one randomly determined creature within 60 feet of the anomaly. They are affected by the haste spell for 1 minute.",
+      "A bowl of flowers and a very surprised aquatic mammal appear 100 feet in the air. \"Oh no, not again...\" thinks the flowers."
   ]
 };
 
@@ -2545,6 +2567,12 @@ function generateLuckyFind() {
   byId("luckyFindOutput").textContent = `Lucky Find: ${resultText}`;
 }
 
+function generateArcaneAnomaly() {
+  const roll = Math.floor(Math.random() * 20) + 1;
+  byId("arcaneAnomalyRoll").textContent = `Arcane Anomaly - rolled ${roll} on d20`;
+  byId("arcaneAnomalyOutput").textContent = DEFAULT_DATA.arcaneAnomalies[roll - 1];
+}
+
 function showTab(tabName) {
   document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === tabName));
   document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active-panel", panel.id === tabName));
@@ -2630,6 +2658,7 @@ function bindEvents() {
   byId("generateCommonLocation").addEventListener("click", generateCommonLocation);
   byId("generateWarpedRuin").addEventListener("click", generateWarpedRuin);
   byId("generateLuckyFind").addEventListener("click", generateLuckyFind);
+  byId("generateArcaneAnomaly").addEventListener("click", generateArcaneAnomaly);
 }
 
 function init() {
