@@ -120,6 +120,34 @@ main { padding: 0.75rem; }
   background: #ddd;
 }
 
+
+.card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.55rem;
+}
+
+.card-heading h2 { margin-bottom: 0; }
+
+.info-note {
+  margin: 0 0 0.75rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #d4d4d4;
+  background: #fafafa;
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.encounter-dice-note {
+  width: min(390px, 100%);
+  margin-bottom: 0;
+}
+
+.search-note { max-width: 880px; }
+.compact-output { min-height: 4.5rem; }
+
 .tables-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(260px, 1fr));
@@ -201,6 +229,7 @@ main { padding: 0.75rem; }
 
 @media (max-width: 780px) {
   .app-header { align-items: stretch; flex-direction: column; }
+  .card-heading { flex-direction: column; }
   .toolbar, .shop-layout, .tables-grid, .editor-grid { grid-template-columns: 1fr; }
   .editor-actions { padding-top: 0; }
   .aldor-art img { max-height: none; }

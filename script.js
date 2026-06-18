@@ -2529,7 +2529,11 @@ function rollDiceExpression(dice, sides, operator, modifier) {
 function randomiseEncounterCounts(description) {
   return String(description).replace(
     /\b\d+\s*\(\s*(\d+)d(\d+)(?:\s*([+-])\s*(\d+))?\s*\)/gi,
-    (_match, dice, sides, operator, modifier) => String(rollDiceExpression(dice, sides, operator, modifier))
+    (_match, dice, sides, operator, modifier) => {
+      const rolledTotal = rollDiceExpression(dice, sides, operator, modifier);
+      const diceExpression = `${dice}d${sides}${operator && modifier ? operator + modifier : ""}`;
+      return `${rolledTotal} (${diceExpression})`;
+    }
   );
 }
 

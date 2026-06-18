@@ -76,6 +76,10 @@
       <div class="tables-grid">
         <section class="card">
           <h2>Delerium Generation</h2>
+          <div class="info-note">
+            <strong>Delerium search reminders:</strong>
+            Outer City DC 15; Inner City DC 15. Exceeding the DC by 5 or more grants one additional success. Results are cumulative, so four successes finds 3d6 delerium chips and 1d6 fragments. Two or more failed checks while searching triggers a random encounter. Within a quarter mile of the Crater's Edge, characters receive one automatic additional success.
+          </div>
           <label class="check-row">
             <input type="checkbox" id="outerCityCheck" checked>
             <span>Outer City <span class="muted">(uncheck for Inner City)</span></span>
@@ -94,13 +98,6 @@
           <p id="luckyFindOutput" class="output-line"></p>
         </section>
 
-        <section class="card">
-          <h2>Arcane Anomalies</h2>
-          <button id="generateArcaneAnomaly">Generate Arcane Anomaly</button>
-          <p id="arcaneAnomalyRoll" class="output-line"></p>
-          <div id="arcaneAnomalyOutput" class="description-output"></div>
-        </section>
-
         <section class="card compact-card">
           <h2>Warped Ruins</h2>
           <button id="generateWarpedRuin">Generate Warped Ruin</button>
@@ -113,8 +110,23 @@
           <p id="locationOutput" class="output-line"></p>
         </section>
 
+        <section class="card compact-card">
+          <h2>Arcane Anomalies</h2>
+          <button id="generateArcaneAnomaly">Generate Arcane Anomaly</button>
+          <p id="arcaneAnomalyRoll" class="output-line"></p>
+          <div id="arcaneAnomalyOutput" class="description-output compact-output"></div>
+        </section>
+
         <section class="card encounter-card">
-          <h2>Random Encounters</h2>
+          <div class="card-heading">
+            <h2>Random Encounters</h2>
+            <div class="info-note encounter-dice-note">
+              <strong>Dice counts:</strong> entries written as average (dice), such as 7 (2d6), are rolled each time and shown as the rolled result plus the original dice expression.
+            </div>
+          </div>
+          <div class="info-note search-note">
+            <strong>Search reminders:</strong> 3 or more successes means the party finds what they are looking for if it can be found in the search area; otherwise they conclusively rule it out. 2 or more failed checks triggers a random encounter, but enough successes still means they find what they sought. For parties larger or smaller than four characters, adjust the required successes proportionately.
+          </div>
           <fieldset class="radio-row">
             <legend>Encounter table</legend>
             <label><input type="radio" name="encounterTable" value="outerCity" checked> Outer City</label>
