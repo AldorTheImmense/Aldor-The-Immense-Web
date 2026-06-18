@@ -2518,12 +2518,27 @@ function lookupEncounterDescription(descriptions, name) {
   return matchingKey ? descriptions[matchingKey] : "";
 }
 
+function rollDiceExpression(dice, sides, operator, modifier) {
+  let total = rollDice(Number(dice), Number(sides));
+  if (operator && modifier) {
+    total += operator === "+" ? Number(modifier) : -Number(modifier);
+  }
+  return total;
+}
+
+function randomiseEncounterCounts(description) {
+  return String(description).replace(
+    /\b\d+\s*\(\s*(\d+)d(\d+)(?:\s*([+-])\s*(\d+))?\s*\)/gi,
+    (_match, dice, sides, operator, modifier) => String(rollDiceExpression(dice, sides, operator, modifier))
+  );
+}
+
 function getEncounterDescription(name, tableName) {
   const activeDescription = lookupEncounterDescription(activeEncounterDescriptions(tableName), name);
-  if (activeDescription) return activeDescription;
+  if (activeDescription) return randomiseEncounterCounts(activeDescription);
 
   const fallbackDescription = lookupEncounterDescription(DEFAULT_DATA.encounterDescriptions, name);
-  return fallbackDescription || "No description found for this encounter.";
+  return fallbackDescription ? randomiseEncounterCounts(fallbackDescription) : "No description found for this encounter.";
 }
 
 function generateEncounter() {
