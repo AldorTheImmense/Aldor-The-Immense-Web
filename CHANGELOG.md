@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.1.3
+
+- Changed light mode button and header-link text to white for stronger contrast.
+- Updated the footer version number.
+
 ## v2.1.2
 
 - Removed the dark gradient overlay from the Aldor artwork so the image stays clear on narrower screens.

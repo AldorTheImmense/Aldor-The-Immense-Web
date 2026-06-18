@@ -2205,7 +2205,7 @@ const STORAGE_KEYS = {
   encounterHistory: "aldor.encounterHistory.v1"
 };
 
-const APP_VERSION = "2.1.2";
+const APP_VERSION = "2.1.3";
 
 const FACTION_LABELS = {
   hoodedLanterns: "Hooded Lanterns",
