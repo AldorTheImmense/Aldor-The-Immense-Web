@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.3.1
+- Clear Route now resets the route start point back to the relevant safe haven marker.
+- If an approach has been logged, Clear Route uses the latest approach safe haven.
+- If no approach has been logged, Clear Route uses the currently selected safe haven.
+- Updated the Map route rules note to describe the Clear Route behaviour.
+- Updated the footer version number.
+
 ## v2.3.0
 - Marked the Drakkenheim Route Map as a stable feature set.
 - Clarified the Road type control so Side roads / rubble explicitly says it is half speed.

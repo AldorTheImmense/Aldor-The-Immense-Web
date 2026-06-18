@@ -944,7 +944,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
   }
 }
 
-/* v2.3.0 Drakkenheim route map */
+/* v2.3.1 Drakkenheim route map */
 .map-card h2 {
   margin-bottom: 0.4rem;
 }
@@ -1358,7 +1358,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
 }
 
 
-/* v2.3.0 themed map tooltips */
+/* v2.3.1 themed map tooltips */
 .map-pin-tooltip {
   position: absolute;
   z-index: 70;
@@ -1385,7 +1385,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
 }
 
 
-/* v2.3.0 stable map route rules */
+/* v2.3.1 stable map route rules */
 .map-route-rules {
   margin: 0.65rem 0 0.85rem;
   padding: 0.62rem 0.75rem;

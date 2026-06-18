@@ -61,3 +61,6 @@ The Map page supports zooming, movable landmark lists, and road-type switching. 
 ## Map zoom and pan
 
 Use the vertical zoom slider on the Map page to zoom in. Hold right-click and drag on the map to pan while zoomed.
+
+
+Clear Route resets the city route back to the latest approach safe haven, or the currently selected safe haven if no approach has been logged.

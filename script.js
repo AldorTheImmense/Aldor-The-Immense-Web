@@ -2212,7 +2212,7 @@ const STORAGE_KEYS = {
   mapTools: "aldor.mapTools.v1"
 };
 
-const APP_VERSION = "2.3.0";
+const APP_VERSION = "2.3.1";
 
 const FACTION_LABELS = {
   hoodedLanterns: "Hooded Lanterns",
@@ -4304,30 +4304,44 @@ function undoMapSegment() {
   playUiSound("reset");
 }
 
-function clearMapRoute() {
-  if (!mapRoutePoints.length && !mapRouteSegments.length) return;
-  if (!confirm("Clear the current city route?")) return;
-  mapRoutePoints = [];
-  mapRouteSegments = [];
-  mapEvents = [];
-  saveMapTools();
-  renderMapTools();
-  playUiSound("reset");
+function currentMapSafeHavenKey() {
+  const select = byId("mapSafeHaven");
+  return select && MAP_SAFE_HAVENS[select.value] ? select.value : "emberwood";
 }
 
-function startRouteFromSafeHaven(havenKey) {
+function lastApproachSafeHavenKey() {
+  for (let i = mapOutsideTrips.length - 1; i >= 0; i -= 1) {
+    const trip = mapOutsideTrips[i];
+    if (trip && trip.type === "approach" && MAP_SAFE_HAVENS[trip.haven]) return trip.haven;
+  }
+  return currentMapSafeHavenKey();
+}
+
+function startRouteFromSafeHaven(havenKey = currentMapSafeHavenKey(), force = false) {
   const haven = MAP_SAFE_HAVENS[havenKey];
-  if (!haven || !haven.landmarkId || mapRoutePoints.length) return;
+  if (!haven || !haven.landmarkId || (mapRoutePoints.length && !force)) return;
   const landmark = activeMapLandmarkById(haven.landmarkId);
   if (!landmark) return;
   mapRoutePoints = [{ x: landmark.x, y: landmark.y, label: `${landmark.id}. ${landmark.label}` }];
 }
 
+function clearMapRoute() {
+  if (!mapRoutePoints.length && !mapRouteSegments.length && !mapEvents.length) return;
+  if (!confirm("Clear the current city route and reset the start point to the safe haven?")) return;
+  const havenKey = lastApproachSafeHavenKey();
+  mapRoutePoints = [];
+  mapRouteSegments = [];
+  mapEvents = [];
+  startRouteFromSafeHaven(havenKey, true);
+  saveMapTools();
+  renderMapTools();
+  playUiSound("reset");
+}
+
 function addOutsideTravel(type, forcedHavenKey = null) {
-  const select = byId("mapSafeHaven");
   const havenKey = forcedHavenKey && MAP_SAFE_HAVENS[forcedHavenKey]
     ? forcedHavenKey
-    : (select && MAP_SAFE_HAVENS[select.value] ? select.value : "emberwood");
+    : currentMapSafeHavenKey();
   mapOutsideTrips.push({ type, haven: havenKey, minutes: MAP_SAFE_HAVENS[havenKey].minutes });
   if (type === "approach") startRouteFromSafeHaven(havenKey);
   saveMapTools();
