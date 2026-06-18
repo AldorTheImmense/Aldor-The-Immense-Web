@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.1.5
+
+- Added search/filter support to the Drakkenheim Conditions pop-out.
+- Added pinned conditions, with common conditions pinned by default and star controls to pin or unpin entries.
+- Added quick reference mode for compact condition summaries.
+- Added stronger themed empty states for shop lists and generated-result panels.
+- Added subtle result animations for generated outputs.
+- Added an optional sound toggle using browser-generated interface sounds.
+- Added a mobile bottom action bar for Shop, Delerium, Encounters, and Conditions.
+- Preserved Delerium Search Helper DCs as Outer City DC 15 and Inner City DC 20.
+- Updated the footer version number.
+
 ## v2.1.4
 
 - Added a Conditions button to the header.

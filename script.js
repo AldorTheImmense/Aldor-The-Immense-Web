@@ -2202,10 +2202,13 @@ const STORAGE_KEYS = {
   shop: "aldor.shopState.v1",
   inventory: "aldor.inventoryLists.v1",
   theme: "aldor.theme.v1",
-  encounterHistory: "aldor.encounterHistory.v1"
+  encounterHistory: "aldor.encounterHistory.v1",
+  conditionsPinned: "aldor.conditionsPinned.v1",
+  quickConditions: "aldor.quickConditions.v1",
+  sound: "aldor.sound.v1"
 };
 
-const APP_VERSION = "2.1.4";
+const APP_VERSION = "2.1.5";
 
 const FACTION_LABELS = {
   hoodedLanterns: "Hooded Lanterns",
@@ -2228,6 +2231,42 @@ const DRAKKENHEIM_MADNESS_TRAITS = [
   "A sinister cabal of disembodied hands is plotting against me.",
   "I must go into the ruins and kill. Rip and tear, until it is done."
 ];
+
+const DEFAULT_PINNED_CONDITIONS = [
+  "Bleeding [X]",
+  "Burning [X]",
+  "Dazed",
+  "Defenseless",
+  "Drakkenheim Madness",
+  "Immobilized",
+  "Shocked"
+];
+
+const CONDITION_QUICK_REFERENCES = {
+  "Addled": "Disadvantage on Intelligence, Wisdom, and Charisma attack rolls, ability checks, and saving throws.",
+  "Bewildered": "You can only cast cantrips with a casting time of 1 action.",
+  "Bleeding [X]": "Lose the listed Hit Points at the end of each turn. Ends when healed or treated with a healer's kit.",
+  "Bloodied": "A creature is Bloodied while at half Hit Points or fewer.",
+  "Burning [X]": "Take the listed ongoing damage at the end of each turn until extinguished, scraped off, or doused.",
+  "Clumsy": "Disadvantage on Dexterity attack rolls, ability checks, and saving throws.",
+  "Contamination": "Use the Contamination rules.",
+  "Dazed": "Move or take an action, not both. No Bonus Actions.",
+  "Defenseless": "Attack rolls against you have Advantage.",
+  "Distracted": "You can't take Reactions.",
+  "Drakkenheim Madness": "Roll a trait from the Drakkenheim Madness table.",
+  "Enfeebled": "Disadvantage on Strength attack rolls, ability checks, and saving throws.",
+  "Frozen [DC X]": "Immobilized, Defenseless, and Helpless against Bludgeoning weapon attacks until broken free or damaged enough.",
+  "Helpless": "Any attack that hits you is a Critical Hit.",
+  "Immobilized": "Speed becomes 0. You can't benefit from bonuses to Speed. Flying creatures fall.",
+  "Jinxed [X]": "Subtract the listed die from each attack roll or saving throw.",
+  "Shocked": "Dazed and Defenseless. Drop held items. Must spend an action to draw, stow, or pick up objects.",
+  "Sickened": "Disadvantage on Constitution saving throws.",
+  "Slowed": "Speed is halved.",
+  "Staggered": "You can't make more than one weapon attack during your turn.",
+  "Valor [X]": "Add the listed die to attack rolls and saving throws.",
+  "Weakened": "Deal half damage with weapon attacks and spells."
+};
+
 
 const ENCOUNTER_FACTIONS = {
   "hooded lantern patrol": "hoodedLanterns",
@@ -2284,6 +2323,9 @@ const DEADLY_ENCOUNTER_PATTERNS = [
 
 let lastEncounterState = null;
 let encounterHistory = [];
+let pinnedConditions = [];
+let soundEnabled = false;
+let audioContext = null;
 
 const state = {
   potions: [],
@@ -2292,6 +2334,13 @@ const state = {
   rareShopItem: [],
   uncommonItems: [],
   rareItems: []
+};
+
+const SHOP_EMPTY_MESSAGES = {
+  potions: "Aldor has not stocked any potions yet. Click Generate Shop to fill the shelves.",
+  scrolls: "No spell scrolls are laid out yet. Click Generate Shop to prepare Aldor's scroll case.",
+  uncommonShopItems: "No uncommon items are on display yet. Click Generate Shop to stock the counter.",
+  rareShopItem: "No rare item has been selected yet. Click Generate Shop to reveal Aldor's prize item."
 };
 
 const byId = (id) => document.getElementById(id);
@@ -2340,8 +2389,8 @@ function renderList(elementId, listName) {
 
   if (!items.length) {
     const empty = document.createElement("li");
-    empty.className = "empty";
-    empty.textContent = "No items";
+    empty.className = "empty empty-state";
+    empty.textContent = SHOP_EMPTY_MESSAGES[listName] || "Nothing generated yet.";
     list.appendChild(empty);
     return;
   }
@@ -2592,6 +2641,8 @@ function generateShop() {
   generateRare();
   renderShop();
   saveShop();
+  flashResults("potionsList", "scrollsList", "uncommonList", "rareList");
+  playUiSound("success");
 }
 
 function removeSoldItem(listName, index) {
@@ -2763,6 +2814,9 @@ function calculateDeleriumSearch() {
     "Delerium found:",
     reward
   ].join("\n");
+  markOutputReady("deleriumOutput");
+  flashResults("deleriumOutput");
+  playUiSound("success");
 }
 
 function selectedEncounterTable() {
@@ -2999,6 +3053,8 @@ function renderEncounterState() {
   byId("encounterOutput").textContent = `${encounterDisplayText(lastEncounterState.encounter)}${modeSuffix}`;
   byId("encounterDescription").textContent = lastEncounterState.description;
   byId("encounterLuckyFindOutput").textContent = formatLuckyFind(lastEncounterState.luckyFind);
+  markOutputReady("encounterOutput", "encounterDescription", "encounterLuckyFindOutput");
+  flashResults("encounterOutput", "encounterDescription", "encounterLuckyFindOutput");
 }
 
 function historySummaryFromState(encounterState) {
@@ -3044,8 +3100,8 @@ function renderEncounterHistory() {
   list.innerHTML = "";
   if (!encounterHistory.length) {
     const empty = document.createElement("li");
-    empty.className = "muted";
-    empty.textContent = "No encounters generated yet.";
+    empty.className = "muted empty-state";
+    empty.textContent = "No encounters logged yet. Generate an encounter to start the session trail.";
     list.appendChild(empty);
     return;
   }
@@ -3114,6 +3170,7 @@ function generateEncounter() {
   lastEncounterState = createEncounterState(encounter, tableName);
   renderEncounterState();
   addEncounterHistoryEntry(lastEncounterState, manualRoll === null ? "Generated" : "Manual roll");
+  playUiSound("roll");
 }
 
 function rerollEncounterOnly() {
@@ -3127,6 +3184,7 @@ function rerollEncounterOnly() {
   lastEncounterState = createEncounterState(encounter, tableName, existingLuckyFind);
   renderEncounterState();
   addEncounterHistoryEntry(lastEncounterState, "Rerolled encounter");
+  playUiSound("roll");
 }
 
 function rerollLuckyFindOnly() {
@@ -3136,6 +3194,7 @@ function rerollLuckyFindOnly() {
   }
   lastEncounterState.luckyFind = rollLuckyFindResult();
   renderEncounterState();
+  playUiSound("roll");
 }
 
 function rerollCountsOnly() {
@@ -3145,6 +3204,7 @@ function rerollCountsOnly() {
   }
   lastEncounterState.description = buildEncounterDescription(lastEncounterState);
   renderEncounterState();
+  playUiSound("roll");
 }
 
 function updateEncounterAreaNote() {
@@ -3160,11 +3220,17 @@ function updateEncounterAreaNote() {
 function generateCommonLocation() {
   const roll = Math.floor(Math.random() * 10) + 1;
   byId("locationOutput").textContent = `Common Location: ${DEFAULT_DATA.locations[roll - 1]}`;
+  markOutputReady("locationOutput");
+  flashResults("locationOutput");
+  playUiSound("roll");
 }
 
 function generateWarpedRuin() {
   const roll = Math.floor(Math.random() * 10) + 1;
   byId("warpedRuinOutput").textContent = `Warped Ruin: ${DEFAULT_DATA.warpedRuins[roll - 1]}`;
+  markOutputReady("warpedRuinOutput");
+  flashResults("warpedRuinOutput");
+  playUiSound("roll");
 }
 
 function rollSpecificUncommonSpellScrolls(count) {
@@ -3230,6 +3296,9 @@ function generateArcaneAnomaly() {
   const roll = Math.floor(Math.random() * 20) + 1;
   byId("arcaneAnomalyRoll").textContent = `Arcane Anomaly - rolled ${roll} on d20`;
   byId("arcaneAnomalyOutput").textContent = DEFAULT_DATA.arcaneAnomalies[roll - 1];
+  markOutputReady("arcaneAnomalyRoll", "arcaneAnomalyOutput");
+  flashResults("arcaneAnomalyRoll", "arcaneAnomalyOutput");
+  playUiSound("roll");
 }
 
 function showTab(tabName) {
@@ -3272,6 +3341,203 @@ function loadTheme() {
   applyTheme(localStorage.getItem(STORAGE_KEYS.theme) || "dark");
 }
 
+function flashElement(element) {
+  if (!element) return;
+  element.classList.remove("result-flash");
+  // Force layout so repeated rolls retrigger the animation.
+  void element.offsetWidth;
+  element.classList.add("result-flash");
+}
+
+function flashResults(...ids) {
+  ids.forEach((id) => flashElement(byId(id)));
+}
+
+function markOutputReady(...ids) {
+  ids.forEach((id) => {
+    const element = byId(id);
+    if (element) element.classList.remove("empty-state");
+  });
+}
+
+function setSoundEnabled(enabled) {
+  soundEnabled = Boolean(enabled);
+  const button = byId("soundToggle");
+  if (button) button.textContent = soundEnabled ? "Sound: On" : "Sound: Off";
+  localStorage.setItem(STORAGE_KEYS.sound, soundEnabled ? "on" : "off");
+}
+
+function loadSoundPreference() {
+  setSoundEnabled(localStorage.getItem(STORAGE_KEYS.sound) === "on");
+}
+
+function playUiSound(kind = "click") {
+  if (!soundEnabled) return;
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    audioContext = audioContext || new AudioContextClass();
+    const now = audioContext.currentTime;
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    const frequencies = {
+      click: 520,
+      roll: 420,
+      success: 660,
+      open: 360
+    };
+    oscillator.type = kind === "roll" ? "triangle" : "sine";
+    oscillator.frequency.setValueAtTime(frequencies[kind] || frequencies.click, now);
+    if (kind === "roll") oscillator.frequency.exponentialRampToValueAtTime(220, now + 0.12);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.06, now + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+    oscillator.start(now);
+    oscillator.stop(now + 0.17);
+  } catch (_error) {
+    // Ignore audio errors; the site should remain silent rather than fail.
+  }
+}
+
+function toggleSound() {
+  setSoundEnabled(!soundEnabled);
+  if (soundEnabled) playUiSound("success");
+}
+
+function loadPinnedConditions() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.conditionsPinned) || "null");
+    pinnedConditions = Array.isArray(saved) ? saved : [...DEFAULT_PINNED_CONDITIONS];
+  } catch {
+    pinnedConditions = [...DEFAULT_PINNED_CONDITIONS];
+  }
+}
+
+function savePinnedConditions() {
+  localStorage.setItem(STORAGE_KEYS.conditionsPinned, JSON.stringify(pinnedConditions));
+}
+
+function isConditionPinned(name) {
+  return pinnedConditions.includes(name);
+}
+
+function renderConditionPins() {
+  document.querySelectorAll(".condition-entry").forEach((entry) => {
+    const name = entry.dataset.conditionName;
+    const button = entry.querySelector(".condition-pin");
+    if (!button || !name) return;
+    const pinned = isConditionPinned(name);
+    entry.classList.toggle("is-pinned", pinned);
+    button.classList.toggle("is-pinned", pinned);
+    button.textContent = pinned ? "★" : "☆";
+    button.setAttribute("aria-label", pinned ? `Unpin ${name}` : `Pin ${name}`);
+    button.title = pinned ? "Unpin condition" : "Pin condition";
+  });
+}
+
+function sortConditionEntries() {
+  const body = document.querySelector("#conditionsWindow .floating-window-body");
+  const tools = body ? body.querySelector(".conditions-tools") : null;
+  if (!body || !tools) return;
+  const entries = Array.from(body.querySelectorAll(".condition-entry"));
+  entries.sort((a, b) => {
+    const aPinned = isConditionPinned(a.dataset.conditionName) ? 0 : 1;
+    const bPinned = isConditionPinned(b.dataset.conditionName) ? 0 : 1;
+    if (aPinned !== bPinned) return aPinned - bPinned;
+    return Number(a.dataset.originalIndex || 0) - Number(b.dataset.originalIndex || 0);
+  });
+  entries.forEach((entry) => body.appendChild(entry));
+}
+
+function togglePinnedCondition(name) {
+  if (isConditionPinned(name)) {
+    pinnedConditions = pinnedConditions.filter((entry) => entry !== name);
+  } else {
+    pinnedConditions.push(name);
+  }
+  savePinnedConditions();
+  sortConditionEntries();
+  renderConditionPins();
+  filterConditions();
+}
+
+function filterConditions() {
+  const input = byId("conditionSearch");
+  const status = byId("conditionFilterStatus");
+  const query = input ? input.value.trim().toLowerCase() : "";
+  const quickMode = Boolean(byId("quickConditionsMode") && byId("quickConditionsMode").checked);
+  let visibleCount = 0;
+
+  document.querySelectorAll(".condition-entry").forEach((entry) => {
+    const haystack = entry.dataset.conditionSearch || entry.textContent.toLowerCase();
+    const visible = !query || haystack.includes(query);
+    entry.classList.toggle("hidden-by-filter", !visible);
+    if (quickMode && visible) entry.open = true;
+    if (visible) visibleCount += 1;
+  });
+
+  if (status) {
+    if (!query) status.textContent = "Pinned conditions appear first. Use search to narrow the list.";
+    else status.textContent = visibleCount ? `${visibleCount} matching condition${visibleCount === 1 ? "" : "s"}.` : "No matching conditions.";
+  }
+}
+
+function setQuickConditionsMode(enabled) {
+  const windowElement = byId("conditionsWindow");
+  const checkbox = byId("quickConditionsMode");
+  const active = Boolean(enabled);
+  if (checkbox) checkbox.checked = active;
+  if (windowElement) windowElement.classList.toggle("quick-mode", active);
+  localStorage.setItem(STORAGE_KEYS.quickConditions, active ? "on" : "off");
+  if (active) document.querySelectorAll(".condition-entry").forEach((entry) => { entry.open = true; });
+  filterConditions();
+}
+
+function enhanceConditionsWindow() {
+  const body = document.querySelector("#conditionsWindow .floating-window-body");
+  if (!body) return;
+  const entries = Array.from(body.querySelectorAll(".condition-entry"));
+  entries.forEach((entry, index) => {
+    if (entry.dataset.enhanced === "true") return;
+    const summary = entry.querySelector("summary");
+    if (!summary) return;
+    const name = summary.textContent.trim();
+    entry.dataset.conditionName = name;
+    entry.dataset.originalIndex = String(index);
+    entry.dataset.conditionSearch = entry.textContent.toLowerCase();
+    summary.textContent = "";
+
+    const title = document.createElement("span");
+    title.className = "condition-title";
+    title.textContent = name;
+
+    const pinButton = document.createElement("button");
+    pinButton.type = "button";
+    pinButton.className = "condition-pin";
+    pinButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      togglePinnedCondition(name);
+      playUiSound("click");
+    });
+
+    summary.append(title, pinButton);
+
+    const quick = document.createElement("p");
+    quick.className = "condition-quick";
+    quick.textContent = CONDITION_QUICK_REFERENCES[name] || "Use the full entry for details.";
+    summary.insertAdjacentElement("afterend", quick);
+    entry.dataset.enhanced = "true";
+  });
+
+  loadPinnedConditions();
+  sortConditionEntries();
+  renderConditionPins();
+  setQuickConditionsMode(localStorage.getItem(STORAGE_KEYS.quickConditions) === "on");
+}
+
 function openConditionsWindow() {
   const windowElement = byId("conditionsWindow");
   if (!windowElement) return;
@@ -3283,6 +3549,7 @@ function openConditionsWindow() {
     windowElement.style.left = "auto";
     windowElement.dataset.positioned = "true";
   }
+  playUiSound("open");
 }
 
 function closeConditionsWindow() {
@@ -3293,7 +3560,11 @@ function closeConditionsWindow() {
 function rollDrakkenheimMadness() {
   const roll = Math.floor(Math.random() * DRAKKENHEIM_MADNESS_TRAITS.length) + 1;
   const output = byId("drakkenheimMadnessOutput");
-  if (output) output.textContent = `Rolled ${roll}: “${DRAKKENHEIM_MADNESS_TRAITS[roll - 1]}”`;
+  if (output) {
+    output.textContent = `Rolled ${roll}: “${DRAKKENHEIM_MADNESS_TRAITS[roll - 1]}”`;
+    flashElement(output);
+  }
+  playUiSound("roll");
 }
 
 function makeConditionsWindowDraggable() {
@@ -3395,9 +3666,13 @@ function bindEvents() {
   });
 
   byId("themeToggle").addEventListener("click", toggleTheme);
+  byId("soundToggle").addEventListener("click", toggleSound);
   byId("conditionsButton").addEventListener("click", openConditionsWindow);
+  document.querySelectorAll("[data-open-conditions]").forEach((button) => button.addEventListener("click", openConditionsWindow));
   byId("closeConditionsWindow").addEventListener("click", closeConditionsWindow);
   byId("rollDrakkenheimMadness").addEventListener("click", rollDrakkenheimMadness);
+  byId("conditionSearch").addEventListener("input", filterConditions);
+  byId("quickConditionsMode").addEventListener("change", (event) => setQuickConditionsMode(event.target.checked));
   makeConditionsWindowDraggable();
 
   byId("generateShop").addEventListener("click", generateShop);
@@ -3409,10 +3684,10 @@ function bindEvents() {
       event.preventDefault();
     });
   });
-  byId("regenPotions").addEventListener("click", () => { generatePotions(); renderShop(); saveShop(); });
-  byId("regenScrolls").addEventListener("click", () => { generateScrolls(); renderShop(); saveShop(); });
-  byId("regenUncommon").addEventListener("click", () => { generateUncommon(); renderShop(); saveShop(); });
-  byId("regenRare").addEventListener("click", () => { generateRare(); renderShop(); saveShop(); });
+  byId("regenPotions").addEventListener("click", () => { generatePotions(); renderShop(); saveShop(); flashResults("potionsList"); playUiSound("success"); });
+  byId("regenScrolls").addEventListener("click", () => { generateScrolls(); renderShop(); saveShop(); flashResults("scrollsList"); playUiSound("success"); });
+  byId("regenUncommon").addEventListener("click", () => { generateUncommon(); renderShop(); saveShop(); flashResults("uncommonList"); playUiSound("success"); });
+  byId("regenRare").addEventListener("click", () => { generateRare(); renderShop(); saveShop(); flashResults("rareList"); playUiSound("success"); });
 
   byId("editInventory").addEventListener("click", openInventoryDialog);
   byId("showSaveCode").addEventListener("click", showSaveCodeDialog);
@@ -3452,10 +3727,12 @@ function bindEvents() {
 
 function init() {
   loadTheme();
+  loadSoundPreference();
   loadInventoryLists();
   loadShop();
   loadEncounterHistory();
   bindEvents();
+  enhanceConditionsWindow();
   renderShop();
   renderEncounterHistory();
   updatePartySizeGuidance();

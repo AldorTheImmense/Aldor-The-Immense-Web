@@ -20,6 +20,7 @@
       <div class="header-actions">
         <a class="header-link" href="changelog.html">Changelog</a>
         <button id="conditionsButton" type="button">Conditions</button>
+        <button id="soundToggle" type="button">Sound: Off</button>
         <button id="themeToggle" type="button">Dark mode</button>
       </div>
     </div>
@@ -43,6 +44,18 @@
     </div>
 
     <div class="floating-window-body">
+      <div class="conditions-tools">
+        <label class="field-stack">
+          <span>Search conditions</span>
+          <input id="conditionSearch" type="search" placeholder="Type to filter conditions..." autocomplete="off">
+        </label>
+        <label class="check-row compact-check">
+          <input type="checkbox" id="quickConditionsMode">
+          <span>Quick reference mode</span>
+        </label>
+        <p id="conditionFilterStatus" class="inline-note"></p>
+      </div>
+
       <details class="condition-entry" open>
         <summary>Addled</summary>
         <p>You have Disadvantage on Intelligence, Wisdom, and Charisma attacks rolls, ability checks, and saving throws.</p>
@@ -270,7 +283,7 @@
             </div>
           </div>
 
-          <pre id="deleriumOutput" class="output"></pre>
+          <pre id="deleriumOutput" class="output empty-state">Enter check results in the helper above, then calculate the search outcome.</pre>
         </details>
 
         <details id="encounters-card" class="card encounter-card collapsible" open>
@@ -322,10 +335,10 @@
           </div>
 
           <h3>Encounter Result:</h3>
-          <p id="encounterOutput" class="output-line"></p>
-          <div id="encounterDescription" class="description-output"></div>
+          <p id="encounterOutput" class="output-line empty-state">No encounter generated yet. The streets are quiet, for now.</p>
+          <div id="encounterDescription" class="description-output empty-state">Generate an encounter to reveal what the party stumbles into.</div>
           <h3>Lucky Find:</h3>
-          <p id="encounterLuckyFindOutput" class="output-line"></p>
+          <p id="encounterLuckyFindOutput" class="output-line empty-state">A Lucky Find will be rolled with each encounter.</p>
 
           <details class="history-panel">
             <summary>Encounter History</summary>
@@ -343,28 +356,35 @@
           <div class="mini-table-section">
             <h3>Common Locations</h3>
             <button id="generateCommonLocation" type="button">Generate Common Location</button>
-            <p id="locationOutput" class="output-line"></p>
+            <p id="locationOutput" class="output-line empty-state">No common location generated yet.</p>
           </div>
 
           <div class="mini-table-section">
             <h3>Warped Ruins</h3>
             <button id="generateWarpedRuin" type="button">Generate Warped Ruin</button>
-            <p id="warpedRuinOutput" class="output-line"></p>
+            <p id="warpedRuinOutput" class="output-line empty-state">No warped ruin generated yet.</p>
           </div>
         </details>
 
         <details id="arcane-card" class="card arcane-card collapsible" open>
           <summary class="card-summary"><span>Arcane Anomalies</span></summary>
           <button id="generateArcaneAnomaly" type="button">Generate Arcane Anomaly</button>
-          <p id="arcaneAnomalyRoll" class="output-line"></p>
-          <div id="arcaneAnomalyOutput" class="description-output compact-output"></div>
+          <p id="arcaneAnomalyRoll" class="output-line empty-state">No arcane anomaly rolled yet.</p>
+          <div id="arcaneAnomalyOutput" class="description-output compact-output empty-state">Generate an anomaly to reveal the effect.</div>
         </details>
       </div>
     </section>
   </main>
 
+  <nav class="mobile-bottom-nav" aria-label="Mobile quick actions">
+    <button type="button" data-nav-tab="shop" data-nav-target="shop">Shop</button>
+    <button type="button" data-nav-tab="tables" data-nav-target="delerium-card">Delerium</button>
+    <button type="button" data-nav-tab="tables" data-nav-target="encounters-card">Encounters</button>
+    <button type="button" data-open-conditions>Conditions</button>
+  </nav>
+
   <footer class="app-footer">
-    <span>Aldor The Immense v2.1.4</span>
+    <span>Aldor The Immense v2.1.5</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 

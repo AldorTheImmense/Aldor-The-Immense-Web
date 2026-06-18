@@ -20,8 +20,8 @@ The site brings several common table tools into one place so a DM can quickly ge
 - Reroll controls for encounter, lucky find, and enemy counts.
 - Arcane Anomalies generator.
 - Common Locations and Warped Ruins generators.
-- Draggable Conditions pop-out with Drakkenheim-specific condition references and a Drakkenheim Madness roller.
-- Dark gothic DM screen styling, collapsible sections, sticky navigation, mobile-friendly layout, and theme toggle.
+- Draggable Conditions pop-out with Drakkenheim-specific condition references, search/filter, pinned conditions, quick reference mode, and a Drakkenheim Madness roller.
+- Dark gothic DM screen styling, collapsible sections, sticky navigation, improved mobile bottom action bar, themed empty states, subtle result animations, theme toggle, and optional sound toggle.
 
 ## Local use
 
