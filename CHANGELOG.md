@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.1.4
+
+- Added a Conditions button to the header.
+- Added a draggable Conditions pop-out window with Drakkenheim-specific condition references.
+- Added a Drakkenheim Madness roller inside the Conditions window.
+- Preserved Delerium Search Helper DCs as Outer City DC 15 and Inner City DC 20.
+- Updated the footer version number.
+
 ## v2.1.3
 
 - Changed light mode button and header-link text to white for stronger contrast.

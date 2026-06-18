@@ -10,7 +10,7 @@ The site brings several common table tools into one place so a DM can quickly ge
 - Aldor shop generator for potions, scrolls, uncommon items, and rare items.
 - Editable shop inventory lists.
 - Save-code support for moving shop state between browsers or computers.
-- Delerium search helper that calculates successes, failures, DC +5 bonus successes, party-size scaling, and Crater's Edge bonus success.
+- Delerium search helper that calculates successes, failures, DC +5 bonus successes, party-size scaling, Crater's Edge bonus success, and the correct Outer City / Inner City DCs.
 - Random encounter generator for Outer City, Inner City, and Sewers.
 - Monsters of Drakkenheim mode for updated Outer City and Inner City encounter tables.
 - Faction filters for encounter results.
@@ -20,6 +20,7 @@ The site brings several common table tools into one place so a DM can quickly ge
 - Reroll controls for encounter, lucky find, and enemy counts.
 - Arcane Anomalies generator.
 - Common Locations and Warped Ruins generators.
+- Draggable Conditions pop-out with Drakkenheim-specific condition references and a Drakkenheim Madness roller.
 - Dark gothic DM screen styling, collapsible sections, sticky navigation, mobile-friendly layout, and theme toggle.
 
 ## Local use

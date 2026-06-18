@@ -2205,7 +2205,7 @@ const STORAGE_KEYS = {
   encounterHistory: "aldor.encounterHistory.v1"
 };
 
-const APP_VERSION = "2.1.3";
+const APP_VERSION = "2.1.4";
 
 const FACTION_LABELS = {
   hoodedLanterns: "Hooded Lanterns",
@@ -2215,6 +2215,19 @@ const FACTION_LABELS = {
   fallingFire: "Falling Fire",
   rivalAdventurers: "Rival Adventurers"
 };
+
+const DRAKKENHEIM_MADNESS_TRAITS = [
+  "I wish I didn't have all these useless organs inside me.",
+  "The contamination is a blessing which will transform me into a wondrous creature.",
+  "The monsters are civilians trying to live a peaceful life! We need to protect them!",
+  "I must wear a flesh-coat made from my slain enemies to gain their strength!",
+  "My companions died in the ruins. I'm sorry friends, you are merely ghosts haunting me, you aren't real. Stop trying to talk to other people.",
+  "I need to eat everything I can find. It's probably going to be my last meal.",
+  "Drakkenheim is so beautiful at night. I could spend forever wandering the streets by moonlight. We should go tonight! Let's go every night!",
+  "Don't you fools get it?! If you die in Drakkenheim, you die IN REAL LIFE!!!!",
+  "A sinister cabal of disembodied hands is plotting against me.",
+  "I must go into the ruins and kill. Rip and tear, until it is done."
+];
 
 const ENCOUNTER_FACTIONS = {
   "hooded lantern patrol": "hoodedLanterns",
@@ -2700,7 +2713,8 @@ function calculateDeleriumSearch() {
     return;
   }
 
-  const dc = 15;
+  const area = currentDeleriumArea();
+  const dc = area === "outer" ? 15 : 20;
   const partySize = parsePositiveIntegerInput("partySize", 4);
   const requiredSuccesses = adjustedRequiredSuccesses(partySize);
   const failureThreshold = adjustedFailureThreshold(partySize);
@@ -2730,7 +2744,6 @@ function calculateDeleriumSearch() {
     rollLines.push("Crater's Edge: +1 automatic success.");
   }
 
-  const area = currentDeleriumArea();
   const reward = generateDeleriumReward(area, successes);
   const foundTarget = successes >= requiredSuccesses;
   const randomEncounter = failures >= failureThreshold;
@@ -3259,6 +3272,74 @@ function loadTheme() {
   applyTheme(localStorage.getItem(STORAGE_KEYS.theme) || "dark");
 }
 
+function openConditionsWindow() {
+  const windowElement = byId("conditionsWindow");
+  if (!windowElement) return;
+  windowElement.hidden = false;
+
+  if (!windowElement.dataset.positioned) {
+    windowElement.style.top = "112px";
+    windowElement.style.right = "18px";
+    windowElement.style.left = "auto";
+    windowElement.dataset.positioned = "true";
+  }
+}
+
+function closeConditionsWindow() {
+  const windowElement = byId("conditionsWindow");
+  if (windowElement) windowElement.hidden = true;
+}
+
+function rollDrakkenheimMadness() {
+  const roll = Math.floor(Math.random() * DRAKKENHEIM_MADNESS_TRAITS.length) + 1;
+  const output = byId("drakkenheimMadnessOutput");
+  if (output) output.textContent = `Rolled ${roll}: “${DRAKKENHEIM_MADNESS_TRAITS[roll - 1]}”`;
+}
+
+function makeConditionsWindowDraggable() {
+  const windowElement = byId("conditionsWindow");
+  const handle = byId("conditionsWindowHandle");
+  if (!windowElement || !handle) return;
+
+  let dragState = null;
+
+  handle.addEventListener("pointerdown", (event) => {
+    if (event.target.closest("button")) return;
+    const rect = windowElement.getBoundingClientRect();
+    dragState = {
+      offsetX: event.clientX - rect.left,
+      offsetY: event.clientY - rect.top
+    };
+    windowElement.style.left = `${rect.left}px`;
+    windowElement.style.top = `${rect.top}px`;
+    windowElement.style.right = "auto";
+    windowElement.classList.add("is-dragging");
+    handle.setPointerCapture(event.pointerId);
+  });
+
+  handle.addEventListener("pointermove", (event) => {
+    if (!dragState) return;
+    const width = windowElement.offsetWidth;
+    const height = windowElement.offsetHeight;
+    const maxLeft = Math.max(0, window.innerWidth - width);
+    const maxTop = Math.max(0, window.innerHeight - Math.min(height, window.innerHeight));
+    const left = Math.min(Math.max(0, event.clientX - dragState.offsetX), maxLeft);
+    const top = Math.min(Math.max(0, event.clientY - dragState.offsetY), Math.max(0, window.innerHeight - 44));
+    windowElement.style.left = `${left}px`;
+    windowElement.style.top = `${top}px`;
+  });
+
+  function endDrag(event) {
+    if (!dragState) return;
+    dragState = null;
+    windowElement.classList.remove("is-dragging");
+    if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+  }
+
+  handle.addEventListener("pointerup", endDrag);
+  handle.addEventListener("pointercancel", endDrag);
+}
+
 function currentInventoryArray() {
   return byId("inventoryType").value === "rare" ? state.rareItems : state.uncommonItems;
 }
@@ -3314,6 +3395,10 @@ function bindEvents() {
   });
 
   byId("themeToggle").addEventListener("click", toggleTheme);
+  byId("conditionsButton").addEventListener("click", openConditionsWindow);
+  byId("closeConditionsWindow").addEventListener("click", closeConditionsWindow);
+  byId("rollDrakkenheimMadness").addEventListener("click", rollDrakkenheimMadness);
+  makeConditionsWindowDraggable();
 
   byId("generateShop").addEventListener("click", generateShop);
   byId("clearInventory").addEventListener("click", clearInventory);
