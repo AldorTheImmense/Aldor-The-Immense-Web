@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.4.29
+- Map pins now shrink relative to the map as you zoom in, so landmarks, route hour markers, and rest pins no longer balloon over the map.
+- Route hour markers now display as compact H-number labels in a rounded rectangle, making them visually distinct from numbered landmark pins.
+- Updated Roll20 route overlay export markers to use the same H-number route-hour distinction.
+- Updated the footer version number.
+
 ## v2.4.28
 - Widened the web app's map page to match the standalone route mapper layout width.
 - Added a little more spacing and minimum width to the right-hand map control/log columns so their left edges no longer tuck under the map.

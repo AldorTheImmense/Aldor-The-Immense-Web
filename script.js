@@ -2214,7 +2214,7 @@ const STORAGE_KEYS = {
   mapTools: "aldor.mapTools.v1"
 };
 
-const APP_VERSION = "2.4.28";
+const APP_VERSION = "2.4.29";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -3667,6 +3667,36 @@ function currentMapZoom() {
   return input ? Math.max(1, Math.min(3, Number(input.value) || 1)) : 1;
 }
 
+
+function mapMarkerScale() {
+  return 1 / Math.max(1, currentMapZoom());
+}
+
+function scaledMapMarkerValue(value, minimum = 0) {
+  const scaled = Number(value) * mapMarkerScale();
+  return Math.round(Math.max(Number(minimum) || 0, scaled) * 100) / 100;
+}
+
+function mapHourMarkerLabel(marker) {
+  return marker && marker.classes && String(marker.classes).includes("hour-marker") ? `H${marker.label}` : String(marker?.label ?? "");
+}
+
+function drawRoundedMapRect(ctx, x, y, width, height, radius) {
+  const r = Math.min(radius, width / 2, height / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + width - r, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+  ctx.lineTo(x + width, y + height - r);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+  ctx.lineTo(x + r, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+
 function setMapZoom(value, { save = true, anchor = null } = {}) {
   const input = byId("mapZoom");
   const zoom = Math.max(1, Math.min(3, Number(value) || 1));
@@ -3711,6 +3741,8 @@ function applyMapZoom(anchor = null) {
     const focusY = stage ? (stage.scrollTop + anchorY) / previousHeight : 0.5;
 
     surface.style.width = `${zoom * 100}%`;
+    renderMapLandmarks();
+    renderMapRoute();
 
     if (stage) {
       requestAnimationFrame(() => {
@@ -4334,11 +4366,13 @@ function renderMapLandmarks() {
   const svg = byId("mapLandmarkSvg");
   const list = byId("mapLandmarkList");
   const landmarks = activeMapLandmarks();
+  const landmarkRadius = scaledMapMarkerValue(15, 5);
+  const landmarkFontSize = scaledMapMarkerValue(22, 8);
   if (svg) {
     svg.innerHTML = landmarks.map((landmark, index) => `
       <g class="map-landmark-marker ${landmark.type === "safe-haven" ? "safe-haven" : ""} ${editingMapLandmarks && index === selectedMapLandmarkIndex ? "selected" : ""}" data-landmark-index="${index}" data-map-tooltip="${escapeHtml(`${landmark.id}. ${landmark.label}`)}" transform="translate(${landmark.x} ${landmark.y})">
-        <circle r="15"></circle>
-        <text text-anchor="middle" dominant-baseline="central">${landmark.id}</text>
+        <circle r="${landmarkRadius}"></circle>
+        <text text-anchor="middle" dominant-baseline="central" style="font-size: ${landmarkFontSize}px;">${landmark.id}</text>
       </g>
     `).join("");
   }
@@ -4421,7 +4455,7 @@ function getMapRouteMarkerData(routeVisibility = currentMapRouteVisibility()) {
       pointIndex: endpointIndex,
       label: String(summary.hourNumber),
       title: `${summary.complete ? "End" : "Current end"} of hour ${summary.hourNumber}`,
-      classes: `${summary.complete ? "complete" : "open-hour-end"}`
+      classes: `${summary.complete ? "complete" : "open-hour-end"} hour-marker`
     });
   });
 
@@ -4455,25 +4489,34 @@ function drawMapRouteExportSegment(ctx, visibleInfo) {
 function drawMapRouteExportMarker(ctx, marker) {
   const point = mapRoutePoints[marker.pointIndex];
   if (!point) return;
+  const isHourMarker = String(marker.classes || "").includes("hour-marker");
+  const label = mapHourMarkerLabel(marker);
   const stroke = marker.classes.includes("start") ? "#56bd86" : marker.classes.includes("open-hour-end") ? "#a25fff" : "#f0d28a";
+
   ctx.save();
   ctx.shadowColor = marker.classes.includes("open-hour-end") ? "rgba(162, 95, 255, 0.7)" : "rgba(240, 210, 138, 0.5)";
   ctx.shadowBlur = 8;
   ctx.fillStyle = "rgba(8, 7, 10, 0.88)";
   ctx.strokeStyle = stroke;
   ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.arc(point.x, point.y, 12, 0, Math.PI * 2);
+  if (isHourMarker) {
+    const width = Math.max(34, String(label).length * 10 + 14);
+    const height = 24;
+    drawRoundedMapRect(ctx, point.x - (width / 2), point.y - (height / 2), width, height, 7);
+  } else {
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, 12, 0, Math.PI * 2);
+  }
   ctx.fill();
   ctx.stroke();
   ctx.restore();
 
   ctx.save();
   ctx.fillStyle = "#fff4d0";
-  ctx.font = '700 22px "Segoe UI", system-ui, sans-serif';
+  ctx.font = isHourMarker ? '700 14px "Segoe UI", system-ui, sans-serif' : '700 22px "Segoe UI", system-ui, sans-serif';
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(String(marker.label), point.x, point.y + 0.5);
+  ctx.fillText(String(label), point.x, point.y + 0.5);
   ctx.restore();
 }
 
@@ -4608,10 +4651,22 @@ function renderMapRoute() {
     const markers = markerIndexes.map((marker) => {
       const point = mapRoutePoints[marker.pointIndex];
       if (!point) return "";
-      return `
+      const isHourMarker = String(marker.classes || "").includes("hour-marker");
+      const label = mapHourMarkerLabel(marker);
+      const startRadius = scaledMapMarkerValue(12, 5);
+      const startFontSize = scaledMapMarkerValue(20, 8);
+      const hourFontSize = scaledMapMarkerValue(14, 7);
+      const hourWidth = scaledMapMarkerValue(Math.max(34, label.length * 10 + 14), 12);
+      const hourHeight = scaledMapMarkerValue(24, 9);
+      const hourRadius = scaledMapMarkerValue(7, 3);
+      return isHourMarker ? `
+      <g class="map-route-marker ${marker.classes}" data-map-tooltip="${escapeHtml(marker.title || point.label)}" transform="translate(${point.x} ${point.y})">
+        <rect x="${-(hourWidth / 2)}" y="${-(hourHeight / 2)}" width="${hourWidth}" height="${hourHeight}" rx="${hourRadius}" ry="${hourRadius}"></rect>
+        <text text-anchor="middle" dominant-baseline="central" style="font-size: ${hourFontSize}px;">${escapeHtml(label)}</text>
+      </g>` : `
       <g class="map-route-marker ${marker.classes}" data-map-tooltip="${escapeHtml(point.label || marker.title)}" transform="translate(${point.x} ${point.y})">
-        <circle r="12"></circle>
-        <text text-anchor="middle" dominant-baseline="central">${marker.label}</text>
+        <circle r="${startRadius}"></circle>
+        <text text-anchor="middle" dominant-baseline="central" style="font-size: ${startFontSize}px;">${escapeHtml(label)}</text>
       </g>`;
     }).join("");
 
@@ -4623,10 +4678,13 @@ function renderMapRoute() {
     }
   }
   if (restLayer) {
+    const restOuter = scaledMapMarkerValue(18, 7);
+    const restInner = scaledMapMarkerValue(5, 2);
+    const restFontSize = scaledMapMarkerValue(22, 8);
     restLayer.innerHTML = mapRestSpots.map((spot, index) => `
       <g class="map-rest-marker" data-rest-index="${index}" data-map-tooltip="${escapeHtml(`Short rest spot: ${spot.name}`)}" transform="translate(${spot.x} ${spot.y})">
-        <path d="M0,-18 L5,-5 L18,0 L5,5 L0,18 L-5,5 L-18,0 L-5,-5 Z"></path>
-        <text text-anchor="middle" dominant-baseline="central">R${index + 1}</text>
+        <path d="M0,-${restOuter} L${restInner},-${restInner} L${restOuter},0 L${restInner},${restInner} L0,${restOuter} L-${restInner},${restInner} L-${restOuter},0 L-${restInner},-${restInner} Z"></path>
+        <text text-anchor="middle" dominant-baseline="central" style="font-size: ${restFontSize}px;">R${index + 1}</text>
       </g>
     `).join("");
   }
