@@ -2108,3 +2108,47 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
   font-size: 0.84rem;
   line-height: 1.35;
 }
+
+
+/* Route save slots */
+.route-slot-list {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.65rem;
+}
+
+.route-slot-item {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.55rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.55rem;
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.route-slot-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  align-items: baseline;
+}
+
+.route-slot-name {
+  color: var(--accent-strong);
+  font-weight: 800;
+}
+
+.route-slot-meta {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.route-slot-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.route-slot-actions button {
+  padding: 0.38rem 0.55rem;
+}

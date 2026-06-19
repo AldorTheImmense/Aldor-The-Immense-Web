@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.4.35
+- Added local named route save slots to the Drakkenheim map.
+- Saved slots preserve route points, route segments, short rest spots, safe-haven travel, log events, map start time, route visibility, travel settings, and landmark overrides.
+- Added route slot load, overwrite, and delete controls under the Route Summary column.
+- Updated the footer version number.
+
 ## v2.4.34
 - Fixed the current-route-hour −1 minute trim button applying twice.
 - Removed the duplicate event binding so each click now trims exactly one minute.

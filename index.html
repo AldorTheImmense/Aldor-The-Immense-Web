@@ -556,6 +556,24 @@
                 </div>
               </details>
 
+              <details class="tool-box collapsible-tool">
+                <summary>Route save slots</summary>
+                <p class="inline-note">Save named route snapshots locally in this browser, then load them again later.</p>
+                <label class="field-stack">
+                  <span>Route name</span>
+                  <input id="mapRouteSlotName" type="text" list="mapRouteSlotExamples" placeholder="Reed Manor run">
+                  <datalist id="mapRouteSlotExamples">
+                    <option value="Reed Manor run">
+                    <option value="Chapel route">
+                    <option value="Rat's Nest escape">
+                  </datalist>
+                </label>
+                <div class="action-row compact-action-row">
+                  <button id="saveMapRouteSlot" type="button">Save Current Route</button>
+                </div>
+                <ol id="mapRouteSlotList" class="compact-list route-slot-list"></ol>
+              </details>
+
               <details class="tool-box collapsible-tool" open>
                 <summary>Exploration log</summary>
                 <div class="action-row compact-action-row">
@@ -757,7 +775,7 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.4.34</span>
+    <span>Aldor The Immense v2.4.35</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 

@@ -2211,10 +2211,11 @@ const STORAGE_KEYS = {
   factionClocks: "aldor.factionClocks.v1",
   factionClockGoals: "aldor.factionClockGoals.v1",
   factionClockSizes: "aldor.factionClockSizes.v1",
-  mapTools: "aldor.mapTools.v1"
+  mapTools: "aldor.mapTools.v1",
+  mapRouteSlots: "aldor.mapRouteSlots.v1"
 };
 
-const APP_VERSION = "2.4.34";
+const APP_VERSION = "2.4.35";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -3537,6 +3538,207 @@ function loadMapTools() {
   }
   normaliseMapToolsState();
 }
+
+
+function captureCurrentMapRouteSlotState() {
+  const hazeCheckbox = byId("showDeepHazeOverlay");
+  const modeSelect = byId("mapTravelMode");
+  const paceSelect = byId("mapTravelPace");
+  const terrainSelect = byId("mapTerrain");
+  return {
+    routePoints: clone(mapRoutePoints),
+    routeSegments: clone(mapRouteSegments),
+    restSpots: clone(mapRestSpots),
+    outsideTrips: clone(mapOutsideTrips),
+    events: clone(mapEvents),
+    landmarkOverrides: clone(mapLandmarkOverrides),
+    startTime: currentMapStartTime(),
+    zoom: currentMapZoom(),
+    deepHazeVisible: hazeCheckbox ? hazeCheckbox.checked : true,
+    routeLeg: currentMapRouteLeg(),
+    routeVisibility: currentMapRouteVisibility(),
+    travelMode: modeSelect && MAP_MODE_LABELS[modeSelect.value] ? modeSelect.value : "streets",
+    travelPace: paceSelect && MAP_PACE_LABELS[paceSelect.value] ? paceSelect.value : "normal",
+    terrain: terrainSelect && MAP_TERRAIN_LABELS[terrainSelect.value] ? terrainSelect.value : "mainRoad",
+    floatingControlsPosition: normaliseMapFloatingControlsPosition(mapFloatingControlsPosition)
+  };
+}
+
+function loadMapRouteSlots() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.mapRouteSlots) || "[]");
+    return arrayOrFallback(parsed, []).filter((slot) => slot && slot.id && slot.name && slot.mapTools).map((slot) => ({
+      id: String(slot.id),
+      name: String(slot.name),
+      createdAt: slot.createdAt || new Date().toISOString(),
+      updatedAt: slot.updatedAt || slot.createdAt || new Date().toISOString(),
+      mapTools: clone(slot.mapTools)
+    }));
+  } catch {
+    return [];
+  }
+}
+
+function saveMapRouteSlots(slots) {
+  localStorage.setItem(STORAGE_KEYS.mapRouteSlots, JSON.stringify(arrayOrFallback(slots, [])));
+}
+
+function mapRouteSlotSummary(slot) {
+  const mapTools = slot && slot.mapTools ? slot.mapTools : {};
+  const segments = arrayOrFallback(mapTools.routeSegments, []);
+  const points = arrayOrFallback(mapTools.routePoints, []);
+  const events = arrayOrFallback(mapTools.events, []);
+  const outsideTrips = arrayOrFallback(mapTools.outsideTrips, []);
+  const miles = segments.reduce((total, segment) => total + (Number(segment.distanceMiles) || 0), 0);
+  const minutes = segments.reduce((total, segment) => {
+    const explicit = Number(segment.segmentHours);
+    if (Number.isFinite(explicit) && explicit > 0) return total + Math.round(explicit * 60);
+    const mode = MAP_MODE_LABELS[segment.mode] ? segment.mode : "streets";
+    const pace = MAP_PACE_LABELS[segment.pace] ? segment.pace : "normal";
+    const terrain = MAP_TERRAIN_LABELS[segment.terrain] ? segment.terrain : "mainRoad";
+    const speed = Math.max(0.001, mapSpeedMilesPerHour(mode, pace, terrain));
+    return total + Math.round(((Number(segment.distanceMiles) || 0) / speed) * 60);
+  }, 0);
+  const parts = [];
+  if (points.length) parts.push(`${points.length} point${points.length === 1 ? "" : "s"}`);
+  if (segments.length) parts.push(`${segments.length} segment${segments.length === 1 ? "" : "s"}`);
+  if (miles > 0) parts.push(formatMiles(miles));
+  if (minutes > 0) parts.push(formatHoursFromMinutes(minutes));
+  if (events.length) parts.push(`${events.length} event${events.length === 1 ? "" : "s"}`);
+  if (outsideTrips.length) parts.push(`${outsideTrips.length} safe-haven trip${outsideTrips.length === 1 ? "" : "s"}`);
+  return parts.length ? parts.join(" · ") : "Empty route";
+}
+
+function renderMapRouteSlots() {
+  const list = byId("mapRouteSlotList");
+  if (!list) return;
+  const slots = loadMapRouteSlots().sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
+  if (!slots.length) {
+    list.innerHTML = `<li class="empty-state">No saved route slots yet.</li>`;
+    return;
+  }
+
+  list.innerHTML = slots.map((slot) => {
+    const updated = slot.updatedAt ? new Date(slot.updatedAt) : null;
+    const updatedText = updated && !Number.isNaN(updated.getTime()) ? updated.toLocaleString() : "Unknown date";
+    return `
+      <li class="route-slot-item">
+        <div class="route-slot-header">
+          <span class="route-slot-name">${escapeHtml(slot.name)}</span>
+          <span class="route-slot-meta">${escapeHtml(updatedText)}</span>
+        </div>
+        <div class="route-slot-meta">${escapeHtml(mapRouteSlotSummary(slot))}</div>
+        <div class="route-slot-actions">
+          <button type="button" data-load-route-slot="${escapeHtml(slot.id)}">Load</button>
+          <button type="button" data-save-route-slot="${escapeHtml(slot.id)}">Overwrite</button>
+          <button type="button" data-delete-route-slot="${escapeHtml(slot.id)}">Delete</button>
+        </div>
+      </li>
+    `;
+  }).join("");
+
+  list.querySelectorAll("[data-load-route-slot]").forEach((button) => {
+    button.addEventListener("click", () => loadMapRouteSlot(button.dataset.loadRouteSlot));
+  });
+  list.querySelectorAll("[data-save-route-slot]").forEach((button) => {
+    button.addEventListener("click", () => saveCurrentMapRouteSlot(button.dataset.saveRouteSlot));
+  });
+  list.querySelectorAll("[data-delete-route-slot]").forEach((button) => {
+    button.addEventListener("click", () => deleteMapRouteSlot(button.dataset.deleteRouteSlot));
+  });
+}
+
+function currentRouteHasContent() {
+  return Boolean(mapRoutePoints.length || mapRouteSegments.length || mapRestSpots.length || mapOutsideTrips.length || mapEvents.length);
+}
+
+function saveCurrentMapRouteSlot(existingId = "") {
+  const input = byId("mapRouteSlotName");
+  const slots = loadMapRouteSlots();
+  const existing = existingId ? slots.find((slot) => slot.id === existingId) : null;
+  let name = existing ? existing.name : String(input && input.value || "").trim();
+
+  if (!name) {
+    alert("Enter a route name first.");
+    if (input) input.focus();
+    return;
+  }
+
+  const duplicate = !existing && slots.find((slot) => slot.name.toLowerCase() === name.toLowerCase());
+  if (duplicate && !confirm(`Overwrite the saved route "${duplicate.name}"?`)) return;
+
+  const now = new Date().toISOString();
+  const slot = {
+    id: existing ? existing.id : (duplicate ? duplicate.id : `route-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`),
+    name,
+    createdAt: existing ? existing.createdAt : (duplicate ? duplicate.createdAt : now),
+    updatedAt: now,
+    mapTools: captureCurrentMapRouteSlotState()
+  };
+
+  const nextSlots = slots.filter((saved) => saved.id !== slot.id);
+  nextSlots.push(slot);
+  saveMapRouteSlots(nextSlots);
+  if (input) input.value = name;
+  renderMapRouteSlots();
+  playUiSound("success");
+}
+
+function applyMapRouteSlotState(mapTools) {
+  const defaults = defaultMapToolsState();
+  const state = mapTools && typeof mapTools === "object" ? mapTools : defaults;
+  mapRoutePoints = clone(arrayOrFallback(state.routePoints, []));
+  mapRouteSegments = clone(arrayOrFallback(state.routeSegments, []));
+  mapRestSpots = clone(arrayOrFallback(state.restSpots, []));
+  mapOutsideTrips = clone(arrayOrFallback(state.outsideTrips, []));
+  mapEvents = clone(arrayOrFallback(state.events, []));
+  mapLandmarkOverrides = state.landmarkOverrides && typeof state.landmarkOverrides === "object" ? clone(state.landmarkOverrides) : {};
+
+  const startInput = byId("mapDayStartTime");
+  if (startInput) startInput.value = typeof state.startTime === "string" && state.startTime ? state.startTime : defaults.startTime;
+  const zoomInput = byId("mapZoom");
+  if (zoomInput) zoomInput.value = Math.max(1, Math.min(3, Number(state.zoom) || defaults.zoom));
+  const hazeCheckbox = byId("showDeepHazeOverlay");
+  if (hazeCheckbox) hazeCheckbox.checked = state.deepHazeVisible !== false;
+  const legSelect = byId("mapRouteLeg");
+  if (legSelect) legSelect.value = MAP_ROUTE_LEG_LABELS[state.routeLeg] ? state.routeLeg : defaults.routeLeg;
+  const visibilitySelect = byId("mapRouteVisibility");
+  if (visibilitySelect) visibilitySelect.value = MAP_ROUTE_VISIBILITY_LABELS[state.routeVisibility] ? state.routeVisibility : defaults.routeVisibility;
+  const modeSelect = byId("mapTravelMode");
+  if (modeSelect) modeSelect.value = MAP_MODE_LABELS[state.travelMode] ? state.travelMode : "streets";
+  const paceSelect = byId("mapTravelPace");
+  if (paceSelect) paceSelect.value = MAP_PACE_LABELS[state.travelPace] ? state.travelPace : "normal";
+  const terrainSelect = byId("mapTerrain");
+  if (terrainSelect) terrainSelect.value = MAP_TERRAIN_LABELS[state.terrain] ? state.terrain : "mainRoad";
+  mapFloatingControlsPosition = normaliseMapFloatingControlsPosition(state.floatingControlsPosition);
+  syncMapTerrainPaceControl();
+  normaliseMapToolsState();
+}
+
+function loadMapRouteSlot(slotId) {
+  const slot = loadMapRouteSlots().find((saved) => saved.id === slotId);
+  if (!slot) {
+    alert("That saved route slot could not be found.");
+    renderMapRouteSlots();
+    return;
+  }
+  if (currentRouteHasContent() && !confirm(`Load "${slot.name}" and replace the current map route?`)) return;
+  applyMapRouteSlotState(slot.mapTools);
+  saveMapTools();
+  renderMapTools();
+  playUiSound("success");
+}
+
+function deleteMapRouteSlot(slotId) {
+  const slots = loadMapRouteSlots();
+  const slot = slots.find((saved) => saved.id === slotId);
+  if (!slot) return;
+  if (!confirm(`Delete saved route "${slot.name}"?`)) return;
+  saveMapRouteSlots(slots.filter((saved) => saved.id !== slotId));
+  renderMapRouteSlots();
+  playUiSound("reset");
+}
+
 
 function currentMapMode() {
   const input = byId("mapTravelMode");
@@ -5147,6 +5349,7 @@ function renderMapTools() {
   renderOutsideTravel();
   renderMapRestSpots();
   renderMapRouteSummary();
+  renderMapRouteSlots();
 }
 
 function undoMapSegment() {
@@ -6292,6 +6495,16 @@ function bindEvents() {
   byId("floatingClearMapRoute").addEventListener("click", clearMapRoute);
   byId("copyMapExplorationLog").addEventListener("click", copyMapExplorationLog);
   byId("exportMapRouteOverlay").addEventListener("click", exportMapRouteOverlayPng);
+  byId("saveMapRouteSlot").addEventListener("click", () => saveCurrentMapRouteSlot());
+  const routeSlotNameInput = byId("mapRouteSlotName");
+  if (routeSlotNameInput) {
+    routeSlotNameInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        saveCurrentMapRouteSlot();
+      }
+    });
+  }
   byId("addApproachTravel").addEventListener("click", () => addOutsideTravel("approach"));
   byId("addReturnTravel").addEventListener("click", () => addOutsideTravel("return"));
   byId("clearOutsideTravel").addEventListener("click", clearOutsideTravel);
