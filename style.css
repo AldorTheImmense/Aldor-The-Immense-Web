@@ -1939,3 +1939,112 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
   margin-top: 0.28rem;
   padding: 0.24rem 0.34rem;
 }
+
+.forced-pace-field {
+  opacity: 0.72;
+}
+
+.forced-pace-field select:disabled {
+  cursor: not-allowed;
+}
+
+
+/* v2.4.27 standalone-style web map layout */
+.map-layout {
+  grid-template-columns: minmax(0, 1.65fr) minmax(260px, 0.55fr) minmax(280px, 0.65fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.map-view-panel {
+  grid-column: auto;
+  order: 0;
+  min-width: 0;
+}
+
+.side-panel {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.map-card .side-panel .tool-box {
+  margin: 0;
+}
+
+.collapsible-tool {
+  padding-top: 0.85rem;
+}
+
+.collapsible-tool summary {
+  cursor: pointer;
+  color: var(--accent-strong);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.08rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  list-style-position: outside;
+}
+
+.collapsible-tool summary::marker {
+  color: var(--accent-strong);
+}
+
+.collapsible-tool[open] summary {
+  margin-bottom: 0.7rem;
+}
+
+.collapsible-tool > .inline-note {
+  margin-top: 0;
+}
+
+.collapsible-tool:not([open]) {
+  padding-bottom: 0.85rem;
+}
+
+.collapsible-tool > summary + * {
+  margin-top: 0.7rem;
+}
+
+@media (max-width: 1120px) {
+  .map-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* v2.4.28 map page width alignment */
+#map.active-panel {
+  width: min(1780px, calc(100vw - 2rem));
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+#map .tables-grid {
+  grid-template-columns: 1fr;
+}
+
+#map-card {
+  overflow: visible;
+}
+
+#map-card .map-layout {
+  grid-template-columns: minmax(0, 1.65fr) minmax(270px, 0.55fr) minmax(300px, 0.65fr);
+  gap: 1.05rem;
+}
+
+#map-card .side-panel {
+  min-width: 0;
+}
+
+@media (max-width: 1120px) {
+  #map.active-panel {
+    width: 100%;
+    margin-left: 0;
+    transform: none;
+  }
+
+  #map-card .map-layout {
+    grid-template-columns: 1fr;
+  }
+}

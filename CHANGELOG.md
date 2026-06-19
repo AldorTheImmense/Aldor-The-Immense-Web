@@ -1,8 +1,84 @@
 # Changelog
 
-## v2.4.14
-- Updated Delerium search helper reward output so rolled quantities show both the rolled total and original dice expression, such as 11 (2d6), for player-facing rolls.
-- Kept Delerium extraction-time parsing compatible with the new inline dice-expression format.
+## v2.4.28
+- Widened the web app's map page to match the standalone route mapper layout width.
+- Added a little more spacing and minimum width to the right-hand map control/log columns so their left edges no longer tuck under the map.
+- Kept the standalone-style three-column layout and all web-only map functionality.
+- Updated the footer version number.
+
+## v2.4.27
+- Rearranged the web app's Drakkenheim Route Map page to match the standalone mapper's layout.
+- The map now sits beside two right-hand collapsible control/log columns instead of using the old lower control panels.
+- Preserved the web-only map functionality, including travel modes, Deep Haze overlay, Map Help, Add Log Event pop-out, Landmarks pop-out, Camp Dawn, and Pin Mover.
+- Updated the footer version number.
+
+## v2.4.26
+- Updated the route summary wording to show in-Drakkenheim travel instead of safe-haven travel.
+- Safe-haven approach and return travel still appears in the exploration log and still counts towards tracked time/current time.
+- Updated the footer version number.
+
+## v2.4.25
+- Moved return-to-safe-haven travel to the end of the exploration log instead of listing it before city exploration.
+- Approach travel still appears at the start of the log.
+- Copied exploration logs now use the same chronological ordering.
+- Updated the footer version number.
+
+## v2.4.24
+- Double-clicking the current route hour marker now ends the current route hour early.
+- Early-ended route hours now use the actual time spent instead of always logging a full 60 minutes.
+- Exploration log, copied travel log, tracked time, and current time now reflect partial route hours.
+- Updated route help text and footer version number.
+
+## v2.4.23
+- Updated the route controls so switching from side roads / rubble back to main roads restores the previously selected travel pace.
+- Side roads / rubble still locks travel pace to Slow while selected.
+- Updated the footer version number.
+
+## v2.4.22
+- Updated the route controls so selecting side roads / rubble automatically switches travel pace to Slow.
+- The travel pace control is now disabled while side roads / rubble is selected, making the forced slow pace rule visible in the UI.
+- Updated the route pace note to show that the pace selector is locked to slow for side roads / rubble.
+- Updated the footer version number.
+
+## v2.4.21
+- Changed side roads / rubble movement so it forces slow pace instead of halving the selected travel pace.
+- Route segments on side roads / rubble are now logged and drawn as slow pace segments.
+- Updated route rule wording and road-type labels to describe forced slow pace.
+- Updated the footer version number.
+
+## v2.4.20
+- Recalibrated the route map distance scale using the bottom map measuring tool.
+- Set the map scale to 482.24 px per mile, so normal street pace plots 0.5 miles / 2,640 ft per hour.
+- This also corrects fast pace, slow pace, and side-road/rubble distances because they use the same calibrated scale.
+- Updated the footer version number.
+
+## v2.4.19
+- Corrected the map distance calibration against the bottom map scale.
+- Updated the route distance scale from 505 px per mile to 510 px per mile, so a normal street travel hour is 0.5 miles / 2,640 ft.
+- This also corrects fast, slow, and side-road/rubble route distances because they use the same base scale.
+- Updated the footer version number.
+
+## v2.4.18
+- Changed Clear Route so it only resets to a safe haven when an approach has actually been logged.
+- If no approach travel has been logged, Clear Route now leaves the city route empty so the next map click sets a fresh start point.
+- Updated the Map route rules note for the new Clear Route behaviour.
+- Updated the footer version number.
+
+## v2.4.17
+- Removed the route summary note that timed events may call for encounter checks at the DM's discretion.
+- Removed the visible Deep Haze wording from the route overlay export helper text.
+- Combined consecutive matching route parts in mixed-hour exploration log breakdowns so repeated same-pace/same-road segments are shown as one total distance.
+- Updated the footer version number.
+
+## v2.4.16
+- Added a transparent 6020×6020 calibration PNG with a faint edge border for lining up the Roll20 map overlay.
+- Updated route overlay PNG export so every exported overlay includes a faint border around the edge to make Roll20 alignment easier.
+- Updated the footer version number.
+
+## v2.4.15
+- Added an Export Route Overlay PNG button to the map tools.
+- The export creates a transparent 6020×6020 PNG aligned to the base assets/drakkenheim-map.webp map without Deep Haze.
+- The export uses the current Show on map setting and includes the visible route plus short rest pins.
 - Updated the footer version number.
 
 ## v2.4.13

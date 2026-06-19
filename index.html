@@ -250,8 +250,8 @@
       <p>Choose Emberwood Village, Camp Dawn, or Eckerman Mill, then press <strong>Add Approach</strong>. If no city route is already plotted, the route starts from that road marker on the map.</p>
 
       <h3>3. Plot city movement</h3>
-      <p>Click the map or a landmark to draw travel. Change pace or road type before the next click if the party switches movement style during the same exploration hour. Side roads / rubble are half speed.</p>
-      <p>Fast, normal, and slow paces use different line styles. When an hour is not fully used, the next click continues the same hour. Double-click to end the current hour leg at that point or landmark.</p>
+      <p>Click the map or a landmark to draw travel. Change pace or road type before the next click if the party switches movement style during the same exploration hour. Side roads / rubble force slow pace for that movement.</p>
+      <p>Fast, normal, and slow paces use different line styles. When an hour is not fully used, the next click continues the same hour. Double-click to end the current route hour early at a point, landmark, or the current route hour marker; the log uses only the time actually spent.</p>
       <p>Use the vertical zoom slider on the map to zoom in. Hold right-click and drag on the map to pan around while zoomed.</p>
 
       <h3>4. Record events</h3>
@@ -449,7 +449,7 @@
                       <span>Road type</span>
                       <select id="mapTerrain">
                         <option value="mainRoad" selected>Main roads</option>
-                        <option value="sideRoad">Side roads / rubble — half speed</option>
+                        <option value="sideRoad">Side roads / rubble — forced slow pace</option>
                       </select>
                     </label>
                   </div>
@@ -475,38 +475,37 @@
               <p class="inline-note">Click numbered landmark pins to route towards them. The map distance is approximate and intended for Drakkenheim's abstract urban exploration rules.</p>
             </section>
 
-            <section class="tool-box map-controls-panel">
-              <h3>Route controls</h3>
-              <div class="map-control-grid map-route-options-grid">
+            <aside class="side-panel">
+              <details class="tool-box collapsible-tool" open>
+                <summary>Travel setup</summary>
                 <label class="field-stack">
                   <span>Day starts</span>
                   <input id="mapDayStartTime" type="time" value="08:00">
                 </label>
-              </div>
-              <p id="mapPaceNote" class="inline-note"></p>
-              <p id="mapModeNote" class="inline-note"></p>
-
-              <details class="map-route-rules">
-                <summary>Map route rules</summary>
-                <ul>
-                  <li>Each city exploration hour is built from the clicks you plot on the map.</li>
-                  <li>If the party changes pace, road type, or route leg mid-hour, change the floating control before the next click.</li>
-                  <li><strong>Route leg</strong> marks each new segment as travel into or out of Drakkenheim. Use <strong>Show on map</strong> to hide one half while keeping the full exploration log.</li>
-                  <li><strong>Main roads</strong> use normal speed. <strong>Side roads / rubble</strong> is difficult terrain and moves at half speed.</li>
-                  <li>Double-click a point or landmark to end the current hour early there, if the party can reach it.</li>
-                  <li>Clear Route resets the city route back to the current approach safe haven, ready for the next click.</li>
-                </ul>
+                <p id="mapPaceNote" class="inline-note"></p>
+                <p id="mapModeNote" class="inline-note"></p>
+                <details class="map-route-rules">
+                  <summary>Map route rules</summary>
+                  <ul>
+                    <li>Each city exploration hour is built from the clicks plotted on the map.</li>
+                    <li>If the party changes travel mode, pace, road type, or route leg mid-hour, change the floating control before the next click.</li>
+                    <li><strong>Travel mode</strong> keeps the web app's streets, sewers, boat / river, land vehicle / portage, and flying options.</li>
+                    <li><strong>Route leg</strong> marks each new segment as travel into or out of Drakkenheim. Use <strong>Show on map</strong> to hide one half while keeping the full exploration log.</li>
+                    <li><strong>Main roads</strong> use the selected pace. <strong>Side roads / rubble</strong> forces slow pace for that movement.</li>
+                    <li>Double-click a point, landmark, or the current route hour marker to end the current hour early there.</li>
+                    <li>Clear Route resets the city route back to the latest logged approach safe haven. If no approach has been logged, the next map click sets a new start point.</li>
+                  </ul>
+                </details>
+                <div class="action-row compact-action-row">
+                  <button id="undoMapSegment" type="button">Undo Last Hour</button>
+                  <button id="clearMapRoute" type="button">Clear Route</button>
+                  <button id="openMapHelp" type="button">Map Help</button>
+                </div>
               </details>
 
-              <div class="action-row compact-action-row">
-                <button id="undoMapSegment" type="button">Undo Last Hour</button>
-                <button id="clearMapRoute" type="button">Clear Route</button>
-                <button id="openMapHelp" type="button">Map Help</button>
-              </div>
-
-              <h3>Safe haven travel</h3>
-              <p class="inline-note">Travel to and from the city outskirts is tracked separately from city exploration.</p>
-              <div class="map-safehaven-row">
+              <details class="tool-box collapsible-tool" open>
+                <summary>Safe haven travel</summary>
+                <p class="inline-note">Travel to and from the city outskirts is tracked separately from city exploration.</p>
                 <label class="field-stack">
                   <span>Safe haven</span>
                   <select id="mapSafeHaven">
@@ -520,43 +519,58 @@
                   <button id="addReturnTravel" type="button">Add Return</button>
                   <button id="clearOutsideTravel" type="button">Clear</button>
                 </div>
-              </div>
-              <ul id="mapOutsideTravelList" class="compact-list"></ul>
+                <ul id="mapOutsideTravelList" class="compact-list"></ul>
+              </details>
 
-              <h3>Short rest spots</h3>
-              <p class="inline-note">Save up to 3 safe short rest spots. Once saved, the party can return there without searching again.</p>
-              <div class="action-row compact-action-row">
-                <button id="addShortRestSpotMode" type="button">Add Short Rest Spot</button>
-              </div>
-              <ol id="mapRestSpotList" class="compact-list"></ol>
+              <details class="tool-box collapsible-tool">
+                <summary>Short rest spots</summary>
+                <p class="inline-note">Save up to 3 safe short rest spots. Once saved, the party can return there without searching again.</p>
+                <div class="action-row compact-action-row">
+                  <button id="addShortRestSpotMode" type="button">Add Short Rest Spot</button>
+                </div>
+                <ol id="mapRestSpotList" class="compact-list"></ol>
+              </details>
 
-              <h3>Landmark pin positions</h3>
-              <p class="inline-note">Use this if a built-in landmark pin needs correcting.</p>
-              <div class="action-row compact-action-row">
-                <button id="openMapPinEditor" type="button">Open Pin Mover</button>
-              </div>
-            </section>
+              <details class="tool-box collapsible-tool">
+                <summary>Landmark pin positions</summary>
+                <p class="inline-note">Use this if a built-in landmark pin needs correcting.</p>
+                <div class="action-row compact-action-row">
+                  <button id="openMapPinEditor" type="button">Open Pin Mover</button>
+                </div>
+              </details>
+            </aside>
 
-            <aside class="tool-box map-summary-panel">
-              <h3>Route summary</h3>
-              <div id="mapRouteSummary" class="description-output compact-output empty-state">No route plotted yet. Click the map to place the party's starting point.</div>
-              <h3>Exploration log</h3>
-              <div class="action-row compact-action-row">
-                <button id="copyMapExplorationLog" type="button">Copy Exploration Log</button>
-              </div>
-              <ol id="mapRouteSegmentList" class="compact-list"></ol>
+            <aside class="side-panel">
+              <details class="tool-box collapsible-tool" open>
+                <summary>Route summary</summary>
+                <div id="mapRouteSummary" class="description-output compact-output empty-state">No route plotted yet. Click the map to place the party's starting point.</div>
+              </details>
 
-              <h3>Add log event</h3>
-              <p class="inline-note">Record short rests, searches, wrong turns, or other time spent during the route.</p>
-              <div class="action-row compact-action-row">
-                <button id="openMapEventWindow" type="button">Add Log Event</button>
-              </div>
+              <details class="tool-box collapsible-tool" open>
+                <summary>Exploration log</summary>
+                <div class="action-row compact-action-row">
+                  <button id="copyMapExplorationLog" type="button">Copy Exploration Log</button>
+                  <button id="exportMapRouteOverlay" type="button">Export Route Overlay PNG</button>
+                </div>
+                <p class="inline-note">Exports a transparent 6020×6020 PNG aligned to the base map asset, using the current Show on map setting. A faint edge border is included to help line it up in Roll20.</p>
+                <ol id="mapRouteSegmentList" class="compact-list"></ol>
+              </details>
 
-              <h3>Landmarks</h3>
-              <p class="inline-note">Open the landmark list in a movable pop-out.</p>
-              <div class="action-row compact-action-row">
-                <button id="openMapLandmarkWindow" type="button">Open Landmarks</button>
-              </div>
+              <details class="tool-box collapsible-tool">
+                <summary>Add log event</summary>
+                <p class="inline-note">Record short rests, searches, wrong turns, or other time spent during the route.</p>
+                <div class="action-row compact-action-row">
+                  <button id="openMapEventWindow" type="button">Add Log Event</button>
+                </div>
+              </details>
+
+              <details class="tool-box collapsible-tool">
+                <summary>Landmarks</summary>
+                <p class="inline-note">Open the landmark list in a movable pop-out.</p>
+                <div class="action-row compact-action-row">
+                  <button id="openMapLandmarkWindow" type="button">Open Landmarks</button>
+                </div>
+              </details>
             </aside>
           </div>
         </article>
@@ -733,7 +747,7 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.4.14</span>
+    <span>Aldor The Immense v2.4.28</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
