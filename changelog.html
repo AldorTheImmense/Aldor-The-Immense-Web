@@ -27,6 +27,41 @@
     <article class="changelog-card">
       <h1>Changelog</h1>
 
+      <h2>v2.4.33</h2>
+      <ul>
+        <li>Fixed the current-route-hour trim control so it is force-rendered under Route Summary when the active route hour is incomplete.</li>
+        <li>Made the trim control self-create and self-bind if the saved/deployed page markup is missing it.</li>
+        <li>Clarified the helper text so it is clear the control only appears while the current route hour is incomplete.</li>
+        <li>Updated the footer version number.</li>
+      </ul>
+
+
+      <h2>v2.4.32</h2>
+      <ul>
+        <li>Fixed the current-route-hour trim control not appearing when the active route hour was incomplete.</li>
+        <li>Clarified the trim control label and helper text so it is easier to find under Route Summary.</li>
+        <li>Updated the footer version number.</li>
+      </ul>
+
+
+      <h2>v2.4.31</h2>
+      <ul>
+        <li>Added a current-route-hour trim control when the active route hour is incomplete.</li>
+        <li>The trim control lets you reduce the current hour's used minutes, shortening the route backwards along the last travelled segment to keep distance and time accurate.</li>
+        <li>Added a one-minute trim button for cases like changing 31 minutes of travel to exactly 30 minutes.</li>
+        <li>Updated the footer version number.</li>
+      </ul>
+
+
+      <h2>v2.4.30</h2>
+      <ul>
+        <li>Route hour markers now track total time spent in Drakkenheim, including logged events.</li>
+        <li>A one-hour log event after H7 makes the next route hour marker H9, because H8 was spent on the event.</li>
+        <li>Partial logged event time is reflected in H labels using compact elapsed-time labels.</li>
+        <li>Updated the footer version number.</li>
+      </ul>
+
+
       <h2>v2.4.29</h2>
       <ul>
         <li>Map pins now shrink relative to the map as you zoom in, so landmarks, route hour markers, and rest pins no longer balloon over the map.</li>
@@ -531,7 +566,7 @@
   </main>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.4.29</span>
+    <span>Aldor The Immense v2.4.33</span>
     <span><a href="index.html">Back to app</a></span>
   </footer>
 </body>

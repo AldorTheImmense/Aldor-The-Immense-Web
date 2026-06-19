@@ -1,5 +1,28 @@
 # Changelog
 
+## v2.4.33
+- Fixed the current-route-hour trim control so it is force-rendered under Route Summary when the active route hour is incomplete.
+- Made the trim control self-create and self-bind if the saved/deployed page markup is missing it.
+- Clarified the helper text so it is clear the control only appears while the current route hour is incomplete.
+- Updated the footer version number.
+
+## v2.4.32
+- Fixed the current-route-hour trim control not appearing when the active route hour was incomplete.
+- Clarified the trim control label and helper text so it is easier to find under Route Summary.
+- Updated the footer version number.
+
+## v2.4.31
+- Added a current-route-hour trim control when the active route hour is incomplete.
+- The trim control lets you reduce the current hour's used minutes, shortening the route backwards along the last travelled segment to keep distance and time accurate.
+- Added a one-minute trim button for cases like changing 31 minutes of travel to exactly 30 minutes.
+- Updated the footer version number.
+
+## v2.4.30
+- Route hour markers now track total time spent in Drakkenheim, including logged events.
+- A one-hour log event after H7 makes the next route hour marker H9, because H8 was spent on the event.
+- Partial logged event time is reflected in H labels using compact elapsed-time labels.
+- Updated the footer version number.
+
 ## v2.4.29
 - Map pins now shrink relative to the map as you zoom in, so landmarks, route hour markers, and rest pins no longer balloon over the map.
 - Route hour markers now display as compact H-number labels in a rounded rectangle, making them visually distinct from numbered landmark pins.
