@@ -2214,7 +2214,7 @@ const STORAGE_KEYS = {
   mapTools: "aldor.mapTools.v1"
 };
 
-const APP_VERSION = "2.4.33";
+const APP_VERSION = "2.4.34";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -4134,6 +4134,7 @@ function ensureCurrentMapHourAdjustPanel() {
 }
 
 function bindCurrentHourAdjustControls() {
+  // Bind exactly once. A duplicate listener makes the -1 minute button trim twice.
   const input = byId("mapCurrentHourMinutes");
   if (input && !input.dataset.trimBound) {
     input.dataset.trimBound = "true";
@@ -6298,21 +6299,6 @@ function bindEvents() {
   byId("addMapEvent").addEventListener("click", addMapEvent);
   bindCurrentHourAdjustControls();
   byId("mapEventType").addEventListener("change", renderMapTools);
-  const currentHourMinutesInput = byId("mapCurrentHourMinutes");
-  if (currentHourMinutesInput) {
-    currentHourMinutesInput.addEventListener("change", () => setCurrentMapHourUsedMinutes(currentHourMinutesInput.value));
-  }
-  const applyCurrentHourMinutesButton = byId("applyCurrentHourMinutes");
-  if (applyCurrentHourMinutesButton) {
-    applyCurrentHourMinutesButton.addEventListener("click", () => setCurrentMapHourUsedMinutes(byId("mapCurrentHourMinutes")?.value));
-  }
-  const trimCurrentHourMinuteButton = byId("trimCurrentHourMinute");
-  if (trimCurrentHourMinuteButton) {
-    trimCurrentHourMinuteButton.addEventListener("click", () => {
-      const input = byId("mapCurrentHourMinutes");
-      setCurrentMapHourUsedMinutes((Number(input && input.value) || 0) - 1);
-    });
-  }
   byId("openMapPinEditor").addEventListener("click", openMapPinEditorWindow);
   byId("closeMapPinEditorWindow").addEventListener("click", closeMapPinEditorWindow);
   makeMapPinEditorWindowDraggable();

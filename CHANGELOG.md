@@ -1,5 +1,10 @@
 # Changelog
 
+## v2.4.34
+- Fixed the current-route-hour −1 minute trim button applying twice.
+- Removed the duplicate event binding so each click now trims exactly one minute.
+- Updated the footer version number.
+
 ## v2.4.33
 - Fixed the current-route-hour trim control so it is force-rendered under Route Summary when the active route hour is incomplete.
 - Made the trim control self-create and self-bind if the saved/deployed page markup is missing it.
