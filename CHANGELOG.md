@@ -1,5 +1,94 @@
 # Changelog
 
+## v2.4.14
+- Updated Delerium search helper reward output so rolled quantities show both the rolled total and original dice expression, such as 11 (2d6), for player-facing rolls.
+- Kept Delerium extraction-time parsing compatible with the new inline dice-expression format.
+- Updated the footer version number.
+
+## v2.4.13
+- Changed the map SVG layer order so saved short rest point pins sit underneath route hour pins.
+- Added an extraction-time summary to the Delerium search helper output after the Delerium found section.
+- Added a persistent Compact mode toggle to reduce spacing, padding, and control height across the app.
+- Updated the footer version number.
+
+## v2.4.12
+- Replaced the floating route controls drag text with a compact move icon.
+- Changed faction conflict clock segment editing so the maximum value is edited inline as the denominator, such as 4/[6].
+- Updated the footer version number.
+
+## v2.4.11
+- Changed the floating route controls from a wide horizontal bar into a slimmer vertical menu.
+- Kept the same route controls available: route leg, map visibility, travel mode, travel pace, road type, Deep Haze overlay, Undo Last Hour, and Clear Route.
+- Clamped the floating route controls inside the map area when applying saved positions so the taller menu is less likely to appear partly off-map.
+- Updated the footer version number.
+
+## v2.4.10
+- Restored the desktop map viewport width to the previous wider layout.
+- Kept the desktop map height constrained to the available viewport height so it stays easier to fit on-screen.
+- Updated the footer version number.
+
+## v2.4.9
+- Constrained the Drakkenheim map to the available viewport height on desktop so the full square map fits on-screen more comfortably.
+- Kept smaller screens using the full available width so mobile/tablet layout is not forced into a tiny map.
+- Updated the footer version number.
+
+## v2.4.8
+- Added Ctrl + mouse wheel map zooming while the cursor is over the Drakkenheim map.
+- Ctrl + scroll now zooms the map instead of the browser page when used on the map.
+- Kept zoom centred around the cursor position where possible.
+- Updated the footer version number.
+
+## v2.4.7
+- Moved the Show Deep Haze overlay checkbox onto the floating route controls menu.
+- Removed the duplicate Deep Haze overlay checkbox from the sidebar route controls panel.
+- Updated the footer version number.
+
+## v2.4.6
+- Refactored duplicated floating-window open, close, and drag code into shared helpers without changing the visible behaviour.
+- Batched several repeated DOM list updates with document fragments for cleaner rendering code.
+- Reduced a repeated map save-code DOM lookup.
+- Updated the footer version number.
+
+## v2.4.5
+- Improved light-mode styling for the Map route rules collapsible so the note remains readable in light mode.
+- Updated the footer version number.
+
+## v2.4.4
+- Improved light-mode styling for the floating map route controls so the header and field labels stay readable.
+- Added configurable segment counts for faction conflict clocks, allowing clocks such as 0/4, 0/6, or 0/9.
+- Saved faction clock segment counts in browser storage and Save Codes.
+- Updated the footer version number.
+
+## v2.4.3
+- Added Undo Last Hour and Clear Route buttons to the floating route controls menu on the map.
+- Kept the existing sidebar route buttons in place as secondary controls.
+- Updated the footer version number.
+
+## v2.4.2
+- Moved Arcane Anomalies into the Other Random Tables card.
+- Kept Other Random Tables as a two-column layout, with Common Locations and Warped Ruins on the left and Arcane Anomalies plus Rumour Generator on the right.
+- Moved Rumour Generator beneath Arcane Anomalies.
+- Updated the footer version number.
+
+## v2.4.1
+- Fixed side-by-side table cards so a collapsed Other Random Tables or Arcane Anomalies card keeps its compact collapsed height instead of stretching to match the open card beside it.
+- Updated the footer version number.
+
+## v2.4.0
+- Added a collapsed Delerium extraction times note between the search helper and the search result.
+- Included compact extraction timings for chips, fragments, shards, crystals, geodes, and massive clusters.
+- Added a reminder that lacking proper equipment makes extraction take ten times as long, and that massive clusters require heavy equipment or powerful magic.
+- Updated the footer version number.
+
+## v2.3.2
+- Added an inbound / outbound route leg control so city routes can be split between travel into Drakkenheim and travel out of Drakkenheim.
+- Added a Show on map control so the map can show the full route, only the inbound route, or only the outbound route while keeping the full exploration log.
+- Moved travel mode, travel pace, road type, route leg, and route visibility into a draggable floating route control bar on the map.
+- Added a Copy Exploration Log button that exports the route in a plain-text notes format.
+- Lowered the map zoom widget layering so it no longer appears over the sticky header while scrolling.
+- Reduced the mobile header height by making the top action buttons compact and horizontally scrollable.
+- Updated the footer version number.
+
 ## v2.3.1
 - Clear Route now resets the route start point back to the relevant safe haven marker.
 - If an approach has been logged, Clear Route uses the latest approach safe haven.

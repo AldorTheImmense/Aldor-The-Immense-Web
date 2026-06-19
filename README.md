@@ -1,6 +1,6 @@
 # Aldor The Immense
 
-Current version: v2.3.0
+Current version: v2.4.14
 
 Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign, styled as a dark gothic DM screen for use during prep or at the table.
 
@@ -9,13 +9,14 @@ The site brings several common table tools into one place so a DM can quickly ge
 
 ## Features
 
-- Faction tools for reputation tracking and editable conflict clocks.
-- Drakkenheim map page with route plotting, Deep Haze overlay, landmark pins, safe-haven travel tracking, route summaries, and saved short rest spots.
+- Faction tools for reputation tracking and editable conflict clocks with configurable segment counts.
+- Drakkenheim map page with route plotting, Deep Haze overlay, landmark pins, safe-haven travel tracking, route summaries, saved short rest spots, and layered route/rest pins.
 
 - Aldor shop generator for potions, scrolls, uncommon items, and rare items.
 - Editable shop inventory lists.
-- Top-bar Save Code controls for moving shop state, custom item lists, faction reputation, faction clocks, and map data between browsers or computers.
-- Delerium search helper that calculates successes, failures, DC +5 bonus successes, party-size scaling, Crater's Edge bonus success, and the correct Outer City / Inner City DCs.
+- Top-bar Save Code controls for moving shop state, custom item lists, faction reputation, faction clocks, clock sizes, and map data between browsers or computers.
+- Compact mode for reducing spacing and control height during table use.
+- Delerium search helper that calculates successes, failures, DC +5 bonus successes, party-size scaling, Crater's Edge bonus success, the correct Outer City / Inner City DCs, and total extraction time for found delerium.
 - Random encounter generator for Outer City, Inner City, and Sewers.
 - Monsters of Drakkenheim mode for updated Outer City and Inner City encounter tables.
 - Faction filters for encounter results.

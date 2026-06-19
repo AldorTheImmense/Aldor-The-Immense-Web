@@ -23,6 +23,7 @@
         <button id="conditionsButton" type="button">Conditions</button>
         <button id="soundToggle" type="button">Sound: Off</button>
         <button id="themeToggle" type="button">Dark mode</button>
+        <button id="compactModeToggle" type="button">Compact: Off</button>
       </div>
     </div>
 
@@ -393,13 +394,74 @@
                     <img class="map-base-image" src="assets/drakkenheim-map.webp" alt="Map of Drakkenheim">
                     <img id="deepHazeMapOverlay" class="map-haze-image" src="assets/drakkenheim-deep-haze.webp" alt="Deep Haze overlay map" aria-hidden="true">
                     <svg id="mapOverlaySvg" class="map-overlay-svg" viewBox="0 0 2048 2048" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-                      <g id="mapRouteSvg"></g>
+                      <g id="mapRouteSegmentSvg"></g>
                       <g id="mapRestSpotSvg"></g>
+                      <g id="mapRouteMarkerSvg"></g>
                       <g id="mapLandmarkSvg"></g>
                     </svg>
                   </div>
                 </div>
                 <div id="mapPinTooltip" class="map-pin-tooltip" role="tooltip" hidden></div>
+                <div id="mapFloatingRouteControls" class="map-floating-route-controls" aria-label="Floating route controls">
+                  <div id="mapFloatingRouteHandle" class="map-floating-route-handle" role="button" tabindex="0" aria-label="Drag route controls">
+                    <span>Route controls</span>
+                    <span class="drag-move-icon" aria-hidden="true" title="Drag">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M12 2l3 3h-2v5h5V8l4 4-4 4v-2h-5v5h2l-3 3-3-3h2v-5H6v2l-4-4 4-4v2h5V5H9l3-3z"></path>
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="map-floating-route-fields">
+                    <label class="field-stack compact-field-stack">
+                      <span>Route leg</span>
+                      <select id="mapRouteLeg">
+                        <option value="inbound" selected>Into Drakkenheim</option>
+                        <option value="outbound">Out of Drakkenheim</option>
+                      </select>
+                    </label>
+                    <label class="field-stack compact-field-stack">
+                      <span>Show on map</span>
+                      <select id="mapRouteVisibility">
+                        <option value="all" selected>All route</option>
+                        <option value="inbound">Into only</option>
+                        <option value="outbound">Out only</option>
+                      </select>
+                    </label>
+                    <label class="field-stack compact-field-stack">
+                      <span>Travel mode</span>
+                      <select id="mapTravelMode">
+                        <option value="streets">Streets</option>
+                        <option value="sewers">Sewers</option>
+                        <option value="boat">Boat / river</option>
+                        <option value="landVehicle">Land vehicle / portage</option>
+                        <option value="flying">Flying</option>
+                      </select>
+                    </label>
+                    <label class="field-stack compact-field-stack">
+                      <span>Travel pace</span>
+                      <select id="mapTravelPace">
+                        <option value="fast">Fast</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="slow">Slow</option>
+                      </select>
+                    </label>
+                    <label class="field-stack compact-field-stack">
+                      <span>Road type</span>
+                      <select id="mapTerrain">
+                        <option value="mainRoad" selected>Main roads</option>
+                        <option value="sideRoad">Side roads / rubble — half speed</option>
+                      </select>
+                    </label>
+                  </div>
+                  <label class="check-row compact-check map-floating-route-toggle">
+                    <input type="checkbox" id="showDeepHazeOverlay" checked>
+                    <span>Show Deep Haze overlay</span>
+                  </label>
+                  <div class="map-floating-route-actions">
+                    <button id="floatingUndoMapSegment" type="button">Undo Last Hour</button>
+                    <button id="floatingClearMapRoute" type="button">Clear Route</button>
+                  </div>
+                </div>
                 <div class="map-zoom-widget" aria-label="Map zoom controls">
                   <output id="mapZoomValue">100%</output>
                   <div id="mapZoomRail" class="map-zoom-rail" role="slider" tabindex="0" aria-label="Map zoom" aria-valuemin="100" aria-valuemax="300" aria-valuenow="100">
@@ -415,39 +477,10 @@
 
             <section class="tool-box map-controls-panel">
               <h3>Route controls</h3>
-              <div class="map-control-grid">
-                <label class="field-stack">
-                  <span>Travel mode</span>
-                  <select id="mapTravelMode">
-                    <option value="streets">Streets</option>
-                    <option value="sewers">Sewers</option>
-                    <option value="boat">Boat / river</option>
-                    <option value="landVehicle">Land vehicle / portage</option>
-                    <option value="flying">Flying</option>
-                  </select>
-                </label>
-                <label class="field-stack">
-                  <span>Travel pace</span>
-                  <select id="mapTravelPace">
-                    <option value="fast">Fast</option>
-                    <option value="normal" selected>Normal</option>
-                    <option value="slow">Slow</option>
-                  </select>
-                </label>
-                <label class="field-stack">
-                  <span>Road type</span>
-                  <select id="mapTerrain">
-                    <option value="mainRoad" selected>Main roads</option>
-                    <option value="sideRoad">Side roads / rubble — half speed</option>
-                  </select>
-                </label>
+              <div class="map-control-grid map-route-options-grid">
                 <label class="field-stack">
                   <span>Day starts</span>
                   <input id="mapDayStartTime" type="time" value="08:00">
-                </label>
-                <label class="check-row compact-check map-check">
-                  <input type="checkbox" id="showDeepHazeOverlay" checked>
-                  <span>Show Deep Haze overlay</span>
                 </label>
               </div>
               <p id="mapPaceNote" class="inline-note"></p>
@@ -457,7 +490,8 @@
                 <summary>Map route rules</summary>
                 <ul>
                   <li>Each city exploration hour is built from the clicks you plot on the map.</li>
-                  <li>If the party changes pace or road type mid-hour, change the control before the next click.</li>
+                  <li>If the party changes pace, road type, or route leg mid-hour, change the floating control before the next click.</li>
+                  <li><strong>Route leg</strong> marks each new segment as travel into or out of Drakkenheim. Use <strong>Show on map</strong> to hide one half while keeping the full exploration log.</li>
                   <li><strong>Main roads</strong> use normal speed. <strong>Side roads / rubble</strong> is difficult terrain and moves at half speed.</li>
                   <li>Double-click a point or landmark to end the current hour early there, if the party can reach it.</li>
                   <li>Clear Route resets the city route back to the current approach safe haven, ready for the next click.</li>
@@ -507,6 +541,9 @@
               <h3>Route summary</h3>
               <div id="mapRouteSummary" class="description-output compact-output empty-state">No route plotted yet. Click the map to place the party's starting point.</div>
               <h3>Exploration log</h3>
+              <div class="action-row compact-action-row">
+                <button id="copyMapExplorationLog" type="button">Copy Exploration Log</button>
+              </div>
               <ol id="mapRouteSegmentList" class="compact-list"></ol>
 
               <h3>Add log event</h3>
@@ -566,6 +603,19 @@
               <button id="calculateDeleriumSearch" type="button">Calculate Search</button>
             </div>
           </div>
+
+          <details class="sub-panel compact-extraction-note">
+            <summary>Delerium extraction times</summary>
+            <div class="extraction-time-grid" aria-label="Delerium extraction times">
+              <div class="extraction-time-item"><span>Chip</span><strong>1 action</strong></div>
+              <div class="extraction-time-item"><span>Fragment</span><strong>1 minute</strong></div>
+              <div class="extraction-time-item"><span>Shard</span><strong>5 minutes</strong></div>
+              <div class="extraction-time-item"><span>Crystal</span><strong>30 minutes</strong></div>
+              <div class="extraction-time-item"><span>Geode</span><strong>1 hour</strong></div>
+              <div class="extraction-time-item"><span>Massive cluster</span><strong>7 days</strong></div>
+            </div>
+            <p class="extraction-equipment-note">No proper equipment: extraction takes ten times as long. Massive clusters are impossible without heavy equipment or powerful magic.</p>
+          </details>
 
           <pre id="deleriumOutput" class="output empty-state">Enter check results in the helper above, then calculate the search outcome.</pre>
         </details>
@@ -634,34 +684,40 @@
           </details>
         </details>
 
-        <details id="other-tables-card" class="card grouped-tables-card collapsible" open>
+        <details id="other-tables-card" class="card card-wide grouped-tables-card collapsible" open>
           <summary class="card-summary"><span>Other Random Tables</span></summary>
 
-          <div class="mini-table-section">
-            <h3>Common Locations</h3>
-            <button id="generateCommonLocation" type="button">Generate Common Location</button>
-            <p id="locationOutput" class="output-line empty-state">No common location generated yet.</p>
-          </div>
+          <div class="other-tables-grid">
+            <div class="other-tables-panel">
+              <div class="mini-table-section">
+                <h3>Common Locations</h3>
+                <button id="generateCommonLocation" type="button">Generate Common Location</button>
+                <p id="locationOutput" class="output-line empty-state">No common location generated yet.</p>
+              </div>
 
-          <div class="mini-table-section">
-            <h3>Warped Ruins</h3>
-            <button id="generateWarpedRuin" type="button">Generate Warped Ruin</button>
-            <p id="warpedRuinOutput" class="output-line empty-state">No warped ruin generated yet.</p>
-          </div>
+              <div class="mini-table-section">
+                <h3>Warped Ruins</h3>
+                <button id="generateWarpedRuin" type="button">Generate Warped Ruin</button>
+                <p id="warpedRuinOutput" class="output-line empty-state">No warped ruin generated yet.</p>
+              </div>
+            </div>
 
-          <div class="mini-table-section">
-            <h3>Rumour Generator</h3>
-            <p class="inline-note">Rolls a d100 Drakkenheim rumour.</p>
-            <button id="generateRumour" type="button">Generate Rumour</button>
-            <div id="rumourOutput" class="description-output compact-output empty-state">No rumour generated yet.</div>
-          </div>
-        </details>
+            <div class="other-tables-panel arcane-panel">
+              <div class="mini-table-section">
+                <h3>Arcane Anomalies</h3>
+                <button id="generateArcaneAnomaly" type="button">Generate Arcane Anomaly</button>
+                <p id="arcaneAnomalyRoll" class="output-line empty-state">No arcane anomaly rolled yet.</p>
+                <div id="arcaneAnomalyOutput" class="description-output compact-output empty-state">Generate an anomaly to reveal the effect.</div>
+              </div>
 
-        <details id="arcane-card" class="card arcane-card collapsible" open>
-          <summary class="card-summary"><span>Arcane Anomalies</span></summary>
-          <button id="generateArcaneAnomaly" type="button">Generate Arcane Anomaly</button>
-          <p id="arcaneAnomalyRoll" class="output-line empty-state">No arcane anomaly rolled yet.</p>
-          <div id="arcaneAnomalyOutput" class="description-output compact-output empty-state">Generate an anomaly to reveal the effect.</div>
+              <div class="mini-table-section">
+                <h3>Rumour Generator</h3>
+                <p class="inline-note">Rolls a d100 Drakkenheim rumour.</p>
+                <button id="generateRumour" type="button">Generate Rumour</button>
+                <div id="rumourOutput" class="description-output compact-output empty-state">No rumour generated yet.</div>
+              </div>
+            </div>
+          </div>
         </details>
       </div>
     </section>
@@ -677,7 +733,7 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.3.1</span>
+    <span>Aldor The Immense v2.4.14</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
@@ -734,7 +790,7 @@
         <h2>Load Save Code</h2>
         <button value="close" class="icon-button" aria-label="Close">×</button>
       </div>
-      <p class="note">Paste a save code below. Loading it will replace the current shop inventory, custom item lists, faction reputation, faction clocks, and map data.</p>
+      <p class="note">Paste a save code below. Loading it will replace the current shop inventory, custom item lists, faction reputation, faction clocks, clock sizes, and map data.</p>
       <textarea id="loadCodeText" class="code-box" spellcheck="false" placeholder="Paste save code here"></textarea>
       <div class="dialog-actions">
         <button type="button" id="loadSaveCode" class="primary">Load Code</button>
