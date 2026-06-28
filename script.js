@@ -2215,7 +2215,7 @@ const STORAGE_KEYS = {
   mapRouteSlots: "aldor.mapRouteSlots.v1"
 };
 
-const APP_VERSION = "2.4.35";
+const APP_VERSION = "2.4.38";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -2286,13 +2286,13 @@ const FACTION_TRACKER_DATA = [
 ];
 
 const FACTION_ATTITUDE_MILESTONES = [
-  { max: -4, label: "Enemy", detail: "The faction treats the party as active enemies. They may attack, sabotage, expose, or refuse all aid." },
-  { max: -2, label: "Hostile", detail: "The faction obstructs the party and makes demands from a position of distrust." },
-  { max: -1, label: "Wary", detail: "The faction is suspicious. Cooperation requires payment, proof, or concessions." },
-  { max: 0, label: "Neutral", detail: "The faction is transactional. Jobs, trade, and information are possible at normal terms." },
-  { max: 2, label: "Cooperative", detail: "The faction offers leads, fair terms, and limited support when interests align." },
-  { max: 4, label: "Trusted", detail: "The faction gives priority access, sensitive information, and practical aid." },
-  { max: 5, label: "Allied", detail: "The faction actively supports the party and may spend resources or political capital on their behalf." }
+  { max: -10, label: "Hunted / kill-on-sight", detail: "The faction hunts the party and may attack on sight. Negotiation is effectively unavailable without extraordinary leverage." },
+  { max: -6, label: "Enemy", detail: "The faction treats the party as active enemies. They may attack, sabotage, expose, or refuse all aid." },
+  { max: -3, label: "Unfriendly", detail: "The faction distrusts and obstructs the party. Cooperation requires major concessions, pressure, or proof." },
+  { max: 2, label: "Neutral", detail: "The faction is transactional. Jobs, trade, and information are possible at normal terms." },
+  { max: 5, label: "Friendly", detail: "The faction is favourably disposed toward the party and may offer fair terms, leads, and limited support." },
+  { max: 9, label: "Ally", detail: "The faction actively cooperates with the party and may spend resources or political capital on their behalf." },
+  { max: 10, label: "Champion / trusted agent", detail: "The faction treats the party as champions or trusted agents with priority access, sensitive information, and strong backing." }
 ];
 
 const DRAKKENHEIM_RUMOURS = [
@@ -3129,7 +3129,7 @@ function factionClockSize(key) {
 function normaliseFactionToolsState() {
   FACTION_TRACKER_DATA.forEach((faction) => {
     const clockSize = normaliseFactionClockSize(factionClockSizes[faction.key]);
-    factionReputation[faction.key] = Math.max(-5, Math.min(5, Number(factionReputation[faction.key]) || 0));
+    factionReputation[faction.key] = Math.max(-10, Math.min(10, Number(factionReputation[faction.key]) || 0));
     factionClockSizes[faction.key] = clockSize;
     factionClocks[faction.key] = Math.max(0, Math.min(clockSize, Number(factionClocks[faction.key]) || 0));
     factionClockGoals[faction.key] = String(factionClockGoals[faction.key] || "");
@@ -3194,12 +3194,13 @@ function renderFactionReputations() {
 
     const slider = document.createElement("input");
     slider.type = "range";
-    slider.min = "-5";
-    slider.max = "5";
+    slider.min = "-10";
+    slider.max = "10";
     slider.step = "1";
     slider.value = String(score);
     slider.className = "faction-slider";
     slider.addEventListener("input", () => {
+      const previousScore = Number(factionReputation[faction.key]) || 0;
       const nextScore = Number(slider.value);
       factionReputation[faction.key] = nextScore;
       const nextAttitude = factionAttitudeForScore(nextScore);
@@ -3207,11 +3208,13 @@ function renderFactionReputations() {
       status.textContent = `${nextAttitude.label} (${nextScore > 0 ? "+" : ""}${nextScore})`;
       detail.textContent = nextAttitude.detail;
       saveFactionTools();
+      if (nextScore > previousScore) playUiSound("advance");
+      else if (nextScore < previousScore) playUiSound("regress");
     });
 
     const scale = document.createElement("div");
     scale.className = "faction-scale";
-    scale.innerHTML = "<span>Enemy</span><span>Neutral</span><span>Allied</span>";
+    scale.innerHTML = "<span>Hunted</span><span>Neutral</span><span>Champion</span>";
 
     const detail = document.createElement("p");
     detail.className = "faction-attitude-detail";

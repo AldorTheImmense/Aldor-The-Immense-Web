@@ -877,10 +877,15 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
   border-radius: 0.5rem;
   background: rgba(0, 0, 0, 0.18);
 }
+.faction-reputation-row[data-attitude="hunted-kill-on-sight"] { --attitude-colour: #b42336; }
 .faction-reputation-row[data-attitude="enemy"] { --attitude-colour: #d14a4a; }
+.faction-reputation-row[data-attitude="unfriendly"] { --attitude-colour: #e06f4f; }
+.faction-reputation-row[data-attitude="neutral"] { --attitude-colour: #a56cff; }
+.faction-reputation-row[data-attitude="friendly"] { --attitude-colour: #55bd86; }
+.faction-reputation-row[data-attitude="ally"] { --attitude-colour: #98df65; }
+.faction-reputation-row[data-attitude="champion-trusted-agent"] { --attitude-colour: #f0d28a; }
 .faction-reputation-row[data-attitude="hostile"] { --attitude-colour: #e06f4f; }
 .faction-reputation-row[data-attitude="wary"] { --attitude-colour: #d99a3d; }
-.faction-reputation-row[data-attitude="neutral"] { --attitude-colour: #a56cff; }
 .faction-reputation-row[data-attitude="cooperative"] { --attitude-colour: #55bd86; }
 .faction-reputation-row[data-attitude="trusted"] { --attitude-colour: #43d37f; }
 .faction-reputation-row[data-attitude="allied"] { --attitude-colour: #98df65; }
@@ -915,6 +920,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
   font-size: 0.78rem;
   margin-top: 0.18rem;
 }
+
 .faction-attitude-detail, .faction-clock-goal {
   margin: 0.45rem 0 0;
   color: var(--muted);

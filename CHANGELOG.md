@@ -1,5 +1,21 @@
 # Changelog
 
+## v2.4.38
+- Added sound feedback when moving faction reputation sliders.
+- Reputation increases now use the same advance sound as conflict clocks, and decreases use the same regress sound.
+- Updated the footer version number.
+
+## v2.4.37
+- Removed the faction reputation threshold legend table from the Faction Reputation Tracker.
+- Kept the updated reputation status logic and slider values unchanged.
+- Updated the footer version number.
+
+## v2.4.36
+- Updated the faction reputation tracker to use the new -10 to +10 status scale.
+- Added statuses for Champion / trusted agent, Ally, Friendly, Neutral, Unfriendly, Enemy, and Hunted / kill-on-sight.
+- Updated the reputation slider range and added a status threshold legend.
+- Updated the footer version number.
+
 ## v2.4.35
 - Added local named route save slots to the Drakkenheim map.
 - Saved slots preserve route points, route segments, short rest spots, safe-haven travel, log events, map start time, route visibility, travel settings, and landmark overrides.
