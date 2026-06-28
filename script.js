@@ -2215,7 +2215,7 @@ const STORAGE_KEYS = {
   mapRouteSlots: "aldor.mapRouteSlots.v1"
 };
 
-const APP_VERSION = "2.4.38";
+const APP_VERSION = "2.4.40";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -2480,6 +2480,9 @@ let mapPanState = null;
 let mapZoomDragState = null;
 let mapFloatingControlsDragState = null;
 let mapFloatingControlsPosition = { leftPercent: 1.2, topPercent: 1.2 };
+let mapMeasuringMode = false;
+let mapMeasureState = null;
+let mapMeasurePreview = null;
 let soundEnabled = false;
 let audioContext = null;
 
@@ -4044,6 +4047,176 @@ function handleMapCtrlWheelZoom(event) {
   setMapZoom(next, { anchor: { clientX: event.clientX, clientY: event.clientY } });
 }
 
+
+function mapMeasureLayer() {
+  const overlay = byId("mapOverlaySvg");
+  let layer = byId("mapMeasureSvg");
+  if (!layer && overlay) {
+    layer = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    layer.id = "mapMeasureSvg";
+    overlay.appendChild(layer);
+  }
+  return layer;
+}
+
+function formatMapMeasureFeet(feet) {
+  const value = Math.max(0, Number(feet) || 0);
+  if (value < 10 && value > 0) return `${Math.round(value * 10) / 10} ft`;
+  return `${Math.round(value).toLocaleString()} ft`;
+}
+
+function formatMapMeasureMiles(miles) {
+  const value = Math.max(0, Number(miles) || 0);
+  if (value < 0.01 && value > 0) return "<0.01 mi";
+  return `${(Math.round(value * 100) / 100).toFixed(2)} mi`;
+}
+
+function formatMapMeasureMinutes(minutes) {
+  const value = Math.max(0, Number(minutes) || 0);
+  if (value < 1 && value > 0) return "<1 min";
+  const rounded = Math.round(value);
+  if (rounded < 60) return `${rounded} min`;
+  return formatHoursFromMinutes(rounded);
+}
+
+function currentMapMeasureShape() {
+  const input = byId("mapMeasureShape");
+  return input && input.value === "circle" ? "circle" : "line";
+}
+
+function mapMeasureLabel(start, end) {
+  const pixels = pointDistance(start, end);
+  const miles = pixels / MAP_PIXELS_PER_MILE;
+  const feet = miles * 5280;
+  const speed = Math.max(0.001, mapSpeedMilesPerHour(currentMapMode(), currentMapPace(), currentMapTerrain()));
+  const minutes = (miles / speed) * 60;
+  const pace = MAP_PACE_LABELS[effectiveMapPace(currentMapMode(), currentMapPace(), currentMapTerrain())] || "Normal";
+  const mode = MAP_MODE_LABELS[currentMapMode()] || "Streets";
+  const shape = currentMapMeasureShape();
+  const prefix = shape === "circle" ? "Radius" : "Distance";
+  return {
+    primary: `${prefix}: ${formatMapMeasureMinutes(minutes)} • ${formatMapMeasureFeet(feet)} • ${formatMapMeasureMiles(miles)}`,
+    secondary: shape === "circle" ? `${mode}, ${pace.toLowerCase()} pace • circle radius` : `${mode}, ${pace.toLowerCase()} pace`,
+    title: `${prefix}: ${formatMapMeasureMinutes(minutes)} at ${mode.toLowerCase()}, ${pace.toLowerCase()} pace; ${formatMapMeasureFeet(feet)} / ${formatMapMeasureMiles(miles)}`
+  };
+}
+
+function renderMapMeasureTool() {
+  const button = byId("toggleMapMeasureTool");
+  const stage = byId("drakkenheimMapStage");
+  const shape = currentMapMeasureShape();
+  const shapeLabel = shape === "circle" ? "Circle" : "Line";
+  if (button) {
+    button.classList.toggle("active", mapMeasuringMode);
+    button.textContent = mapMeasuringMode ? `Measure: ${shapeLabel}` : "Measure Distance";
+    button.setAttribute("aria-pressed", mapMeasuringMode ? "true" : "false");
+    button.title = mapMeasuringMode ? "Drag on the map to measure. Click again to turn measuring off." : "Turn on ruler mode.";
+  }
+  if (stage) stage.classList.toggle("is-measuring", mapMeasuringMode);
+}
+
+function renderMapMeasure() {
+  const layer = mapMeasureLayer();
+  if (!layer) return;
+  if (!mapMeasurePreview || !mapMeasurePreview.start || !mapMeasurePreview.end) {
+    layer.innerHTML = "";
+    return;
+  }
+
+  const start = normaliseMapPoint(mapMeasurePreview.start);
+  const end = normaliseMapPoint(mapMeasurePreview.end);
+  const pixels = pointDistance(start, end);
+  if (pixels < 2) {
+    layer.innerHTML = "";
+    return;
+  }
+
+  const shape = currentMapMeasureShape();
+  const label = mapMeasureLabel(start, end);
+  const midX = shape === "circle" ? end.x : (start.x + end.x) / 2;
+  const midY = shape === "circle" ? end.y : (start.y + end.y) / 2;
+  const labelWidth = Math.max(190, Math.min(430, (Math.max(label.primary.length, label.secondary.length) * 7.4) + 26));
+  const labelHeight = 42;
+  const labelX = Math.max(6, Math.min(MAP_SIZE - labelWidth - 6, midX + 12));
+  const labelY = Math.max(6, Math.min(MAP_SIZE - labelHeight - 6, midY - labelHeight - 12));
+  const circleMarkup = shape === "circle" ? `
+      <circle class="map-measure-radius-circle map-measure-radius-circle-shadow" cx="${start.x}" cy="${start.y}" r="${pixels}"></circle>
+      <circle class="map-measure-radius-circle" cx="${start.x}" cy="${start.y}" r="${pixels}"></circle>` : "";
+
+  layer.innerHTML = `
+    <g class="map-measure-ruler map-measure-${shape}" data-map-tooltip="${escapeHtml(label.title)}">
+      ${circleMarkup}
+      <line class="map-measure-line map-measure-line-shadow" x1="${start.x}" y1="${start.y}" x2="${end.x}" y2="${end.y}"></line>
+      <line class="map-measure-line" x1="${start.x}" y1="${start.y}" x2="${end.x}" y2="${end.y}"></line>
+      <circle class="map-measure-endpoint map-measure-centerpoint" cx="${start.x}" cy="${start.y}" r="7"></circle>
+      <circle class="map-measure-endpoint" cx="${end.x}" cy="${end.y}" r="7"></circle>
+      <g class="map-measure-label" transform="translate(${labelX} ${labelY})">
+        <rect width="${labelWidth}" height="${labelHeight}" rx="8" ry="8"></rect>
+        <text x="12" y="17">${escapeHtml(label.primary)}</text>
+        <text x="12" y="33" class="map-measure-label-secondary">${escapeHtml(label.secondary)}</text>
+      </g>
+    </g>
+  `;
+}
+
+function clearMapMeasurePreview() {
+  mapMeasurePreview = null;
+  mapMeasureState = null;
+  renderMapMeasure();
+}
+
+function toggleMapMeasureTool() {
+  mapMeasuringMode = !mapMeasuringMode;
+  addingMapRestSpot = false;
+  editingMapLandmarks = false;
+  if (!mapMeasuringMode) clearMapMeasurePreview();
+  hideMapTooltip();
+  renderMapMeasureTool();
+  renderMapLandmarkEditor();
+  playUiSound(mapMeasuringMode ? "open" : "click");
+}
+
+function startMapMeasure(event) {
+  if (!mapMeasuringMode || event.button !== 0 || event.target.closest(".map-zoom-widget")) return;
+  event.preventDefault();
+  event.stopPropagation();
+  hideMapTooltip();
+
+  const stage = byId("drakkenheimMapStage");
+  const start = mapClickPoint(event);
+  mapMeasureState = { pointerId: event.pointerId, start };
+  mapMeasurePreview = { start, end: start };
+  renderMapMeasure();
+  if (stage && event.pointerId !== undefined) stage.setPointerCapture(event.pointerId);
+}
+
+function moveMapMeasure(event) {
+  if (!mapMeasureState || mapMeasureState.pointerId !== event.pointerId) return;
+  event.preventDefault();
+  event.stopPropagation();
+  mapMeasurePreview = {
+    start: mapMeasureState.start,
+    end: mapClickPoint(event)
+  };
+  renderMapMeasure();
+}
+
+function endMapMeasure(event) {
+  if (!mapMeasureState || mapMeasureState.pointerId !== event.pointerId) return;
+  event.preventDefault();
+  event.stopPropagation();
+  const stage = byId("drakkenheimMapStage");
+  mapMeasurePreview = {
+    start: mapMeasureState.start,
+    end: mapClickPoint(event)
+  };
+  mapMeasureState = null;
+  if (stage && stage.hasPointerCapture && stage.hasPointerCapture(event.pointerId)) stage.releasePointerCapture(event.pointerId);
+  if (pointDistance(mapMeasurePreview.start, mapMeasurePreview.end) < 4) clearMapMeasurePreview();
+  else renderMapMeasure();
+}
+
+
 function startMapPan(event) {
   hideMapTooltip();
   const stage = byId("drakkenheimMapStage");
@@ -4625,6 +4798,7 @@ function handleMapPoint(point, endCurrentHourEarly = false) {
 function handleMapClick(event) {
   if (event.button && event.button !== 0) return;
   if (event.target.closest(".map-zoom-widget")) return;
+  if (mapMeasuringMode) return;
   if (mapPanState) return;
   if (editingMapLandmarks) {
     event.preventDefault();
@@ -4642,6 +4816,7 @@ function handleMapClick(event) {
 function handleMapDoubleClick(event) {
   if (event.button && event.button !== 0) return;
   if (event.target.closest(".map-zoom-widget")) return;
+  if (mapMeasuringMode) return;
   event.preventDefault();
   event.stopPropagation();
   if (editingMapLandmarks) {
@@ -4691,6 +4866,7 @@ function handleMapLandmarkEditClick(event) {
 }
 
 function toggleMapLandmarkEditing() {
+  if (!editingMapLandmarks && mapMeasuringMode) toggleMapMeasureTool();
   editingMapLandmarks = !editingMapLandmarks;
   addingMapRestSpot = false;
   renderMapTools();
@@ -5457,6 +5633,7 @@ function addMapEvent() {
 }
 
 function beginAddShortRestSpot() {
+  if (mapMeasuringMode) toggleMapMeasureTool();
   if (mapRestSpots.length >= 3) {
     alert("You already have 3 saved short rest spots. Delete one before adding another.");
     return;
@@ -6460,6 +6637,10 @@ function bindEvents() {
   byId("drakkenheimMapStage").addEventListener("pointermove", moveMapPan);
   byId("drakkenheimMapStage").addEventListener("pointerup", endMapPan);
   byId("drakkenheimMapStage").addEventListener("pointercancel", endMapPan);
+  byId("drakkenheimMapStage").addEventListener("pointerdown", startMapMeasure);
+  byId("drakkenheimMapStage").addEventListener("pointermove", moveMapMeasure);
+  byId("drakkenheimMapStage").addEventListener("pointerup", endMapMeasure);
+  byId("drakkenheimMapStage").addEventListener("pointercancel", endMapMeasure);
   byId("mapOverlaySvg").addEventListener("pointerover", showMapTooltip);
   byId("mapOverlaySvg").addEventListener("pointermove", moveMapTooltip);
   byId("mapOverlaySvg").addEventListener("pointerout", hideMapTooltip);
@@ -6496,6 +6677,11 @@ function bindEvents() {
   byId("clearMapRoute").addEventListener("click", clearMapRoute);
   byId("floatingUndoMapSegment").addEventListener("click", undoMapSegment);
   byId("floatingClearMapRoute").addEventListener("click", clearMapRoute);
+  byId("toggleMapMeasureTool").addEventListener("click", toggleMapMeasureTool);
+  byId("mapMeasureShape").addEventListener("change", () => {
+    renderMapMeasureTool();
+    renderMapMeasure();
+  });
   byId("copyMapExplorationLog").addEventListener("click", copyMapExplorationLog);
   byId("exportMapRouteOverlay").addEventListener("click", exportMapRouteOverlayPng);
   byId("saveMapRouteSlot").addEventListener("click", () => saveCurrentMapRouteSlot());

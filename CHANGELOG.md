@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.4.40
+- Added a ruler shape option to the map measuring tool.
+- The measuring tool can now draw either a straight line or a circle using the clicked start point as the centre and the dragged distance as the radius.
+- Circle measurements show radius travel time, feet, and miles using the current travel settings.
+- Updated the footer version number.
+
+## v2.4.39
+- Added a map measuring tool to the floating route controls.
+- When Measure Distance is active, click-and-drag on the map to draw a ruler.
+- The ruler shows travel time, feet, and miles for the dragged distance using the current travel mode, pace, and road type.
+- Updated the footer version number.
+
 ## v2.4.38
 - Added sound feedback when moving faction reputation sliders.
 - Reputation increases now use the same advance sound as conflict clocks, and decreases use the same regress sound.

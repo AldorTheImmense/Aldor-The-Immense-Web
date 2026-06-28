@@ -2158,3 +2158,94 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
 .route-slot-actions button {
   padding: 0.38rem 0.55rem;
 }
+
+
+/* Map measuring tool */
+.map-stage.is-measuring {
+  cursor: crosshair;
+}
+
+.map-floating-route-actions button.active,
+.map-floating-route-actions button[aria-pressed="true"] {
+  border-color: var(--accent-strong);
+  color: var(--accent-strong);
+  box-shadow: 0 0 0 1px rgba(240, 210, 138, 0.35), 0 0 12px rgba(240, 210, 138, 0.25);
+}
+
+.map-measure-ruler {
+  pointer-events: auto;
+}
+
+.map-measure-line {
+  stroke: #fff4d0;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 18 12;
+  filter: drop-shadow(0 0 8px rgba(240, 210, 138, 0.76));
+}
+
+.map-measure-line-shadow {
+  stroke: rgba(8, 7, 10, 0.9);
+  stroke-width: 10;
+  stroke-dasharray: none;
+  filter: none;
+}
+
+.map-measure-endpoint {
+  fill: rgba(8, 7, 10, 0.9);
+  stroke: #fff4d0;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 8px rgba(240, 210, 138, 0.7));
+}
+
+.map-measure-label rect {
+  fill: rgba(8, 7, 10, 0.92);
+  stroke: rgba(240, 210, 138, 0.86);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.65));
+}
+
+.map-measure-label text {
+  fill: #fff4d0;
+  font: 700 15px "Segoe UI", system-ui, sans-serif;
+  pointer-events: none;
+}
+
+.map-measure-label .map-measure-label-secondary {
+  fill: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+.map-measure-shape-field {
+  margin: 0;
+}
+
+.map-measure-shape-field select {
+  width: 100%;
+}
+
+.map-measure-radius-circle {
+  fill: rgba(240, 210, 138, 0.08);
+  stroke: #fff4d0;
+  stroke-width: 4;
+  stroke-dasharray: 18 12;
+  filter: drop-shadow(0 0 8px rgba(240, 210, 138, 0.55));
+}
+
+.map-measure-radius-circle-shadow {
+  fill: rgba(8, 7, 10, 0.12);
+  stroke: rgba(8, 7, 10, 0.88);
+  stroke-width: 9;
+  stroke-dasharray: none;
+  filter: none;
+}
+
+.map-measure-circle .map-measure-line {
+  stroke-dasharray: 10 8;
+}
+
+.map-measure-centerpoint {
+  stroke: var(--success);
+}

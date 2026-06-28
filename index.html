@@ -398,6 +398,7 @@
                       <g id="mapRestSpotSvg"></g>
                       <g id="mapRouteMarkerSvg"></g>
                       <g id="mapLandmarkSvg"></g>
+                      <g id="mapMeasureSvg"></g>
                     </svg>
                   </div>
                 </div>
@@ -458,6 +459,14 @@
                     <span>Show Deep Haze overlay</span>
                   </label>
                   <div class="map-floating-route-actions">
+                    <label class="field-stack compact-field-stack map-measure-shape-field">
+                      <span>Ruler</span>
+                      <select id="mapMeasureShape">
+                        <option value="line" selected>Line</option>
+                        <option value="circle">Circle radius</option>
+                      </select>
+                    </label>
+                    <button id="toggleMapMeasureTool" type="button" aria-pressed="false">Measure Distance</button>
                     <button id="floatingUndoMapSegment" type="button">Undo Last Hour</button>
                     <button id="floatingClearMapRoute" type="button">Clear Route</button>
                   </div>
@@ -775,7 +784,7 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.4.38</span>
+    <span>Aldor The Immense v2.4.40</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
