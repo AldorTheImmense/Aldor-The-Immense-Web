@@ -2215,7 +2215,7 @@ const STORAGE_KEYS = {
   mapRouteSlots: "aldor.mapRouteSlots.v1"
 };
 
-const APP_VERSION = "2.4.40";
+const APP_VERSION = "2.4.42";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -4095,8 +4095,8 @@ function mapMeasureLabel(start, end) {
   const shape = currentMapMeasureShape();
   const prefix = shape === "circle" ? "Radius" : "Distance";
   return {
-    primary: `${prefix}: ${formatMapMeasureMinutes(minutes)} • ${formatMapMeasureFeet(feet)} • ${formatMapMeasureMiles(miles)}`,
-    secondary: shape === "circle" ? `${mode}, ${pace.toLowerCase()} pace • circle radius` : `${mode}, ${pace.toLowerCase()} pace`,
+    primary: `${prefix}: ${formatMapMeasureMinutes(minutes)}`,
+    secondary: `${formatMapMeasureFeet(feet)} / ${formatMapMeasureMiles(miles)} • ${mode}, ${pace.toLowerCase()}`,
     title: `${prefix}: ${formatMapMeasureMinutes(minutes)} at ${mode.toLowerCase()}, ${pace.toLowerCase()} pace; ${formatMapMeasureFeet(feet)} / ${formatMapMeasureMiles(miles)}`
   };
 }
@@ -4115,11 +4115,49 @@ function renderMapMeasureTool() {
   if (stage) stage.classList.toggle("is-measuring", mapMeasuringMode);
 }
 
+function mapMeasureLabelElement() {
+  const surface = byId("mapZoomSurface");
+  let label = byId("mapMeasureLabel");
+  if (!label && surface) {
+    label = document.createElement("div");
+    label.id = "mapMeasureLabel";
+    label.className = "map-measure-html-label";
+    label.hidden = true;
+    surface.appendChild(label);
+  }
+  return label;
+}
+
+function hideMapMeasureLabel() {
+  const label = mapMeasureLabelElement();
+  if (label) {
+    label.hidden = true;
+    label.textContent = "";
+  }
+}
+
+function renderMapMeasureLabel(label, x, y) {
+  const element = mapMeasureLabelElement();
+  if (!element) return;
+  const widthPx = 248;
+  const heightPx = 52;
+  const xPercent = Math.max(0, Math.min(100, (Number(x) / MAP_SIZE) * 100));
+  const yPercent = Math.max(0, Math.min(100, (Number(y) / MAP_SIZE) * 100));
+  element.hidden = false;
+  element.style.left = `clamp(8px, ${xPercent}%, calc(100% - ${widthPx + 8}px))`;
+  element.style.top = `clamp(8px, ${yPercent}%, calc(100% - ${heightPx + 8}px))`;
+  element.innerHTML = `
+    <strong>${escapeHtml(label.primary)}</strong>
+    <span>${escapeHtml(label.secondary)}</span>
+  `;
+}
+
 function renderMapMeasure() {
   const layer = mapMeasureLayer();
   if (!layer) return;
   if (!mapMeasurePreview || !mapMeasurePreview.start || !mapMeasurePreview.end) {
     layer.innerHTML = "";
+    hideMapMeasureLabel();
     return;
   }
 
@@ -4128,17 +4166,16 @@ function renderMapMeasure() {
   const pixels = pointDistance(start, end);
   if (pixels < 2) {
     layer.innerHTML = "";
+    hideMapMeasureLabel();
     return;
   }
 
   const shape = currentMapMeasureShape();
   const label = mapMeasureLabel(start, end);
-  const midX = shape === "circle" ? end.x : (start.x + end.x) / 2;
-  const midY = shape === "circle" ? end.y : (start.y + end.y) / 2;
-  const labelWidth = Math.max(190, Math.min(430, (Math.max(label.primary.length, label.secondary.length) * 7.4) + 26));
-  const labelHeight = 42;
-  const labelX = Math.max(6, Math.min(MAP_SIZE - labelWidth - 6, midX + 12));
-  const labelY = Math.max(6, Math.min(MAP_SIZE - labelHeight - 6, midY - labelHeight - 12));
+  const anchorX = shape === "circle" ? end.x : (start.x + end.x) / 2;
+  const anchorY = shape === "circle" ? end.y : (start.y + end.y) / 2;
+  const labelX = Math.max(6, Math.min(MAP_SIZE - 6, anchorX + 12));
+  const labelY = Math.max(6, Math.min(MAP_SIZE - 6, anchorY - 56));
   const circleMarkup = shape === "circle" ? `
       <circle class="map-measure-radius-circle map-measure-radius-circle-shadow" cx="${start.x}" cy="${start.y}" r="${pixels}"></circle>
       <circle class="map-measure-radius-circle" cx="${start.x}" cy="${start.y}" r="${pixels}"></circle>` : "";
@@ -4150,18 +4187,15 @@ function renderMapMeasure() {
       <line class="map-measure-line" x1="${start.x}" y1="${start.y}" x2="${end.x}" y2="${end.y}"></line>
       <circle class="map-measure-endpoint map-measure-centerpoint" cx="${start.x}" cy="${start.y}" r="7"></circle>
       <circle class="map-measure-endpoint" cx="${end.x}" cy="${end.y}" r="7"></circle>
-      <g class="map-measure-label" transform="translate(${labelX} ${labelY})">
-        <rect width="${labelWidth}" height="${labelHeight}" rx="8" ry="8"></rect>
-        <text x="12" y="17">${escapeHtml(label.primary)}</text>
-        <text x="12" y="33" class="map-measure-label-secondary">${escapeHtml(label.secondary)}</text>
-      </g>
     </g>
   `;
+  renderMapMeasureLabel(label, labelX, labelY);
 }
 
 function clearMapMeasurePreview() {
   mapMeasurePreview = null;
   mapMeasureState = null;
+  hideMapMeasureLabel();
   renderMapMeasure();
 }
 

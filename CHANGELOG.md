@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.4.42
+- Changed the map measuring readout from tiny SVG text to a fixed-size HTML label.
+- Shortened the ruler text so the distance, feet, miles, and travel mode remain readable on the map.
+- Updated cache-busting query strings for the script and stylesheet.
+- Updated the footer version number.
+
+## v2.4.41
+- Added cache-busting version query strings to the app stylesheet and script references.
+- This forces browsers and GitHub Pages deployments to load the current JavaScript after an update instead of reusing a stale cached script.
+- This should prevent newly added controls, such as the map measuring tool, from appearing without their click handlers.
+- Updated the footer version number.
+
 ## v2.4.40
 - Added a ruler shape option to the map measuring tool.
 - The measuring tool can now draw either a straight line or a circle using the clicked start point as the centre and the dragged distance as the radius.

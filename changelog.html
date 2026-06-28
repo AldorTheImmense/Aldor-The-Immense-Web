@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense - Changelog</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2.4.42">
 </head>
 <body class="changelog-page">
   <header class="app-header">
@@ -26,6 +26,24 @@
   <main>
     <article class="changelog-card">
       <h1>Changelog</h1>
+
+      <h2>v2.4.42</h2>
+      <ul>
+        <li>Changed the map measuring readout from tiny SVG text to a fixed-size HTML label.</li>
+        <li>Shortened the ruler text so the distance, feet, miles, and travel mode remain readable on the map.</li>
+        <li>Updated cache-busting query strings for the script and stylesheet.</li>
+        <li>Updated the footer version number.</li>
+      </ul>
+
+
+      <h2>v2.4.41</h2>
+      <ul>
+        <li>Added cache-busting version query strings to the app stylesheet and script references.</li>
+        <li>This forces browsers and GitHub Pages deployments to load the current JavaScript after an update instead of reusing a stale cached script.</li>
+        <li>This should prevent newly added controls, such as the map measuring tool, from appearing without their click handlers.</li>
+        <li>Updated the footer version number.</li>
+      </ul>
+
 
       <h2>v2.4.40</h2>
       <ul>
@@ -626,7 +644,7 @@
   </main>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.4.40</span>
+    <span>Aldor The Immense v2.4.42</span>
     <span><a href="index.html">Back to app</a></span>
   </footer>
 </body>

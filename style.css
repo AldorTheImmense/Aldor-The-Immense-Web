@@ -2249,3 +2249,49 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
 .map-measure-centerpoint {
   stroke: var(--success);
 }
+
+
+/* Readable fixed-size measuring label */
+.map-measure-html-label {
+  position: absolute;
+  z-index: 7;
+  width: 248px;
+  max-width: calc(100% - 16px);
+  padding: 0.38rem 0.52rem;
+  border: 1px solid rgba(240, 210, 138, 0.88);
+  border-radius: 0.55rem;
+  background: rgba(8, 7, 10, 0.94);
+  color: #fff4d0;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.72), 0 0 10px rgba(240, 210, 138, 0.22);
+  pointer-events: none;
+  line-height: 1.22;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.map-measure-html-label[hidden] {
+  display: none;
+}
+
+.map-measure-html-label strong,
+.map-measure-html-label span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.map-measure-html-label strong {
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.map-measure-html-label span {
+  margin-top: 0.08rem;
+  color: #d8c998;
+  font-size: 0.74rem;
+  font-weight: 650;
+}
+
+.map-measure-label {
+  display: none;
+}
