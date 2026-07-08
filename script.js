@@ -395,17 +395,20 @@ const DEFAULT_DATA = {
     "Brooch of Shielding",
     "Broom of Flying",
     "Cap of Water Breathing",
+    "Champion's Weapon",
+    "Charm of Swarms",
     "Circlet of Blasting",
     "Cloak of Elvenkind",
     "Cloak of Protection",
     "Cloak of the Manta Ray",
     "Coiling Grasp Tattoo",
+    "Dazing Hammer",
     "Decanter of Endless Water",
     "Deck of Illusions",
     "Dragon Vessel",
+    "Dragon-Touched Focus",
     "Dragonhide Belt",
     "Dragon's Wrath Weapon",
-    "Dragon-Touched Focus",
     "Driftglobe",
     "Dust of Disappearance",
     "Dust of Dryness",
@@ -413,10 +416,12 @@ const DEFAULT_DATA = {
     "Eldritch Claw Tattoo",
     "Elemental Gem",
     "Emerald Pen",
+    "Everhot Stew Pot",
     "Eversmoking Bottle",
     "Eyes of Charming",
     "Eyes of Minute Seeing",
     "Eyes of the Eagle",
+    "Familiar Figurine",
     "Feywild Shard",
     "Figurine of Wondrous Power",
     "Gauntlets of Ogre Power",
@@ -428,6 +433,7 @@ const DEFAULT_DATA = {
     "Guardian Emblem",
     "Harkon's Bite",
     "Hat of Disguise",
+    "Hazewind Cape",
     "Headband of Intellect",
     "Helm of Comprehending Languages",
     "Helm of Telepathy",
@@ -446,12 +452,14 @@ const DEFAULT_DATA = {
     "Necklace of Adaptation",
     "Oil of Slipperiness",
     "Pearl of Power",
+    "Pendant of Prismatic Protection",
     "Periapt of Health",
     "Periapt of Wound Closure",
     "Philter of Love",
     "Pipes of Haunting",
     "Pipes of the Sewers",
     "Potion of Animal Friendship",
+    "Potion of Controlled Mutation",
     "Potion of Fire Breath",
     "Potion of Giant Strength",
     "Potion of Growth",
@@ -472,6 +480,7 @@ const DEFAULT_DATA = {
     "Rope of Climbing",
     "Saddle of the Cavalier",
     "Scaled Ornament",
+    "Scroll of Spell Power",
     "Sending Stones",
     "Sentinel Shield",
     "Shield, +1",
@@ -480,41 +489,52 @@ const DEFAULT_DATA = {
     "Staff of the Adder",
     "Staff of the Python",
     "Stone of Good Luck (Luckstone)",
+    "Swashbuckler's Boots",
     "Sword of Vengeance",
     "Trident of Fish Command",
     "Wand of Magic Detection",
     "Wand of Magic Missiles",
     "Wand of Secrets",
+    "Wand of the Precocious Apprentice",
     "Wand of the War Mage",
     "Wand of Web",
-    "Weapon, +1",
     "Weapon of Warning",
+    "Weapon, +1",
     "Wind Fan",
     "Winged Boots"
   ],
   "rareItems": [
+    "All-Purpose Tool",
     "Ammunition, +2",
     "Amulet of Health",
-    "All-Purpose Tool",
+    "Amulet of Incineration",
+    "Amulet of Primal Wisdom",
+    "Aqua Delerium",
+    "Aqua Expurgo",
     "Arcane Grimoire",
-    "Armor, +2",
     "Armor of Resistance",
     "Armor of Vulnerability",
+    "Armor, +2",
     "Arrow-Catching Shield",
     "Bag of Beans",
     "Bead of Force",
     "Belt of Dwarvenkind",
     "Belt of Giant Strength",
     "Berserker Axe",
+    "Blade of Retribution",
     "Boots of Levitation",
     "Boots of Speed",
+    "Bracers of Arc Lightning",
     "Bracers of Defense",
     "Brazier of Commanding Fire Elementals",
     "Cape of the Mountebank",
     "Censer of Controlling Air Elementals",
     "Chime of Opening",
+    "Circlet of Valor",
     "Cloak of Displacement",
     "Cloak of the Bat",
+    "Cold Snap Circlet",
+    "Crest of the Sacred Flame",
     "Cube of Force",
     "Daern's Instant Fortress",
     "Dagger of Venom",
@@ -522,26 +542,35 @@ const DEFAULT_DATA = {
     "Dimensional Shackles",
     "Dragon Vessel",
     "Dragon Wing Bow",
+    "Dragon-Touched Focus",
     "Dragonhide Belt",
     "Dragon's Wrath Weapon",
-    "Dragon-Touched Focus",
     "Duplicitous Manuscript",
+    "Electric Charge Ring",
+    "Elemental Essence Shard",
     "Elixir of Health",
     "Elven Chain",
-    "Elemental Essence Shard",
     "Far Realm Shard",
     "Figurine of Wondrous Power",
     "Flame Tongue",
+    "Fractal Key",
+    "Frozen Armor",
     "Gem of Seeing",
+    "Giant Femur Club",
     "Giant Slayer",
     "Glamoured Studded Leather",
+    "Gloves of Ratling Agility",
     "Gulthias Staff",
+    "Hag-Stitched Troll Leather Armor",
+    "Heart String Harp",
     "Heart Weaver's Primer",
+    "Helm of Burning Rage",
     "Helm of Teleportation",
     "Heward's Handy Haversack",
     "Horn of Blasting",
     "Horn of Valhalla",
     "Horseshoes of Speed",
+    "Injector's Crossbow",
     "Instrument of the Bards",
     "Ioun Stone",
     "Iron Bands of Bilarro",
@@ -550,13 +579,19 @@ const DEFAULT_DATA = {
     "Mace of Disruption",
     "Mace of Smiting",
     "Mace of Terror",
+    "Mantle of Otherworldly Charisma",
     "Mantle of Spell Resistance",
+    "Manual of Occult Anatomy +1",
+    "Mask of Monstrous Forms",
     "Mind Blade",
     "Mind Lash",
+    "Monster Hunter's Weapon +1",
     "Moon Sickle",
     "Necklace of Fireballs",
     "Necklace of Prayer Beads",
+    "Necromancer's Armor",
     "Oil of Etherealness",
+    "Pelt of the Pack Lord",
     "Periapt of Proof against Poison",
     "Planecaller's Codex",
     "Portable Hole",
@@ -570,6 +605,9 @@ const DEFAULT_DATA = {
     "Potion of Mind Reading",
     "Protective Verses",
     "Quaal's Feather Token",
+    "Rat Tooth Dagger",
+    "Reflector Shield",
+    "Retracer Boots",
     "Reveler's Concertina",
     "Rhythm Maker's Drum",
     "Ring of Animal Influence",
@@ -585,10 +623,11 @@ const DEFAULT_DATA = {
     "Rod of Rulership",
     "Rod of the Pact Keeper, +2",
     "Rope of Entanglement",
+    "Scythed Arm Blades",
     "Shadowfell Brand Tattoo",
     "Shadowfell Shard",
-    "Shield, +2",
     "Shield of Missile Attraction",
+    "Shield, +2",
     "Staff of Charming",
     "Staff of Healing",
     "Staff of Swarming Insects",
@@ -598,12 +637,16 @@ const DEFAULT_DATA = {
     "Sun Blade",
     "Sword of Life Stealing",
     "Sword of Wounding",
+    "Talon Gloves",
     "Tentacle Rod",
+    "Tentacle Whip",
+    "Trollblood Potion",
     "Vicious Weapon",
     "Wand of Binding",
     "Wand of Enemy Detection",
     "Wand of Fear",
     "Wand of Fireballs",
+    "Wand of Jinxes",
     "Wand of Lightning Bolts",
     "Wand of Paralysis",
     "Wand of the War Mage, +2",
@@ -2215,7 +2258,7 @@ const STORAGE_KEYS = {
   mapRouteSlots: "aldor.mapRouteSlots.v1"
 };
 
-const APP_VERSION = "2.4.42";
+const APP_VERSION = "2.4.43";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -2604,6 +2647,19 @@ function loadShop() {
   state.rareShopItem = clone(source.rareShopItem || []);
 }
 
+function mergeDefaultInventoryItems(savedItems, defaultItems) {
+  const merged = clone(arrayOrFallback(savedItems, []));
+  const seen = new Set(merged.map((item) => String(item).toLowerCase()));
+  arrayOrFallback(defaultItems, []).forEach((item) => {
+    const key = String(item).toLowerCase();
+    if (!seen.has(key)) {
+      merged.push(item);
+      seen.add(key);
+    }
+  });
+  return merged;
+}
+
 function saveInventoryLists() {
   localStorage.setItem(STORAGE_KEYS.inventory, JSON.stringify({
     uncommonItems: state.uncommonItems,
@@ -2615,8 +2671,9 @@ function loadInventoryLists() {
   const saved = localStorage.getItem(STORAGE_KEYS.inventory);
   if (saved) {
     const parsed = JSON.parse(saved);
-    state.uncommonItems = clone(parsed.uncommonItems || DEFAULT_DATA.uncommonItems);
-    state.rareItems = clone(parsed.rareItems || DEFAULT_DATA.rareItems);
+    state.uncommonItems = mergeDefaultInventoryItems(parsed.uncommonItems, DEFAULT_DATA.uncommonItems);
+    state.rareItems = mergeDefaultInventoryItems(parsed.rareItems, DEFAULT_DATA.rareItems);
+    saveInventoryLists();
   } else {
     state.uncommonItems = clone(DEFAULT_DATA.uncommonItems);
     state.rareItems = clone(DEFAULT_DATA.rareItems);

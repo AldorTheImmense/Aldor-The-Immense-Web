@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.4.43
+- Added the Monsters of Drakkenheim uncommon magic items to Aldor's uncommon shop item pool.
+- Added the Monsters of Drakkenheim rare magic items to Aldor's rare shop item pool.
+- Existing saved custom inventory lists now merge in newly added default shop items instead of missing them until a manual reset.
+- Updated cache-busting query strings for the script and stylesheet.
+- Updated the footer version number.
+
 ## v2.4.42
 - Changed the map measuring readout from tiny SVG text to a fixed-size HTML label.
 - Shortened the ruler text so the distance, feet, miles, and travel mode remain readable on the map.
