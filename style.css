@@ -2303,3 +2303,23 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
 .faction-reputation-row[data-attitude="indifferent"] { --attitude-colour: #a56cff; }
 .faction-reputation-row[data-attitude="allies"] { --attitude-colour: #98df65; }
 .faction-reputation-row[data-attitude="champions"] { --attitude-colour: #f0d28a; }
+
+
+/* Route log hour context labels */
+.map-log-context {
+  display: inline-block;
+  margin: 0 0.2rem;
+  padding: 0.08rem 0.32rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  color: var(--accent-strong);
+  background: rgba(240, 210, 138, 0.08);
+  font-size: 0.82em;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+
+#mapEventInsertAfterField {
+  grid-column: 1 / -1;
+}

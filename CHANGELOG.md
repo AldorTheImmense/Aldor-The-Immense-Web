@@ -1,5 +1,28 @@
 # Changelog
 
+## v2.4.47
+- Changed map route hour markers to show the in-game time of day instead of shorthand in-Drakkenheim elapsed time.
+- Marker tooltips now show the Travel marker number and the elapsed time spent in Drakkenheim.
+- Fixed the confusing H10h10-style elapsed marker formatting by removing the H-prefix marker display from the map.
+- Updated route segment tooltips from Hour to Travel to match the route log terminology.
+- Updated cache-busting query strings for the script and stylesheet.
+- Updated the footer version number.
+
+## v2.4.46
+- Added an Insert event selector to the map Add Log Event window.
+- Map events can now be inserted before Travel 1, after any existing Travel marker, or at the current end of the plotted route.
+- Inserting an event in the middle of a route automatically shifts later day/city times in the route log and copied exploration log.
+- Updated cache-busting query strings for the script and stylesheet.
+- Updated the footer version number.
+
+## v2.4.45
+- Reworked the Drakkenheim route exploration log labels to separate adventuring day hours, in-city hours, and route travel markers.
+- Logged events now advance the displayed in-Drakkenheim elapsed hour, so later route entries no longer look like they ignored event time.
+- Updated the route summary wording to distinguish city travel time, logged event time in Drakkenheim, total in-Drakkenheim elapsed time, and total adventuring day time.
+- Updated the copied exploration log to include the same day/city/travel context labels.
+- Updated cache-busting query strings for the script and stylesheet.
+- Updated the footer version number.
+
 ## v2.4.44
 - Changed the Faction Reputation Tracker to use the Drakkenheim p23 reputation categories: Enemies, Adversaries, Indifferent, Allies, and Champions.
 - Updated the faction reputation descriptions to match the new relationship system.

@@ -2258,7 +2258,7 @@ const STORAGE_KEYS = {
   mapRouteSlots: "aldor.mapRouteSlots.v1"
 };
 
-const APP_VERSION = "2.4.44";
+const APP_VERSION = "2.4.47";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -3941,16 +3941,21 @@ function scaledMapMarkerValue(value, minimum = 0) {
 }
 
 function mapHourMarkerLabel(marker) {
-  return marker && marker.classes && String(marker.classes).includes("hour-marker") ? `H${marker.label}` : String(marker?.label ?? "");
+  return String(marker?.label ?? "");
 }
 
 function formatMapHourMarkerElapsedLabel(minutes) {
   const totalMinutes = Math.max(0, Math.round(Number(minutes) || 0));
   const hours = Math.floor(totalMinutes / 60);
   const remainder = totalMinutes % 60;
-  if (!remainder) return String(hours);
-  if (remainder === 30) return `${hours}.5`;
-  return `${hours}h${remainder}`;
+  if (!remainder) return `${hours}h`;
+  return `${hours}h ${remainder}m`;
+}
+
+function mapApproachMinutesBeforeRoute() {
+  return mapOutsideTrips
+    .filter((trip) => trip && trip.type !== "return")
+    .reduce((total, trip) => total + (Number(trip.minutes) || 0), 0);
 }
 
 function mapElapsedMinutesAtRouteHour(summary, hourSummaries = getMapHourSummaries()) {
@@ -3963,6 +3968,22 @@ function mapElapsedMinutesAtRouteHour(summary, hourSummaries = getMapHourSummari
     return afterHours < hourNumber ? total + mapEventDuration(event) : total;
   }, 0);
   return routeMinutes + eventMinutes;
+}
+
+function mapClockMinutesAtRouteHour(summary, hourSummaries = getMapHourSummaries()) {
+  return parseMapTimeToMinutes(currentMapStartTime())
+    + mapApproachMinutesBeforeRoute()
+    + mapElapsedMinutesAtRouteHour(summary, hourSummaries);
+}
+
+function formatMapMarkerClock(totalMinutes) {
+  const minutes = Math.max(0, Math.floor(Number(totalMinutes) || 0));
+  const day = Math.floor(minutes / 1440);
+  const withinDay = ((minutes % 1440) + 1440) % 1440;
+  const hours = Math.floor(withinDay / 60);
+  const mins = withinDay % 60;
+  const clock = `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
+  return day > 0 ? `D${day + 1} ${clock}` : clock;
 }
 
 function drawRoundedMapRect(ctx, x, y, width, height, radius) {
@@ -5078,11 +5099,12 @@ function getMapRouteMarkerData(routeVisibility = currentMapRouteVisibility()) {
     const endpoint = mapRoutePoints[endpointIndex];
     if (!endpoint) return;
     const elapsedMinutes = mapElapsedMinutesAtRouteHour(summary, hourSummaries);
-    const elapsedLabel = formatMapHourMarkerElapsedLabel(elapsedMinutes);
+    const clockMinutes = mapClockMinutesAtRouteHour(summary, hourSummaries);
+    const clockLabel = formatMapMarkerClock(clockMinutes);
     markerIndexes.push({
       pointIndex: endpointIndex,
-      label: elapsedLabel,
-      title: `${summary.complete ? "End" : "Current end"} of route hour ${summary.hourNumber} — ${formatHoursFromMinutes(elapsedMinutes)} in Drakkenheim`,
+      label: clockLabel,
+      title: `${summary.complete ? "End" : "Current end"} of Travel ${summary.hourNumber} — ${formatMapClock(clockMinutes)}; ${formatHoursFromMinutes(elapsedMinutes)} in Drakkenheim`,
       classes: `${summary.complete ? "complete" : "open-hour-end"} hour-marker`
     });
   });
@@ -5128,7 +5150,7 @@ function drawMapRouteExportMarker(ctx, marker) {
   ctx.strokeStyle = stroke;
   ctx.lineWidth = 4;
   if (isHourMarker) {
-    const width = Math.max(34, String(label).length * 10 + 14);
+    const width = Math.max(54, String(label).length * 9 + 16);
     const height = 24;
     drawRoundedMapRect(ctx, point.x - (width / 2), point.y - (height / 2), width, height, 7);
   } else {
@@ -5272,7 +5294,7 @@ function renderMapRoute() {
       const terrainClass = MAP_TERRAIN_LABELS[segment.terrain] ? `terrain-${segment.terrain}` : "terrain-mainRoad";
       const legClass = `leg-${leg}`;
       const segmentTimeMinutes = Math.round(mapSegmentHours(segment) * 60);
-      const tooltip = `Hour ${(Number(segment.hourIndex) || 0) + 1}: ${MAP_ROUTE_LEG_LABELS[leg]} — ${formatMiles(Number(segment.distanceMiles) || 0)} at ${MAP_PACE_LABELS[segment.pace] || "Normal"} pace, ${MAP_TERRAIN_LABELS[segment.terrain] || "Main roads"} (${segmentTimeMinutes} min)`;
+      const tooltip = `Travel ${(Number(segment.hourIndex) || 0) + 1}: ${MAP_ROUTE_LEG_LABELS[leg]} — ${formatMiles(Number(segment.distanceMiles) || 0)} at ${MAP_PACE_LABELS[segment.pace] || "Normal"} pace, ${MAP_TERRAIN_LABELS[segment.terrain] || "Main roads"} (${segmentTimeMinutes} min)`;
       return `<line class="map-route-segment ${paceClass} ${modeClass} ${terrainClass} ${legClass} ${hourComplete ? "complete" : "open-hour"}" data-map-tooltip="${escapeHtml(tooltip)}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"></line>`;
     }).join("");
 
@@ -5284,7 +5306,7 @@ function renderMapRoute() {
       const startRadius = scaledMapMarkerValue(12, 5);
       const startFontSize = scaledMapMarkerValue(20, 8);
       const hourFontSize = scaledMapMarkerValue(14, 7);
-      const hourWidth = scaledMapMarkerValue(Math.max(34, label.length * 10 + 14), 12);
+      const hourWidth = scaledMapMarkerValue(Math.max(54, label.length * 9 + 16), 18);
       const hourHeight = scaledMapMarkerValue(24, 9);
       const hourRadius = scaledMapMarkerValue(7, 3);
       return isHourMarker ? `
@@ -5359,6 +5381,23 @@ function renderMapRestSpots() {
   });
 }
 
+
+function formatMapOrdinalHourRange(elapsedMinutes, durationMinutes, label) {
+  const start = Math.max(0, Math.floor(Number(elapsedMinutes) || 0));
+  const duration = Math.max(0, Math.floor(Number(durationMinutes) || 0));
+  const endExclusive = start + duration;
+  const startHour = Math.floor(start / 60) + 1;
+  const endHour = Math.floor(Math.max(start, endExclusive - 1) / 60) + 1;
+  return startHour === endHour ? `${label} ${startHour}` : `${label}s ${startHour}–${endHour}`;
+}
+
+function formatMapLogContext(dayElapsedMinutes, cityElapsedMinutes, durationMinutes, includeCity = true, travelLabel = "") {
+  const parts = [formatMapOrdinalHourRange(dayElapsedMinutes, durationMinutes, "Day hr")];
+  if (includeCity) parts.push(formatMapOrdinalHourRange(cityElapsedMinutes, durationMinutes, "City hr"));
+  if (travelLabel) parts.push(travelLabel);
+  return parts.join(" / ");
+}
+
 function renderMapRouteSummary() {
   const summary = byId("mapRouteSummary");
   const segmentList = byId("mapRouteSegmentList");
@@ -5370,6 +5409,7 @@ function renderMapRouteSummary() {
   const cityMiles = hourSummaries.reduce((total, segment) => total + (Number(segment.distanceMiles) || 0), 0);
   const outsideMinutes = mapOutsideTrips.reduce((total, trip) => total + (Number(trip.minutes) || 0), 0);
   const eventMinutes = mapEvents.reduce((total, event) => total + mapEventDuration(event), 0);
+  const inDrakkenheimMinutes = cityMinutes + eventMinutes;
   const trackedMinutes = cityMinutes + outsideMinutes + eventMinutes;
   const startMinutes = parseMapTimeToMinutes(currentMapStartTime());
   const currentMinutes = startMinutes + trackedMinutes;
@@ -5385,12 +5425,13 @@ function renderMapRouteSummary() {
   } else {
     summary.classList.remove("empty-state");
     lines.push(`Day starts: ${formatMapClock(startMinutes)}.`);
-    if (cityHours || cityMiles) lines.push(`In-Drakkenheim travel: ${formatMiles(cityMiles)} over ${formatHoursFromMinutes(cityMinutes)} (${cityHours} route hour marker${cityHours === 1 ? "" : "s"}).`);
-    if (openHour && openHour.remainingMiles > 0.005) lines.push(`Current hour is incomplete: ${Math.round(openHour.usedHours * 60)} minutes used, ${Math.round(openHour.remainingHours * 60)} minutes remaining. Double-click a point to end this hour early.`);
-    if (eventMinutes) lines.push(`Logged event time: ${formatHoursFromMinutes(eventMinutes)}.`);
-    lines.push(`Tracked time: ${formatHoursFromMinutes(trackedMinutes)}.`);
+    if (cityHours || cityMiles) lines.push(`City travel: ${formatMiles(cityMiles)} over ${formatHoursFromMinutes(cityMinutes)} (${cityHours} travel hour marker${cityHours === 1 ? "" : "s"}).`);
+    if (eventMinutes) lines.push(`Logged event time in Drakkenheim: ${formatHoursFromMinutes(eventMinutes)}.`);
+    if (cityHours || eventMinutes) lines.push(`In-Drakkenheim elapsed: ${formatHoursFromMinutes(inDrakkenheimMinutes)}.`);
+    if (openHour && openHour.remainingMiles > 0.005) lines.push(`Current travel hour is incomplete: ${Math.round(openHour.usedHours * 60)} minutes used, ${Math.round(openHour.remainingHours * 60)} minutes remaining. Double-click a point to end this hour early.`);
+    lines.push(`Adventuring day tracked time: ${formatHoursFromMinutes(trackedMinutes)}.`);
     lines.push(`Current time: ${formatMapClock(currentMinutes)}.`);
-    lines.push(`Random encounter checks: ${cityHours} city exploration hour${cityHours === 1 ? "" : "s"}.`);
+    lines.push(`Random encounter checks: ${cityHours} city travel hour${cityHours === 1 ? "" : "s"} marked on the route.`);
     if (fastHours) lines.push(`Fast pace: ${fastHours} hour${fastHours === 1 ? "" : "s"}; each character rolls twice and takes the lower result for encounter checks.`);
     if (sewerHours) lines.push(`Sewers: ${sewerHours} hour${sewerHours === 1 ? "" : "s"}; after each sewer hour, characters make a DC 10 Constitution save or gain one contamination level.`);
     if (flyingHours) lines.push(`Flying: ${flyingHours} hour${flyingHours === 1 ? "" : "s"}; hostile gargoyles or harpies may notice at the DM's discretion.`);
@@ -5402,20 +5443,25 @@ function renderMapRouteSummary() {
 
   const logItems = [];
   let cursorMinutes = startMinutes;
+  let cityCursorMinutes = 0;
 
   mapOutsideTrips.filter((trip) => trip.type !== "return").forEach((trip) => {
     const haven = MAP_SAFE_HAVENS[trip.haven];
     if (!haven) return;
+    const duration = Number(trip.minutes) || 0;
+    const dayContext = formatMapOrdinalHourRange(cursorMinutes - startMinutes, duration, "Day hr");
     const label = `Approach from ${haven.label}`;
-    logItems.push(`<li><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, trip.minutes))}</strong> — ${escapeHtml(label)} <span class="muted">(${formatHoursFromMinutes(trip.minutes)})</span></li>`);
-    cursorMinutes += Number(trip.minutes) || 0;
+    logItems.push(`<li><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, duration))}</strong> <span class="map-log-context">${escapeHtml(dayContext)}</span> — ${escapeHtml(label)} <span class="muted">(${formatHoursFromMinutes(duration)})</span></li>`);
+    cursorMinutes += duration;
   });
 
   mapEvents.forEach((event, index) => {
     if (Number(event.afterHours) <= 0) {
       const duration = mapEventDuration(event);
-      logItems.push(`<li><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, duration))}</strong> — ${escapeHtml(buildMapEventLabel(event))} <span class="muted">(${formatHoursFromMinutes(duration)})</span> <button type="button" data-delete-map-event="${index}">Delete</button></li>`);
+      const context = formatMapLogContext(cursorMinutes - startMinutes, cityCursorMinutes, duration, true, "");
+      logItems.push(`<li><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, duration))}</strong> <span class="map-log-context">${escapeHtml(context)}</span> — ${escapeHtml(buildMapEventLabel(event))} <span class="muted">(${formatHoursFromMinutes(duration)})</span> <button type="button" data-delete-map-event="${index}">Delete</button></li>`);
       cursorMinutes += duration;
+      cityCursorMinutes += duration;
     }
   });
 
@@ -5433,14 +5479,19 @@ function renderMapRouteSummary() {
       : "";
     const segmentMinutes = mapHourSummaryMinutes(segment);
     const earlyCompletion = segment.complete && segmentMinutes < 60 ? ` <span class="muted">(ended early — ${segmentMinutes} min used)</span>` : "";
-    const completion = segment.complete ? earlyCompletion : ` <span class="muted">(in progress — ${Math.round(segment.remainingHours * 60)} min remaining in this hour)</span>`;
-    logItems.push(`<li><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, segmentMinutes))}</strong> — Hour ${segment.hourNumber}: ${legLabel}, ${modeLabel}, ${paceLabel}, ${terrainLabel}: ${formatMiles(Number(segment.distanceMiles) || 0)}${partBreakdown}${completion}</li>`);
+    const completion = segment.complete ? earlyCompletion : ` <span class="muted">(in progress — ${Math.round(segment.remainingHours * 60)} min remaining in this travel hour)</span>`;
+    const context = formatMapLogContext(cursorMinutes - startMinutes, cityCursorMinutes, segmentMinutes, true, `Travel ${segment.hourNumber}`);
+    logItems.push(`<li><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, segmentMinutes))}</strong> <span class="map-log-context">${escapeHtml(context)}</span> — ${legLabel}, ${modeLabel}, ${paceLabel}, ${terrainLabel}: ${formatMiles(Number(segment.distanceMiles) || 0)}${partBreakdown}${completion}</li>`);
     cursorMinutes += segmentMinutes;
+    cityCursorMinutes += segmentMinutes;
+
     mapEvents.forEach((event, index) => {
       if (Number(event.afterHours) === segment.hourNumber) {
         const duration = mapEventDuration(event);
-        logItems.push(`<li class="map-log-subitem"><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, duration))}</strong> — ${escapeHtml(buildMapEventLabel(event))} <span class="muted">(${formatHoursFromMinutes(duration)})</span> <button type="button" data-delete-map-event="${index}">Delete</button></li>`);
+        const eventContext = formatMapLogContext(cursorMinutes - startMinutes, cityCursorMinutes, duration, true, "");
+        logItems.push(`<li class="map-log-subitem"><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, duration))}</strong> <span class="map-log-context">${escapeHtml(eventContext)}</span> — ${escapeHtml(buildMapEventLabel(event))} <span class="muted">(${formatHoursFromMinutes(duration)})</span> <button type="button" data-delete-map-event="${index}">Delete</button></li>`);
         cursorMinutes += duration;
+        cityCursorMinutes += duration;
       }
     });
   });
@@ -5449,8 +5500,9 @@ function renderMapRouteSummary() {
     const haven = MAP_SAFE_HAVENS[trip.haven];
     if (!haven) return;
     const duration = Number(trip.minutes) || 0;
+    const dayContext = formatMapOrdinalHourRange(cursorMinutes - startMinutes, duration, "Day hr");
     const label = `Return to ${haven.label}`;
-    logItems.push(`<li><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, duration))}</strong> — ${escapeHtml(label)} <span class="muted">(${formatHoursFromMinutes(duration)})</span></li>`);
+    logItems.push(`<li><strong>${escapeHtml(formatMapTimeRange(cursorMinutes, duration))}</strong> <span class="map-log-context">${escapeHtml(dayContext)}</span> — ${escapeHtml(label)} <span class="muted">(${formatHoursFromMinutes(duration)})</span></li>`);
     cursorMinutes += duration;
   });
 
@@ -5503,38 +5555,49 @@ function notesExplorationHourLabel(segment) {
 function buildMapExplorationLogText() {
   const hourSummaries = getMapHourSummaries();
   const lines = ["TRAVEL TODAY"];
-  let cursorMinutes = parseMapTimeToMinutes(currentMapStartTime());
+  const startMinutes = parseMapTimeToMinutes(currentMapStartTime());
+  let cursorMinutes = startMinutes;
+  let cityCursorMinutes = 0;
 
   mapOutsideTrips.filter((trip) => trip.type !== "return").forEach((trip) => {
     const duration = Number(trip.minutes) || 0;
-    lines.push(`${formatMapNotesTimeRange(cursorMinutes, duration)} - ${notesSafeHavenTravelLabel(trip)}`);
+    const context = formatMapOrdinalHourRange(cursorMinutes - startMinutes, duration, "DAY HR");
+    lines.push(`${formatMapNotesTimeRange(cursorMinutes, duration)} - ${context} - ${notesSafeHavenTravelLabel(trip)}`);
     cursorMinutes += duration;
   });
 
   mapEvents.forEach((event) => {
     if (Number(event.afterHours) <= 0) {
       const duration = mapEventDuration(event);
-      lines.push(`${formatMapNotesTimeRange(cursorMinutes, duration)} - ${String(buildMapEventLabel(event)).toUpperCase()}`);
+      const context = formatMapLogContext(cursorMinutes - startMinutes, cityCursorMinutes, duration, true, "").toUpperCase();
+      lines.push(`${formatMapNotesTimeRange(cursorMinutes, duration)} - ${context} - ${String(buildMapEventLabel(event)).toUpperCase()}`);
       cursorMinutes += duration;
+      cityCursorMinutes += duration;
     }
   });
 
   hourSummaries.forEach((segment) => {
     const segmentMinutes = mapHourSummaryMinutes(segment);
-    lines.push(`${formatMapNotesTimeRange(cursorMinutes, segmentMinutes)} - ${notesExplorationHourLabel(segment)}`);
+    const context = formatMapLogContext(cursorMinutes - startMinutes, cityCursorMinutes, segmentMinutes, true, `TRAVEL ${segment.hourNumber}`).toUpperCase();
+    lines.push(`${formatMapNotesTimeRange(cursorMinutes, segmentMinutes)} - ${context} - ${notesExplorationHourLabel(segment)}`);
     cursorMinutes += segmentMinutes;
+    cityCursorMinutes += segmentMinutes;
+
     mapEvents.forEach((event) => {
       if (Number(event.afterHours) === segment.hourNumber) {
         const duration = mapEventDuration(event);
-        lines.push(`  ${formatMapNotesTimeRange(cursorMinutes, duration)} - ${String(buildMapEventLabel(event)).toUpperCase()}`);
+        const eventContext = formatMapLogContext(cursorMinutes - startMinutes, cityCursorMinutes, duration, true, "").toUpperCase();
+        lines.push(`  ${formatMapNotesTimeRange(cursorMinutes, duration)} - ${eventContext} - ${String(buildMapEventLabel(event)).toUpperCase()}`);
         cursorMinutes += duration;
+        cityCursorMinutes += duration;
       }
     });
   });
 
   mapOutsideTrips.filter((trip) => trip.type === "return").forEach((trip) => {
     const duration = Number(trip.minutes) || 0;
-    lines.push(`${formatMapNotesTimeRange(cursorMinutes, duration)} - ${notesSafeHavenTravelLabel(trip)}`);
+    const context = formatMapOrdinalHourRange(cursorMinutes - startMinutes, duration, "DAY HR");
+    lines.push(`${formatMapNotesTimeRange(cursorMinutes, duration)} - ${context} - ${notesSafeHavenTravelLabel(trip)}`);
     cursorMinutes += duration;
   });
 
@@ -5613,6 +5676,7 @@ function renderMapTools() {
   const customField = byId("mapEventCustomField");
   const eventType = byId("mapEventType");
   if (customField && eventType) customField.hidden = eventType.value !== "custom" && eventType.value !== "searchObjective";
+  renderMapEventInsertOptions();
   renderMapRoute();
   renderOutsideTravel();
   renderMapRestSpots();
@@ -5693,6 +5757,42 @@ function clearOutsideTravel() {
   playUiSound("reset");
 }
 
+function mapEventInsertOptionLabel(afterHours, hourSummaries = getMapHourSummaries()) {
+  const hourCount = hourSummaries.length;
+  const numeric = Math.max(0, Math.min(hourCount, Math.floor(Number(afterHours) || 0)));
+  if (numeric <= 0) return "Before Travel 1 / after approach";
+  if (numeric >= hourCount) return hourCount ? `At current end / after Travel ${hourCount}` : "At current end";
+  return `After Travel ${numeric}`;
+}
+
+function renderMapEventInsertOptions() {
+  const select = byId("mapEventInsertAfter");
+  if (!select) return;
+
+  const hourSummaries = getMapHourSummaries();
+  const hourCount = hourSummaries.length;
+  const previousValue = select.value;
+  const selectedValue = previousValue === "end" || previousValue === "" ? "end" : String(Math.max(0, Math.min(hourCount, Math.floor(Number(previousValue) || 0))));
+
+  const options = [];
+  options.push(`<option value="end">${escapeHtml(hourCount ? `At current end / after Travel ${hourCount}` : "At current end")}</option>`);
+  options.push(`<option value="0">Before Travel 1 / after approach</option>`);
+  hourSummaries.forEach((summary) => {
+    options.push(`<option value="${summary.hourNumber}">After Travel ${summary.hourNumber}</option>`);
+  });
+
+  select.innerHTML = options.join("");
+  const validValues = new Set(["end", "0", ...hourSummaries.map((summary) => String(summary.hourNumber))]);
+  select.value = validValues.has(selectedValue) ? selectedValue : "end";
+}
+
+function selectedMapEventAfterHours() {
+  const select = byId("mapEventInsertAfter");
+  const hourCount = getMapHourSummaries().length;
+  if (!select || select.value === "end" || select.value === "") return hourCount;
+  return Math.max(0, Math.min(hourCount, Math.floor(Number(select.value) || 0)));
+}
+
 function addMapEvent() {
   const select = byId("mapEventType");
   const customInput = byId("mapEventCustomText");
@@ -5711,8 +5811,8 @@ function addMapEvent() {
   }
   if (type === "searchObjective") label = `${MAP_EVENT_TYPES[type]} — ${customText}`;
   else if (type === "custom") label = customText;
-  const hourCount = getMapHourSummaries().length;
-  mapEvents.push({ type, label, afterHours: hourCount, durationMinutes });
+  const afterHours = selectedMapEventAfterHours();
+  mapEvents.push({ type, label, afterHours, durationMinutes });
   if (customInput) customInput.value = "";
   if (durationInput) durationInput.value = "60";
   closeMapEventWindow();
@@ -6528,6 +6628,7 @@ function closeMapHelpWindow() {
 }
 
 function openMapEventWindow() {
+  renderMapEventInsertOptions();
   showPositionedWindow("mapEventWindow", { top: "156px", right: "34px", left: "auto" }, renderMapTools);
 }
 

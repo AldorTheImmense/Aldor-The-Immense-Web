@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.4.44">
+  <link rel="stylesheet" href="style.css?v=2.4.47">
 </head>
 <body>
   <header class="app-header">
@@ -293,7 +293,11 @@
           <span>Duration (minutes)</span>
           <input id="mapEventCustomDuration" type="number" min="1" step="5" value="60" inputmode="numeric">
         </label>
-        <p class="inline-note">Default is 60 minutes. Change it for any event when the activity takes more or less time.</p>
+        <label class="field-stack" id="mapEventInsertAfterField">
+          <span>Insert event</span>
+          <select id="mapEventInsertAfter"></select>
+        </label>
+        <p class="inline-note">Default is 60 minutes. Use Insert event to place this in the middle of an already plotted route; later times adjust automatically.</p>
         <button id="addMapEvent" type="button">Add Event</button>
       </div>
     </div>
@@ -785,7 +789,7 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.4.44</span>
+    <span>Aldor The Immense v2.4.47</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
@@ -853,6 +857,6 @@
 
 
 
-  <script src="script.js?v=2.4.44"></script>
+  <script src="script.js?v=2.4.47"></script>
 </body>
 </html>

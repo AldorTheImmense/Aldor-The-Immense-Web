@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense - Changelog</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.4.44">
+  <link rel="stylesheet" href="style.css?v=2.4.47">
 </head>
 <body class="changelog-page">
   <header class="app-header">
@@ -26,6 +26,38 @@
   <main>
     <article class="changelog-card">
       <h1>Changelog</h1>
+
+      <h2>v2.4.47</h2>
+      <ul>
+        <li>Changed map route hour markers to show the in-game time of day instead of shorthand in-Drakkenheim elapsed time.</li>
+        <li>Marker tooltips now show the Travel marker number and the elapsed time spent in Drakkenheim.</li>
+        <li>Fixed the confusing H10h10-style elapsed marker formatting by removing the H-prefix marker display from the map.</li>
+        <li>Updated route segment tooltips from Hour to Travel to match the route log terminology.</li>
+        <li>Updated cache-busting query strings for the script and stylesheet.</li>
+        <li>Updated the footer version number.</li>
+      </ul>
+
+
+      <h2>v2.4.46</h2>
+      <ul>
+        <li>Added an Insert event selector to the map Add Log Event window.</li>
+        <li>Map events can now be inserted before Travel 1, after any existing Travel marker, or at the current end of the plotted route.</li>
+        <li>Inserting an event in the middle of a route automatically shifts later day/city times in the route log and copied exploration log.</li>
+        <li>Updated cache-busting query strings for the script and stylesheet.</li>
+        <li>Updated the footer version number.</li>
+      </ul>
+
+
+      <h2>v2.4.45</h2>
+      <ul>
+        <li>Reworked the Drakkenheim route exploration log labels to separate adventuring day hours, in-city hours, and route travel markers.</li>
+        <li>Logged events now advance the displayed in-Drakkenheim elapsed hour, so later route entries no longer look like they ignored event time.</li>
+        <li>Updated the route summary wording to distinguish city travel time, logged event time in Drakkenheim, total in-Drakkenheim elapsed time, and total adventuring day time.</li>
+        <li>Updated the copied exploration log to include the same day/city/travel context labels.</li>
+        <li>Updated cache-busting query strings for the script and stylesheet.</li>
+        <li>Updated the footer version number.</li>
+      </ul>
+
 
       <h2>v2.4.44</h2>
       <ul>
@@ -664,7 +696,7 @@
   </main>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.4.44</span>
+    <span>Aldor The Immense v2.4.47</span>
     <span><a href="index.html">Back to app</a></span>
   </footer>
 </body>
