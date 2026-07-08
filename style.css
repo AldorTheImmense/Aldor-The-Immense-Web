@@ -2295,3 +2295,11 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
 .map-measure-label {
   display: none;
 }
+
+
+/* Drakkenheim p23 faction reputation states */
+.faction-reputation-row[data-attitude="enemies"] { --attitude-colour: #b42336; }
+.faction-reputation-row[data-attitude="adversaries"] { --attitude-colour: #e06f4f; }
+.faction-reputation-row[data-attitude="indifferent"] { --attitude-colour: #a56cff; }
+.faction-reputation-row[data-attitude="allies"] { --attitude-colour: #98df65; }
+.faction-reputation-row[data-attitude="champions"] { --attitude-colour: #f0d28a; }

@@ -2258,7 +2258,7 @@ const STORAGE_KEYS = {
   mapRouteSlots: "aldor.mapRouteSlots.v1"
 };
 
-const APP_VERSION = "2.4.43";
+const APP_VERSION = "2.4.44";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -2329,13 +2329,11 @@ const FACTION_TRACKER_DATA = [
 ];
 
 const FACTION_ATTITUDE_MILESTONES = [
-  { max: -10, label: "Hunted / kill-on-sight", detail: "The faction hunts the party and may attack on sight. Negotiation is effectively unavailable without extraordinary leverage." },
-  { max: -6, label: "Enemy", detail: "The faction treats the party as active enemies. They may attack, sabotage, expose, or refuse all aid." },
-  { max: -3, label: "Unfriendly", detail: "The faction distrusts and obstructs the party. Cooperation requires major concessions, pressure, or proof." },
-  { max: 2, label: "Neutral", detail: "The faction is transactional. Jobs, trade, and information are possible at normal terms." },
-  { max: 5, label: "Friendly", detail: "The faction is favourably disposed toward the party and may offer fair terms, leads, and limited support." },
-  { max: 9, label: "Ally", detail: "The faction actively cooperates with the party and may spend resources or political capital on their behalf." },
-  { max: 10, label: "Champion / trusted agent", detail: "The faction treats the party as champions or trusted agents with priority access, sensitive information, and strong backing." }
+  { max: -10, label: "Enemies", detail: "The characters have betrayed the faction's trust, murdered its members, or are working against its most important goals in a profound way. The faction actively schemes against them and sends deadly strike teams after them." },
+  { max: -3, label: "Adversaries", detail: "There is no trust here. The party has shown disregard for the faction's objectives, and minor skirmishes may have broken out with low-level members. The faction may send strike teams to impede, capture, de-escalate, or drive the party away, but not usually to kill them." },
+  { max: 2, label: "Indifferent", detail: "The faction is neutral, or the party is not yet known to them. It may hire the party on a freelance basis, especially for arms-length work, but offers no resources, support, or information beyond what the mission requires." },
+  { max: 9, label: "Allies", detail: "The party and the faction are working together to advance mutual goals, though some minor differences remain. The characters have completed a few missions and proven reliable, so the faction rewards them with boons after these missions." },
+  { max: 10, label: "Champions", detail: "The characters have demonstrated themselves as staunch supporters of the faction's cause, completed multiple missions, and acted directly against another faction. The faction offers complete access to its resources, support, and information, including faction boons." }
 ];
 
 const DRAKKENHEIM_RUMOURS = [
@@ -3274,7 +3272,7 @@ function renderFactionReputations() {
 
     const scale = document.createElement("div");
     scale.className = "faction-scale";
-    scale.innerHTML = "<span>Hunted</span><span>Neutral</span><span>Champion</span>";
+    scale.innerHTML = "<span>Enemies</span><span>Indifferent</span><span>Champions</span>";
 
     const detail = document.createElement("p");
     detail.className = "faction-attitude-detail";

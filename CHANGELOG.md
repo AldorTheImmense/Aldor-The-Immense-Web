@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.4.44
+- Changed the Faction Reputation Tracker to use the Drakkenheim p23 reputation categories: Enemies, Adversaries, Indifferent, Allies, and Champions.
+- Updated the faction reputation descriptions to match the new relationship system.
+- Updated the reputation slider scale labels and attitude colours.
+- Updated cache-busting query strings for the script and stylesheet.
+- Updated the footer version number.
+
 ## v2.4.43
 - Added the Monsters of Drakkenheim uncommon magic items to Aldor's uncommon shop item pool.
 - Added the Monsters of Drakkenheim rare magic items to Aldor's rare shop item pool.
