@@ -2323,3 +2323,63 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
 #mapEventInsertAfterField {
   grid-column: 1 / -1;
 }
+
+
+/* Faction conflict clock completion result */
+.faction-clock-fields {
+  display: grid;
+  gap: 0.48rem;
+  margin: 0.35rem 0 0.55rem;
+}
+
+.faction-clock-field {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.faction-clock-field-label {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.faction-clock-goal-label,
+.faction-clock-result-label {
+  display: block;
+  max-width: 100%;
+  min-height: 1.85rem;
+  padding: 0.34rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.55rem;
+  color: var(--text);
+  background: rgba(162, 95, 255, 0.10);
+  line-height: 1.35;
+  cursor: text;
+}
+
+.faction-clock-result-label {
+  background: rgba(240, 210, 138, 0.10);
+}
+
+.faction-clock-row[data-clock-complete="true"] .faction-clock-result-label {
+  border-color: var(--accent-strong);
+  background: rgba(240, 210, 138, 0.18);
+  box-shadow: 0 0 12px rgba(240, 210, 138, 0.14);
+}
+
+.faction-clock-goal-label:hover,
+.faction-clock-goal-label:focus,
+.faction-clock-result-label:hover,
+.faction-clock-result-label:focus {
+  border-color: var(--haze);
+  background: rgba(162, 95, 255, 0.18);
+  outline: none;
+}
+
+.faction-clock-row[data-clock-complete="true"] .faction-clock-result-label:hover,
+.faction-clock-row[data-clock-complete="true"] .faction-clock-result-label:focus {
+  border-color: var(--accent-strong);
+  background: rgba(240, 210, 138, 0.22);
+}

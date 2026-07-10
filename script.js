@@ -2253,12 +2253,13 @@ const STORAGE_KEYS = {
   factionReputation: "aldor.factionReputation.v1",
   factionClocks: "aldor.factionClocks.v1",
   factionClockGoals: "aldor.factionClockGoals.v1",
+  factionClockResults: "aldor.factionClockResults.v1",
   factionClockSizes: "aldor.factionClockSizes.v1",
   mapTools: "aldor.mapTools.v1",
   mapRouteSlots: "aldor.mapRouteSlots.v1"
 };
 
-const APP_VERSION = "2.4.47";
+const APP_VERSION = "2.4.48";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -2506,6 +2507,7 @@ let pinnedConditions = [];
 let factionReputation = {};
 let factionClocks = {};
 let factionClockGoals = {};
+let factionClockResults = {};
 let factionClockSizes = {};
 let mapRoutePoints = [];
 let mapRouteSegments = [];
@@ -2725,6 +2727,7 @@ function buildSavePayload() {
       reputation: factionReputation,
       clocks: factionClocks,
       clockGoals: factionClockGoals,
+      clockResults: factionClockResults,
       clockSizes: factionClockSizes
     },
     mapTools: {
@@ -2795,6 +2798,7 @@ function applySavePayload(payload) {
   factionReputation = { ...defaultFactionReputation(), ...(factionTools.reputation || {}) };
   factionClocks = { ...defaultFactionClocks(), ...(factionTools.clocks || {}) };
   factionClockGoals = { ...defaultFactionClockGoals(), ...(factionTools.clockGoals || {}) };
+  factionClockResults = { ...defaultFactionClockResults(), ...(factionTools.clockResults || factionTools.clockConsequences || {}) };
   factionClockSizes = { ...defaultFactionClockSizes(), ...(factionTools.clockSizes || {}) };
   normaliseFactionToolsState();
 
@@ -3172,6 +3176,10 @@ function defaultFactionClockGoals() {
   return Object.fromEntries(FACTION_TRACKER_DATA.map((faction) => [faction.key, ""]));
 }
 
+function defaultFactionClockResults() {
+  return Object.fromEntries(FACTION_TRACKER_DATA.map((faction) => [faction.key, ""]));
+}
+
 function defaultFactionClockSizes() {
   return Object.fromEntries(FACTION_TRACKER_DATA.map((faction) => [faction.key, 6]));
 }
@@ -3191,6 +3199,7 @@ function normaliseFactionToolsState() {
     factionClockSizes[faction.key] = clockSize;
     factionClocks[faction.key] = Math.max(0, Math.min(clockSize, Number(factionClocks[faction.key]) || 0));
     factionClockGoals[faction.key] = String(factionClockGoals[faction.key] || "");
+    factionClockResults[faction.key] = String(factionClockResults[faction.key] || "");
   });
 }
 
@@ -3198,6 +3207,7 @@ function saveFactionTools() {
   localStorage.setItem(STORAGE_KEYS.factionReputation, JSON.stringify(factionReputation));
   localStorage.setItem(STORAGE_KEYS.factionClocks, JSON.stringify(factionClocks));
   localStorage.setItem(STORAGE_KEYS.factionClockGoals, JSON.stringify(factionClockGoals));
+  localStorage.setItem(STORAGE_KEYS.factionClockResults, JSON.stringify(factionClockResults));
   localStorage.setItem(STORAGE_KEYS.factionClockSizes, JSON.stringify(factionClockSizes));
 }
 
@@ -3218,6 +3228,12 @@ function loadFactionTools() {
     factionClockGoals = { ...defaultFactionClockGoals(), ...JSON.parse(localStorage.getItem(STORAGE_KEYS.factionClockGoals) || "{}") };
   } catch {
     factionClockGoals = defaultFactionClockGoals();
+  }
+
+  try {
+    factionClockResults = { ...defaultFactionClockResults(), ...JSON.parse(localStorage.getItem(STORAGE_KEYS.factionClockResults) || "{}") };
+  } catch {
+    factionClockResults = defaultFactionClockResults();
   }
 
   try {
@@ -3298,9 +3314,12 @@ function renderFactionConflictClocks() {
   FACTION_TRACKER_DATA.forEach((faction) => {
     const size = factionClockSize(faction.key);
     const value = factionClocks[faction.key] ?? 0;
+    const isComplete = value >= size;
     const row = document.createElement("div");
     row.className = "faction-clock-row";
+    row.dataset.clockComplete = isComplete ? "true" : "false";
     const goalText = factionClockGoals[faction.key] || "Current conflict / goal";
+    const resultText = factionClockResults[faction.key] || "What happens when this clock fills?";
     row.innerHTML = `
       <div class="faction-row-heading faction-clock-heading">
         <strong>${faction.label}</strong>
@@ -3310,8 +3329,15 @@ function renderFactionConflictClocks() {
           </label>
         </div>
       </div>
-      <div class="faction-clock-goal-editor">
-        <div class="faction-clock-goal-label" data-clock-goal="${faction.key}" contenteditable="true" spellcheck="true" role="textbox" aria-label="${faction.label} current conflict or goal" title="Click to edit this faction goal">${escapeHtml(goalText)}</div>
+      <div class="faction-clock-fields">
+        <div class="faction-clock-field">
+          <span class="faction-clock-field-label">Current goal</span>
+          <div class="faction-clock-goal-label" data-clock-goal="${faction.key}" contenteditable="true" spellcheck="true" role="textbox" aria-label="${faction.label} current conflict or goal" title="Click to edit this faction goal">${escapeHtml(goalText)}</div>
+        </div>
+        <div class="faction-clock-field faction-clock-result-field">
+          <span class="faction-clock-field-label">${isComplete ? "Clock complete" : "If completed"}</span>
+          <div class="faction-clock-result-label" data-clock-result="${faction.key}" contenteditable="true" spellcheck="true" role="textbox" aria-label="${faction.label} clock completion result" title="Click to edit what happens when this clock fills">${escapeHtml(resultText)}</div>
+        </div>
       </div>
       <div class="clock-pips" style="--clock-pip-count: ${size};" aria-label="${faction.label} clock ${value} of ${size}">${clockPips(value, size)}</div>
       <div class="clock-actions">
@@ -3355,6 +3381,19 @@ function renderFactionConflictClocks() {
       saveFactionTools();
     });
   });
+
+  container.querySelectorAll("[data-clock-result]").forEach((input) => {
+    input.addEventListener("input", () => {
+      factionClockResults[input.dataset.clockResult] = input.textContent.trim();
+      saveFactionTools();
+    });
+    input.addEventListener("blur", () => {
+      const cleaned = input.textContent.trim();
+      factionClockResults[input.dataset.clockResult] = cleaned;
+      if (!cleaned) input.textContent = "What happens when this clock fills?";
+      saveFactionTools();
+    });
+  });
 }
 
 function advanceFactionClock(key) {
@@ -3377,6 +3416,9 @@ function resetFactionClock(key) {
   factionClocks[key] = 0;
   if (Object.prototype.hasOwnProperty.call(defaultFactionClockGoals(), key)) {
     factionClockGoals[key] = defaultFactionClockGoals()[key];
+  }
+  if (Object.prototype.hasOwnProperty.call(defaultFactionClockResults(), key)) {
+    factionClockResults[key] = defaultFactionClockResults()[key];
   }
   saveFactionTools();
   renderFactionConflictClocks();
@@ -3405,9 +3447,10 @@ function regressAllFactionClocks() {
 }
 
 function resetAllFactionClocks() {
-  if (!confirm("Reset all faction conflict clocks and goals?")) return;
+  if (!confirm("Reset all faction conflict clocks, goals, and completion results?")) return;
   factionClocks = defaultFactionClocks();
   factionClockGoals = defaultFactionClockGoals();
+  factionClockResults = defaultFactionClockResults();
   saveFactionTools();
   renderFactionConflictClocks();
   flashResults("factionClockList");

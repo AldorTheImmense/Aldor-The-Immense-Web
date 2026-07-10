@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.4.48
+- Added an editable completion result field to each Faction Conflict Clock.
+- Completion results are saved locally, included in save codes, and restored when loading save codes.
+- Filled clocks highlight their completion result so the consequence is visible when the clock finishes.
+- Resetting clocks now also clears their completion result text.
+- Updated cache-busting query strings for the script and stylesheet.
+- Updated the footer version number.
+
 ## v2.4.47
 - Changed map route hour markers to show the in-game time of day instead of shorthand in-Drakkenheim elapsed time.
 - Marker tooltips now show the Travel marker number and the elapsed time spent in Drakkenheim.

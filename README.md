@@ -1,6 +1,6 @@
 # Aldor The Immense
 
-Current version: v2.4.47
+Current version: v2.4.48
 
 Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign, styled as a dark gothic DM screen for use during prep or at the table.
 
