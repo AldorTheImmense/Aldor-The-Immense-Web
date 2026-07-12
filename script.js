@@ -2743,7 +2743,7 @@ const STORAGE_KEYS = {
   crafting: "aldor.craftingState.v1"
 };
 
-const APP_VERSION = "2.6.9";
+const APP_VERSION = "2.6.12";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -3083,6 +3083,278 @@ function sortShopLists() {
   });
 }
 
+function inferShopItemRarity(item, listName) {
+  if (listName === "rareShopItem") return "Rare";
+  if (listName === "uncommonShopItems") return "Uncommon";
+  const name = String(item?.name || "");
+  if (/Superior Healing/i.test(name)) return "Rare";
+  if (/Greater Healing/i.test(name)) return "Uncommon";
+  if (/Healing/i.test(name)) return "Common";
+  if (/\(3rd\)/i.test(name)) return "Uncommon";
+  if (/\(2nd\)/i.test(name)) return "Uncommon";
+  if (/\(1st\)/i.test(name)) return "Common";
+  return "Uncommon";
+}
+
+const SHOP_ITEM_EFFECTS = {
+  "Potion of Healing": "When you drink this potion, you regain 2d4 + 2 Hit Points.",
+  "Potion of Greater Healing": "When you drink this potion, you regain 4d4 + 4 Hit Points.",
+  "Potion of Superior Healing": "When you drink this potion, you regain 8d4 + 8 Hit Points.",
+  "Potion of Animal Friendship": "For 1 hour after drinking this potion, you can cast Animal Friendship (save DC 13) at will.",
+  "Potion of Fire Breath": "After drinking this potion, you can use a Bonus Action up to three times within 1 hour to exhale fire in a 30-foot cone (DC 13 Dexterity save; 4d6 Fire damage, half on a success).",
+  "Potion of Growth": "When you drink this potion, you gain the enlarge effect of Enlarge/Reduce for 1d4 hours without Concentration.",
+  "Potion of Water Breathing": "You can breathe underwater for 1 hour after drinking this potion.",
+  "Potion of Clairvoyance": "When you drink this potion, you gain the effect of the Clairvoyance spell.",
+  "Potion of Diminution": "When you drink this potion, you gain the reduce effect of Enlarge/Reduce for 1d4 hours without Concentration.",
+  "Potion of Gaseous Form": "When you drink this potion, you gain the effect of Gaseous Form for 1 hour without Concentration.",
+  "Potion of Heroism": "For 1 hour after drinking this potion, you are under the effects of Bless without Concentration and gain 10 temporary Hit Points.",
+  "Potion of Invulnerability": "For 1 minute after drinking this potion, you have Resistance to all damage.",
+  "Potion of Mind Reading": "When you drink this potion, you gain the effect of Detect Thoughts (save DC 13).",
+  "Elixir of Health": "Drinking this elixir cures any disease and ends the Blinded, Deafened, Paralyzed, and Poisoned conditions affecting you.",
+  "Philter of Love": "The next creature you see within 10 minutes after drinking this philter charms you for 1 hour if it is of a species and gender you are normally attracted to.",
+  "Oil of Slipperiness": "The oil can coat a Medium or smaller creature or object. A creature gains Freedom of Movement for 8 hours; on the floor it creates a 10-foot square affected as Grease for 8 hours.",
+  "Oil of Etherealness": "The oil covers a Medium or smaller creature and grants the effect of Etherealness for 1 hour.",
+  "Adamantine Armor": "While wearing this armor, any Critical Hit against you becomes a normal hit.",
+  "Alchemy Jug": "The jug can produce one chosen liquid each day, such as acid, poison, beer, honey, mayonnaise, oil, vinegar, fresh water, salt water, or wine.",
+  "Amulet of Health": "While wearing this amulet, your Constitution score is 19 unless it is already 19 or higher. Requires Attunement.",
+  "Amulet of Proof Against Detection and Location": "While wearing this amulet, you are hidden from divination magic and cannot be targeted by such magic or perceived through magical scrying sensors. Requires Attunement.",
+  "Bag of Holding": "This bag opens into an extradimensional space that can hold up to 500 pounds, not exceeding 64 cubic feet. The bag always weighs 15 pounds.",
+  "Bag of Tricks": "The bag produces up to three fuzzy objects each day. Throwing one transforms it into a random friendly beast that obeys your commands until the next dawn or until reduced to 0 Hit Points.",
+  "Bag of Beans": "The bag contains 3d4 dry beans. Thrown beans explode shortly afterward; planted beans produce one of several unpredictable magical effects.",
+  "Bead of Force": "You can throw the bead to create a force explosion. Creatures in the area take Force damage and may be enclosed in a resilient sphere for 1 minute.",
+  "Boots of Elvenkind": "Your steps make no sound, and you have Advantage on Dexterity (Stealth) checks that rely on moving silently.",
+  "Boots of Levitation": "While wearing these boots, you can cast Levitate on yourself at will. Requires Attunement.",
+  "Boots of Speed": "As a Bonus Action, you can click the heels together to double your walking speed and impose Disadvantage on Opportunity Attacks against you for up to 10 minutes. Requires Attunement.",
+  "Boots of Striding and Springing": "Your walking speed becomes 30 feet unless it is higher, your speed is not reduced by encumbrance or heavy armor, and you can jump three times the normal distance. Requires Attunement.",
+  "Boots of the Winterlands": "You have Resistance to Cold damage, ignore difficult terrain caused by ice or snow, and tolerate extreme cold. Requires Attunement.",
+  "Bracers of Archery": "You have proficiency with longbows and shortbows and gain a +2 bonus to damage rolls with them. Requires Attunement.",
+  "Bracers of Defense": "While wearing no armor and using no shield, you gain a +2 bonus to AC. Requires Attunement.",
+  "Brooch of Shielding": "You have Resistance to Force damage and are immune to damage from Magic Missile. Requires Attunement.",
+  "Broom of Flying": "The broom can be commanded to fly, carrying up to 400 pounds, and can travel independently to a named destination within 1 mile.",
+  "Cap of Water Breathing": "While wearing this cap underwater, you can speak its command word to create a bubble of breathable air around your head.",
+  "Cape of the Mountebank": "Once per day, you can use an action to cast Dimension Door, leaving behind and arriving in clouds of smoke.",
+  "Circlet of Blasting": "Once per day, you can use an action to cast Scorching Ray with a +5 spell attack bonus.",
+  "Cloak of Elvenkind": "While the hood is up, Wisdom (Perception) checks to see you have Disadvantage and you have Advantage on Dexterity (Stealth) checks to hide. Requires Attunement.",
+  "Cloak of Protection": "You gain a +1 bonus to AC and saving throws while wearing this cloak. Requires Attunement.",
+  "Cloak of the Bat": "You have Advantage on Dexterity (Stealth) checks, can fly in dim light or darkness, and can polymorph into a bat once per day. Requires Attunement.",
+  "Cloak of the Manta Ray": "With the hood up, you can breathe underwater and gain a swimming speed of 60 feet.",
+  "Cloak of Displacement": "Attack rolls against you have Disadvantage until you take damage, after which the effect is suppressed until the start of your next turn. Requires Attunement.",
+  "Decanter of Endless Water": "The decanter produces a chosen stream of fresh or salt water, including a powerful geyser that can damage and shove a creature.",
+  "Deck of Illusions": "A card drawn and thrown from this deck creates an illusion of a random creature that lasts until dispelled or the card is moved.",
+  "Dimensional Shackles": "A creature restrained by these shackles cannot use extradimensional movement or teleportation and can attempt to break free only once every 30 days.",
+  "Driftglobe": "The globe can cast Light at will and Daylight once per day. It can also float and follow you.",
+  "Dust of Disappearance": "Throwing the dust makes creatures and objects within 10 feet Invisible for 2d4 minutes; the effect ends early for a creature that attacks or casts a spell.",
+  "Dust of Dryness": "A pinch transforms a 15-foot cube of water into a marble-sized pellet, which releases the water when broken.",
+  "Dust of Sneezing and Choking": "The dust causes creatures that breathe it to become unable to breathe and Incapacitated until they succeed on a Constitution save.",
+  "Elemental Gem": "Breaking the gem summons an elemental as if by Conjure Elemental; the gem is destroyed.",
+  "Eversmoking Bottle": "Opening the bottle creates a thick cloud of smoke that rapidly expands and heavily obscures its area until the bottle is closed and the smoke disperses.",
+  "Eyes of Charming": "The lenses have 3 charges and allow you to cast Charm Person (save DC 13). Requires Attunement.",
+  "Eyes of Minute Seeing": "You have Advantage on Intelligence (Investigation) checks relying on sight while examining something within 1 foot.",
+  "Eyes of the Eagle": "You have Advantage on Wisdom (Perception) checks relying on sight and can discern fine details at great distance. Requires Attunement.",
+  "Gauntlets of Ogre Power": "Your Strength score is 19 while wearing these gauntlets unless it is already 19 or higher. Requires Attunement.",
+  "Gem of Brightness": "The gem has 50 charges that can create bright light or release blinding beams and flashes.",
+  "Gem of Seeing": "The gem has 3 charges. Looking through it grants Truesight out to 120 feet for 10 minutes. Requires Attunement.",
+  "Gloves of Missile Snaring": "When a ranged weapon attack hits you, you can use your Reaction to reduce the damage by 1d10 + your Dexterity modifier. Requires Attunement.",
+  "Gloves of Swimming and Climbing": "You gain a climbing speed and swimming speed equal to your walking speed and a +5 bonus to related Strength (Athletics) checks. Requires Attunement.",
+  "Gloves of Thievery": "The gloves are invisible while worn and grant a +5 bonus to Dexterity (Sleight of Hand) checks and checks made to pick locks.",
+  "Goggles of Night": "You gain Darkvision out to 60 feet, or increase existing Darkvision by 60 feet.",
+  "Hat of Disguise": "While wearing this hat, you can cast Disguise Self at will. The spell ends if the hat is removed. Requires Attunement.",
+  "Headband of Intellect": "Your Intelligence score is 19 while wearing this headband unless it is already 19 or higher. Requires Attunement.",
+  "Helm of Comprehending Languages": "While wearing this helm, you can cast Comprehend Languages at will.",
+  "Helm of Telepathy": "While wearing this helm, you can cast Detect Thoughts and communicate telepathically with a creature you detect; once per day you can cast Suggestion through it. Requires Attunement.",
+  "Helm of Teleportation": "The helm has 3 charges and lets you cast Teleport. It regains charges daily. Requires Attunement.",
+  "Heward's Handy Haversack": "This backpack has three extradimensional compartments that together hold up to 120 pounds while always weighing 5 pounds. Retrieving an item requires an action.",
+  "Horn of Blasting": "Blowing the horn creates a 30-foot cone of thunderous force that damages creatures and objects and can deafen creatures; repeated use risks destroying the horn.",
+  "Immovable Rod": "Pressing its button fixes the rod in place, even in midair, until the button is pressed again or sufficient force moves it.",
+  "Iron Bands of Bilarro": "You can throw the sphere to restrain a creature with expanding metal bands. The bands can be used once per day.",
+  "Javelin of Lightning": "Once per day, you can transform the thrown javelin into a 120-foot line of lightning before it strikes its target.",
+  "Keoghtom's Ointment": "A dose applied to a creature restores 2d8 + 2 Hit Points, cures poison, and ends one disease.",
+  "Lantern of Revealing": "While lit, the lantern reveals Invisible creatures and objects within its bright light.",
+  "Medallion of Thoughts": "The medallion has 3 charges and lets you cast Detect Thoughts (save DC 13). Requires Attunement.",
+  "Mithral Armor": "This armor does not impose Disadvantage on Dexterity (Stealth) checks and has no Strength requirement.",
+  "Necklace of Adaptation": "You can breathe normally in any environment and have Advantage on saves against harmful gases and vapors. Requires Attunement.",
+  "Necklace of Fireballs": "You can detach and throw beads to cast Fireball; throwing multiple beads increases the spell's level.",
+  "Necklace of Prayer Beads": "The necklace contains magical beads that let an attuned divine spellcaster cast specific spells as Bonus Actions. Requires Attunement.",
+  "Pearl of Power": "Once per day, you can use an action to regain one expended spell slot of 3rd level or lower. Requires Attunement by a spellcaster.",
+  "Periapt of Health": "You are immune to contracting diseases while wearing this pendant, though existing diseases are not suppressed.",
+  "Periapt of Proof against Poison": "You are immune to the Poisoned condition and poison damage while wearing this pendant.",
+  "Periapt of Wound Closure": "You stabilize automatically at the start of your turn while dying, and Hit Dice restore twice as many Hit Points. Requires Attunement.",
+  "Pipes of Haunting": "The pipes have 3 charges and can frighten nearby creatures that hear them. They regain charges daily.",
+  "Pipes of the Sewers": "You can use the pipes to summon and control swarms of rats. Requires Attunement.",
+  "Portable Hole": "Unfolding this cloth creates a 6-foot-wide, 10-foot-deep extradimensional hole. Folding it closes the entrance while leaving contents inside.",
+  "Quiver of Ehlonna": "The quiver has extradimensional compartments that hold large quantities of arrows, javelins, bows, and similar objects while remaining light.",
+  "Ring of Animal Influence": "The ring has 3 charges that can cast Animal Friendship, Fear against beasts, or Speak with Animals.",
+  "Ring of Evasion": "The ring has 3 charges. When you fail a Dexterity saving throw, you can spend a charge to succeed instead. Requires Attunement.",
+  "Ring of Feather Falling": "When you fall while wearing this ring, you descend at 60 feet per round and take no falling damage. Requires Attunement.",
+  "Ring of Free Action": "Difficult terrain does not cost you extra movement, magic cannot reduce your speed, and magic cannot Paralyze or Restrain you. Requires Attunement.",
+  "Ring of Jumping": "While wearing this ring, you can cast Jump on yourself as a Bonus Action. Requires Attunement.",
+  "Ring of Mind Shielding": "You are immune to magic that reads thoughts, determines truthfulness, alignment, or creature type, and you can communicate telepathically with any soul inside the ring. Requires Attunement.",
+  "Ring of Protection": "You gain a +1 bonus to AC and saving throws while wearing this ring. Requires Attunement.",
+  "Ring of Resistance": "You have Resistance to the damage type associated with the ring. Requires Attunement.",
+  "Ring of Spell Storing": "The ring stores up to 5 levels of spells. A wearer can cast the stored spells using the original caster's spellcasting statistics. Requires Attunement.",
+  "Ring of Swimming": "You gain a swimming speed of 40 feet while wearing this ring.",
+  "Ring of the Ram": "The ring has 3 charges that can make a ranged force attack, dealing damage and potentially pushing the target; it can also damage objects.",
+  "Ring of Warmth": "You have Resistance to Cold damage and tolerate temperatures as low as −50°F. Requires Attunement.",
+  "Ring of Water Walking": "You can stand on and move across liquid surfaces as though they were solid ground.",
+  "Ring of X-Ray Vision": "As an action, you can see through solid matter for 1 minute, though repeated use can cause Exhaustion. Requires Attunement.",
+  "Robe of Eyes": "You can see in all directions, gain Darkvision, see Invisible and Ethereal creatures, and have Advantage on sight-based Perception checks, but are vulnerable to gaze effects and bright-light magic. Requires Attunement.",
+  "Robe of Useful Items": "The robe bears patches that can be detached and transformed into useful objects; several additional patches are randomly determined.",
+  "Rod of Rulership": "Once per day, you can command creatures within 120 feet to regard you as their trusted leader for 8 hours unless they resist. Requires Attunement.",
+  "Rope of Climbing": "The rope can animate, fasten itself, knot itself, and move as commanded, granting Advantage on checks made to climb it.",
+  "Rope of Entanglement": "The rope can attempt to Restrain a creature within 20 feet and can be commanded to release it.",
+  "Saddle of the Cavalier": "While in this saddle, you cannot be dismounted against your will, and attacks against the mount have Disadvantage.",
+  "Sending Stones": "The paired stones let their bearers cast Sending to each other once per day.",
+  "Sentinel Shield": "While holding this shield, you have Advantage on Initiative rolls and Wisdom (Perception) checks.",
+  "Slippers of Spider Climbing": "While wearing these shoes, you can move on vertical surfaces and ceilings while keeping your hands free. Requires Attunement.",
+  "Staff of Charming": "The staff has 10 charges for Charm Person, Command, and Comprehend Languages, and can turn certain enchantment spells back on their caster. Requires Attunement by a bard, cleric, druid, sorcerer, warlock, or wizard.",
+  "Staff of Healing": "The staff has 10 charges for Cure Wounds, Lesser Restoration, and Mass Cure Wounds. Requires Attunement by a bard, cleric, or druid.",
+  "Staff of Swarming Insects": "The staff has 10 charges for Giant Insect and Insect Plague and can create a concealing cloud of harmless insects. Requires Attunement by a bard, cleric, druid, sorcerer, warlock, or wizard.",
+  "Staff of the Adder": "You can animate the head of this staff into a poisonous snake that makes melee attacks. Requires Attunement by a cleric, druid, or warlock.",
+  "Staff of the Python": "You can transform this staff into a Giant Constrictor Snake and back again. Requires Attunement by a cleric, druid, or warlock.",
+  "Staff of the Woodlands": "This +2 quarterstaff has 10 charges for druidic spells and can become a healthy tree. Requires Attunement by a druid.",
+  "Staff of Withering": "The staff has 3 charges that can add 2d10 Necrotic damage to a hit and potentially impose Disadvantage on Strength and Constitution checks and saves. Requires Attunement by a cleric, druid, or warlock.",
+  "Stone of Good Luck (Luckstone)": "You gain a +1 bonus to ability checks and saving throws while this polished stone is on your person. Requires Attunement.",
+  "Sun Blade": "This hilt produces a radiant blade that functions as a +2 finesse longsword, deals Radiant damage, and deals extra damage to Undead. Requires Attunement.",
+  "Sword of Life Stealing": "On a Critical Hit against a non-Construct, non-Undead creature, the target takes an extra 10 Necrotic damage and you gain 10 temporary Hit Points. Requires Attunement.",
+  "Sword of Vengeance": "You gain a +1 bonus to attack and damage rolls, but the cursed sword compels you to keep attacking creatures that damage you. Requires Attunement.",
+  "Sword of Wounding": "Hit Points lost to this weapon can be regained only by resting, and a wounded creature can take ongoing Necrotic damage. Requires Attunement.",
+  "Tentacle Rod": "The rod makes three tentacle attacks against one creature; three hits reduce its speed, impose Disadvantage on Dexterity saves, and prevent Reactions for 1 minute. Requires Attunement.",
+  "Trident of Fish Command": "The trident has 3 charges and lets you cast Dominate Beast on creatures with an innate swimming speed. Requires Attunement.",
+  "Wand of Binding": "The wand has 7 charges for Hold Monster and Hold Person and can help you resist or escape effects that Paralyze or Restrain. Requires Attunement by a spellcaster.",
+  "Wand of Enemy Detection": "For 1 minute, the wand points toward the nearest hostile creature within 60 feet and pulses when one is present. Requires Attunement.",
+  "Wand of Fear": "The wand has 7 charges and can create a cone that Frightens creatures or force a creature to flee. Requires Attunement.",
+  "Wand of Fireballs": "The wand has 7 charges and lets you cast Fireball, spending additional charges to increase the spell's level. Requires Attunement by a spellcaster.",
+  "Wand of Lightning Bolts": "The wand has 7 charges and lets you cast Lightning Bolt, spending additional charges to increase the spell's level. Requires Attunement by a spellcaster.",
+  "Wand of Magic Detection": "The wand has 3 charges and lets you cast Detect Magic.",
+  "Wand of Magic Missiles": "The wand has 7 charges and lets you cast Magic Missile, spending additional charges to increase the spell's level.",
+  "Wand of Paralysis": "The wand has 7 charges and can Paralyze a creature that fails a Constitution save. Requires Attunement by a spellcaster.",
+  "Wand of Secrets": "The wand has 3 charges and points toward the nearest secret door or trap within 30 feet.",
+  "Wand of Web": "The wand has 7 charges and lets you cast Web. Requires Attunement by a spellcaster.",
+  "Wand of Wonder": "The wand has 7 charges and produces a random magical effect when used against a target within 120 feet. Requires Attunement by a spellcaster.",
+  "Weapon of Warning": "You and companions within 30 feet cannot be surprised while you are not Incapacitated; you also have Advantage on Initiative rolls. Requires Attunement.",
+  "Wind Fan": "You can use the fan to cast Gust of Wind; repeated use before dawn risks destroying it.",
+  "Winged Boots": "You gain a flying speed equal to your walking speed for up to 4 hours, divided into increments. Requires Attunement.",
+  "Wings of Flying": "Speaking the command word transforms the cloak into bat or bird wings, granting a flying speed of 60 feet for 1 hour.",
+  "Shield, +1": "While holding this shield, you gain a +1 bonus to AC in addition to the shield's normal bonus.",
+  "Shield, +2": "While holding this shield, you gain a +2 bonus to AC in addition to the shield's normal bonus.",
+  "Shield, +3": "While holding this shield, you gain a +3 bonus to AC in addition to the shield's normal bonus.",
+  "Ammunition, +1": "You gain a +1 bonus to attack and damage rolls made with this piece of magical ammunition. Its magic is expended after it hits a target.",
+  "Ammunition, +2": "You gain a +2 bonus to attack and damage rolls made with this piece of magical ammunition. Its magic is expended after it hits a target.",
+  "Ammunition, +3": "You gain a +3 bonus to attack and damage rolls made with this piece of magical ammunition. Its magic is expended after it hits a target.",
+  "Blood Spear": "When you reduce a creature to 0 Hit Points with a melee attack using this magic spear, you gain 2d6 temporary Hit Points. Requires Attunement.",
+  "Dagger of Venom": "You gain a +1 bonus to attack and damage rolls. Once per day, you can coat the blade in poison; the next creature hit must save or take 2d10 Poison damage and become Poisoned for 1 minute.",
+  "Flame Tongue": "As a Bonus Action, you can ignite or extinguish the blade. While ignited, it sheds light and deals an extra 2d6 Fire damage on a hit. Requires Attunement.",
+  "Giant Slayer": "You gain a +1 bonus to attack and damage rolls, deal an extra 2d6 damage to Giants, and can knock a Giant Prone on a Critical Hit. Requires Attunement.",
+  "Mace of Disruption": "The mace deals an extra 2d6 Radiant damage to Fiends and Undead and can destroy them outright when they are reduced to low Hit Points. Requires Attunement.",
+  "Mace of Smiting": "You gain a +1 bonus to attack and damage rolls, increased against Constructs; Critical Hits deal extra damage and can destroy low-HP Constructs. Requires Attunement.",
+  "Mace of Terror": "The mace has 3 charges that can Frighten creatures in a 30-foot radius and force them to flee. Requires Attunement.",
+  "Vicious Weapon": "When you roll a 20 on an attack roll with this weapon, the target takes an extra 7 damage of the weapon's type.",
+  "Weapon, +1": "You gain a +1 bonus to attack and damage rolls made with this magic weapon.",
+  "Weapon, +2": "You gain a +2 bonus to attack and damage rolls made with this magic weapon.",
+  "Weapon, +3": "You gain a +3 bonus to attack and damage rolls made with this magic weapon.",
+  "Armor, +2": "You gain a +2 bonus to AC while wearing this magic armor.",
+  "Armor of Resistance": "While wearing this armor, you have Resistance to one specified damage type. Requires Attunement.",
+  "Armor of Vulnerability": "You have Resistance to one physical damage type, but the cursed armor makes you vulnerable to the other two. Requires Attunement.",
+  "Arrow-Catching Shield": "You gain a +2 bonus to AC against ranged attacks, and can use your Reaction to make a ranged attack against a nearby target hit you instead. Requires Attunement.",
+  "Elven Chain": "You gain a +1 bonus to AC while wearing this chain shirt and are considered proficient with it even if you lack medium armor proficiency.",
+  "Glamoured Studded Leather": "You gain a +1 bonus to AC, and can use a Bonus Action to make the armor appear as normal clothing or another kind of armor. Requires Attunement.",
+  "Mariner's Armor": "While wearing this armor, you gain a swimming speed equal to your walking speed, and if you start your turn underwater at 0 Hit Points the armor carries you upward.",
+  "Berserker Axe": "You gain a +1 bonus to attack and damage rolls and 1 extra Hit Point per level, but the cursed axe can drive you into a frenzy when you take damage. Requires Attunement.",
+  "Figurine of Wondrous Power": "The figurine can transform into a living creature for a limited time, then cannot be used again until its recharge period passes.",
+  "Belt of Dwarvenkind": "You gain bonuses associated with dwarven resilience, including +2 Constitution (maximum 20), Advantage against poison, Darkvision, and proficiency in Dwarvish. Requires Attunement.",
+  "Belt of Giant Strength": "While wearing the belt, your Strength becomes the score associated with its giant type unless your Strength is already higher. Requires Attunement.",
+  "Cube of Force": "The cube has 36 charges and can create one of several 15-foot barriers that block specific kinds of matter, creatures, or magic. Requires Attunement.",
+  "Daern's Instant Fortress": "You can place and command this metal cube to transform into a 30-foot-tall adamantine tower, then return it to cube form when empty.",
+  "Gulthias Staff": "The staff can drain life on a hit and grant temporary Hit Points, but its evil influence can cause long-term madness. Requires Attunement.",
+  "Mantle of Spell Resistance": "You have Advantage on saving throws against spells while wearing this cloak. Requires Attunement.",
+  "Shield of Missile Attraction": "You have Resistance to damage from ranged weapon attacks, but the cursed shield redirects nearby ranged weapon attacks toward you. Requires Attunement.",
+  "Shadowfell Brand Tattoo": "You gain Darkvision and Advantage on Dexterity (Stealth) checks; once per day, you can use a Reaction to become insubstantial and halve damage from an attack. Requires Attunement.",
+  "Spellwrought Tattoo": "The tattoo contains one spell. You can cast it once without material components, after which the tattoo disappears.",
+  "Barrier Tattoo": "While not wearing armor, the tattoo gives you an Armor Class based on its rarity. Requires Attunement.",
+  "Coiling Grasp Tattoo": "As an action, you can cause inky tendrils to grapple and damage a creature within 15 feet. Requires Attunement.",
+  "Eldritch Claw Tattoo": "Your unarmed strikes are magical and gain +1 to attack and damage; once per day, you can extend your melee reach and deal extra Force damage for 1 minute. Requires Attunement.",
+  "All-Purpose Tool": "You gain a bonus to Artificer spell attack rolls and save DCs, can transform the tool into any artisan's tool, and can temporarily learn one cantrip. Requires Attunement by an Artificer.",
+  "Amulet of the Devout": "You gain a bonus to Cleric or Paladin spell attack rolls and save DCs, and can use Channel Divinity once without expending a use. Requires Attunement by a Cleric or Paladin.",
+  "Arcane Grimoire": "You gain a bonus to Wizard spell attack rolls and save DCs, and recover an additional spell-slot level when using Arcane Recovery. Requires Attunement by a Wizard.",
+  "Bloodwell Vial": "You gain a bonus to Sorcerer spell attack rolls and save DCs, and can regain 5 Sorcery Points when you spend Hit Dice. Requires Attunement by a Sorcerer.",
+  "Dragonhide Belt": "You gain a bonus to the save DCs of your Ki features and can regain Ki once per day. Requires Attunement by a Monk.",
+  "Moon Sickle": "You gain a bonus to attack and damage rolls and to Druid or Ranger spell attack rolls and save DCs; healing spells restore an extra 1d4 Hit Points. Requires Attunement by a Druid or Ranger.",
+  "Rhythm Maker's Drum": "You gain a bonus to Bard spell attack rolls and save DCs and can regain one use of Bardic Inspiration once per day. Requires Attunement by a Bard.",
+  "Rod of the Pact Keeper, +1": "You gain a +1 bonus to Warlock spell attack rolls and save DCs and can regain one Warlock spell slot once per day. Requires Attunement by a Warlock.",
+  "Rod of the Pact Keeper, +2": "You gain a +2 bonus to Warlock spell attack rolls and save DCs and can regain one Warlock spell slot once per day. Requires Attunement by a Warlock.",
+  "Wand of the War Mage": "You gain a bonus to spell attack rolls and ignore half cover when making spell attacks. Requires Attunement by a spellcaster.",
+  "Wand of the War Mage, +2": "You gain a +2 bonus to spell attack rolls and ignore half cover when making spell attacks. Requires Attunement by a spellcaster.",
+  "Brazier of Commanding Fire Elementals": "While a fire burns in the brazier, you can use an action to summon a Fire Elemental as if by Conjure Elemental. It cannot be used again until the next dawn.",
+  "Censer of Controlling Air Elementals": "While incense burns in the censer, you can use an action to summon an Air Elemental as if by Conjure Elemental. It cannot be used again until the next dawn.",
+  "Chime of Opening": "The chime has 10 uses. Striking it while pointing at a locked object opens one lock or fastening within 120 feet, after which one use is expended.",
+  "Devotee's Censer": "This flail deals an extra 1d8 Radiant damage. Once per day it can create a healing cloud that restores Hit Points to nearby creatures for 1 minute. Requires Attunement by a Cleric or Paladin.",
+  "Dragon Vessel": "The vessel can hold a potion that changes with its rarity, and once per day can transform a quantity of liquid into its associated magical drink. Requires Attunement.",
+  "Dragon Wing Bow": "The bow deals an extra 1d6 damage of its associated dragon type, and ammunition fired from it becomes magical and reappears when drawn. Requires Attunement.",
+  "Dragon's Wrath Weapon": "This weapon grows in power by rarity, gaining bonuses and dragon-themed damage or breath effects tied to its associated dragon. Requires Attunement.",
+  "Dragon-Touched Focus": "This spellcasting focus grants a dragon-themed benefit determined by its associated dragon and rarity. Requires Attunement by a spellcaster.",
+  "Elemental Essence Shard": "When you use Metamagic, the shard can trigger an additional elemental effect determined by its plane. Requires Attunement by a Sorcerer.",
+  "Emerald Pen": "The pen can write in emerald ink and lets you cast Illusory Script once per day without material components.",
+  "Far Realm Shard": "When you use Metamagic, you can force a creature near the spell's target to take Psychic damage and become Frightened until the start of your next turn. Requires Attunement by a Sorcerer.",
+  "Feywild Shard": "When you use Metamagic, you can roll on the Wild Magic Surge table. Requires Attunement by a Sorcerer.",
+  "Guardian Emblem": "The emblem can be attached to armor or a shield. It has 3 charges that let you turn a Critical Hit against a nearby creature into a normal hit.",
+  "Harkon's Bite": "You gain a +1 bonus to ability checks and saving throws, but the necklace carries a curse that can transform you into a werewolf. Requires Attunement.",
+  "Horn of Valhalla": "Blowing the horn summons warrior spirits that fight for you for 1 hour. The number and strength depend on the horn's material, and it recharges after 7 days.",
+  "Horseshoes of Speed": "A horse or similar creature wearing all four shoes has its walking speed increased by 30 feet.",
+  "Instrument of the Bards": "The instrument can cast several spells, imposes Disadvantage on saves against your charm spells, and has additional spells based on its type. Requires Attunement by a Bard.",
+  "Ioun Stone": "The stone orbits your head and grants a benefit determined by its type while it remains in orbit. Requires Attunement.",
+  "Libram of Souls and Flesh": "This spellbook contains necromancy magic and has charges that can alter your appearance, make you appear undead, or empower summoned undead. Requires Attunement by a Wizard.",
+  "Lyre of Building": "The lyre can protect structures from damage and use charges to cast Mending, Fabricate, Move Earth, Passwall, or Summon Construct. Requires Attunement by a Bard.",
+  "Mask of the Beast": "The mask has 3 charges and lets you cast Animal Friendship. Requires Attunement.",
+  "Nature's Mantle": "The mantle serves as a spellcasting focus, and while lightly obscured you can Hide as a Bonus Action. Requires Attunement by a Druid or Ranger.",
+  "Planecaller's Codex": "This spellbook contains conjuration magic and can empower a summoned or created creature with temporary Hit Points and Advantage on attack rolls. Requires Attunement by a Wizard.",
+  "Potion of Giant Strength": "When you drink this potion, your Strength score changes for 1 hour. The score depends on the type of giant associated with the potion.",
+  "Potion of Poison": "This potion resembles a healing potion, but a creature that drinks it takes Poison damage and becomes Poisoned, taking additional damage until it succeeds on repeated saves.",
+  "Potion of Resistance": "For 1 hour after drinking this potion, you have Resistance to one specified damage type.",
+  "Prismari Primer": "The primer has 3 charges that can be spent to add a bonus to an Acrobatics or Performance check, and it contains several Prismari-themed spells. Requires Attunement by a spellcaster.",
+  "Protective Verses": "This spellbook contains abjuration magic and can create a protective ward that grants temporary Hit Points when you cast an abjuration spell. Requires Attunement by a Wizard.",
+  "Quaal's Feather Token": "The token is consumed to create a specific magical effect determined by its type, such as a tree, boat, bird, anchor, fan, or whip.",
+  "Scaled Ornament": "You gain protection against being Charmed or Frightened, and higher-rarity ornaments grant additional dragon-like defenses and movement. Requires Attunement.",
+  "Shadowfell Shard": "When you use Metamagic, you can impose Disadvantage on one ability's checks and saves for a creature affected by the spell until the end of your next turn. Requires Attunement by a Sorcerer.",
+  "Stone of Controlling Earth Elementals": "Touching the stone to the ground lets you summon an Earth Elemental as if by Conjure Elemental. It cannot be used again until the next dawn."
+};
+function getShopItemEffect(name, listName) {
+  const cleanName = String(name || "").replace(/\s+\((?:1st|2nd|3rd)\)$/i, "");
+  if (listName === "scrolls") {
+    return `This spell scroll contains ${cleanName}. A creature able to use the scroll can cast the stored spell from it once; the writing then disappears.`;
+  }
+
+  if (SHOP_ITEM_EFFECTS[cleanName]) return SHOP_ITEM_EFFECTS[cleanName];
+
+  const bonusMatch = cleanName.match(/^(Weapon|Armor|Shield), \+(\d)$/i);
+  if (bonusMatch) {
+    const bonus = bonusMatch[2];
+    if (/weapon/i.test(bonusMatch[1])) return `You gain a +${bonus} bonus to attack and damage rolls made with this magic weapon.`;
+    return `You gain a +${bonus} bonus to AC while using this magic ${bonusMatch[1].toLowerCase()}.`;
+  }
+
+  return "No rules summary for this item is currently stored in Aldor.";
+}
+
+function openShopItemDetails(item, listName) {
+  const dialog = byId("shopItemDialog");
+  const title = byId("shopItemDialogTitle");
+  const body = byId("shopItemDialogBody");
+  if (!dialog || !title || !body) return;
+
+  const name = String(item?.name || "Unknown item");
+  const cleanName = name.replace(/\s+\((?:1st|2nd|3rd)\)$/i, "");
+  const rarity = inferShopItemRarity(item, listName);
+  const category = listName === "scrolls" ? "Spell Scroll" : listName === "potions" ? "Potion" : "Magic Item";
+  const effect = getShopItemEffect(name, listName);
+
+  title.textContent = cleanName;
+  body.innerHTML = [
+    `<p class="shop-item-meta"><strong>${escapeHtml(rarity)}</strong> ${escapeHtml(category)} &nbsp;·&nbsp; <strong>${Number(item?.price || 0).toLocaleString()} gp</strong></p>`,
+    `<p class="shop-item-description">${escapeHtml(effect)}</p>`
+  ].join("");
+  dialog.showModal();
+}
+
 function renderList(elementId, listName) {
   const list = byId(elementId);
   const items = state[listName];
@@ -3099,8 +3371,12 @@ function renderList(elementId, listName) {
   const fragment = document.createDocumentFragment();
   items.forEach((item, index) => {
     const li = document.createElement("li");
-    const text = document.createElement("span");
+    const text = document.createElement("button");
+    text.type = "button";
+    text.className = "shop-item-detail-trigger";
     text.textContent = formatItem(item);
+    text.title = "View item details";
+    text.addEventListener("click", () => openShopItemDetails(item, listName));
 
     const soldButton = document.createElement("button");
     soldButton.type = "button";
@@ -3146,10 +3422,16 @@ function normaliseNamedShopItems(items, rarity) {
 }
 
 function normaliseRecipeShopItems(items) {
-  return arrayOrFallback(items, []).map((item) => ({
-    ...item,
-    name: migrateLegacyShopItemName(item?.name, item?.rarity)
-  }));
+  return arrayOrFallback(items, []).map((item) => {
+    const rarity = item?.rarity === "Rare" ? "Rare" : "Uncommon";
+    const legacyBasePrice = rarity === "Rare" ? 500 : 50;
+    return {
+      ...item,
+      name: migrateLegacyShopItemName(item?.name, rarity),
+      // v2.6.10: Emberwood scarcity doubles Aldor's schematic sale prices.
+      price: !Number.isFinite(Number(item?.price)) || Number(item?.price) === legacyBasePrice ? legacyBasePrice * 2 : Number(item.price)
+    };
+  });
 }
 
 function normaliseInventoryItemNames(items, rarity) {
@@ -5095,7 +5377,7 @@ function generateRecipes() {
     state.recipeShopItems.push({
       name,
       rarity: "Uncommon",
-      price: recipe.schematicPrice || 50,
+      price: (recipe.schematicPrice || 50) * 2,
       quantity: 1,
       isStackable: false
     });
@@ -5106,7 +5388,7 @@ function generateRecipes() {
     state.recipeShopItems.push({
       name,
       rarity: "Rare",
-      price: recipe.schematicPrice || 500,
+      price: (recipe.schematicPrice || 500) * 2,
       quantity: 1,
       isStackable: false
     });

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.6.9">
+  <link rel="stylesheet" href="style.css?v=2.6.12">
 </head>
 <body>
   <header class="app-header">
@@ -352,7 +352,7 @@
 
           <details class="shop-section collapsible" open>
             <summary class="section-header"><span>Recipes</span><button id="regenRecipes" type="button">Regenerate</button></summary>
-            <p class="inline-note recipe-shop-note">Aldor stocks 1d4 uncommon schematics and one rare schematic. Uncommon schematics cost 50 gp; rare schematics cost 500 gp.</p>
+            <p class="inline-note recipe-shop-note">Aldor stocks 1d4 uncommon schematics and one rare schematic. Emberwood scarcity doubles their normal price: uncommon schematics cost 100 gp; rare schematics cost 1,000 gp.</p>
             <ul id="recipesList" class="recipe-list"></ul>
           </details>
         </div>
@@ -1227,7 +1227,7 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.6.9</span>
+    <span>Aldor The Immense v2.6.12</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
@@ -1285,6 +1285,19 @@
       <div class="dialog-actions">
         <button type="button" id="copyCraftingExport" class="primary">Copy formatted text</button>
         <button value="cancel">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="shopItemDialog" class="shop-item-dialog">
+    <form method="dialog">
+      <div class="dialog-header">
+        <h2 id="shopItemDialogTitle">Item Details</h2>
+        <button value="close" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <div id="shopItemDialogBody" class="shop-item-dialog-body"></div>
+      <div class="dialog-actions">
+        <button value="close" class="primary">Close</button>
       </div>
     </form>
   </dialog>
@@ -1353,8 +1366,8 @@
 
 
 
-  <script src="harvest-data.js?v=2.6.9"></script>
-  <script src="recipes.js?v=2.6.9"></script>
-  <script src="script.js?v=2.6.9"></script>
+  <script src="harvest-data.js?v=2.6.12"></script>
+  <script src="recipes.js?v=2.6.12"></script>
+  <script src="script.js?v=2.6.12"></script>
 </body>
 </html>

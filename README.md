@@ -1,6 +1,6 @@
 # Aldor The Immense
 
-Current version: v2.6.9
+Current version: v2.6.12
 
 Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign, styled as a dark gothic DM screen for use during prep or at the table.
 
@@ -8,6 +8,29 @@ The site brings several common table tools into one place so a DM can quickly ge
 
 
 
+
+
+## v2.6.12 expanded shop item descriptions
+
+- Removed the redundant “What it does” heading from purchasable item details.
+- Added locally stored, player-facing rules summaries for the standard potions and magic items in Aldor’s Uncommon and Rare shop pools, based on their D&D 5e Wikidot entries.
+- Shop item popups now present the effect text directly beneath the item metadata and price.
+- Preserved source-specific Aldor and Drakkenheim items that already have local summaries, with the existing plain fallback retained where no public item entry is available.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
+
+## v2.6.11 Shop item effect details
+
+- Shop item details now describe what the purchased magic item does instead of showing its crafting recipe, workshop requirement, components, or recipe source.
+- Added concise stored effect summaries for Aldor’s current potion and magic-item stock, spell scrolls, enhancement shields, and magical ammunition.
+- Items without a stored rules summary now say so plainly rather than displaying unrelated crafting information.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
+
+## v2.6.10 Emberwood shop pricing and item details
+
+- Doubled schematic sale prices in Aldor's shop to reflect Emberwood scarcity: 100 gp for Uncommon schematics and 1,000 gp for Rare schematics.
+- Added clickable shop-item listings that open a compact details dialog using the item and recipe information already included in Aldor.
+- Migrated previously generated 50 gp and 500 gp schematic listings to the new prices when saved shop data is loaded.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
 
 
 ## v2.6.9 random-table layout refinement

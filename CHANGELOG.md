@@ -1,5 +1,27 @@
 # Changelog
 
+## v2.6.12
+
+- Removed the “What it does” label from shop-item details so the rules text is presented directly.
+- Added a substantially expanded local library of concise item-effect summaries for Aldor’s standard Uncommon and Rare stock, using D&D 5e Wikidot as the requested reference.
+- Kept shop details free of crafting components, workshop requirements, recipe notes, and recipe sources.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
+## v2.6.11
+
+- Corrected shop item details so purchasable items display their effects rather than crafting information.
+- Removed recipe notes, workshop requirements, component lists, and recipe sources from purchasable item details.
+- Added concise effect summaries for current stock, spell scrolls, enhancement shields, and magical ammunition, with an explicit fallback where no rules summary is stored.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
+## v2.6.10
+
+- Doubled Aldor's shop schematic prices for Emberwood scarcity: Uncommon 100 gp and Rare 1,000 gp.
+- Added clickable details for potions, scrolls, and magic items in the shop.
+- Item details use the recipe notes, workshop, components, and source information already bundled with Aldor where available.
+- Migrated legacy generated schematic listings from 50/500 gp to 100/1,000 gp.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
 ## v2.6.9
 
 - Moved the Rumour Generator to the left side of Other Random Tables beneath the simple one-click generators.
