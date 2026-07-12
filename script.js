@@ -1344,28 +1344,511 @@ const DEFAULT_DATA = {
     "1 rare spell scroll."
   ],
   "arcaneAnomalies": [
-      "Gravity breaks within a 100-foot radius area for 1 hour. Creatures levitate in midair, and must move by pushing or pulling against a fixed object or surface within reach (such as a wall or a ceiling), which allows them to move as if they were climbing. Unattended objects float around randomly.",
-      "The nearest creature is affected by a hideous laughter spell (Save DC 15) but instead of laughing, the creature repeats unfathomable combinations of syllables and words.",
-      "Time skips a beat. Creatures within 60 feet experience a palpable feeling of vertigo followed by a powerful sensation of deja vu and are stunned for 1 round (No save).",
-      "The nearest creature becomes unstuck in time. It is affected by the blink spell for 1 minute. Instead of vanishing into the Ethereal Plane, the creature vanishes into a sliver of time in its past or possible future.",
-      "A prismatic burst of energy erupts in a 20-foot radius. Creatures in the area must succeed on a DC 15 Constitution saving throw or take 8d6 radiant damage and become blinded for 1 round. The smell of ozone fills the area, and wood transforms into glass.",
-      "Echoes of possible realities are briefly visible for 1 minute. When a creature within 60 feet is hit by an attack, a faint vision of the creature being killed by that attack appears.",
-      "Discordant music fills the mind of all creatures within 30 feet, who are affected as if by irresistible dance (Save DC 15).",
-      "A section of stone, water, air, or energy becomes an appropriate contaminated elemental.",
-      "An extraplanar creature is summoned and remains for 1 hour. The DM either chooses the creature or determines it randomly. It is friendly to the creature who triggered the anomaly.",
-      "All humanoid corpses within 120 feet animate as hostile haze husks. The shrieking undead beg frantically for forgiveness as they rip apart the living.",
-      "The shadows of 1d6 random creatures in the area animate and try to kill them. Once destroyed, the creatures don't cast a shadow for 24 hours.",
-      "All creatures within 60 feet become invisible for 1 min or until they attack or cast a spell.",
-      "Tendrils of life flow from the nearest creature to others. It must succeed on a DC 15 Constitution saving throw or take 8d8 necrotic damage, half on a success. The three nearest creatures within 60 feet each regain hit points equal to the damage taken.",
-      "A hypnotic pattern (save DC 15) appears. It creates scintillating impossible colours in shapes which are simply wrong. Creatures incapacitated by the spell weep uncontrollably.",
-      "A black tentacles spell appears in the area for 1 hour (Escape DC 15).",
-      "Objects within 60 feet come to life for the next hour, as if affected by the animate objects spell. They mumble awful truths, but are not otherwise hostile.",
-      "The nearest creature is polymorphed into an awakened shrub for 1 hour or until reduced to 0 hp (No save).",
-      "Time slows down for up to six randomly determined creatures within 120 feet of the anomaly. They are affected by the slow spell for 1 minute. (Save DC 15).",
-      "Time speeds up for one randomly determined creature within 60 feet of the anomaly. They are affected by the haste spell for 1 minute.",
-      "A bowl of flowers and a very surprised aquatic mammal appear 100 feet in the air. \"Oh no, not again...\" thinks the flowers."
-  ]
+  {
+    "min": 1,
+    "max": 2,
+    "text": "A resonant cascade of eldritch phenomena! The resulting energies reflect, refract, and collide with another producing ongoing effects. Roll another Arcane Anomaly, then once more on Initiative count 20 for the next 1d4 rounds."
+  },
+  {
+    "min": 3,
+    "max": 4,
+    "text": "Gravity breaks within a 100-foot radius area for 1 hour. Creatures levitate in midair and must push or pull against a fixed object or surface within reach (such as a wall or a ceiling) to move as if climbing. Unattended objects float around randomly."
+  },
+  {
+    "min": 5,
+    "max": 6,
+    "text": "The nearest creature is affected by a Hideous Laughter spell (spell save DC 15) but instead of laughing, they repeat unfathomable syllables and words. Occasionally, a somewhat comprehensible but totally illogical phrase emerges, such as \"...oh time thy pyramids!\""
+  },
+  {
+    "min": 7,
+    "max": 8,
+    "text": "Time skips a beat. Creatures within 60 feet experience a palpable feeling of vertigo followed by a powerful sensation of deja vu and are Dazed for 1 round (no saving throw)."
+  },
+  {
+    "min": 9,
+    "max": 10,
+    "text": "The nearest creature becomes unstuck in time. It is affected by the Blink spell for 1 minute. Instead of vanishing into the Ethereal Plane, the creature vanishes into a sliver of time in its past or possible future."
+  },
+  {
+    "min": 11,
+    "max": 12,
+    "text": "A prismatic burst of energy erupts in a 20-foot radius. Creatures in the area must make a DC 15 Constitution saving throw or take 28 (8d6) Radiant damage and become Blinded for 1 round. The smell of ozone fills the area, and nearby wood and inanimate plants are transformed into solid glass."
+  },
+  {
+    "min": 13,
+    "max": 14,
+    "text": "Echoes of possible realities are briefly visible for 1 minute. When a creature within 60 feet is hit by an attack, a faint vision of the creature being killed by that attack appears."
+  },
+  {
+    "min": 15,
+    "max": 16,
+    "text": "Discordant music fills the mind of all creatures within 30 feet, who are affected by Irresistible Dance (spell save DC 15)."
+  },
+  {
+    "min": 17,
+    "max": 18,
+    "text": "A section of stone, water, air, or energy becomes an appropriate Contaminated Elemental that is hostile to all nearby creatures."
+  },
+  {
+    "min": 19,
+    "max": 20,
+    "text": "An extraplanar creature is summoned. The GM either chooses the creature or determines it randomly. It is friendly to the creature who triggered the anomaly."
+  },
+  {
+    "min": 21,
+    "max": 22,
+    "text": "All humanoid corpses with 120 feet animate as hostile Haze Husks. The shrieking undead beg frantically for forgiveness as they rip apart the living."
+  },
+  {
+    "min": 23,
+    "max": 24,
+    "text": "The Shadows of 1d6 random creatures in the area animate and try to kill them while softly whispering \"Guilty, guilty, guilty...\" Once destroyed, the creatures don't cast a shadow for 24 hours."
+  },
+  {
+    "min": 25,
+    "max": 26,
+    "text": "All creatures within 60 feet gain the Invisible condition for 1 minute or until they attack or cast a spell."
+  },
+  {
+    "min": 27,
+    "max": 28,
+    "text": "Tendrils of life flow from the nearest creature to others. It must make a DC 15 Constitution saving throw or take 36 (8d8) Necrotic damage, or half as much on a success. The three nearest creatures within 60 feet each regain Hit Points equal to the damage taken."
+  },
+  {
+    "min": 29,
+    "max": 30,
+    "text": "A Hypnotic Pattern (spell save DC 15) appears. It creates scintillating impossible colors in shapes which are simply wrong. Creatures Incapacitated by the spell weep uncontrollably for the duration."
+  },
+  {
+    "min": 31,
+    "max": 32,
+    "text": "A Black Tentacles spell appears in the area for 1 hour (escape DC 15)."
+  },
+  {
+    "min": 33,
+    "max": 34,
+    "text": "Objects within 60 feet come to life for 1 hour, as if affected by the Animate Objects spell. They mumble awful truths but are not hostile."
+  },
+  {
+    "min": 35,
+    "max": 36,
+    "text": "Time slows down for up to six random creatures within 120 feet. They are affected by the Slow spell for 1 minute. (spell save DC 15)."
+  },
+  {
+    "min": 37,
+    "max": 38,
+    "text": "Time speeds up for one randomly determined creature within 60 feet of the anomaly. They are affected by the Haste spell for 1 minute."
+  },
+  {
+    "min": 39,
+    "max": 40,
+    "text": "The nearest creature is polymorphed into an Awakened Shrub for 1 hour or until reduced to 0 Hit Points."
+  },
+  {
+    "min": 41,
+    "max": 42,
+    "text": "A bowl of flowers and a very surprised-looking aquatic mammal appear 100 feet in the air. \"Oh no, not again...\" thinks the bowl of flowers."
+  },
+  {
+    "min": 43,
+    "max": 44,
+    "text": "All creatures within a 30-foot-radius are affected by Mirror Image. Affected creatures do not know if they were the original or simply a reflection, and the feeling gnaws at the back of their minds forevermore."
+  },
+  {
+    "min": 45,
+    "max": 46,
+    "text": "The skin, flesh, and hair sloughs off all living humanoid creatures within a 30-foot-radius in a horrific display of gore, leaving behind only their skeletons and equipment. This doesn't kill or otherwise harm the affected creatures or change their game statistics. Their flesh, skin, and hair regrow slowly and painfully over the next 3d6 hours."
+  },
+  {
+    "min": 47,
+    "max": 48,
+    "text": "The sound of shattering glass is heard as the delicate webs of 1d4 Eldritch Crawlers appear. Each spider appears with webbing which acts like the Web spell. The webs and eldritch crawlers remain until destroyed, or until the crawlers successfully obtain suitable prey."
+  },
+  {
+    "min": 49,
+    "max": 50,
+    "text": "A powerful magnetic force takes root in the triggering creature. All other creatures within 30 feet of the triggering creature must make a DC 15 Strength saving throw. On a failed save, they are pulled up to 20 feet towards the triggering creature."
+  },
+  {
+    "min": 51,
+    "max": 52,
+    "text": "Each creature within 60 feet of the triggering creature (including the triggering creature) chooses a direction and rolls 2d6. Each creature is then teleported to the nearest unoccupied space in that direction equal to the result times five feet. (e.g. 35 feet for a result of 7 on 2d6)."
+  },
+  {
+    "min": 53,
+    "max": 54,
+    "text": "Strange glowing fungus sprouts in a 20-foot radius around the triggering creature and hums softly with discordant tunes. Anyone who hears the tune mindlessly whistles the song in moments of idleness for the next 1d6 days."
+  },
+  {
+    "min": 55,
+    "max": 56,
+    "text": "A randomly determined mundane item worn or carried by the triggering creature flashes with brilliant energy, becoming an Uncommon magic item of the Game Master's choice."
+  },
+  {
+    "min": 57,
+    "max": 58,
+    "text": "A blast of raw contaminated energy explodes forth from the triggering creature in a 20-foot radius. All other creatures in the area must make a DC 15 Constitution saving throw. They suffer 18 (4d8) Necrotic damage and gain one level of Contamination on a failed save. On a successful save, they take half as much damage and do not gain any Contamination levels."
+  },
+  {
+    "min": 59,
+    "max": 60,
+    "text": "The triggering creature is momentarily pulled into the Space Between Worlds. They vanish from their space until the start of their next turn. When they reappear, they must make a DC 15 Intelligence saving throw. On a failed save, they take 14 (4d6) Psychic damage and gain one random form of Drakkenheim Madness (see Conditions later in this appendix). On a successful save, they take half as much damage and don't suffer from any madness."
+  },
+  {
+    "min": 61,
+    "max": 62,
+    "text": "The triggering creature's muscles bulge and its skin turns purple-green. It is enlarged as if affected by the Enlarge/Reduce spell for 1 minute."
+  },
+  {
+    "min": 63,
+    "max": 64,
+    "text": "Wicked spirits flutter around the triggering creature. It is surrounded by the Spirit Guardians spell (spell save DC 15), which deals Necrotic damage and harms all creatures except the triggering creature. The spirits taunt and jeer at the triggering creature."
+  },
+  {
+    "min": 65,
+    "max": 66,
+    "text": "The triggering creature gains 1d6 levels of Contamination. Unlike normal Contamination levels, these Contamination levels disappear after the character finishes a Long Rest. If the character undergoes a Monstrous Transformation while it has any of these Contamination levels, it reverts to its original form when the new form is reduced to 0 Hit Points or after 24 hours. It then gains a random form of Drakkenheim Madness from the harrowing ordeal (see Conditions later in this appendix)."
+  },
+  {
+    "min": 67,
+    "max": 68,
+    "text": "The triggering creature screams uncontrollably in horror for the next minute. Afterwards, it must make a successful DC 15 Wisdom saving throw or be unable to speak for the next 1d4 hours."
+  },
+  {
+    "min": 69,
+    "max": 70,
+    "text": "All creatures within 30 feet of the triggering creature (but not the triggering creature) gain the benefit of Detect Thoughts spell for 1 minute."
+  },
+  {
+    "min": 71,
+    "max": 72,
+    "text": "The triggering creature begins melting. Their skin sags and begins dripping off. Their bones turn to jelly and they become a puddle on the ground which quickly evaporates into a cloud of octarine mist. For 1 hour, the creature is under the effects of the Gaseous Form spell."
+  },
+  {
+    "min": 73,
+    "max": 74,
+    "text": "A burst of arcane energy lashes out to strike the triggering creature. While potentially lethal, if the triggering creature is a spellcaster they can attempt to absorb this energy to regain spell slots. If they do, the triggering creature regains 1d10 levels worth of spell slots. If the triggering creature doesn't have spell slots or can't regain the full amount, it instead suffers 18 (4d8) Force damage. Any spell cast using a spell slot regained from this effect automatically triggers another arcane anomaly."
+  },
+  {
+    "min": 75,
+    "max": 76,
+    "text": "All creatures within 60 feet of the triggering creature begin to transform into plantlike versions of themselves. Their skin becomes bark, they grow leaves and buds from their flesh, and creak as they move. For the next minute, each affected creature gains the benefit of the Barkskin spell but becomes vulnerable to Fire damage."
+  },
+  {
+    "min": 77,
+    "max": 78,
+    "text": "An 100-foot-radius octarine storm cloud emerges 300 feet above as pouring glittering rain falls for 1 minute. The area below the cloud becomes heavily obscured. A creature who starts its turn in the area must roll a d6, on the result of a 1 they are struck by octarine lightning. They take 14 (4d6) Lightning damage and must make a successful DC 15 Constitution saving throw or gain 1 level of Contamination."
+  },
+  {
+    "min": 79,
+    "max": 80,
+    "text": "An Arcane Hand spell (spell save DC 18, +10 to hit) appears in the area and assaults the triggering creature, trying to rip them apart, fling them from high places, or squeeze them to death."
+  },
+  {
+    "min": 81,
+    "max": 82,
+    "text": "The triggering creature is affected by Flesh to Stone (spell save DC 15). Instead of transforming into stone, it slowly turns into solid delerium crystal. If it is wholly transformed into delerium, its body is equivalent in value to a delerium geode. While Petrified in this manner, the creature is fully conscious and aware of its surroundings. If the delerium geode is used to create a magic item, the creature's personality invests the resulting item with sentience."
+  },
+  {
+    "min": 83,
+    "max": 84,
+    "text": "A Simulacrum, as created by the spell,of the triggering creature appears. It claims to be a traveler from the future and insists the character must slay a randomly determined ally to prevent a terrible fate. If slain, the simulacrum melts into delerium sludge instead of snow."
+  },
+  {
+    "min": 85,
+    "max": 86,
+    "text": "A glowing crystalline orb appears hovering 10 feet above. Anyone within 30 feet of the orb hears the incoherent whispering of several voices. The first creature who touches the orb can communicate with the voices as if by the Contact Other Plane spell. The orb then disappears."
+  },
+  {
+    "min": 87,
+    "max": 88,
+    "text": "Each creature within a 30-foot-radius immediately hallucinates their own inevitable death in such a vivid manner that they are stricken with terror and a wave of lethargic hopelessness. Each creature must make a successful DC 15 Intelligence saving throw or be Stunned for the next minute. A creature can repeat this saving throw at the end of each of their turns to end the effect, shaking off the terror and returning to reality."
+  },
+  {
+    "min": 89,
+    "max": 90,
+    "text": "Reminiscent of the flames which consumed Drakkenheim in the meteor's wake, a roaring wave of eldritch fire erupts in a 30-foot Emanation. Each creature in the Emanation has the Burning (3d6 Fire) condition."
+  },
+  {
+    "min": 91,
+    "max": 92,
+    "text": "All the heat is suddenly pulled from one random creature within a 30-foot-radius, who becomes Frozen (save DC 15)."
+  },
+  {
+    "min": 93,
+    "max": 94,
+    "text": "Your arms and legs gain the ability to detach for the next minute and they rejoin at the end of this duration. They gain a Flying speed of 15 feet, you can control them as you normally would, they have an AC of 10 and any damage dealt to them is dealt directly to you."
+  },
+  {
+    "min": 95,
+    "max": 96,
+    "text": "The area erupts with unnatural, alien flora. Strange pulsing trees and octarine flowers emerge, twisting vines with pulsing octarine veins, rich plants that sparkle and hum softly, along with an abundance of various strange glowing fruit. Any creature who eats the strange fruit immediately gains the benefits of the Heroes' Feast spell. While under the effects of the spell, their eyes glow with octarine light, and their veins bulge and glow as well. They shed Dim Light in a 10-foot radius around them. The plants wither and crumble to dust after 1 hour."
+  },
+  {
+    "min": 97,
+    "max": 98,
+    "text": "The triggering creature explodes out of its skin and into a Delerium Dragon Wyrmling as if under the effects of True Polymorph. The creature reverts to its true form after 1 hour."
+  },
+  {
+    "min": 99,
+    "max": 100,
+    "text": "The triggering creature gains the ability to see through all of time and space, gaining unbound knowledge of all that has been, and all that will be. The creature immediately takes 36 (8d8) Psychic damage. If this damage reduces the creature to 0 Hit Points, it is knocked Unconscious but is Stable. For the next hour, the creature gains the benefits of the Foresight spell as their mind is filled with visions of all possible futures and unbound realities. At the end of the hour, the creature takes an additional 36 (8d8) Psychic damage as they are flung back to a basic understanding of life, the universe, and probability."
+  }
+]
 };
+
+const MUTATION_TABLE = [
+  {
+    "min": 1,
+    "max": 2,
+    "text": "Wave of Mutation. You gain any one mutation of your choice, then gain an additional randomly determined mutation. Then, all creatures within 60 feet of you gain 1 contamination level. Instead of rolling to determine whether or not those creatures gain a mutation, each automatically gains 1 mutation."
+  },
+  {
+    "min": 3,
+    "max": 4,
+    "text": "Anomaly Locus. When you fail a D20 Test, you can reroll the d20. When you do, you trigger an Arcane Anomalies. You must finish a Short Rest before you can do so again."
+  },
+  {
+    "min": 5,
+    "max": 6,
+    "text": "Sanguine Appetite. You develop a taste for blood which intensifies when you're wounded. While you have the Bloodied or Bleeding conditions, you gain Advantage on melee attack rolls against other creatures with the Bloodied or Bleeding conditions."
+  },
+  {
+    "min": 7,
+    "max": 8,
+    "text": "Fledgling Wings. Bat-like wings painfully explode from your back. You gain a flying speed of 40 feet during your turn. If you end your turn aloft, you fall. If you have 4 or more contamination levels, your wings expand and your flying speed increases to 60 feet, and you no longer fall when you end your turn aloft."
+  },
+  {
+    "min": 9,
+    "max": 10,
+    "text": "Wretched Bile. Bubbling contaminated ichor unconformably builds up in your guts, which you can vomit forth periodically. When you take the Attack action on your turn, you can replace one of your attacks with an exhalation in a 15-foot Cone. Each creature in that area must make a Constitution saving throw (DC 8 plus your Constitution modifier and Proficiency Bonus). On a failed save, a creature takes 1d10 Necrotic damage for each Contamination level you have gained. On a successful save, a creature takes half as much damage. You can use your Wretched Bile a number of times equal to your Contamination level, and regain all expended uses when you finish a Long Rest."
+  },
+  {
+    "min": 11,
+    "max": 12,
+    "text": "Terrible Stench. Your body emits a pungent odor which reeks of death and sulfur. Creatures who end their turn within 5 feet of you have gain the Poisoned condition until the end of their next turn. Creatures have Advantage on Wisdom (Perception) checks made to locate or track you."
+  },
+  {
+    "min": 13,
+    "max": 14,
+    "text": "Explosive Demise. You feel volatile growths inside your body radiating intense heat. You gain Resistance to Fire damage. If you are reduced to 0 Hit Points while you have the Contaminated condition, you die and explode horribly in a shower of gore. Creatures within a 20-foot-radius must make a DC 15 Dexterity saving throw. Failure: 4d6 Fire plus 4d6 Necrotic damage. Success: Half damage."
+  },
+  {
+    "min": 15,
+    "max": 16,
+    "text": "Hallucinogenic Visions. Your perception of the world around you twists into a miraculous landscape of rainbows, flowers, and vibrant colors, like walking through a pleasant dream. All creatures appear beautiful, friendly, smiling, and whimsical to you."
+  },
+  {
+    "min": 17,
+    "max": 18,
+    "text": "Cryogenic Shift. Your body rapidly disperses heat as ice begins forming on your flesh. You gain Resistance to Cold damage, but if you don't move at least half your speed on your turn, you have the Frozen condition (DC 15)."
+  },
+  {
+    "min": 19,
+    "max": 20,
+    "text": "Nascent Delusions. You gain a randomly determined form of Drakkenheim Madness, which persists so long as you have the Contaminated condition."
+  },
+  {
+    "min": 21,
+    "max": 22,
+    "text": "Electric Discharge. Strange glands filled with crackling energy appear on your body. You gain Resistance to Lightning damage. At the start of each of your turns, you deal Lightning damage to each creature within 5 feet of you. The damage equals a number of d6s equal to your Proficiency Bonus. If you have 4 or more Contamination levels, the dice become d10s, and the range increases to 10 feet."
+  },
+  {
+    "min": 23,
+    "max": 24,
+    "text": "Hulking. If you are Medium or smaller, your size increases by one step (from Small to Medium, or Medium to Large). While your size is increased, you have Advantage on Strength ability checks. You return to your normal size when you no longer have Contamination levels."
+  },
+  {
+    "min": 25,
+    "max": 26,
+    "text": "Shrinking. If you are Small or Larger, your size decreases by one step (from Small to Tiny, from Large to Medium). While your size is decreased, you have Disadvantage on Strength ability checks. You return to your normal size when you no longer have Contamination levels."
+  },
+  {
+    "min": 27,
+    "max": 28,
+    "text": "Vocal Warp. Your voice takes on a strange pitch and resonance determined by rolling 1d6. 1: Alien Resonance; 2: Wet Gurgling; 3: Demonic Baritone; 4: Constantly Singing; 5: Distant Echoing; 6: Rasping Whisper."
+  },
+  {
+    "min": 29,
+    "max": 30,
+    "text": "Wasting. Body parts begin falling out of you. Roll 1d6 to determine which: 1–2: fingernails; 3–4: teeth; and 5–6: toenails."
+  },
+  {
+    "min": 31,
+    "max": 32,
+    "text": "Rotting Extremities. One of your body parts begins to blacken and wither. Roll 1d6 to determine which: 1–2: your lips; 3–4: your nose; 5–6: your ears. If you reach four or more Contamination levels, they rot and fall off. You can still speak and hear, however."
+  },
+  {
+    "min": 33,
+    "max": 34,
+    "text": "Transforming Skin. Your skin begins to change. Roll 1d6 to determine the effect: 1: painful blisters which seep strange liquids; 2: cracking and peeling to reveal raw sinew; 3: strange patterns and runes; 4: welts and bruises which throb violently; 5: necrosis and rotting in patches; 6: lesions in otherworldly multi-colored hues."
+  },
+  {
+    "min": 35,
+    "max": 36,
+    "text": "Lambent Glow. You emit a dim octarine glow to a range of 10 feet. If you have four or more Contamination levels, you instead emit Bright Light to a range of 30 feet."
+  },
+  {
+    "min": 37,
+    "max": 38,
+    "text": "Shedding. Each time you gain a Contamination level, some of your hair falls out in patches. Once you reach four or more Contamination levels, all hair on your body completely falls out."
+  },
+  {
+    "min": 39,
+    "max": 40,
+    "text": "Ocular Tumors. An eyeball opens somewhere on your body for each Contamination level you have gained. If you have four or more Contamination levels, you can see in all directions."
+  },
+  {
+    "min": 41,
+    "max": 42,
+    "text": "Alien Organs. You feel a bloated shift within your abdomen, as if something has been altered in your internal composition. Several of your organs have changed into something unrecognizable yet still functional. They're filled with alien black goo."
+  },
+  {
+    "min": 43,
+    "max": 44,
+    "text": "Shimmering Veins. Your blood veins glow through your skin, casting a faint octarine light."
+  },
+  {
+    "min": 45,
+    "max": 46,
+    "text": "Shadowless. You no longer cast a shadow, regardless of the light sources around you."
+  },
+  {
+    "min": 47,
+    "max": 48,
+    "text": "Flickering Presence. Your form flickers intermittently like a poorly tuned hologram."
+  },
+  {
+    "min": 49,
+    "max": 50,
+    "text": "Gossamer Hair. Your hair becomes fine and ethereal, floating gently as if underwater."
+  },
+  {
+    "min": 51,
+    "max": 52,
+    "text": "Sprouting Crystals. Small bits of delerium begin to erupt from your bones and through your skin. They itch painfully."
+  },
+  {
+    "min": 53,
+    "max": 54,
+    "text": "Burning Blood. FLAME ON! As a Bonus Action, you can give yourself the Burning condition. The Fire damage is a number of d6s equal to half your Proficiency Bonus (rounded down). While you have the Burning condition, you gain a Fly speed equal to your Speed. You can end the Burning condition as an action. If the Burning damage reduces you to 0 Hit Points, your flesh burns away and only a skeleton remains."
+  },
+  {
+    "min": 55,
+    "max": 56,
+    "text": "Screaming Brain. You grow a sentient brain in your body, and it doesn't like you very much. It berates you and constantly questions your judgment, constantly wishing to escape the confines of your body."
+  },
+  {
+    "min": 57,
+    "max": 58,
+    "text": "Vestigial Limbs. Your body suddenly sprouts additional appendages. The limbs are not usable, however. Roll 1d6 to determine what grows: 1: fingers; 2: toes; 3: leg; 4: Arm; 5: tail; 6: head."
+  },
+  {
+    "min": 59,
+    "max": 60,
+    "text": "Transmuted Flesh. Your flesh and body transform into an seemingly inorganic material but you remain animate and alive. This doesn't affect your game statistics. Roll 1d6 to determine which material: 1: iron; 2: wood; 3: glass; 4: stone; 5: water; 6: plastic."
+  },
+  {
+    "min": 61,
+    "max": 62,
+    "text": "Otherworldly Resistance. The Contamination growing in your body makes you strangely resistant to similar forces. You gain Resistance to a damage type. Roll a d10 to determine which damage type: 1–2: Necrotic; 3–4: Thunder; 5–6: Radiant; 7–8: Psychic; 9–10: Force. You can gain this mutation multiple times, rolling a different damage type each time."
+  },
+  {
+    "min": 63,
+    "max": 64,
+    "text": "Chitinous Plates. Shell-like growths appear all over your body, giving you a +1 bonus to AC. If you have four or more Contamination levels, this bonus increases to +2."
+  },
+  {
+    "min": 65,
+    "max": 66,
+    "text": "Amorphous Form. Your bones and organs become gelatinous. You can move through a space as narrow as 6 inches wide without squeezing."
+  },
+  {
+    "min": 67,
+    "max": 68,
+    "text": "Spiked Growths. At the start of each of your turns, you deal 5 (1d10) Piercing damage for each contamination level you have gained to any creature you are grappling."
+  },
+  {
+    "min": 69,
+    "max": 70,
+    "text": "Aquatic Adaptation. You sprout fish-like fins and gills. You gain a Swim speed equal to your Speed and can breathe underwater. If you have four or more Contamination levels, you can only breathe underwater. You can hold your breath outside water for up to 1 hour."
+  },
+  {
+    "min": 71,
+    "max": 72,
+    "text": "Cyclopean Vision. Your eyes merge into a single central eye, which you can use to cast the Fire Bolt cantrip. You use your choice of Intelligence, Wisdom, or Charisma as the spellcasting ability."
+  },
+  {
+    "min": 73,
+    "max": 74,
+    "text": "Spatial Displacement. You can cast Misty Step once for each Contamination level you have. You regain these uses when you finish a Long Rest."
+  },
+  {
+    "min": 75,
+    "max": 76,
+    "text": "Tentacled Limb. One of your arms becomes a fleshy tentacle. When you make a melee attack on your turn, increase your reach by 5 feet."
+  },
+  {
+    "min": 77,
+    "max": 78,
+    "text": "Spider Climb. You gain a Climb Speed equal to your walking speed. You can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
+  },
+  {
+    "min": 79,
+    "max": 80,
+    "text": "Whispering Voices. You gain telepathy to a range of 10 feet, but other people hear it as their own voice. If you have four or more Contamination levels, the range extends to 60 feet."
+  },
+  {
+    "min": 81,
+    "max": 82,
+    "text": "Belly Maw. A toothy mouth appears on your stomach. You can use it to make a melee attack as a Bonus Action on your turn against a creature within 5 of you. Its attack bonus is equal to your Proficiency Bonus + your Strength or Dexterity modifier (your choice). If you hit with it, you deal Piercing damage equal to 1d6 + your Strength or Dexterity modifier, plus an additional 1d6 Necrotic damage for each contamination level you have gained."
+  },
+  {
+    "min": 83,
+    "max": 84,
+    "text": "Eyeless Sight. Your eyes become milky orbs. You gain Blindsight to a range of 10 feet. If you have four or more Contamination levels, your eyes rot out, and dim octarine light burns in the sockets. Your Blindsight increases to 30 feet."
+  },
+  {
+    "min": 85,
+    "max": 86,
+    "text": "Arcane Blood. You gain an additional spell slot of the highest level you can cast (to a maximum of 5th level). If you don't have spell slots, your Hit Point maximum increases by an amount equal to your level. If you have four or more Contamination levels, you gain two spell slots instead of one or increase your Hit Points by twice your level."
+  },
+  {
+    "min": 87,
+    "max": 88,
+    "text": "Reversed Limbs. Your base Walking speed increases by 10 feet and your long jump distance is doubled."
+  },
+  {
+    "min": 89,
+    "max": 90,
+    "text": "Chameleon. Your skin turns translucent and changes color to match your surroundings. As an action, you can give yourself the Invisible condition, which lasts until the end of your next turn or until you make an attack roll, deal damage, or cast a spell. You can use this ability only if you haven't moved during this turn, and after you use it, your speed is 0 until the end of the current turn."
+  },
+  {
+    "min": 91,
+    "max": 92,
+    "text": "Magic Resistance. You gain Advantage on saving throws against spells and magical effects."
+  },
+  {
+    "min": 93,
+    "max": 94,
+    "text": "Regenerative Flesh. At the start of each of your turns, if you are Bloodied and have at least 1 Hit Point, you regain Hit Points equal to twice your Proficiency Bonus. The healed flesh regrows as knobby, scaled, alien hide."
+  },
+  {
+    "min": 95,
+    "max": 96,
+    "text": "Multiplied Senses. Your face sprouts additional eyeballs, ears, and noses. You gain Advantage on Initiative checks as well as Wisdom (Perception) and Intelligence (Investigation) checks."
+  },
+  {
+    "min": 97,
+    "max": 98,
+    "text": "Corrosive Mucus. As a Bonus Action, you can spit acid at a creature within 30 feet. Make a ranged attack against the creature. On a hit, you deal 2d10 Acid damage and the creature is Burning (1d10 Acid)."
+  },
+  {
+    "min": 99,
+    "max": 100,
+    "text": "Rampant Mutation! Roll twice, ignoring this result on subsequent rolls."
+  }
+];
 
 const MONSTERS_OF_DRAKKENHEIM_DATA = {
   "encounterDescriptions": {
@@ -2260,7 +2743,7 @@ const STORAGE_KEYS = {
   crafting: "aldor.craftingState.v1"
 };
 
-const APP_VERSION = "2.6.7";
+const APP_VERSION = "2.6.9";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -8075,13 +8558,74 @@ function generateEncounterLuckyFindCheck() {
   return formatLuckyFind(rollLuckyFindResult());
 }
 
-function generateArcaneAnomaly() {
-  const roll = Math.floor(Math.random() * 20) + 1;
-  byId("arcaneAnomalyRoll").textContent = `Arcane Anomaly - rolled ${roll} on d20`;
-  byId("arcaneAnomalyOutput").textContent = DEFAULT_DATA.arcaneAnomalies[roll - 1];
-  markOutputReady("arcaneAnomalyRoll", "arcaneAnomalyOutput");
-  flashResults("arcaneAnomalyRoll", "arcaneAnomalyOutput");
+function findD100TableResult(table, roll) {
+  return table.find((entry) => roll >= entry.min && roll <= entry.max) || null;
+}
+
+function renderD100TableResult({ table, roll, label, rollOutputId, effectOutputId }) {
+  const result = findD100TableResult(table, roll);
+  if (!result) return;
+  byId(rollOutputId).textContent = `${label} — rolled ${roll} on d100`;
+  byId(effectOutputId).textContent = result.text;
+  markOutputReady(rollOutputId, effectOutputId);
+  flashResults(rollOutputId, effectOutputId);
   playUiSound("roll");
+}
+
+function readManualD100(inputId) {
+  const input = byId(inputId);
+  const roll = Number.parseInt(input.value, 10);
+  if (!Number.isInteger(roll) || roll < 1 || roll > 100) {
+    input.setCustomValidity("Enter a whole number from 1 to 100.");
+    input.reportValidity();
+    return null;
+  }
+  input.setCustomValidity("");
+  return roll;
+}
+
+function generateArcaneAnomaly() {
+  renderD100TableResult({
+    table: DEFAULT_DATA.arcaneAnomalies,
+    roll: Math.floor(Math.random() * 100) + 1,
+    label: "Arcane Anomaly",
+    rollOutputId: "arcaneAnomalyRoll",
+    effectOutputId: "arcaneAnomalyOutput"
+  });
+}
+
+function resolveManualArcaneAnomaly() {
+  const roll = readManualD100("manualArcaneAnomalyRoll");
+  if (roll === null) return;
+  renderD100TableResult({
+    table: DEFAULT_DATA.arcaneAnomalies,
+    roll,
+    label: "Arcane Anomaly",
+    rollOutputId: "arcaneAnomalyRoll",
+    effectOutputId: "arcaneAnomalyOutput"
+  });
+}
+
+function generateMutation() {
+  renderD100TableResult({
+    table: MUTATION_TABLE,
+    roll: Math.floor(Math.random() * 100) + 1,
+    label: "Mutation",
+    rollOutputId: "mutationRoll",
+    effectOutputId: "mutationOutput"
+  });
+}
+
+function resolveManualMutation() {
+  const roll = readManualD100("manualMutationRoll");
+  if (roll === null) return;
+  renderD100TableResult({
+    table: MUTATION_TABLE,
+    roll,
+    label: "Mutation",
+    rollOutputId: "mutationRoll",
+    effectOutputId: "mutationOutput"
+  });
 }
 
 function showTab(tabName) {
@@ -8725,6 +9269,21 @@ function bindEvents() {
   byId("generateCommonLocation").addEventListener("click", generateCommonLocation);
   byId("generateWarpedRuin").addEventListener("click", generateWarpedRuin);
   byId("generateArcaneAnomaly").addEventListener("click", generateArcaneAnomaly);
+  byId("resolveManualArcaneAnomaly").addEventListener("click", resolveManualArcaneAnomaly);
+  byId("manualArcaneAnomalyRoll").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      resolveManualArcaneAnomaly();
+    }
+  });
+  byId("generateMutation").addEventListener("click", generateMutation);
+  byId("resolveManualMutation").addEventListener("click", resolveManualMutation);
+  byId("manualMutationRoll").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      resolveManualMutation();
+    }
+  });
 }
 
 function init() {

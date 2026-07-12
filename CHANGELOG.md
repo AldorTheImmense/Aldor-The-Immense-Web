@@ -1,5 +1,19 @@
 # Changelog
 
+## v2.6.9
+
+- Moved the Rumour Generator to the left side of Other Random Tables beneath the simple one-click generators.
+- Kept Arcane Anomalies and Mutations together in the right column.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
+## v2.6.8
+
+- Expanded Arcane Anomalies from the previous d20 table to the supplied d100 table.
+- Added manual d100 entry for Arcane Anomalies so player-rolled results can be resolved directly.
+- Added the supplied expanded d100 Mutations table to Other Random Tables.
+- Added manual d100 entry for Mutations and the Long Rest contamination reminder.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
 ## v2.6.7
 
 - Simplified Harvest from Encounter Creatures to a single monster search field.

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.6.7">
+  <link rel="stylesheet" href="style.css?v=2.6.9">
 </head>
 <body>
   <header class="app-header">
@@ -1172,15 +1172,6 @@
                 <button id="generateWarpedRuin" type="button">Generate Warped Ruin</button>
                 <p id="warpedRuinOutput" class="output-line empty-state">No warped ruin generated yet.</p>
               </div>
-            </div>
-
-            <div class="other-tables-panel arcane-panel">
-              <div class="mini-table-section">
-                <h3>Arcane Anomalies</h3>
-                <button id="generateArcaneAnomaly" type="button">Generate Arcane Anomaly</button>
-                <p id="arcaneAnomalyRoll" class="output-line empty-state">No arcane anomaly rolled yet.</p>
-                <div id="arcaneAnomalyOutput" class="description-output compact-output empty-state">Generate an anomaly to reveal the effect.</div>
-              </div>
 
               <div class="mini-table-section">
                 <h3>Rumour Generator</h3>
@@ -1188,6 +1179,36 @@
                 <button id="generateRumour" type="button">Generate Rumour</button>
                 <div id="rumourOutput" class="description-output compact-output empty-state">No rumour generated yet.</div>
               </div>
+            </div>
+
+            <div class="other-tables-panel arcane-panel">
+              <div class="mini-table-section">
+                <h3>Arcane Anomalies</h3>
+                <div class="action-row">
+                  <button id="generateArcaneAnomaly" type="button">Roll d100</button>
+                  <label class="field-stack compact-field-stack">Manual roll
+                    <input id="manualArcaneAnomalyRoll" type="number" min="1" max="100" inputmode="numeric" placeholder="1–100">
+                  </label>
+                  <button id="resolveManualArcaneAnomaly" type="button">Use Roll</button>
+                </div>
+                <p id="arcaneAnomalyRoll" class="output-line empty-state">No arcane anomaly rolled yet.</p>
+                <div id="arcaneAnomalyOutput" class="description-output compact-output empty-state">Roll or enter a d100 result to reveal the effect.</div>
+              </div>
+
+              <div class="mini-table-section">
+                <h3>Mutations</h3>
+                <div class="action-row">
+                  <button id="generateMutation" type="button">Roll d100</button>
+                  <label class="field-stack compact-field-stack">Manual roll
+                    <input id="manualMutationRoll" type="number" min="1" max="100" inputmode="numeric" placeholder="1–100">
+                  </label>
+                  <button id="resolveManualMutation" type="button">Use Roll</button>
+                </div>
+                <p id="mutationRoll" class="output-line empty-state">No mutation rolled yet.</p>
+                <div id="mutationOutput" class="description-output compact-output empty-state">Roll or enter a d100 result to reveal the mutation.</div>
+                <p class="inline-note"><strong>Long Rests.</strong> Each time you finish a Long Rest while you have 1 or more Contamination levels, roll 1d20. On a 1, you gain a Contamination level.</p>
+              </div>
+
             </div>
           </div>
         </details>
@@ -1206,7 +1227,7 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.6.7</span>
+    <span>Aldor The Immense v2.6.9</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
@@ -1332,8 +1353,8 @@
 
 
 
-  <script src="harvest-data.js?v=2.6.7"></script>
-  <script src="recipes.js?v=2.6.7"></script>
-  <script src="script.js?v=2.6.7"></script>
+  <script src="harvest-data.js?v=2.6.9"></script>
+  <script src="recipes.js?v=2.6.9"></script>
+  <script src="script.js?v=2.6.9"></script>
 </body>
 </html>

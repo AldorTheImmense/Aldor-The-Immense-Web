@@ -1,6 +1,6 @@
 # Aldor The Immense
 
-Current version: v2.6.7
+Current version: v2.6.9
 
 Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign, styled as a dark gothic DM screen for use during prep or at the table.
 
@@ -9,6 +9,20 @@ The site brings several common table tools into one place so a DM can quickly ge
 
 
 
+
+## v2.6.9 random-table layout refinement
+
+- Moved the Rumour Generator into the left column beneath Common Locations and Warped Ruins.
+- Kept Arcane Anomalies and Mutations together in the right column.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
+
+## v2.6.8 expanded anomalies and mutations
+
+- Expanded Arcane Anomalies to the supplied d100 table.
+- Added the supplied expanded d100 Mutations table under Other Random Tables.
+- Added manual roll inputs for both tables, alongside random d100 generation.
+- Added the Long Rest contamination reminder beneath Mutations.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
 
 ## v2.6.7 streamlined encounter harvesting
 
