@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense - Changelog</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.6.12">
+  <link rel="stylesheet" href="style.css?v=2.6.24">
 </head>
 <body class="changelog-page">
   <header class="app-header">
@@ -24,10 +24,74 @@
   </header>
 
   <main>
+
+    <section class="changelog-entry">
+      <h2>v2.6.24</h2>
+      <ul>
+        <li>Added Poison Gland harvests to Lob Frog, Sewer Thing, Eldritch Crawler, and Phage.</li>
+        <li>Broadened Periapt of Proof against Poison to accept Animus from any poisonous creature.</li>
+        <li>Added suitable Very Rare Fiend hair components to Erinyes, Marilith, and Nalfeshnee.</li>
+        <li>Removed Whirling Bonesaw because its named Ripper component is unavailable in the campaign harvest pool.</li>
+      </ul>
+
+      <h2>v2.6.23</h2>
+      <ul>
+        <li>Fixed named-creature alternative matching so Winter Troll Heart satisfies Cold Snap Circlet.</li>
+        <li>Recognised Lob Frog and Sewer Thing as poisonous creatures and broadened Periapt of Proof against Poison accordingly.</li>
+        <li>Added a harvestable Doppelganger with Flesh as an Organ.</li>
+        <li>Added Celestial Eyes to Deva and Planetar and revised Sun Blade to require an Eye from a Celestial.</li>
+        <li>Revised Wand of Fireballs to accept an Efreeti Genie Heart or Fire Elemental Elemental Core.</li>
+        <li>Removed Flame Tongue from the recipe catalogue.</li>
+      </ul>
+    </section>
+    <section class="changelog-entry">
+      <h2>v2.6.22</h2>
+      <ul>
+        <li>Removed all Legendary recipes and capped the active crafting interface at Very Rare.</li>
+        <li>Removed Boots of the Winterlands, Frozen Armor, and Helm of Burning Rage because their required source creatures are unavailable in the adventure.</li>
+        <li>Removed Legendary options from workshop, component, recipe-filter, and custom recipe controls.</li>
+        <li>Preserved Appendix D Legendary rows as rules reference material.</li>
+      </ul>
+    </section>
+    <section class="changelog-entry">
+      <h2>v2.6.20</h2>
+      <ul>
+        <li>Added recipe-required components to campaign-generated Banshee, Displacer Beast, Dryad, Harpy, Mimic, and Troll harvest entries.</li>
+        <li>Restored Bag of Tricks to accept mimic mucus or ectoplasm.</li>
+        <li>Preserved all existing recipes and crafting behaviour.</li>
+      </ul>
+    </section>
+    <section class="changelog-entry">
+      <h2>v2.6.19</h2>
+      <ul>
+        <li>Added semantic recipe matching for equivalent harvested materials and creature traits.</li>
+        <li>Fire Essence, Water Essence, Fey Sap, celestial fluids, and construct cores now satisfy their intended recipe wording.</li>
+        <li>Bag of Tricks now requires ectoplasm.</li>
+        <li>Harvest data remains unchanged.</li>
+      </ul>
+    </section>
+
     <article class="changelog-card">
       <h1>Changelog</h1>
+      <h2>v2.6.17</h2>
+      <ul>
+        <li>Reverted the v2.6.16 recipe compatibility rewrites.</li>
+        <li>Restored the bespoke and situational recipe ingredients from v2.6.15 so players can create, prepare, or alter components through play and add them manually.</li>
+        <li>Preserved the expanded harvesting catalogue and all other existing functionality.</li>
+        <li>Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.</li>
+      </ul>
 
-      <h2>v2.6.12</h2>
+      <h2>v2.6.17</h2>
+      <ul>
+        <li>Added 57 missing creatures from the supplied Dungeons of Drakkenheim adventure to the harvesting catalogue.</li>
+        <li>Added Grotesque Gargant as a distinct creature from Grotesque Gargantuan.</li>
+        <li>Generated components using comparable creatures already in Aldor, with creature-type animus and CR-based rarity scaling.</li>
+        <li>Preserved all existing harvesting and crafting functionality.</li>
+        <li>Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.</li>
+      </ul>
+
+
+      <h2>v2.6.13</h2>
       <ul>
         <li>Removed the “What it does” heading from purchasable item details.</li>
         <li>Expanded the locally stored effect-summary library for standard Uncommon and Rare shop stock using D&amp;D 5e Wikidot as the requested reference.</li>
@@ -858,7 +922,7 @@
   </main>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.6.12</span>
+    <span>Aldor The Immense v2.6.24</span>
     <span><a href="index.html">Back to app</a></span>
   </footer>
 </body>

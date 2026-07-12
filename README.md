@@ -1,6 +1,6 @@
 # Aldor The Immense
 
-Current version: v2.6.12
+Current version: v2.6.24
 
 Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign, styled as a dark gothic DM screen for use during prep or at the table.
 
@@ -9,6 +9,92 @@ The site brings several common table tools into one place so a DM can quickly ge
 
 
 
+
+
+## v2.6.24 poison-component and Fiend-hair alignment
+
+- Added Poison Glands to Lob Frog, Sewer Thing, Eldritch Crawler, and Phage so visibly venomous creatures provide an appropriate poison-related organ.
+- Broadened Periapt of Proof against Poison to accept Animus from any poisonous creature, including Sewer Thing.
+- Added suitable Hair components to the Very Rare Fiends Erinyes, Marilith, and Nalfeshnee for Charged Gauntlets.
+- Removed Whirling Bonesaw because its required Ripper component is unavailable in the campaign.
+
+## v2.6.23 campaign-source recipe alignment
+
+- Fixed named-creature alternatives so a Winter Troll heart can satisfy Cold Snap Circlet even though the same requirement also lists dragons.
+- Recognised Lob Frog and Sewer Thing as poisonous creatures for recipe matching.
+- Broadened Periapt of Proof against Poison to accept Animus from any poisonous creature.
+- Added a harvestable Doppelganger with Flesh as an Organ for Mask of Monstrous Forms.
+- Changed Sun Blade to require an Eye from a Celestial and added Eyes to generated Deva and Planetar harvest entries.
+- Changed Wand of Fireballs to accept an Efreeti Genie Heart or Fire Elemental Elemental Core.
+- Removed Flame Tongue because Red Dragons are outside the campaign's expected creature pool.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
+
+## v2.6.22 Fey recipe scope reduction
+
+- Removed 25 recipes from the unsupported-recipe list whose remaining requirements depended on Fey creatures or Fey-derived components unavailable at suitable campaign tiers.
+- Kept the Uncommon Instrument of the Bards recipe because it was already automatically obtainable.
+- Reduced the active recipe catalogue from 303 to 278 recipes.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
+
+## v2.6.21 campaign-tier recipe scope
+
+- Removed all Legendary recipes because the Drakkenheim campaign and available workshops are not expected to support that tier.
+- Removed Boots of the Winterlands, Frozen Armor, and Helm of Burning Rage because their required source creatures are not present in the adventure. Time Dilation Medallion was removed with the Legendary catalogue.
+- Removed Legendary from workshop, component, recipe, and custom-entry rarity controls; Very Rare is now the highest supported crafting tier.
+- Preserved Appendix D's Legendary reference rows as rules reference material.
+
+## v2.6.20 named-monster component alignment
+
+Campaign-generated creatures now provide the exact components named by recipes where those components were previously absent. Bag of Tricks again accepts mimic mucus or ectoplasm.
+
+## v2.6.19 semantic recipe matching
+
+- Recipe matching now understands equivalent harvested names such as Fire Essence → elemental fluid, Water Essence → elemental water, and Fey Sap → restorative sap.
+- Creature source names supply relevant traits such as aquatic, fire-aligned, cold-aligned, swift, poisonous, radiant, shapechanger, and force-wielding.
+- Bag of Tricks now asks for ectoplasm, matching an actual harvested component.
+- Harvest data itself is unchanged.
+
+## v2.6.19 recipe component terminology pass
+
+- Audited recipe ingredient wording against the actual component types produced by the harvesting catalogue.
+- Removed unsupported alternatives such as leg tendons, hooves, swim bladders, sinew, pearls, barbs, lenses, muscles, pelts, and wand-core crystals where Aldor cannot harvest those component types.
+- Retained roleplay qualifiers such as creature speed, elemental affinity, anatomy, and source creature type.
+- Reworded affected requirements to use existing harvestable equivalents such as claws, gills, hair, glands, fangs, stingers, eyes, cores, hearts, skin, horns, and bones.
+- Preserved all recipes, harvest entries, quantities, rarities, and crafting behaviour.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
+
+## v2.6.17 recipe flavour restoration
+
+- Reverted the broad recipe-requirement simplifications introduced in v2.6.16.
+- Restored the original bespoke and situational ingredients from v2.6.15, such as specially prepared, altered, or condition-dependent components.
+- These requirements may be fulfilled through play and recorded with the existing manual component controls rather than requiring every ingredient to be generated automatically by a monster entry.
+- Preserved the expanded encounter-creature harvesting catalogue and all other existing functionality.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
+
+## v2.6.16 recipe compatibility pass
+
+- Audited all 313 recipes against the complete official and campaign-generated harvest catalogue.
+- Reworked every requirement that had no valid harvest source into a same-rarity requirement using an obtainable component category.
+- Resolved 131 blocked requirements across 85 recipe entries while preserving recipe counts and ingredient quantities.
+- Higher-rarity components can still substitute during crafting; recipe discovery still requires exact rarity.
+- Verified that every recipe requirement now has at least one harvestable source.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
+
+## v2.6.15 expanded adventure harvesting catalogue
+
+- Added 57 harvestable creatures referenced in the supplied Dungeons of Drakkenheim adventure that were missing from the encounter-harvest browser.
+- Added Grotesque Gargant as a distinct creature from Grotesque Gargantuan.
+- Generated components using comparable creatures already in Aldor as the baseline, including appropriate creature-type animus, anatomy, materials, and rarity scaling.
+- Preserved all existing official and generated harvesting entries.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
+
+
+## v2.6.13 complete tiered focus recipes
+
+- Added or completed +1, +2, and +3 recipe families for All-Purpose Tool, Amulet of the Devout, Arcane Grimoire, Bloodwell Vial, Dragonhide Belt, Moon Sickle, Rhythm Maker's Drum, Rod of the Pact Keeper, and Wand of the War Mage.
+- Existing unsuffixed recipes were renamed to the correct enhancement tier rather than duplicated.
+- Added 11 missing recipes while preserving every pre-existing recipe, for 313 recipes total.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
 
 ## v2.6.12 expanded shop item descriptions
 

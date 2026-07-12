@@ -3,6 +3,102 @@
    Encounter-only creatures absent from that dataset retain campaign-generated components. */
 window.ALDOR_HARVEST_DATA = [
   {
+    "id": "adventure-aboleth",
+    "name": "Aboleth",
+    "creatureType": "Aberration",
+    "cr": "10",
+    "aliases": [
+      "aboleths"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Aberration Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Aboleth Mucus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Aberrant Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Three Eyes"
+      },
+      {
+        "category": "Organ",
+        "name": "Brain"
+      },
+      {
+        "category": "Organ",
+        "name": "Mucus Glands"
+      },
+      {
+        "category": "Hide",
+        "name": "Rubbery Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Aberrant Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-air-elemental",
+    "name": "Air Elemental",
+    "creatureType": "Elemental",
+    "cr": "5",
+    "aliases": [
+      "air elementals"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Elemental Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Air Essence"
+      },
+      {
+        "category": "Organ",
+        "name": "Elemental Core"
+      },
+      {
+        "category": "Dust",
+        "name": "Elemental Dust"
+      }
+    ]
+  },
+  {
     "id": "official-allopine",
     "name": "Allopine",
     "creatureType": "Aberration",
@@ -63,6 +159,238 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Aberrant Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-amalgamation",
+    "name": "Amalgamation",
+    "creatureType": "Aberration",
+    "cr": "20",
+    "aliases": [
+      "amalgamations"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Legendary",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Aberration Animus"
+      },
+      {
+        "category": "Animus",
+        "name": "Aberration Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Contaminated Ichor"
+      },
+      {
+        "category": "Fluid",
+        "name": "Aberrant Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Many Eyes"
+      },
+      {
+        "category": "Organ",
+        "name": "Many Hearts"
+      },
+      {
+        "category": "Organ",
+        "name": "Warped Brain"
+      },
+      {
+        "category": "Hide",
+        "name": "Amalgamated Flesh"
+      },
+      {
+        "category": "Dust",
+        "name": "Aberrant Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-ancient-bronze-dragon",
+    "name": "Ancient Bronze Dragon",
+    "creatureType": "Dragon",
+    "cr": "22",
+    "aliases": [
+      "ancient bronze dragons"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Legendary",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Dragon Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Dragon Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Dragon Heart"
+      },
+      {
+        "category": "Organ",
+        "name": "Dragon Eye"
+      },
+      {
+        "category": "Organ",
+        "name": "Lightning Glands"
+      },
+      {
+        "category": "Bones",
+        "name": "Dragon Bones"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Dragon Claws"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Dragon Teeth"
+      },
+      {
+        "category": "Hide",
+        "name": "Bronze Dragon Scales"
+      },
+      {
+        "category": "Dust",
+        "name": "Dragon Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-ancient-gold-dragon",
+    "name": "Ancient Gold Dragon",
+    "creatureType": "Dragon",
+    "cr": "24",
+    "aliases": [
+      "ancient gold dragons"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Legendary",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Dragon Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Dragon Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Dragon Heart"
+      },
+      {
+        "category": "Organ",
+        "name": "Dragon Eye"
+      },
+      {
+        "category": "Organ",
+        "name": "Fire Glands"
+      },
+      {
+        "category": "Bones",
+        "name": "Dragon Bones"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Dragon Claws"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Dragon Teeth"
+      },
+      {
+        "category": "Hide",
+        "name": "Gold Dragon Scales"
+      },
+      {
+        "category": "Dust",
+        "name": "Dragon Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-animated-armor",
+    "name": "Animated Armor",
+    "creatureType": "Construct",
+    "cr": "1",
+    "aliases": [
+      "animated armors"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Construct Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Arcane Oil"
+      },
+      {
+        "category": "Organ",
+        "name": "Arcane Core"
+      },
+      {
+        "category": "Hide",
+        "name": "Animated Plate"
+      },
+      {
+        "category": "Dust",
+        "name": "Construct Dust"
       }
     ]
   },
@@ -189,6 +517,146 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-awakened-shrub",
+    "name": "Awakened Shrub",
+    "creatureType": "Plant",
+    "cr": "0",
+    "aliases": [
+      "awakened shrubs"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Common",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Plant Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Sap"
+      },
+      {
+        "category": "Organ",
+        "name": "Heartwood"
+      },
+      {
+        "category": "Hide",
+        "name": "Bark"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Twigs"
+      },
+      {
+        "category": "Dust",
+        "name": "Plant Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-azer",
+    "name": "Azer",
+    "creatureType": "Elemental",
+    "cr": "2",
+    "aliases": [
+      "azers"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Elemental Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Molten Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Elemental Core"
+      },
+      {
+        "category": "Hide",
+        "name": "Bronze Skin"
+      },
+      {
+        "category": "Dust",
+        "name": "Cinder Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-balor",
+    "name": "Balor",
+    "creatureType": "Fiend",
+    "cr": "19",
+    "aliases": [
+      "balors"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Legendary",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fiend Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fiendish Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Demonic Heart"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Horns"
+      },
+      {
+        "category": "Hide",
+        "name": "Flaming Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Fiend Dust"
+      }
+    ]
+  },
+  {
     "name": "Banshee",
     "creatureType": "Undead",
     "cr": "4",
@@ -221,6 +689,10 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Undead Dust"
+      },
+      {
+        "category": "Hair",
+        "name": "Banshee Hair"
       }
     ]
   },
@@ -289,6 +761,54 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Hide",
         "name": "Skin"
+      }
+    ]
+  },
+  {
+    "id": "adventure-bearded-devil",
+    "name": "Bearded Devil",
+    "creatureType": "Fiend",
+    "cr": "3",
+    "aliases": [
+      "bearded devils"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fiend Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fiendish Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Infernal Beard Spines"
+      },
+      {
+        "category": "Hide",
+        "name": "Devil Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Fiend Dust"
       }
     ]
   },
@@ -861,6 +1381,54 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-bone-devil",
+    "name": "Bone Devil",
+    "creatureType": "Fiend",
+    "cr": "9",
+    "aliases": [
+      "bone devils"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fiend Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fiendish Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Bones",
+        "name": "Infernal Bones"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Stinger"
+      },
+      {
+        "category": "Dust",
+        "name": "Fiend Dust"
+      }
+    ]
+  },
+  {
     "name": "Brazen Gorgon",
     "creatureType": "Construct",
     "cr": "5",
@@ -1249,6 +1817,70 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Aberrant Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-crater-wurm",
+    "name": "Crater Wurm",
+    "creatureType": "Monstrosity",
+    "cr": "15",
+    "aliases": [
+      "crater wurms"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Very Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Contaminated Ichor"
+      },
+      {
+        "category": "Fluid",
+        "name": "Monster Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Organ",
+        "name": "Glands"
+      },
+      {
+        "category": "Bones",
+        "name": "Wurm Bones"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Teeth"
+      },
+      {
+        "category": "Hide",
+        "name": "Armoured Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Monstrosity Dust"
       }
     ]
   },
@@ -1953,6 +2585,106 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-doppelganger",
+    "name": "Doppelganger",
+    "creatureType": "Monstrosity",
+    "cr": "3",
+    "aliases": [
+      "doppelgangers"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Monster Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Flesh"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Organ",
+        "name": "Eyes"
+      },
+      {
+        "category": "Bones",
+        "name": "Skull"
+      },
+      {
+        "category": "Hide",
+        "name": "Skin"
+      }
+    ]
+  },
+  {
+    "id": "adventure-deva",
+    "name": "Deva",
+    "creatureType": "Celestial",
+    "cr": "10",
+    "aliases": [
+      "devas"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Celestial Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Celestial Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Radiant Heart"
+      },
+      {
+        "category": "Organ",
+        "name": "Eyes"
+      },
+      {
+        "category": "Hide",
+        "name": "Celestial Feathers"
+      },
+      {
+        "category": "Dust",
+        "name": "Celestial Dust"
+      }
+    ]
+  },
+  {
     "id": "official-digipede",
     "name": "Digipede",
     "creatureType": "Monstrosity",
@@ -2123,6 +2855,10 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Hide",
         "name": "Skin"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Tentacles"
       }
     ]
   },
@@ -2216,6 +2952,46 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-djinni",
+    "name": "Djinni",
+    "creatureType": "Elemental",
+    "cr": "11",
+    "aliases": [
+      "djinnis"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Very Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Elemental Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Air Essence"
+      },
+      {
+        "category": "Organ",
+        "name": "Genie Heart"
+      },
+      {
+        "category": "Dust",
+        "name": "Elemental Dust"
+      }
+    ]
+  },
+  {
     "name": "Dretch",
     "creatureType": "Fiend",
     "cr": "1/4",
@@ -2280,6 +3056,142 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-dryad",
+    "name": "Dryad",
+    "creatureType": "Fey",
+    "cr": "1",
+    "aliases": [
+      "dryads"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fey Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fey Sap"
+      },
+      {
+        "category": "Organ",
+        "name": "Heartwood"
+      },
+      {
+        "category": "Hide",
+        "name": "Bark-like Skin"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Living Branches"
+      },
+      {
+        "category": "Dust",
+        "name": "Fey Dust"
+      },
+      {
+        "category": "Bones",
+        "name": "Dryad Skull"
+      }
+    ]
+  },
+  {
+    "id": "adventure-dust-mephit",
+    "name": "Dust Mephit",
+    "creatureType": "Elemental",
+    "cr": "1/2",
+    "aliases": [
+      "dust mephits"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Common",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Elemental Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Air Essence"
+      },
+      {
+        "category": "Organ",
+        "name": "Tiny Elemental Core"
+      },
+      {
+        "category": "Dust",
+        "name": "Mephit Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-earth-elemental",
+    "name": "Earth Elemental",
+    "creatureType": "Elemental",
+    "cr": "5",
+    "aliases": [
+      "earth elementals"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Elemental Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Earth Essence"
+      },
+      {
+        "category": "Organ",
+        "name": "Elemental Core"
+      },
+      {
+        "category": "Hide",
+        "name": "Living Stone"
+      },
+      {
+        "category": "Dust",
+        "name": "Elemental Dust"
+      }
+    ]
+  },
+  {
     "id": "official-effulgent-cnidarian",
     "name": "Effulgent Cnidarian",
     "creatureType": "Aberration",
@@ -2332,6 +3244,46 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-efreeti",
+    "name": "Efreeti",
+    "creatureType": "Elemental",
+    "cr": "11",
+    "aliases": [
+      "efreetis"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Very Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Elemental Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fire Essence"
+      },
+      {
+        "category": "Organ",
+        "name": "Genie Heart"
+      },
+      {
+        "category": "Dust",
+        "name": "Cinder Dust"
+      }
+    ]
+  },
+  {
     "id": "official-eldritch-crawler",
     "name": "Eldritch Crawler",
     "creatureType": "Aberration",
@@ -2373,6 +3325,10 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Fluid",
         "name": "Venom"
+      },
+      {
+        "category": "Organ",
+        "name": "Poison Gland"
       },
       {
         "category": "Organ",
@@ -2609,6 +3565,54 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-erinyes",
+    "name": "Erinyes",
+    "creatureType": "Fiend",
+    "cr": "12",
+    "aliases": [
+      "erinyess"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Very Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fiend Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fiendish Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Hide",
+        "name": "Infernal Feathers"
+      },
+      {
+        "category": "Hair",
+        "name": "Infernal Hair"
+      },
+      {
+        "category": "Dust",
+        "name": "Fiend Dust"
+      }
+    ]
+  },
+  {
     "id": "official-executioner",
     "name": "Executioner",
     "creatureType": "Construct",
@@ -2805,6 +3809,46 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-fire-elemental",
+    "name": "Fire Elemental",
+    "creatureType": "Elemental",
+    "cr": "5",
+    "aliases": [
+      "fire elementals"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Elemental Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fire Essence"
+      },
+      {
+        "category": "Organ",
+        "name": "Elemental Core"
+      },
+      {
+        "category": "Dust",
+        "name": "Cinder Dust"
+      }
+    ]
+  },
+  {
     "name": "Flesh Golem",
     "creatureType": "Construct",
     "cr": "5",
@@ -2853,6 +3897,50 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Arcane Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-flying-sword",
+    "name": "Flying Sword",
+    "creatureType": "Construct",
+    "cr": "1/4",
+    "aliases": [
+      "flying swords"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Common",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Construct Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Arcane Oil"
+      },
+      {
+        "category": "Organ",
+        "name": "Arcane Core"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Enchanted Blade"
+      },
+      {
+        "category": "Dust",
+        "name": "Construct Dust"
       }
     ]
   },
@@ -3714,6 +4802,58 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-giant-crocodile",
+    "name": "Giant Crocodile",
+    "creatureType": "Beast",
+    "cr": "5",
+    "aliases": [
+      "giant crocodiles"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Beast Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Monster Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Bones",
+        "name": "Skull"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Teeth"
+      },
+      {
+        "category": "Hide",
+        "name": "Thick Scales"
+      },
+      {
+        "category": "Dust",
+        "name": "Beast Dust"
+      }
+    ]
+  },
+  {
     "name": "Giant Lizard",
     "creatureType": "Beast",
     "cr": "1/4",
@@ -3934,6 +5074,106 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-glabrezu",
+    "name": "Glabrezu",
+    "creatureType": "Fiend",
+    "cr": "9",
+    "aliases": [
+      "glabrezus"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fiend Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fiendish Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Demonic Heart"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Pincers"
+      },
+      {
+        "category": "Hide",
+        "name": "Demon Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Fiend Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-gorgon",
+    "name": "Gorgon",
+    "creatureType": "Monstrosity",
+    "cr": "5",
+    "aliases": [
+      "gorgons"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Monster Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Petrifying Glands"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Horns"
+      },
+      {
+        "category": "Hide",
+        "name": "Iron Plates"
+      },
+      {
+        "category": "Dust",
+        "name": "Monstrosity Dust"
+      }
+    ]
+  },
+  {
     "id": "official-graffiti",
     "name": "Graffiti",
     "creatureType": "Construct",
@@ -3971,6 +5211,58 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Elemental Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-gravekeeper",
+    "name": "Gravekeeper",
+    "creatureType": "Undead",
+    "cr": "18",
+    "aliases": [
+      "gravekeepers"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Legendary",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Undead Animus"
+      },
+      {
+        "category": "Animus",
+        "name": "Undead Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Ectoplasm"
+      },
+      {
+        "category": "Organ",
+        "name": "Royal Soul Core"
+      },
+      {
+        "category": "Bones",
+        "name": "Ancient Bone"
+      },
+      {
+        "category": "Dust",
+        "name": "Undead Dust"
+      },
+      {
+        "category": "Dust",
+        "name": "Delerium Dust"
       }
     ]
   },
@@ -4123,6 +5415,70 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Undead Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-grotesque-gargant",
+    "name": "Grotesque Gargant",
+    "creatureType": "Monstrosity",
+    "cr": "12",
+    "aliases": [
+      "grotesque gargants"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Very Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Contaminated Ichor"
+      },
+      {
+        "category": "Fluid",
+        "name": "Monster Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Oversized Heart"
+      },
+      {
+        "category": "Organ",
+        "name": "Glands"
+      },
+      {
+        "category": "Bones",
+        "name": "Massive Bones"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Claws"
+      },
+      {
+        "category": "Hide",
+        "name": "Mutated Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Monstrosity Dust"
       }
     ]
   },
@@ -4382,6 +5738,10 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Hide",
         "name": "Skin"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Claws"
       }
     ]
   },
@@ -5246,6 +6606,102 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-homunculus",
+    "name": "Homunculus",
+    "creatureType": "Construct",
+    "cr": "0",
+    "aliases": [
+      "homunculuss"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Common",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Construct Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Alchemical Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Arcane Core"
+      },
+      {
+        "category": "Hide",
+        "name": "Clay Flesh"
+      },
+      {
+        "category": "Dust",
+        "name": "Construct Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-horned-devil",
+    "name": "Horned Devil",
+    "creatureType": "Fiend",
+    "cr": "11",
+    "aliases": [
+      "horned devils"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Very Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fiend Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fiendish Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Horns"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Tail Spikes"
+      },
+      {
+        "category": "Hide",
+        "name": "Devil Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Fiend Dust"
+      }
+    ]
+  },
+  {
     "id": "official-humongous-fungus-troll",
     "name": "Humongous Fungus Troll",
     "creatureType": "Giant",
@@ -5410,6 +6866,62 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-hydra",
+    "name": "Hydra",
+    "creatureType": "Monstrosity",
+    "cr": "8",
+    "aliases": [
+      "hydras"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Monster Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Regenerative Glands"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Bones",
+        "name": "Neck Vertebrae"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Fangs"
+      },
+      {
+        "category": "Hide",
+        "name": "Scales"
+      },
+      {
+        "category": "Dust",
+        "name": "Monstrosity Dust"
+      }
+    ]
+  },
+  {
     "id": "official-hypnotic-eldritch-blossom",
     "name": "Hypnotic Eldritch Blossom",
     "creatureType": "Plant",
@@ -5468,6 +6980,54 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Plant Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-imp",
+    "name": "Imp",
+    "creatureType": "Fiend",
+    "cr": "1",
+    "aliases": [
+      "imps"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fiend Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fiendish Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Stinger"
+      },
+      {
+        "category": "Hide",
+        "name": "Imp Wings"
+      },
+      {
+        "category": "Dust",
+        "name": "Fiend Dust"
       }
     ]
   },
@@ -5616,6 +7176,50 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Elemental Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-iron-golem",
+    "name": "Iron Golem",
+    "creatureType": "Construct",
+    "cr": "16",
+    "aliases": [
+      "iron golems"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Very Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Construct Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Arcane Oil"
+      },
+      {
+        "category": "Organ",
+        "name": "Golem Core"
+      },
+      {
+        "category": "Hide",
+        "name": "Iron Plates"
+      },
+      {
+        "category": "Dust",
+        "name": "Construct Dust"
       }
     ]
   },
@@ -6238,6 +7842,10 @@ window.ALDOR_HARVEST_DATA = [
       },
       {
         "category": "Organ",
+        "name": "Poison Gland"
+      },
+      {
+        "category": "Organ",
         "name": "Eyes"
       },
       {
@@ -6536,6 +8144,46 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-magma-mephit",
+    "name": "Magma Mephit",
+    "creatureType": "Elemental",
+    "cr": "1/2",
+    "aliases": [
+      "magma mephits"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Common",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Elemental Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Magma Essence"
+      },
+      {
+        "category": "Organ",
+        "name": "Tiny Elemental Core"
+      },
+      {
+        "category": "Dust",
+        "name": "Cinder Dust"
+      }
+    ]
+  },
+  {
     "id": "official-magma-troll",
     "name": "Magma Troll",
     "creatureType": "Giant",
@@ -6685,6 +8333,58 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-marilith",
+    "name": "Marilith",
+    "creatureType": "Fiend",
+    "cr": "16",
+    "aliases": [
+      "mariliths"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Very Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fiend Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fiendish Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Demonic Heart"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Serpent Fangs"
+      },
+      {
+        "category": "Hair",
+        "name": "Demonic Hair"
+      },
+      {
+        "category": "Hide",
+        "name": "Demon Scales"
+      },
+      {
+        "category": "Dust",
+        "name": "Fiend Dust"
+      }
+    ]
+  },
+  {
     "id": "official-maw-vermin",
     "name": "Maw Vermin",
     "creatureType": "Monstrosity",
@@ -6781,6 +8481,118 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-medusa",
+    "name": "Medusa",
+    "creatureType": "Monstrosity",
+    "cr": "6",
+    "aliases": [
+      "medusas"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Monster Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Petrifying Eyes"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Serpent Fangs"
+      },
+      {
+        "category": "Hide",
+        "name": "Serpent Hair"
+      },
+      {
+        "category": "Hide",
+        "name": "Skin"
+      },
+      {
+        "category": "Dust",
+        "name": "Monstrosity Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-merrow",
+    "name": "Merrow",
+    "creatureType": "Monstrosity",
+    "cr": "2",
+    "aliases": [
+      "merrows"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Monster Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Gills"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Bones",
+        "name": "Bones"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Teeth"
+      },
+      {
+        "category": "Hide",
+        "name": "Scales"
+      },
+      {
+        "category": "Dust",
+        "name": "Monstrosity Dust"
+      }
+    ]
+  },
+  {
     "name": "Mimic",
     "creatureType": "Monstrosity",
     "cr": "2",
@@ -6845,6 +8657,106 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Hide",
         "name": "Skin"
+      },
+      {
+        "category": "Fluid",
+        "name": "Mimic Mucus"
+      }
+    ]
+  },
+  {
+    "id": "adventure-mummy",
+    "name": "Mummy",
+    "creatureType": "Undead",
+    "cr": "3",
+    "aliases": [
+      "mummys"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Undead Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Embalming Fluid"
+      },
+      {
+        "category": "Organ",
+        "name": "Preserved Heart"
+      },
+      {
+        "category": "Hide",
+        "name": "Mummy Wrappings"
+      },
+      {
+        "category": "Dust",
+        "name": "Undead Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-nalfeshnee",
+    "name": "Nalfeshnee",
+    "creatureType": "Fiend",
+    "cr": "13",
+    "aliases": [
+      "nalfeshnees"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Very Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fiend Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fiendish Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Demonic Heart"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Tusks"
+      },
+      {
+        "category": "Hair",
+        "name": "Demonic Fur"
+      },
+      {
+        "category": "Hide",
+        "name": "Demon Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Fiend Dust"
       }
     ]
   },
@@ -6929,6 +8841,58 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Undead Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-night-hag",
+    "name": "Night Hag",
+    "creatureType": "Fiend",
+    "cr": "5",
+    "aliases": [
+      "night hags"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fiend Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fiendish Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Organ",
+        "name": "Evil Eye"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Claws"
+      },
+      {
+        "category": "Hide",
+        "name": "Hag Skin"
+      },
+      {
+        "category": "Dust",
+        "name": "Fiend Dust"
       }
     ]
   },
@@ -7112,6 +9076,54 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Plant Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-ogre-zombie",
+    "name": "Ogre Zombie",
+    "creatureType": "Undead",
+    "cr": "2",
+    "aliases": [
+      "ogre zombies"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Undead Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Necrotic Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Rotten Heart"
+      },
+      {
+        "category": "Bones",
+        "name": "Ogre Bones"
+      },
+      {
+        "category": "Hide",
+        "name": "Rotting Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Undead Dust"
       }
     ]
   },
@@ -7510,6 +9522,10 @@ window.ALDOR_HARVEST_DATA = [
       },
       {
         "category": "Organ",
+        "name": "Poison Gland"
+      },
+      {
+        "category": "Organ",
         "name": "Eyes"
       },
       {
@@ -7687,6 +9703,54 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Hide",
         "name": "Skin"
+      }
+    ]
+  },
+  {
+    "id": "adventure-planetar",
+    "name": "Planetar",
+    "creatureType": "Celestial",
+    "cr": "16",
+    "aliases": [
+      "planetars"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Very Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Celestial Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Celestial Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Radiant Heart"
+      },
+      {
+        "category": "Organ",
+        "name": "Eyes"
+      },
+      {
+        "category": "Hide",
+        "name": "Celestial Feathers"
+      },
+      {
+        "category": "Dust",
+        "name": "Celestial Dust"
       }
     ]
   },
@@ -7920,6 +9984,54 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-quasit",
+    "name": "Quasit",
+    "creatureType": "Fiend",
+    "cr": "1",
+    "aliases": [
+      "quasits"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fiend Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fiendish Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Claws"
+      },
+      {
+        "category": "Hide",
+        "name": "Quasit Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Fiend Dust"
+      }
+    ]
+  },
+  {
     "id": "official-rat-crown-prince",
     "name": "Rat Crown-Prince",
     "creatureType": "Monstrosity",
@@ -8080,6 +10192,71 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Hide",
         "name": "Skin"
+      }
+    ]
+  },
+  {
+    "id": "adventure-rat-prince",
+    "name": "Rat Prince",
+    "creatureType": "Monstrosity",
+    "cr": "5",
+    "aliases": [
+      "rat prince",
+      "rat princes"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Monster Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Organ",
+        "name": "Eyes"
+      },
+      {
+        "category": "Bones",
+        "name": "Skull"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Fangs"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Claws"
+      },
+      {
+        "category": "Hide",
+        "name": "Ratling Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Monstrosity Dust"
       }
     ]
   },
@@ -8806,6 +10983,102 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-roper",
+    "name": "Roper",
+    "creatureType": "Monstrosity",
+    "cr": "5",
+    "aliases": [
+      "ropers"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Monster Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Eye"
+      },
+      {
+        "category": "Organ",
+        "name": "Digestive Glands"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Tendrils"
+      },
+      {
+        "category": "Hide",
+        "name": "Stone-like Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Monstrosity Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-rug-of-smothering",
+    "name": "Rug of Smothering",
+    "creatureType": "Construct",
+    "cr": "2",
+    "aliases": [
+      "rug of smotherings"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Construct Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Arcane Thread Oil"
+      },
+      {
+        "category": "Organ",
+        "name": "Arcane Core"
+      },
+      {
+        "category": "Hide",
+        "name": "Enchanted Fabric"
+      },
+      {
+        "category": "Dust",
+        "name": "Construct Dust"
+      }
+    ]
+  },
+  {
     "id": "official-sanguine-witch",
     "name": "Sanguine Witch",
     "creatureType": "Undead",
@@ -8951,6 +11224,58 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-sea-hag",
+    "name": "Sea Hag",
+    "creatureType": "Fey",
+    "cr": "2",
+    "aliases": [
+      "sea hags"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fey Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fey Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Evil Eye"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Claws"
+      },
+      {
+        "category": "Hide",
+        "name": "Warty Skin"
+      },
+      {
+        "category": "Dust",
+        "name": "Fey Dust"
+      }
+    ]
+  },
+  {
     "id": "official-sewer-thing",
     "name": "Sewer Thing",
     "creatureType": "Plant",
@@ -8982,6 +11307,10 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Fluid",
         "name": "Venom"
+      },
+      {
+        "category": "Organ",
+        "name": "Poison Gland"
       },
       {
         "category": "Fluid",
@@ -9204,6 +11533,90 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Hide",
         "name": "Webbed Membrane"
+      }
+    ]
+  },
+  {
+    "id": "adventure-shield-guardian",
+    "name": "Shield Guardian",
+    "creatureType": "Construct",
+    "cr": "7",
+    "aliases": [
+      "shield guardians"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Construct Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Arcane Oil"
+      },
+      {
+        "category": "Organ",
+        "name": "Guardian Core"
+      },
+      {
+        "category": "Hide",
+        "name": "Runed Plating"
+      },
+      {
+        "category": "Dust",
+        "name": "Construct Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-skeleton",
+    "name": "Skeleton",
+    "creatureType": "Undead",
+    "cr": "1/4",
+    "aliases": [
+      "skeletons"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Common",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Undead Animus"
+      },
+      {
+        "category": "Bones",
+        "name": "Bones"
+      },
+      {
+        "category": "Bones",
+        "name": "Skull"
+      },
+      {
+        "category": "Dust",
+        "name": "Undead Dust"
       }
     ]
   },
@@ -9706,6 +12119,46 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-steam-mephit",
+    "name": "Steam Mephit",
+    "creatureType": "Elemental",
+    "cr": "1/4",
+    "aliases": [
+      "steam mephits"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Common",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Elemental Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Steam Essence"
+      },
+      {
+        "category": "Organ",
+        "name": "Tiny Elemental Core"
+      },
+      {
+        "category": "Dust",
+        "name": "Mephit Dust"
+      }
+    ]
+  },
+  {
     "id": "official-stitcher",
     "name": "Stitcher",
     "creatureType": "Construct",
@@ -9769,6 +12222,50 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Hide",
         "name": "Skin"
+      }
+    ]
+  },
+  {
+    "id": "adventure-stone-golem",
+    "name": "Stone Golem",
+    "creatureType": "Construct",
+    "cr": "10",
+    "aliases": [
+      "stone golems"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Construct Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Arcane Oil"
+      },
+      {
+        "category": "Organ",
+        "name": "Golem Core"
+      },
+      {
+        "category": "Hide",
+        "name": "Runed Stone"
+      },
+      {
+        "category": "Dust",
+        "name": "Construct Dust"
       }
     ]
   },
@@ -10175,6 +12672,74 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-tarrasque",
+    "name": "Tarrasque",
+    "creatureType": "Monstrosity",
+    "cr": "30",
+    "aliases": [
+      "tarrasques"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Legendary",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Monstrosity Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Monster Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Organ",
+        "name": "Eyes"
+      },
+      {
+        "category": "Organ",
+        "name": "Regenerative Glands"
+      },
+      {
+        "category": "Bones",
+        "name": "Titanic Bones"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Horns"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Claws"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Teeth"
+      },
+      {
+        "category": "Hide",
+        "name": "Carapace"
+      },
+      {
+        "category": "Dust",
+        "name": "Monstrosity Dust"
+      }
+    ]
+  },
+  {
     "id": "official-tentacled-dreg",
     "name": "Tentacled Dreg",
     "creatureType": "Aberration",
@@ -10308,6 +12873,54 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-treant",
+    "name": "Treant",
+    "creatureType": "Plant",
+    "cr": "9",
+    "aliases": [
+      "treants"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Plant Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Ancient Sap"
+      },
+      {
+        "category": "Organ",
+        "name": "Heartwood"
+      },
+      {
+        "category": "Hide",
+        "name": "Iron Bark"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Living Branches"
+      },
+      {
+        "category": "Dust",
+        "name": "Plant Dust"
+      }
+    ]
+  },
+  {
     "name": "Troll",
     "creatureType": "Giant",
     "cr": "5",
@@ -10390,6 +13003,14 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Hide",
         "name": "Skin"
+      },
+      {
+        "category": "Dust",
+        "name": "Troll Dust"
+      },
+      {
+        "category": "Organ",
+        "name": "Eyes"
       }
     ]
   },
@@ -10474,6 +13095,64 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Elemental Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-tyrannosaurus-rex",
+    "name": "Tyrannosaurus Rex",
+    "creatureType": "Beast",
+    "cr": "8",
+    "aliases": [
+      "tyrannosaurus",
+      "tyrannosaurus rexes",
+      "t-rex"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Beast Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Monster Blood"
+      },
+      {
+        "category": "Organ",
+        "name": "Heart"
+      },
+      {
+        "category": "Bones",
+        "name": "Massive Bones"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Teeth"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Claws"
+      },
+      {
+        "category": "Hide",
+        "name": "Thick Hide"
+      },
+      {
+        "category": "Dust",
+        "name": "Beast Dust"
       }
     ]
   },
@@ -10601,6 +13280,58 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Undead Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-vrock",
+    "name": "Vrock",
+    "creatureType": "Fiend",
+    "cr": "6",
+    "aliases": [
+      "vrocks"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Fiend Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Fiendish Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Demonic Heart"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Beak"
+      },
+      {
+        "category": "Natural Weapon",
+        "name": "Claws"
+      },
+      {
+        "category": "Hide",
+        "name": "Demon Feathers"
+      },
+      {
+        "category": "Dust",
+        "name": "Fiend Dust"
       }
     ]
   },
@@ -10908,6 +13639,90 @@ window.ALDOR_HARVEST_DATA = [
     ]
   },
   {
+    "id": "adventure-water-elemental",
+    "name": "Water Elemental",
+    "creatureType": "Elemental",
+    "cr": "5",
+    "aliases": [
+      "water elementals"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Elemental Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Water Essence"
+      },
+      {
+        "category": "Organ",
+        "name": "Elemental Core"
+      },
+      {
+        "category": "Dust",
+        "name": "Elemental Dust"
+      }
+    ]
+  },
+  {
+    "id": "adventure-wight",
+    "name": "Wight",
+    "creatureType": "Undead",
+    "cr": "3",
+    "aliases": [
+      "wights"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Uncommon",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Undead Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Ectoplasm"
+      },
+      {
+        "category": "Organ",
+        "name": "Withered Heart"
+      },
+      {
+        "category": "Bones",
+        "name": "Bones"
+      },
+      {
+        "category": "Dust",
+        "name": "Undead Dust"
+      }
+    ]
+  },
+  {
     "name": "Will-o'-Wisp",
     "creatureType": "Undead",
     "cr": "2",
@@ -11094,6 +13909,46 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Hide",
         "name": "Skin"
+      }
+    ]
+  },
+  {
+    "id": "adventure-wraith",
+    "name": "Wraith",
+    "creatureType": "Undead",
+    "cr": "5",
+    "aliases": [
+      "wraiths"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Rare",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Undead Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Ectoplasm"
+      },
+      {
+        "category": "Organ",
+        "name": "Soul Shard"
+      },
+      {
+        "category": "Dust",
+        "name": "Undead Dust"
       }
     ]
   },
@@ -11326,6 +14181,54 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Hide",
         "name": "Skin"
+      }
+    ]
+  },
+  {
+    "id": "adventure-zombie",
+    "name": "Zombie",
+    "creatureType": "Undead",
+    "cr": "1/4",
+    "aliases": [
+      "zombies"
+    ],
+    "modes": [
+      "core"
+    ],
+    "encounters": [
+      {
+        "mode": "core",
+        "title": "Dungeons of Drakkenheim"
+      }
+    ],
+    "rarity": "Common",
+    "hasAnimus": true,
+    "provenance": "generated",
+    "sourcePage": null,
+    "components": [
+      {
+        "category": "Animus",
+        "name": "Undead Animus"
+      },
+      {
+        "category": "Fluid",
+        "name": "Necrotic Ichor"
+      },
+      {
+        "category": "Organ",
+        "name": "Rotten Organs"
+      },
+      {
+        "category": "Bones",
+        "name": "Bones"
+      },
+      {
+        "category": "Hide",
+        "name": "Rotting Skin"
+      },
+      {
+        "category": "Dust",
+        "name": "Undead Dust"
       }
     ]
   }

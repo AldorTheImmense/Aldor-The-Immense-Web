@@ -100,31 +100,86 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
   },
-  "Uncommon::All-Purpose Tool": {
-    "name": "All-Purpose Tool",
+  "Uncommon::All-Purpose Tool, +1": {
+    "name": "All-Purpose Tool, +1",
     "itemRarity": "Uncommon",
     "workshopRarity": "Uncommon",
     "schematicPrice": 50,
     "components": [
       {
         "category": "Animus",
-        "text": "Animus from a spellcasting creature"
+        "text": "Uncommon Animus from a spellcasting creature"
       },
       {
         "category": "Dust",
-        "text": "Arcane dust from a Fey, Dragon, or Aberration"
+        "text": "Uncommon arcane dust from a Fey, Dragon, or Aberration"
       },
       {
         "category": "Fluid",
-        "text": "Monster blood from a spellcasting creature"
+        "text": "Uncommon monster blood or ectoplasm from a spellcasting creature"
       },
       {
         "category": "Organ",
-        "text": "Eye, brain, or gland from a magical creature"
+        "text": "Uncommon eye, brain, or gland from a magical creature"
       }
     ],
     "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "all-purpose-tool-1"
+  },
+  "Rare::All-Purpose Tool, +2": {
+    "name": "All-Purpose Tool, +2",
+    "itemRarity": "Rare",
+    "workshopRarity": "Rare",
+    "schematicPrice": 500,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Rare Animus from a spellcasting creature"
+      },
+      {
+        "category": "Dust",
+        "text": "Rare arcane dust from a Fey, Dragon, or Aberration"
+      },
+      {
+        "category": "Fluid",
+        "text": "Rare monster blood or ectoplasm from a spellcasting creature"
+      },
+      {
+        "category": "Organ",
+        "text": "Rare eye, brain, or gland from a magical creature"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "all-purpose-tool-2"
+  },
+  "Very Rare::All-Purpose Tool, +3": {
+    "name": "All-Purpose Tool, +3",
+    "itemRarity": "Very Rare",
+    "workshopRarity": "Very Rare",
+    "schematicPrice": 5000,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Very Rare Animus from a spellcasting creature"
+      },
+      {
+        "category": "Dust",
+        "text": "Very Rare arcane dust from a Fey, Dragon, or Aberration"
+      },
+      {
+        "category": "Fluid",
+        "text": "Very Rare monster blood or ectoplasm from a spellcasting creature"
+      },
+      {
+        "category": "Organ",
+        "text": "Very Rare eye, brain, or gland from a magical creature"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "all-purpose-tool-3"
   },
   "Uncommon::Ammunition, +1": {
     "name": "Ammunition, +1",
@@ -178,57 +233,167 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
   },
-  "Uncommon::Amulet of the Devout": {
-    "name": "Amulet of the Devout",
+  "Uncommon::Amulet of the Devout, +1": {
+    "name": "Amulet of the Devout, +1",
     "itemRarity": "Uncommon",
     "workshopRarity": "Uncommon",
     "schematicPrice": 50,
     "components": [
       {
         "category": "Animus",
-        "text": "Animus from a spellcasting creature"
+        "text": "Uncommon Animus from a Celestial, Fey, or Fiend"
       },
       {
         "category": "Dust",
-        "text": "Arcane dust from a Fey, Dragon, or Aberration"
+        "text": "Uncommon dust from a Celestial, Fey, or Fiend"
       },
       {
         "category": "Fluid",
-        "text": "Monster blood from a spellcasting creature"
+        "text": "Uncommon blood or ichor from a Celestial, Fey, or Fiend"
       },
       {
         "category": "Organ",
-        "text": "Eye, brain, or gland from a magical creature"
+        "text": "Uncommon heart, eye, or gland from a Celestial, Fey, or Fiend"
       }
     ],
     "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "amulet-of-the-devout-1"
   },
-  "Uncommon::Arcane Grimoire": {
-    "name": "Arcane Grimoire",
+  "Rare::Amulet of the Devout, +2": {
+    "name": "Amulet of the Devout, +2",
+    "itemRarity": "Rare",
+    "workshopRarity": "Rare",
+    "schematicPrice": 500,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Rare Animus from a Celestial, Fey, or Fiend"
+      },
+      {
+        "category": "Dust",
+        "text": "Rare dust from a Celestial, Fey, or Fiend"
+      },
+      {
+        "category": "Fluid",
+        "text": "Rare blood or ichor from a Celestial, Fey, or Fiend"
+      },
+      {
+        "category": "Organ",
+        "text": "Rare heart, eye, or gland from a Celestial, Fey, or Fiend"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "amulet-of-the-devout-2"
+  },
+  "Very Rare::Amulet of the Devout, +3": {
+    "name": "Amulet of the Devout, +3",
+    "itemRarity": "Very Rare",
+    "workshopRarity": "Very Rare",
+    "schematicPrice": 5000,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Very Rare Animus from a Celestial, Fey, or Fiend"
+      },
+      {
+        "category": "Dust",
+        "text": "Very Rare dust from a Celestial, Fey, or Fiend"
+      },
+      {
+        "category": "Fluid",
+        "text": "Very Rare blood or ichor from a Celestial, Fey, or Fiend"
+      },
+      {
+        "category": "Organ",
+        "text": "Very Rare heart, eye, or gland from a Celestial, Fey, or Fiend"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "amulet-of-the-devout-3"
+  },
+  "Uncommon::Arcane Grimoire, +1": {
+    "name": "Arcane Grimoire, +1",
     "itemRarity": "Uncommon",
     "workshopRarity": "Uncommon",
     "schematicPrice": 50,
     "components": [
       {
         "category": "Animus",
-        "text": "Animus from a spellcasting creature"
+        "text": "Uncommon Animus from a spellcasting creature"
       },
       {
         "category": "Dust",
-        "text": "Arcane dust from a Fey, Dragon, or Aberration"
+        "text": "Uncommon arcane dust from a spellcasting creature"
       },
       {
         "category": "Fluid",
-        "text": "Monster blood from a spellcasting creature"
+        "text": "Uncommon monster blood or ectoplasm from a spellcasting creature"
       },
       {
-        "category": "Organ",
-        "text": "Eye, brain, or gland from a magical creature"
+        "category": "Hide",
+        "text": "Uncommon skin or bark prepared as pages and binding"
       }
     ],
     "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "arcane-grimoire-1"
+  },
+  "Rare::Arcane Grimoire, +2": {
+    "name": "Arcane Grimoire, +2",
+    "itemRarity": "Rare",
+    "workshopRarity": "Rare",
+    "schematicPrice": 500,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Rare Animus from a spellcasting creature"
+      },
+      {
+        "category": "Dust",
+        "text": "Rare arcane dust from a spellcasting creature"
+      },
+      {
+        "category": "Fluid",
+        "text": "Rare monster blood or ectoplasm from a spellcasting creature"
+      },
+      {
+        "category": "Hide",
+        "text": "Rare skin or bark prepared as pages and binding"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "arcane-grimoire-2"
+  },
+  "Very Rare::Arcane Grimoire, +3": {
+    "name": "Arcane Grimoire, +3",
+    "itemRarity": "Very Rare",
+    "workshopRarity": "Very Rare",
+    "schematicPrice": 5000,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Very Rare Animus from a spellcasting creature"
+      },
+      {
+        "category": "Dust",
+        "text": "Very Rare arcane dust from a spellcasting creature"
+      },
+      {
+        "category": "Fluid",
+        "text": "Very Rare monster blood or ectoplasm from a spellcasting creature"
+      },
+      {
+        "category": "Hide",
+        "text": "Very Rare skin or bark prepared as pages and binding"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "arcane-grimoire-3"
   },
   "Uncommon::Bag of Holding": {
     "name": "Bag of Holding",
@@ -334,31 +499,86 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
   },
-  "Uncommon::Bloodwell Vial": {
-    "name": "Bloodwell Vial",
+  "Uncommon::Bloodwell Vial, +1": {
+    "name": "Bloodwell Vial, +1",
     "itemRarity": "Uncommon",
     "workshopRarity": "Uncommon",
     "schematicPrice": 50,
     "components": [
       {
         "category": "Animus",
-        "text": "Undead Animus"
+        "text": "Uncommon Animus from an Undead"
       },
       {
         "category": "Dust",
-        "text": "Undead dust"
+        "text": "Uncommon dust from an Undead"
       },
       {
         "category": "Fluid",
-        "text": "Ectoplasm or undead blood"
+        "text": "Uncommon blood, ichor, or ectoplasm from an Undead"
       },
       {
         "category": "Bones",
-        "text": "Skull, ribs, or spine from an Undead"
+        "text": "Uncommon skull, ribs, or spine from an Undead"
       }
     ],
     "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "bloodwell-vial-1"
+  },
+  "Rare::Bloodwell Vial, +2": {
+    "name": "Bloodwell Vial, +2",
+    "itemRarity": "Rare",
+    "workshopRarity": "Rare",
+    "schematicPrice": 500,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Rare Animus from an Undead"
+      },
+      {
+        "category": "Dust",
+        "text": "Rare dust from an Undead"
+      },
+      {
+        "category": "Fluid",
+        "text": "Rare blood, ichor, or ectoplasm from an Undead"
+      },
+      {
+        "category": "Bones",
+        "text": "Rare skull, ribs, or spine from an Undead"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "bloodwell-vial-2"
+  },
+  "Very Rare::Bloodwell Vial, +3": {
+    "name": "Bloodwell Vial, +3",
+    "itemRarity": "Very Rare",
+    "workshopRarity": "Very Rare",
+    "schematicPrice": 5000,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Very Rare Animus from an Undead"
+      },
+      {
+        "category": "Dust",
+        "text": "Very Rare dust from an Undead"
+      },
+      {
+        "category": "Fluid",
+        "text": "Very Rare blood, ichor, or ectoplasm from an Undead"
+      },
+      {
+        "category": "Bones",
+        "text": "Very Rare skull, ribs, or spine from an Undead"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "bloodwell-vial-3"
   },
   "Uncommon::Boots of Elvenkind": {
     "name": "Boots of Elvenkind",
@@ -406,33 +626,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Natural Weapon",
-        "text": "Leg tendon, hoof, or claw from a swift creature"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Uncommon::Boots of the Winterlands": {
-    "name": "Boots of the Winterlands",
-    "itemRarity": "Uncommon",
-    "workshopRarity": "Uncommon",
-    "schematicPrice": 50,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a cold-aligned Elemental"
-      },
-      {
-        "category": "Dust",
-        "text": "Frost-laden elemental dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Blood from a creature immune to cold"
-      },
-      {
-        "category": "Organ",
-        "text": "Heart from a winter creature"
+        "text": "Claw from a swift creature"
       }
     ],
     "source": "Aldor custom recipe",
@@ -536,7 +730,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Uncommon gills or swim bladder"
+        "text": "Uncommon gills"
       }
     ],
     "source": "Aldor custom recipe",
@@ -698,7 +892,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Uncommon gills or swim bladder"
+        "text": "Uncommon gills"
       }
     ],
     "source": "Aldor custom recipe",
@@ -777,7 +971,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Uncommon gills or swim bladder"
+        "text": "Uncommon gills"
       }
     ],
     "source": "Aldor custom recipe",
@@ -799,7 +993,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Fluid",
-        "text": "Uncommon mimic mucus or ectoplasm"
+        "text": "Uncommon ectoplasm"
       },
       {
         "category": "Hide",
@@ -887,31 +1081,86 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
   },
-  "Uncommon::Dragonhide Belt": {
-    "name": "Dragonhide Belt",
+  "Uncommon::Dragonhide Belt, +1": {
+    "name": "Dragonhide Belt, +1",
     "itemRarity": "Uncommon",
     "workshopRarity": "Uncommon",
     "schematicPrice": 50,
     "components": [
       {
         "category": "Animus",
-        "text": "Dragon Animus"
+        "text": "Uncommon Dragon Animus"
       },
       {
         "category": "Dust",
-        "text": "Dragon dust"
+        "text": "Uncommon Dragon dust"
       },
       {
         "category": "Fluid",
-        "text": "Dragon blood"
+        "text": "Uncommon Dragon blood"
       },
       {
         "category": "Hide",
-        "text": "Dragon scales"
+        "text": "Uncommon Dragon scales or hide"
       }
     ],
     "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "dragonhide-belt-1"
+  },
+  "Rare::Dragonhide Belt, +2": {
+    "name": "Dragonhide Belt, +2",
+    "itemRarity": "Rare",
+    "workshopRarity": "Rare",
+    "schematicPrice": 500,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Rare Dragon Animus"
+      },
+      {
+        "category": "Dust",
+        "text": "Rare Dragon dust"
+      },
+      {
+        "category": "Fluid",
+        "text": "Rare Dragon blood"
+      },
+      {
+        "category": "Hide",
+        "text": "Rare Dragon scales or hide"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "dragonhide-belt-2"
+  },
+  "Very Rare::Dragonhide Belt, +3": {
+    "name": "Dragonhide Belt, +3",
+    "itemRarity": "Very Rare",
+    "workshopRarity": "Very Rare",
+    "schematicPrice": 5000,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Very Rare Dragon Animus"
+      },
+      {
+        "category": "Dust",
+        "text": "Very Rare Dragon dust"
+      },
+      {
+        "category": "Fluid",
+        "text": "Very Rare Dragon blood"
+      },
+      {
+        "category": "Hide",
+        "text": "Very Rare Dragon scales or hide"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "dragonhide-belt-3"
   },
   "Uncommon::Driftglobe": {
     "name": "Driftglobe",
@@ -1309,7 +1558,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Muscle from a Giant"
+        "text": "Heart from a Giant"
       }
     ],
     "source": "Aldor custom recipe",
@@ -1387,7 +1636,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Uncommon gills or swim bladder"
+        "text": "Uncommon gills"
       }
     ],
     "source": "Aldor custom recipe",
@@ -1513,7 +1762,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Fluid",
-        "text": "Uncommon mimic mucus or ectoplasm"
+        "text": "Uncommon ectoplasm"
       },
       {
         "category": "Hide",
@@ -1670,7 +1919,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Hair",
-        "text": "Uncommon hair or sinew suitable for strings"
+        "text": "Uncommon hair suitable for strings"
       },
       {
         "category": "Bones",
@@ -1778,7 +2027,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Uncommon gills or swim bladder"
+        "text": "Uncommon gills"
       }
     ],
     "source": "Aldor custom recipe",
@@ -1888,31 +2137,86 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
   },
-  "Uncommon::Moon Sickle": {
-    "name": "Moon Sickle",
+  "Uncommon::Moon Sickle, +1": {
+    "name": "Moon Sickle, +1",
     "itemRarity": "Uncommon",
     "workshopRarity": "Uncommon",
     "schematicPrice": 50,
     "components": [
       {
         "category": "Animus",
-        "text": "Animus from a Fey, Plant, or Monstrosity"
+        "text": "Uncommon Animus from a Fey, Plant, or Monstrosity"
       },
       {
         "category": "Fluid",
-        "text": "Uncommon sap"
+        "text": "Uncommon sap or vital fluid from a Fey, Plant, or Monstrosity"
       },
       {
         "category": "Hair",
-        "text": "Uncommon leaves, fur, or feathers"
+        "text": "Uncommon leaves, fur, or feathers from a Fey, Plant, or Monstrosity"
       },
       {
         "category": "Hide",
-        "text": "Uncommon bark or natural hide"
+        "text": "Uncommon bark or natural hide from a Fey, Plant, or Monstrosity"
       }
     ],
     "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "moon-sickle-1"
+  },
+  "Rare::Moon Sickle, +2": {
+    "name": "Moon Sickle, +2",
+    "itemRarity": "Rare",
+    "workshopRarity": "Rare",
+    "schematicPrice": 500,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Rare Animus from a Fey, Plant, or Monstrosity"
+      },
+      {
+        "category": "Fluid",
+        "text": "Rare sap or vital fluid from a Fey, Plant, or Monstrosity"
+      },
+      {
+        "category": "Hair",
+        "text": "Rare leaves, fur, or feathers from a Fey, Plant, or Monstrosity"
+      },
+      {
+        "category": "Hide",
+        "text": "Rare bark or natural hide from a Fey, Plant, or Monstrosity"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "moon-sickle-2"
+  },
+  "Very Rare::Moon Sickle, +3": {
+    "name": "Moon Sickle, +3",
+    "itemRarity": "Very Rare",
+    "workshopRarity": "Very Rare",
+    "schematicPrice": 5000,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Very Rare Animus from a Fey, Plant, or Monstrosity"
+      },
+      {
+        "category": "Fluid",
+        "text": "Very Rare sap or vital fluid from a Fey, Plant, or Monstrosity"
+      },
+      {
+        "category": "Hair",
+        "text": "Very Rare leaves, fur, or feathers from a Fey, Plant, or Monstrosity"
+      },
+      {
+        "category": "Hide",
+        "text": "Very Rare bark or natural hide from a Fey, Plant, or Monstrosity"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "moon-sickle-3"
   },
   "Uncommon::Nature's Mantle": {
     "name": "Nature's Mantle",
@@ -2008,7 +2312,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Pearl or gland from an aquatic Monstrosity"
+        "text": "Gland from an aquatic Monstrosity"
       }
     ],
     "source": "Aldor custom recipe",
@@ -2127,7 +2431,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Hair",
-        "text": "Uncommon hair or sinew suitable for strings"
+        "text": "Uncommon hair suitable for strings"
       },
       {
         "category": "Bones",
@@ -2309,7 +2613,7 @@ window.ALDOR_RECIPE_DATA = {
     "components": [
       {
         "category": "Animus",
-        "text": "Animus from a poisonous Monstrosity"
+        "text": "Animus from a poisonous creature"
       },
       {
         "category": "Fluid",
@@ -2317,7 +2621,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Natural Weapon",
-        "text": "Fang, stinger, or barb from a venomous creature"
+        "text": "Fang or stinger from a venomous creature"
       }
     ],
     "source": "Aldor custom recipe",
@@ -2424,19 +2728,19 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
   },
-  "Uncommon::Rhythm Maker's Drum": {
-    "name": "Rhythm Maker's Drum",
+  "Uncommon::Rhythm Maker's Drum, +1": {
+    "name": "Rhythm Maker's Drum, +1",
     "itemRarity": "Uncommon",
     "workshopRarity": "Uncommon",
     "schematicPrice": 50,
     "components": [
       {
         "category": "Animus",
-        "text": "Fey Animus"
+        "text": "Uncommon Fey Animus"
       },
       {
         "category": "Hair",
-        "text": "Uncommon hair or sinew suitable for strings"
+        "text": "Uncommon hair suitable for strings"
       },
       {
         "category": "Bones",
@@ -2444,11 +2748,12 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Fluid",
-        "text": "Monster blood from a creature with a magical voice"
+        "text": "Uncommon blood or ichor from a creature with a magical voice"
       }
     ],
     "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "rhythm-maker-s-drum-1"
   },
   "Uncommon::Ring of Jumping": {
     "name": "Ring of Jumping",
@@ -2470,7 +2775,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Natural Weapon",
-        "text": "Leg tendon, hoof, or claw from a swift creature"
+        "text": "Claw from a swift creature"
       }
     ],
     "source": "Aldor custom recipe",
@@ -2522,7 +2827,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Uncommon gills or swim bladder"
+        "text": "Uncommon gills"
       }
     ],
     "source": "Aldor custom recipe",
@@ -2574,7 +2879,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Uncommon gills or swim bladder"
+        "text": "Uncommon gills"
       }
     ],
     "source": "Aldor custom recipe",
@@ -2614,23 +2919,78 @@ window.ALDOR_RECIPE_DATA = {
     "components": [
       {
         "category": "Animus",
-        "text": "Animus from a spellcasting creature"
+        "text": "Uncommon Animus from a spellcasting creature"
       },
       {
         "category": "Dust",
-        "text": "Arcane dust from a Fey, Dragon, or Aberration"
+        "text": "Uncommon arcane dust from a Fey, Fiend, or Aberration"
       },
       {
         "category": "Fluid",
-        "text": "Monster blood from a spellcasting creature"
+        "text": "Uncommon monster blood or ectoplasm from a spellcasting creature"
       },
       {
         "category": "Organ",
-        "text": "Eye, brain, or gland from a magical creature"
+        "text": "Uncommon eye, heart, or gland from a spellcasting creature"
       }
     ],
     "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "rod-of-the-pact-keeper-1"
+  },
+  "Rare::Rod of the Pact Keeper, +2": {
+    "name": "Rod of the Pact Keeper, +2",
+    "itemRarity": "Rare",
+    "workshopRarity": "Rare",
+    "schematicPrice": 500,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Rare Animus from a spellcasting creature"
+      },
+      {
+        "category": "Dust",
+        "text": "Rare arcane dust from a Fey, Fiend, or Aberration"
+      },
+      {
+        "category": "Fluid",
+        "text": "Rare monster blood or ectoplasm from a spellcasting creature"
+      },
+      {
+        "category": "Organ",
+        "text": "Rare eye, heart, or gland from a spellcasting creature"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "rod-of-the-pact-keeper-2"
+  },
+  "Very Rare::Rod of the Pact Keeper, +3": {
+    "name": "Rod of the Pact Keeper, +3",
+    "itemRarity": "Very Rare",
+    "workshopRarity": "Very Rare",
+    "schematicPrice": 5000,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Very Rare Animus from a spellcasting creature"
+      },
+      {
+        "category": "Dust",
+        "text": "Very Rare arcane dust from a Fey, Fiend, or Aberration"
+      },
+      {
+        "category": "Fluid",
+        "text": "Very Rare monster blood or ectoplasm from a spellcasting creature"
+      },
+      {
+        "category": "Organ",
+        "text": "Very Rare eye, heart, or gland from a spellcasting creature"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "rod-of-the-pact-keeper-3"
   },
   "Uncommon::Rope of Climbing": {
     "name": "Rope of Climbing",
@@ -2652,7 +3012,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Natural Weapon",
-        "text": "Leg tendon, hoof, or claw from a swift creature"
+        "text": "Claw from a swift creature"
       }
     ],
     "source": "Aldor custom recipe",
@@ -2832,7 +3192,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Natural Weapon",
-        "text": "Leg tendon, hoof, or claw from a swift creature"
+        "text": "Claw from a swift creature"
       }
     ],
     "source": "Aldor custom recipe",
@@ -2903,7 +3263,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Natural Weapon",
-        "text": "Fang, stinger, or barb from a venomous creature"
+        "text": "Fang or stinger from a venomous creature"
       },
       {
         "category": "Organ",
@@ -3038,7 +3398,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Uncommon gills or swim bladder"
+        "text": "Uncommon gills"
       }
     ],
     "source": "Aldor custom recipe",
@@ -3090,7 +3450,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Lens, eye, or core from a Construct"
+        "text": "Eye or core from a Construct"
       }
     ],
     "source": "Aldor custom recipe",
@@ -3149,31 +3509,86 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 394)",
     "note": ""
   },
-  "Uncommon::Wand of the War Mage": {
-    "name": "Wand of the War Mage",
+  "Uncommon::Wand of the War Mage, +1": {
+    "name": "Wand of the War Mage, +1",
     "itemRarity": "Uncommon",
     "workshopRarity": "Uncommon",
     "schematicPrice": 50,
     "components": [
       {
         "category": "Animus",
-        "text": "Animus from a spellcasting creature"
+        "text": "Uncommon Animus from a spellcasting creature"
       },
       {
         "category": "Dust",
-        "text": "Arcane dust from a Fey, Dragon, or Aberration"
+        "text": "Uncommon arcane dust from a Fey, Dragon, or Aberration"
       },
       {
         "category": "Fluid",
-        "text": "Monster blood from a spellcasting creature"
+        "text": "Uncommon monster blood or ectoplasm from a spellcasting creature"
       },
       {
-        "category": "Organ",
-        "text": "Eye, brain, or gland from a magical creature"
+        "category": "Bones",
+        "text": "Uncommon horn or bone suitable for a wand core"
       }
     ],
     "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "wand-of-the-war-mage-1"
+  },
+  "Rare::Wand of the War Mage, +2": {
+    "name": "Wand of the War Mage, +2",
+    "itemRarity": "Rare",
+    "workshopRarity": "Rare",
+    "schematicPrice": 500,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Rare Animus from a spellcasting creature"
+      },
+      {
+        "category": "Dust",
+        "text": "Rare arcane dust from a Fey, Dragon, or Aberration"
+      },
+      {
+        "category": "Fluid",
+        "text": "Rare monster blood or ectoplasm from a spellcasting creature"
+      },
+      {
+        "category": "Bones",
+        "text": "Rare horn or bone suitable for a wand core"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "wand-of-the-war-mage-2"
+  },
+  "Very Rare::Wand of the War Mage, +3": {
+    "name": "Wand of the War Mage, +3",
+    "itemRarity": "Very Rare",
+    "workshopRarity": "Very Rare",
+    "schematicPrice": 5000,
+    "components": [
+      {
+        "category": "Animus",
+        "text": "Very Rare Animus from a spellcasting creature"
+      },
+      {
+        "category": "Dust",
+        "text": "Very Rare arcane dust from a Fey, Dragon, or Aberration"
+      },
+      {
+        "category": "Fluid",
+        "text": "Very Rare monster blood or ectoplasm from a spellcasting creature"
+      },
+      {
+        "category": "Bones",
+        "text": "Very Rare horn or bone suitable for a wand core"
+      }
+    ],
+    "source": "Aldor custom recipe",
+    "note": "All listed components must match the recipe rarity. Higher-rarity components may substitute during crafting under Aldor’s normal crafting rules.",
+    "id": "wand-of-the-war-mage-3"
   },
   "Uncommon::Wand of Web": {
     "name": "Wand of Web",
@@ -3301,36 +3716,6 @@ window.ALDOR_RECIPE_DATA = {
       {
         "category": "Fluid",
         "text": "Air elemental fluid"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::All-Purpose Tool": {
-    "name": "All-Purpose Tool",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a spellcasting creature"
-      },
-      {
-        "category": "Dust",
-        "text": "Arcane dust from a Fey, Dragon, or Aberration"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster blood from a spellcasting creature"
-      },
-      {
-        "category": "Organ",
-        "text": "Eye, brain, or gland from a magical creature"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin, bark, shell, or construct plates"
       }
     ],
     "source": "Aldor custom recipe",
@@ -3503,36 +3888,6 @@ window.ALDOR_RECIPE_DATA = {
     ],
     "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 382)",
     "note": ""
-  },
-  "Rare::Arcane Grimoire": {
-    "name": "Arcane Grimoire",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a spellcasting creature"
-      },
-      {
-        "category": "Dust",
-        "text": "Arcane dust from a Fey, Dragon, or Aberration"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster blood from a spellcasting creature"
-      },
-      {
-        "category": "Organ",
-        "text": "Eye, brain, or gland from a magical creature"
-      },
-      {
-        "category": "Hide",
-        "text": "Rare skin or bark prepared as pages and binding"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
   },
   "Rare::Armor of Resistance": {
     "name": "Armor of Resistance",
@@ -3888,36 +4243,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
   },
-  "Rare::Boots of Speed": {
-    "name": "Boots of Speed",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a swift Fey"
-      },
-      {
-        "category": "Hair",
-        "text": "Fur from a fast Monstrosity"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin from a creature with exceptional speed"
-      },
-      {
-        "category": "Fluid",
-        "text": "Air elemental fluid"
-      },
-      {
-        "category": "Organ",
-        "text": "Heart from a swift creature"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
   "Rare::Bracers of Arc Lightning": {
     "id": "rare-bracers-of-arc-lightning",
     "name": "Bracers of Arc Lightning",
@@ -4013,36 +4338,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
   },
-  "Rare::Cape of the Mountebank": {
-    "name": "Cape of the Mountebank",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a teleporting Fey or Fiend"
-      },
-      {
-        "category": "Dust",
-        "text": "Extraplanar dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Ectoplasm"
-      },
-      {
-        "category": "Hair",
-        "text": "Hair from a Fey"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin from a creature with teleportation magic"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
   "Rare::Censer of Controlling Air Elementals": {
     "name": "Censer of Controlling Air Elementals",
     "itemRarity": "Rare",
@@ -4068,36 +4363,6 @@ window.ALDOR_RECIPE_DATA = {
       {
         "category": "Hide",
         "text": "Skin, bark, shell, or construct plates"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::Chime of Opening": {
-    "name": "Chime of Opening",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Fey Animus"
-      },
-      {
-        "category": "Hair",
-        "text": "Rare hair or sinew suitable for strings"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare hollow bone or horn"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster blood from a creature with a magical voice"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare horn or hollow bone used in the body"
       }
     ],
     "source": "Aldor custom recipe",
@@ -4130,36 +4395,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 384)",
     "note": ""
   },
-  "Rare::Cloak of Displacement": {
-    "name": "Cloak of Displacement",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a Displacer Beast"
-      },
-      {
-        "category": "Dust",
-        "text": "Fey dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Displacer Beast blood"
-      },
-      {
-        "category": "Hide",
-        "text": "Hide from a Displacer Beast"
-      },
-      {
-        "category": "Natural Weapon",
-        "text": "Tentacle from a Displacer Beast"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
   "Rare::Cloak of the Bat": {
     "name": "Cloak of the Bat",
     "itemRarity": "Rare",
@@ -4184,7 +4419,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Hide",
-        "text": "Rare skin or pelt suited to the garment"
+        "text": "Rare skin suited to the garment"
       }
     ],
     "source": "Aldor custom recipe",
@@ -4268,7 +4503,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Lens, eye, or core from a Construct"
+        "text": "Eye or core from a Construct"
       },
       {
         "category": "Hide",
@@ -4518,36 +4753,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
   },
-  "Rare::Dragonhide Belt": {
-    "name": "Dragonhide Belt",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Dragon Animus"
-      },
-      {
-        "category": "Dust",
-        "text": "Dragon dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Dragon blood"
-      },
-      {
-        "category": "Hide",
-        "text": "Dragon scales"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin, bark, shell, or construct plates"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
   "Rare::Duplicitous Manuscript": {
     "name": "Duplicitous Manuscript",
     "itemRarity": "Rare",
@@ -4747,36 +4952,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
   },
-  "Rare::Flame Tongue": {
-    "name": "Flame Tongue",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a Fire Elemental"
-      },
-      {
-        "category": "Dust",
-        "text": "Elemental ash"
-      },
-      {
-        "category": "Fluid",
-        "text": "Blood from a fire-immune creature"
-      },
-      {
-        "category": "Natural Weapon",
-        "text": "Fang or claw from a Red Dragon"
-      },
-      {
-        "category": "Organ",
-        "text": "Heart from a fire creature"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
   "Rare::Fractal Key": {
     "id": "rare-fractal-key",
     "name": "Fractal Key",
@@ -4791,33 +4966,6 @@ window.ALDOR_RECIPE_DATA = {
       {
         "category": "Bones",
         "text": "Bones from any Rare creature"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 386)",
-    "note": ""
-  },
-  "Rare::Frozen Armor": {
-    "id": "rare-frozen-armor",
-    "name": "Frozen Armor",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a Frost Giant"
-      },
-      {
-        "category": "Dust",
-        "text": "Elemental dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Contaminated ichor"
-      },
-      {
-        "category": "Fluid",
-        "text": "Elemental fluid"
       }
     ],
     "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 386)",
@@ -4908,37 +5056,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Muscle or heart from a Giant"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin, bark, shell, or construct plates"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::Glamoured Studded Leather": {
-    "name": "Glamoured Studded Leather",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Fey Animus"
-      },
-      {
-        "category": "Dust",
-        "text": "Fey dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Rare mimic mucus or ectoplasm"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin from a shapechanger"
+        "text": "Heart from a Giant"
       },
       {
         "category": "Hide",
@@ -5036,33 +5154,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 386)",
     "note": ""
   },
-  "Rare::Heart String Harp": {
-    "id": "rare-heart-string-harp",
-    "name": "Heart String Harp",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Fey Animus"
-      },
-      {
-        "category": "Hair",
-        "text": "Hair willingly given by a Fey"
-      },
-      {
-        "category": "Natural Weapon",
-        "text": "Horns or teeth from a Fey, Monstrosity, or Dragon"
-      },
-      {
-        "category": "Organ",
-        "text": "Heart from a Dragon"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 388)",
-    "note": ""
-  },
   "Rare::Heart Weaver's Primer": {
     "name": "Heart Weaver's Primer",
     "itemRarity": "Rare",
@@ -5092,37 +5183,6 @@ window.ALDOR_RECIPE_DATA = {
     ],
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::Helm of Burning Rage": {
-    "id": "rare-helm-of-burning-rage",
-    "name": "Helm of Burning Rage",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a Fire Giant"
-      },
-      {
-        "category": "Dust",
-        "text": "Elemental dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Elemental fluid"
-      },
-      {
-        "category": "Hide",
-        "text": "Plates"
-      },
-      {
-        "category": "Organ",
-        "text": "Heart from a Red Dragon"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 388)",
-    "note": ""
   },
   "Rare::Helm of Teleportation": {
     "name": "Helm of Teleportation",
@@ -5214,36 +5274,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
   },
-  "Rare::Horn of Valhalla": {
-    "name": "Horn of Valhalla",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Fey Animus"
-      },
-      {
-        "category": "Hair",
-        "text": "Rare hair or sinew suitable for strings"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare hollow bone or horn"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster blood from a creature with a magical voice"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare horn or hollow bone used in the body"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
   "Rare::Horseshoes of Speed": {
     "name": "Horseshoes of Speed",
     "itemRarity": "Rare",
@@ -5264,7 +5294,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Natural Weapon",
-        "text": "Leg tendon, hoof, or claw from a swift creature"
+        "text": "Claw from a swift creature"
       },
       {
         "category": "Hide",
@@ -5308,36 +5338,6 @@ window.ALDOR_RECIPE_DATA = {
     ],
     "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 388)",
     "note": ""
-  },
-  "Rare::Instrument of the Bards": {
-    "name": "Instrument of the Bards",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Fey Animus"
-      },
-      {
-        "category": "Hair",
-        "text": "Rare hair or sinew suitable for strings"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare hollow bone or horn"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster blood from a creature with a magical voice"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare horn or hollow bone used in the body"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
   },
   "Rare::Ioun Stone": {
     "name": "Ioun Stone",
@@ -5389,7 +5389,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Lens, eye, or core from a Construct"
+        "text": "Eye or core from a Construct"
       },
       {
         "category": "Hide",
@@ -5424,36 +5424,6 @@ window.ALDOR_RECIPE_DATA = {
       {
         "category": "Hide",
         "text": "Rare skin or bark prepared as pages and binding"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::Lyre of Building": {
-    "name": "Lyre of Building",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Fey Animus"
-      },
-      {
-        "category": "Hair",
-        "text": "Rare hair or sinew suitable for strings"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare hollow bone or horn"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster blood from a creature with a magical voice"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare horn or hollow bone used in the body"
       }
     ],
     "source": "Aldor custom recipe",
@@ -5549,37 +5519,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "The listed components should come from at least three different creatures where possible."
   },
-  "Rare::Mantle of Otherworldly Charisma": {
-    "id": "rare-mantle-of-otherworldly-charisma",
-    "name": "Mantle of Otherworldly Charisma",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Any Animus"
-      },
-      {
-        "category": "Dust",
-        "text": "Fey dust"
-      },
-      {
-        "category": "Hair",
-        "text": "Fur from a Monstrosity"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin from a Monstrosity"
-      },
-      {
-        "category": "Natural Weapon",
-        "text": "Horns from a Fiend"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 389)",
-    "note": ""
-  },
   "Rare::Mantle of Spell Resistance": {
     "name": "Mantle of Spell Resistance",
     "itemRarity": "Rare",
@@ -5604,7 +5543,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Hide",
-        "text": "Rare skin or pelt suited to the garment"
+        "text": "Rare skin suited to the garment"
       }
     ],
     "source": "Aldor custom recipe",
@@ -5675,127 +5614,6 @@ window.ALDOR_RECIPE_DATA = {
     ],
     "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 389)",
     "note": ""
-  },
-  "Rare::Mind Blade": {
-    "name": "Mind Blade",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a Fey or psychic Aberration"
-      },
-      {
-        "category": "Dust",
-        "text": "Fey or aberrant dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Rare ectoplasm or cerebral fluid"
-      },
-      {
-        "category": "Organ",
-        "text": "Eye or brain from a telepathic creature"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare dense bone used in the weapon core"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::Mind Lash": {
-    "name": "Mind Lash",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a Fey or psychic Aberration"
-      },
-      {
-        "category": "Dust",
-        "text": "Fey or aberrant dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Rare ectoplasm or cerebral fluid"
-      },
-      {
-        "category": "Organ",
-        "text": "Eye or brain from a telepathic creature"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin, bark, shell, or construct plates"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::Monster Hunter's Weapon +1": {
-    "id": "rare-monster-hunter-s-weapon-1",
-    "name": "Monster Hunter's Weapon +1",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Any Animus"
-      },
-      {
-        "category": "Fluid",
-        "text": "Sap"
-      },
-      {
-        "category": "Hair",
-        "text": "Hair from a Fey"
-      },
-      {
-        "category": "Hair",
-        "text": "Leaves"
-      },
-      {
-        "category": "Hide",
-        "text": "Bark"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 383)",
-    "note": ""
-  },
-  "Rare::Moon Sickle": {
-    "name": "Moon Sickle",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a Fey, Plant, or Monstrosity"
-      },
-      {
-        "category": "Fluid",
-        "text": "Rare sap"
-      },
-      {
-        "category": "Hair",
-        "text": "Rare leaves, fur, or feathers"
-      },
-      {
-        "category": "Hide",
-        "text": "Rare bark or natural hide"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin, bark, shell, or construct plates"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
   },
   "Rare::Necklace of Fireballs": {
     "name": "Necklace of Fireballs",
@@ -5953,7 +5771,7 @@ window.ALDOR_RECIPE_DATA = {
     "components": [
       {
         "category": "Animus",
-        "text": "Animus from a poisonous Monstrosity"
+        "text": "Animus from a poisonous creature"
       },
       {
         "category": "Fluid",
@@ -5961,7 +5779,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Natural Weapon",
-        "text": "Fang, stinger, or barb from a venomous creature"
+        "text": "Fang or stinger from a venomous creature"
       },
       {
         "category": "Organ",
@@ -6167,28 +5985,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Aldor custom recipe",
     "note": "This recipe produces one consumable dose or token."
   },
-  "Rare::Potion of Mind Reading": {
-    "name": "Potion of Mind Reading",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a Fey or psychic Aberration"
-      },
-      {
-        "category": "Dust",
-        "text": "Fey or aberrant dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Rare ectoplasm or cerebral fluid"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "This recipe produces one consumable dose or token."
-  },
   "Rare::Potion of Superior Healing": {
     "id": "rare-potion-of-superior-healing",
     "name": "Potion of Superior Healing",
@@ -6353,96 +6149,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 392)",
     "note": ""
   },
-  "Rare::Reveler's Concertina": {
-    "name": "Reveler's Concertina",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Fey Animus"
-      },
-      {
-        "category": "Hair",
-        "text": "Rare hair or sinew suitable for strings"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare hollow bone or horn"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster blood from a creature with a magical voice"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare horn or hollow bone used in the body"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::Rhythm Maker's Drum": {
-    "name": "Rhythm Maker's Drum",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Fey Animus"
-      },
-      {
-        "category": "Hair",
-        "text": "Rare hair or sinew suitable for strings"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare hollow bone or horn"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster blood from a creature with a magical voice"
-      },
-      {
-        "category": "Bones",
-        "text": "Rare horn or hollow bone used in the body"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::Ring of Animal Influence": {
-    "name": "Ring of Animal Influence",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a Fey or psychic Aberration"
-      },
-      {
-        "category": "Dust",
-        "text": "Fey or aberrant dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Rare ectoplasm or cerebral fluid"
-      },
-      {
-        "category": "Organ",
-        "text": "Eye or brain from a telepathic creature"
-      },
-      {
-        "category": "Dust",
-        "text": "Rare dust compressed into the setting"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
   "Rare::Ring of Evasion": {
     "name": "Ring of Evasion",
     "itemRarity": "Rare",
@@ -6523,7 +6229,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Natural Weapon",
-        "text": "Leg tendon, hoof, or claw from a swift creature"
+        "text": "Claw from a swift creature"
       },
       {
         "category": "Dust",
@@ -6643,7 +6349,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Lens, eye, or core from a Construct"
+        "text": "Eye or core from a Construct"
       },
       {
         "category": "Dust",
@@ -6707,67 +6413,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Hide",
-        "text": "Rare skin or pelt suited to the garment"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::Rod of Rulership": {
-    "name": "Rod of Rulership",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a Fey or psychic Aberration"
-      },
-      {
-        "category": "Dust",
-        "text": "Fey or aberrant dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Rare ectoplasm or cerebral fluid"
-      },
-      {
-        "category": "Organ",
-        "text": "Eye or brain from a telepathic creature"
-      },
-      {
-        "category": "Hide",
-        "text": "Rare bark or hide used for the grip and casing"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::Rod of the Pact Keeper, +2": {
-    "name": "Rod of the Pact Keeper, +2",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a spellcasting creature"
-      },
-      {
-        "category": "Dust",
-        "text": "Arcane dust from a Fey, Dragon, or Aberration"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster blood from a spellcasting creature"
-      },
-      {
-        "category": "Organ",
-        "text": "Eye, brain, or gland from a magical creature"
-      },
-      {
-        "category": "Hide",
-        "text": "Rare bark or hide used for the grip and casing"
+        "text": "Rare skin suited to the garment"
       }
     ],
     "source": "Aldor custom recipe",
@@ -6793,7 +6439,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Natural Weapon",
-        "text": "Leg tendon, hoof, or claw from a swift creature"
+        "text": "Claw from a swift creature"
       },
       {
         "category": "Hide",
@@ -6914,7 +6560,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Lens, eye, or core from a Construct"
+        "text": "Eye or core from a Construct"
       },
       {
         "category": "Hide",
@@ -6973,36 +6619,6 @@ window.ALDOR_RECIPE_DATA = {
     ],
     "source": "Monsters of Drakkenheim — Appendix E - SRD Recipes (p. 395)",
     "note": "The recipe creates a spell scroll within the listed spell-level tier."
-  },
-  "Rare::Staff of Charming": {
-    "name": "Staff of Charming",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a Fey or psychic Aberration"
-      },
-      {
-        "category": "Dust",
-        "text": "Fey or aberrant dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Rare ectoplasm or cerebral fluid"
-      },
-      {
-        "category": "Organ",
-        "text": "Eye or brain from a telepathic creature"
-      },
-      {
-        "category": "Hide",
-        "text": "Rare bark or hide used for the grip and casing"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
   },
   "Rare::Staff of Healing": {
     "name": "Staff of Healing",
@@ -7178,7 +6794,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Eye from a radiant creature"
+        "text": "Eye from a Celestial"
       }
     ],
     "source": "Aldor custom recipe",
@@ -7336,29 +6952,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 393)",
     "note": ""
   },
-  "Rare::Trollblood Potion": {
-    "id": "rare-trollblood-potion",
-    "name": "Trollblood Potion",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Fey Animus"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster blood from a Troll"
-      },
-      {
-        "category": "Organ",
-        "text": "Eyes from a Troll"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 394)",
-    "note": ""
-  },
   "Rare::Vicious Weapon": {
     "name": "Vicious Weapon",
     "itemRarity": "Rare",
@@ -7503,7 +7096,7 @@ window.ALDOR_RECIPE_DATA = {
       },
       {
         "category": "Organ",
-        "text": "Heart from a Red Dragon or fire creature"
+        "text": "Genie heart from an Efreeti or elemental core from a Fire Elemental"
       }
     ],
     "source": "Aldor custom recipe",
@@ -7587,66 +7180,6 @@ window.ALDOR_RECIPE_DATA = {
       {
         "category": "Organ",
         "text": "Eye or gland from a magical creature"
-      },
-      {
-        "category": "Hide",
-        "text": "Rare bark or hide used for the grip and casing"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::Wand of the War Mage, +2": {
-    "name": "Wand of the War Mage, +2",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from a spellcasting creature"
-      },
-      {
-        "category": "Dust",
-        "text": "Arcane dust from a Fey, Dragon, or Aberration"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster blood from a spellcasting creature"
-      },
-      {
-        "category": "Organ",
-        "text": "Eye, brain, or gland from a magical creature"
-      },
-      {
-        "category": "Hide",
-        "text": "Rare bark or hide used for the grip and casing"
-      }
-    ],
-    "source": "Aldor custom recipe",
-    "note": "The listed components should come from at least three different creatures where possible."
-  },
-  "Rare::Wand of Wonder": {
-    "name": "Wand of Wonder",
-    "itemRarity": "Rare",
-    "workshopRarity": "Rare",
-    "schematicPrice": 500,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Fey Animus"
-      },
-      {
-        "category": "Dust",
-        "text": "Fey dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Rare mimic mucus or ectoplasm"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin from a shapechanger"
       },
       {
         "category": "Hide",
@@ -7841,37 +7374,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 386)",
     "note": ""
   },
-  "Very Rare::Inexhaustible Armor": {
-    "id": "very-rare-inexhaustible-armor",
-    "name": "Inexhaustible Armor",
-    "itemRarity": "Very Rare",
-    "workshopRarity": "Very Rare",
-    "schematicPrice": 5000,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Any Animus"
-      },
-      {
-        "category": "Fluid",
-        "text": "Chemical Solution from a Construct"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin from a Fey"
-      },
-      {
-        "category": "Hide",
-        "text": "Plates"
-      },
-      {
-        "category": "Organ",
-        "text": "Heart from a Gorgon"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 388)",
-    "note": ""
-  },
   "Very Rare::Manual of Occult Anatomy +2": {
     "id": "very-rare-manual-of-occult-anatomy-2",
     "name": "Manual of Occult Anatomy +2",
@@ -7903,37 +7405,6 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 389)",
     "note": ""
   },
-  "Very Rare::Monster Hunter's Weapon +2": {
-    "id": "very-rare-monster-hunter-s-weapon-2",
-    "name": "Monster Hunter's Weapon +2",
-    "itemRarity": "Very Rare",
-    "workshopRarity": "Very Rare",
-    "schematicPrice": 5000,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Any Animus"
-      },
-      {
-        "category": "Fluid",
-        "text": "Sap"
-      },
-      {
-        "category": "Hair",
-        "text": "Hair from a Fey"
-      },
-      {
-        "category": "Hair",
-        "text": "Leaves"
-      },
-      {
-        "category": "Hide",
-        "text": "Bark"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 383)",
-    "note": "Use components whose rarity equals the item rarity."
-  },
   "Very Rare::Potion of Supreme Healing": {
     "id": "very-rare-potion-of-supreme-healing",
     "name": "Potion of Supreme Healing",
@@ -7956,37 +7427,6 @@ window.ALDOR_RECIPE_DATA = {
     ],
     "source": "Monsters of Drakkenheim — Appendix E - SRD Recipes (p. 395)",
     "note": "This recipe produces one Potion of Supreme Healing."
-  },
-  "Very Rare::Rejuvenation Potion": {
-    "id": "very-rare-rejuvenation-potion",
-    "name": "Rejuvenation Potion",
-    "itemRarity": "Very Rare",
-    "workshopRarity": "Very Rare",
-    "schematicPrice": 5000,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Any Animus"
-      },
-      {
-        "category": "Dust",
-        "text": "Fey Dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Any Elemental Fluid"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster Blood from a Dragon"
-      },
-      {
-        "category": "Organ",
-        "text": "Heart from a Fiend"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 387)",
-    "note": ""
   },
   "Very Rare::Shield, +3": {
     "id": "very-rare-shield-3",
@@ -8123,264 +7563,4 @@ window.ALDOR_RECIPE_DATA = {
     "source": "Monsters of Drakkenheim — Appendix E - SRD Recipes (p. 395)",
     "note": "Each component must come from a different monster."
   },
-  "Very Rare::Whirling Bonesaw": {
-    "id": "very-rare-whirling-bonesaw",
-    "name": "Whirling Bonesaw",
-    "itemRarity": "Very Rare",
-    "workshopRarity": "Very Rare",
-    "schematicPrice": 5000,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Any Animus"
-      },
-      {
-        "category": "Bones",
-        "text": "Ribs"
-      },
-      {
-        "category": "Fluid",
-        "text": "Elemental Fluid"
-      },
-      {
-        "category": "Hide",
-        "text": "Plates"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin from any Monstrosity"
-      },
-      {
-        "category": "Natural Weapon",
-        "text": "Blade from a Ripper"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 395)",
-    "note": ""
-  },
-  "Legendary::Armor, +3": {
-    "id": "legendary-armor-3",
-    "name": "Armor, +3",
-    "itemRarity": "Legendary",
-    "workshopRarity": "Legendary",
-    "schematicPrice": 50000,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Any Legendary Animus"
-      },
-      {
-        "category": "Bones",
-        "text": "Any Legendary Bones"
-      },
-      {
-        "category": "Natural Weapon",
-        "text": "Any Legendary natural weapon"
-      },
-      {
-        "category": "Hide",
-        "text": "Any Legendary Hide"
-      },
-      {
-        "category": "Hair",
-        "text": "Any Legendary Hair"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - SRD Recipes (p. 395)",
-    "note": "Each component must come from a different monster."
-  },
-  "Legendary::Greater Rejuvenation Potion": {
-    "id": "legendary-greater-rejuvenation-potion",
-    "name": "Greater Rejuvenation Potion",
-    "itemRarity": "Legendary",
-    "workshopRarity": "Legendary",
-    "schematicPrice": 50000,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Any Animus"
-      },
-      {
-        "category": "Bones",
-        "text": "Bones from any Giant"
-      },
-      {
-        "category": "Dust",
-        "text": "Fey Dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Any Elemental Fluid"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster Blood from any Dragon"
-      },
-      {
-        "category": "Hair",
-        "text": "Hair from any Celestial"
-      },
-      {
-        "category": "Organ",
-        "text": "Brain from an Aberration"
-      },
-      {
-        "category": "Organ",
-        "text": "Heart from a Fiend"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 387)",
-    "note": ""
-  },
-  "Legendary::Hammer of Chaos": {
-    "id": "legendary-hammer-of-chaos",
-    "name": "Hammer of Chaos",
-    "itemRarity": "Legendary",
-    "workshopRarity": "Legendary",
-    "schematicPrice": 50000,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Any Animus"
-      },
-      {
-        "category": "Bones",
-        "text": "Spine from a Dragon"
-      },
-      {
-        "category": "Dust",
-        "text": "Elemental Dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Elemental Fluid"
-      },
-      {
-        "category": "Hide",
-        "text": "Plates from a Construct"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin from a Fiend"
-      },
-      {
-        "category": "Organ",
-        "text": "Brain from an Aberration"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 387)",
-    "note": ""
-  },
-  "Legendary::Manual of Occult Anatomy +3": {
-    "id": "legendary-manual-of-occult-anatomy-3",
-    "name": "Manual of Occult Anatomy +3",
-    "itemRarity": "Legendary",
-    "workshopRarity": "Legendary",
-    "schematicPrice": 50000,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Any Animus"
-      },
-      {
-        "category": "Dust",
-        "text": "Any Dragon Dust"
-      },
-      {
-        "category": "Fluid",
-        "text": "Monster Blood from a Monstrosity"
-      },
-      {
-        "category": "Hide",
-        "text": "Scales"
-      },
-      {
-        "category": "Hide",
-        "text": "Skin from an Aberration"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 389)",
-    "note": ""
-  },
-  "Legendary::Monster Hunter's Weapon +3": {
-    "id": "legendary-monster-hunter-s-weapon-3",
-    "name": "Monster Hunter's Weapon +3",
-    "itemRarity": "Legendary",
-    "workshopRarity": "Legendary",
-    "schematicPrice": 50000,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Any Animus"
-      },
-      {
-        "category": "Fluid",
-        "text": "Sap"
-      },
-      {
-        "category": "Hair",
-        "text": "Hair from a Fey"
-      },
-      {
-        "category": "Hair",
-        "text": "Leaves"
-      },
-      {
-        "category": "Hide",
-        "text": "Bark"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 383)",
-    "note": "Use components whose rarity equals the item rarity."
-  },
-  "Legendary::Spell Scroll (Level 9)": {
-    "id": "legendary-spell-scroll-level-9",
-    "name": "Spell Scroll (Level 9)",
-    "itemRarity": "Legendary",
-    "workshopRarity": "Legendary",
-    "schematicPrice": 50000,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Any Legendary Animus"
-      },
-      {
-        "category": "Fluid",
-        "text": "Any Legendary Fluid"
-      },
-      {
-        "category": "Hide",
-        "text": "Any Legendary Hide"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - SRD Recipes (p. 395)",
-    "note": "The recipe creates a spell scroll within the listed spell-level tier."
-  },
-  "Legendary::Time Dilation Medallion": {
-    "id": "legendary-time-dilation-medallion",
-    "name": "Time Dilation Medallion",
-    "itemRarity": "Legendary",
-    "workshopRarity": "Legendary",
-    "schematicPrice": 50000,
-    "components": [
-      {
-        "category": "Animus",
-        "text": "Animus from The Algorithm or another Legendary Construct"
-      },
-      {
-        "category": "Hide",
-        "text": "Plates from a Construct"
-      },
-      {
-        "category": "Natural Weapon",
-        "text": "Any Needles"
-      },
-      {
-        "category": "Organ",
-        "text": "Eye from a Construct"
-      }
-    ],
-    "source": "Monsters of Drakkenheim — Appendix E - New Magic Items (p. 394)",
-    "note": ""
-  }
 };

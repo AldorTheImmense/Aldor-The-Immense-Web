@@ -1,4 +1,85 @@
-# Changelog
+## v2.6.24
+
+- Added **Poison Gland** harvests to Lob Frog, Sewer Thing, Eldritch Crawler, and Phage so poison-focused recipes can use components from creatures that visibly produce venom.
+- Broadened Periapt of Proof against Poison to accept Animus from any poisonous creature.
+- Added appropriate Very Rare Fiend hair components to Erinyes, Marilith, and Nalfeshnee for Charged Gauntlets.
+- Removed Whirling Bonesaw from the recipe catalogue because its named Ripper component is unavailable in the campaign harvest pool.
+- Updated version labels and cache-busting to v2.6.24.
+
+## v2.6.23
+
+- Fixed named-creature alternative matching so Winter Troll Heart satisfies Cold Snap Circlet.
+- Added poisonous-creature matching for Lob Frog and Sewer Thing, and broadened Periapt of Proof against Poison accordingly.
+- Added a harvestable Doppelganger with Flesh as an Organ.
+- Added Celestial Eyes to Deva and Planetar and revised Sun Blade to require an Eye from a Celestial.
+- Revised Wand of Fireballs to accept an Efreeti Genie Heart or Fire Elemental Elemental Core.
+- Removed Flame Tongue from the recipe catalogue.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
+## v2.6.22
+
+- Removed 25 recipes from the currently unsupported list that depended on Fey creatures or Fey-derived components unavailable at suitable campaign tiers.
+- Preserved the already-obtainable Uncommon Instrument of the Bards recipe.
+- Reduced the recipe catalogue from 303 to 278 recipes.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
+## v2.6.21
+
+- Removed all Legendary recipes and capped the active crafting interface at Very Rare.
+- Removed Boots of the Winterlands, Frozen Armor, and Helm of Burning Rage because their required cold/fire giant sources are unavailable in the adventure.
+- Removed Legendary options from workshop, component, recipe-filter, and custom recipe controls.
+- Legacy Legendary custom recipes are retained in saved data but hidden from the active recipe catalogue.
+- Preserved Appendix D Legendary rows as rules reference material.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
+## v2.6.20
+
+- Added missing named-monster components to campaign-generated harvest entries when recipes explicitly require them.
+- Added Banshee Hair, Displacer Beast Tentacles, Dryad Skull, Harpy Claws, Mimic Mucus, Troll Dust, and Troll Eyes.
+- Restored Bag of Tricks to require “Uncommon mimic mucus or ectoplasm” now that Mimics can provide mucus.
+- Preserved all existing recipes, creature entries, and crafting behaviour.
+
+## v2.6.19
+
+- Added semantic component matching so recipe wording can recognise equivalent harvested materials without making requirements generic.
+- Fire Essence now counts as elemental fluid from a fire creature; Water Essence counts as elemental water; Fey Sap counts as restorative sap; Celestial blood/ichor and Construct cores are recognised by their intended recipe phrases.
+- Added source-trait recognition for aquatic, fire, cold, lightning, swift, poisonous, radiant, shapechanging, and force-wielding creatures.
+- Corrected Bag of Tricks to require Uncommon ectoplasm rather than mimic mucus that Mimics do not harvest.
+- Improved alternative wording handling so phrases such as “blood or elemental fluid” accept either valid branch.
+- Preserved all harvestable components and all flavourful recipe requirements.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
+## v2.6.17
+
+- Reverted the v2.6.16 recipe compatibility rewrites.
+- Restored the flavourful bespoke component requirements from v2.6.15, including ingredients that players can create, prepare, or alter through play and then add manually.
+- Preserved the expanded harvesting catalogue and all other functionality added through v2.6.16.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
+## v2.6.16
+
+- Completed a full recipe-to-harvest compatibility pass across the 313-recipe catalogue.
+- Replaced every currently unfulfillable component requirement with an obtainable requirement of the same recipe rarity and appropriate component category.
+- Resolved 131 blocked requirements across 85 affected recipe entries without removing recipes or changing component quantities.
+- Preserved higher-rarity substitution during crafting and exact-rarity matching during recipe discovery.
+- Verified that every recipe requirement now has at least one valid harvest source.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
+## v2.6.15
+
+- Added 57 missing adventure creatures to the harvest-from-encounter-creatures catalogue.
+- Added Grotesque Gargant as a separate creature rather than treating it as Grotesque Gargantuan.
+- Generated sensible harvest components from existing same-type creatures and scaled component rarity from creature challenge rating.
+- Preserved all existing harvest entries and crafting functionality.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
+## v2.6.13
+
+- Completed the full +1 / +2 / +3 recipe progressions for scalable class-focus magic items.
+- Added missing tiers for All-Purpose Tool, Amulet of the Devout, Arcane Grimoire, Bloodwell Vial, Dragonhide Belt, Moon Sickle, Rhythm Maker's Drum, Rod of the Pact Keeper, and Wand of the War Mage.
+- Renamed previously unsuffixed tiered recipes so each entry clearly identifies its +1, +2, or +3 version.
+- Preserved all existing recipes and added 11 new tier entries, bringing the recipe catalogue to 313 recipes.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
 
 ## v2.6.12
 

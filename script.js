@@ -2743,7 +2743,7 @@ const STORAGE_KEYS = {
   crafting: "aldor.craftingState.v1"
 };
 
-const APP_VERSION = "2.6.12";
+const APP_VERSION = "2.6.24";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -3691,9 +3691,11 @@ function normaliseCraftingState(source) {
       timestamp: String(entry?.timestamp || new Date().toISOString()),
       message: String(entry?.message || "Crafting activity")
     })),
-    availableWorkshopRarity: CRAFTING_RARITY_ORDER[value.availableWorkshopRarity] !== undefined
-      ? value.availableWorkshopRarity
-      : defaults.availableWorkshopRarity
+    availableWorkshopRarity: value.availableWorkshopRarity === "Legendary"
+      ? "Very Rare"
+      : (CRAFTING_RARITY_ORDER[value.availableWorkshopRarity] !== undefined
+        ? value.availableWorkshopRarity
+        : defaults.availableWorkshopRarity)
   };
 }
 
@@ -3737,7 +3739,9 @@ function allCraftingRecipes() {
     ...clone(recipe),
     _key: `custom:${recipe.id}`
   }));
-  return [...staticRecipes, ...customRecipes].sort((a, b) => {
+  return [...staticRecipes, ...customRecipes]
+    .filter((recipe) => recipe.itemRarity !== "Legendary")
+    .sort((a, b) => {
     const rarityDifference = (CRAFTING_RARITY_ORDER[a.itemRarity] ?? 99) - (CRAFTING_RARITY_ORDER[b.itemRarity] ?? 99);
     return rarityDifference || a.name.localeCompare(b.name);
   });
@@ -3780,8 +3784,46 @@ function requirementUnitCount(requirement) {
   return /\btwo\b/.test(text) ? 2 : 1;
 }
 
+const CRAFTING_SOURCE_TRAIT_RULES = [
+  { pattern: /water elemental|aboleth|merrow|sea hag|giant crocodile|deep dreg|anomollusk|aquatic|fish|shark|octopus|kraken|manta/i, traits: ["aquatic", "water creature"] },
+  { pattern: /fire elemental|azer|efreeti|red dragon|fire giant|entropic flame|salamander|magma|flame|phoenix/i, traits: ["fire creature", "fire-aligned", "immune to fire"] },
+  { pattern: /winter troll|white dragon|silver dragon|frost giant|ice|frost|winter/i, traits: ["cold creature", "cold-aligned", "winter creature", "immune to cold"] },
+  { pattern: /blue dragon|bronze dragon|storm troll|air elemental|lightning|storm/i, traits: ["lightning creature", "deals lightning damage"] },
+  { pattern: /mimic|doppelganger|shapechanger/i, traits: ["shapechanger"] },
+  { pattern: /lob frog|sewer thing|spider|scorpion|snake|serpent|ettercap|wyvern|poison|venom|adder|cobra/i, traits: ["poisonous", "venomous", "poisonous creature", "venomous creature", "poisonous monstrosity", "venomous monstrosity"] },
+  { pattern: /wolf|worg|horse|griffon|harpy|air elemental|quickling|raptor/i, traits: ["swift creature"] },
+  { pattern: /celestial|deva|planetar|unicorn|couatl|angel/i, traits: ["radiant creature", "celestial blood", "radiant ichor"] },
+  { pattern: /construct|golem|guardian|reautomata|algorithm|animated armor|flying sword|homunculus/i, traits: ["force-wielding creature"] }
+];
+
+function componentSemanticAliases(component) {
+  const name = String(component?.name || "").toLowerCase();
+  const source = String(component?.source || "");
+  const aliases = [];
+
+  if (name.includes("essence")) aliases.push("elemental fluid", "fluid");
+  if (name.includes("water essence")) aliases.push("elemental water", "water", "aquatic");
+  if (name.includes("fire essence")) aliases.push("elemental fluid", "fire creature", "fire-aligned");
+  if (name.includes("ectoplasm")) aliases.push("ectoplasm");
+  if (name.includes("mucus")) aliases.push("mucus");
+  if (name.includes("sap")) aliases.push("sap", "restorative sap");
+  if (name.includes("ichor") && component?.creatureType === "Celestial") aliases.push("radiant ichor", "celestial blood");
+  if (name.includes("blood") && component?.creatureType === "Celestial") aliases.push("celestial blood", "radiant ichor");
+  if (name.includes("elemental dust") || name.includes("cinder dust")) aliases.push("elemental ash", "frost-laden elemental dust");
+  if (name.includes("core") && component?.creatureType === "Construct") aliases.push("construct core");
+
+  CRAFTING_SOURCE_TRAIT_RULES.forEach((rule) => {
+    if (rule.pattern.test(source)) aliases.push(...rule.traits);
+  });
+  if (component?.creatureType === "Celestial") aliases.push("radiant creature", "celestial");
+  if (component?.creatureType === "Construct") aliases.push("force-wielding creature", "construct");
+  if (component?.creatureType === "Fey") aliases.push("fey");
+
+  return aliases;
+}
+
 function componentSearchText(component) {
-  return [component.name, component.source, component.creatureType, component.category, component.rarity, component.location, component.notes]
+  return [component.name, component.source, component.creatureType, component.category, component.rarity, component.location, component.notes, ...componentSemanticAliases(component)]
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
@@ -3800,8 +3842,11 @@ function componentMatchesRequirement(component, requirement, recipe) {
   const requirementText = String(requirement.text || "").toLowerCase();
   const haystack = componentSearchText(component);
 
+  const hasNamedMatch = requirementHasNamedMatch(requirementText, haystack);
   const creatureTypes = CRAFTING_CREATURE_TYPES.filter((type) => requirementText.includes(type.toLowerCase()));
-  if (creatureTypes.length && !creatureTypes.some((type) => haystack.includes(type.toLowerCase()))) return false;
+  // Explicit named-creature alternatives take precedence over other creature-type words in the same requirement.
+  // Example: a Winter Troll heart remains valid even though the recipe also lists White and Silver Dragons.
+  if (!hasNamedMatch && creatureTypes.length && !creatureTypes.some((type) => haystack.includes(type.toLowerCase()))) return false;
 
   const damageTerms = CRAFTING_DAMAGE_TERMS.filter((term) => requirementText.includes(term));
   if (damageTerms.length && !damageTerms.some((term) => haystack.includes(term))) return false;
@@ -3822,11 +3867,21 @@ function componentMatchesRequirement(component, requirement, recipe) {
   };
   const genericTerms = genericByCategory[normaliseCraftingCategory(requirement.category)] || [];
   const specificPartTerms = partTerms.filter((term) => !genericTerms.includes(term));
-  if (specificPartTerms.length && !specificPartTerms.some((term) => haystack.includes(term))) return false;
+  const hasGenericAlternative = /\bor\b/.test(requirementText)
+    && genericTerms.some((term) => requirementText.includes(term));
+  const semanticPhraseMatched = [
+    "elemental water", "elemental fluid", "restorative sap", "celestial blood", "radiant ichor",
+    "frost-laden elemental dust", "elemental ash", "force-wielding creature", "swift creature",
+    "cold-aligned", "fire creature", "lightning creature", "poisonous creature", "venomous creature", "poisonous monstrosity", "venomous monstrosity"
+  ].some((phrase) => requirementText.includes(phrase) && haystack.includes(phrase));
+  if (specificPartTerms.length
+      && !specificPartTerms.some((term) => haystack.includes(term))
+      && !hasGenericAlternative
+      && !semanticPhraseMatched) return false;
 
   const componentRank = CRAFTING_RARITY_ORDER[component.rarity] ?? -1;
   const requiredRank = CRAFTING_RARITY_ORDER[recipe.itemRarity] ?? 0;
-  if (componentRank < requiredRank && !requirementHasNamedMatch(requirementText, haystack)) return false;
+  if (componentRank < requiredRank && !hasNamedMatch) return false;
 
   return true;
 }
