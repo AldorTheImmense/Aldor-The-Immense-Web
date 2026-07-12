@@ -1,12 +1,35 @@
 # Aldor The Immense
 
-Current version: v2.6.4
+Current version: v2.6.7
 
 Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign, styled as a dark gothic DM screen for use during prep or at the table.
 
 The site brings several common table tools into one place so a DM can quickly generate shop inventory, map routes, delerium search results, random encounters, lucky finds, arcane anomalies, common locations, and warped ruins during prep or at the table.
 
 
+
+
+
+## v2.6.7 streamlined encounter harvesting
+
+- Simplified Harvest from Encounter Creatures to a single monster search field.
+- Removed the encounter-set and component-rarity filters from the harvesting browser.
+- Preserved the existing search-first workflow and individual component-add controls.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
+
+## v2.6.6 corrected component pricing reference
+
+- Replaced the incorrect rarity-based component prices with the Appendix D monster-CR pricing table.
+- Added the Appendix D creature-type price multipliers for component values.
+- Retained the v2.6.5 harvesting cleanup: no bulk harvest-all action and no creature results before searching.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
+
+## v2.6.5 crafting reference and harvesting cleanup
+
+- Added Appendix D component prices by rarity to the Crafting quick reference.
+- Removed the bulk “Add One of Every Listed Component” action from creature harvest cards.
+- The harvesting browser now stays empty until a search term is entered instead of showing the first 30 creatures.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
 
 ## v2.6.4 chat-ready crafting sharing
 

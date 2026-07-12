@@ -2260,7 +2260,7 @@ const STORAGE_KEYS = {
   crafting: "aldor.craftingState.v1"
 };
 
-const APP_VERSION = "2.6.4";
+const APP_VERSION = "2.6.7";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -3307,30 +3307,22 @@ function addHarvestedComponent(monsterId, componentIndex, { deferRender = false 
   return true;
 }
 
-function addAllHarvestedComponents(monsterId) {
-  const monster = allHarvestMonsters().find((entry) => entry.id === monsterId);
-  if (!monster || !monster.components.length) return;
-  monster.components.forEach((_component, index) => addHarvestedComponent(monsterId, index, { deferRender: true }));
-  saveCraftingState();
-  renderCrafting();
-  playUiSound("success");
-}
-
 function renderHarvestMonsterBrowser() {
   const list = byId("harvestMonsterResults");
   const status = byId("harvestMonsterStatus");
   if (!list || !status) return;
   const search = String(byId("harvestMonsterSearch")?.value || "").trim().toLowerCase();
-  const mode = byId("harvestMonsterModeFilter")?.value || "all";
-  const rarity = byId("harvestMonsterRarityFilter")?.value || "all";
+  list.innerHTML = "";
+  if (!search) {
+    status.textContent = `Search by creature, encounter, component, type, CR, or rarity. ${allHarvestMonsters().length} creatures are available.`;
+    list.innerHTML = '<div class="crafting-empty">Enter a search term to browse harvestable creatures.</div>';
+    return;
+  }
   const matches = allHarvestMonsters().filter((monster) => {
-    if (search && !harvestMonsterSearchText(monster).includes(search)) return false;
-    if (mode !== "all" && !arrayOrFallback(monster.modes, []).includes(mode)) return false;
-    if (rarity !== "all" && monster.rarity !== rarity) return false;
+    if (!harvestMonsterSearchText(monster).includes(search)) return false;
     return true;
   });
-  const visible = matches.slice(0, search ? 80 : 30);
-  list.innerHTML = "";
+  const visible = matches.slice(0, 80);
   if (!visible.length) {
     list.innerHTML = '<div class="crafting-empty">No encounter creature matches this search.</div>';
   } else {
@@ -3385,14 +3377,6 @@ function renderHarvestMonsterBrowser() {
         componentGrid.appendChild(button);
       });
       body.appendChild(componentGrid);
-      const actions = document.createElement("div");
-      actions.className = "action-row compact-action-row";
-      const addAll = document.createElement("button");
-      addAll.type = "button";
-      addAll.textContent = "Add One of Every Listed Component";
-      addAll.addEventListener("click", () => addAllHarvestedComponents(monster.id));
-      actions.appendChild(addAll);
-      body.appendChild(actions);
       card.append(summary, body);
       fragment.appendChild(card);
     });
@@ -8583,7 +8567,7 @@ function bindEvents() {
   byId("regenRecipes").addEventListener("click", () => { generateRecipes(); renderShop(); saveShop(); flashResults("recipesList"); playUiSound("success"); });
 
   byId("componentForm").addEventListener("submit", handleComponentFormSubmit);
-  ["harvestMonsterSearch", "harvestMonsterModeFilter", "harvestMonsterRarityFilter"].forEach((id) => byId(id).addEventListener(id === "harvestMonsterSearch" ? "input" : "change", renderHarvestMonsterBrowser));
+  byId("harvestMonsterSearch").addEventListener("input", renderHarvestMonsterBrowser);
   byId("cancelComponentEdit").addEventListener("click", resetComponentForm);
   ["componentSearch", "componentCategoryFilter", "componentRarityFilter"].forEach((id) => byId(id).addEventListener(id === "componentSearch" ? "input" : "change", renderComponentInventory));
   byId("showArchivedComponents").addEventListener("change", renderComponentInventory);

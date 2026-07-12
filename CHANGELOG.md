@@ -1,5 +1,26 @@
 # Changelog
 
+## v2.6.7
+
+- Simplified Harvest from Encounter Creatures to a single monster search field.
+- Removed the encounter-set and component-rarity filters from the harvesting browser.
+- Preserved the existing search-first workflow and individual component-add controls.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
+## v2.6.6
+
+- Corrected Appendix D component pricing to use monster challenge rating rather than component rarity.
+- Added the creature-type price multipliers: ×1.5 for Constructs, Elementals, Oozes, and Undead; ×2 for Aberrations and Dragons; and ×3 for Celestials, Fey, and Fiends.
+- Preserved the removal of the bulk harvest-all action and the empty harvesting browser before a search is entered.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
+## v2.6.5
+
+- Added Appendix D component prices by rarity to the Crafting quick reference.
+- Removed the bulk “Add One of Every Listed Component” action from creature harvest cards.
+- Changed the harvesting browser so it shows no creatures until the DM enters a search term.
+- Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.
+
 ## v2.6.4
 
 - Replaced downloadable crafting HTML exports with formatted text designed for direct sharing in chat.

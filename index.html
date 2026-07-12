@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.6.4">
+  <link rel="stylesheet" href="style.css?v=2.6.7">
 </head>
 <body>
   <header class="app-header">
@@ -443,6 +443,28 @@
                 </tbody>
               </table>
               <table>
+                <caption>Component base price</caption>
+                <thead><tr><th>Monster challenge rating</th><th>Component value</th></tr></thead>
+                <tbody>
+                  <tr><td>0 to 1/2</td><td>1d4 × 10 gp</td></tr>
+                  <tr><td>1 to 4</td><td>1d6 × 20 gp</td></tr>
+                  <tr><td>5 to 10</td><td>3d6 × 200 gp</td></tr>
+                  <tr><td>11 to 16</td><td>1d6 × 2,000 gp</td></tr>
+                  <tr><td>17 to 20</td><td>2d6 × 5,000 gp</td></tr>
+                  <tr><td>21+</td><td>Priceless</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <caption>Creature type price modifier</caption>
+                <thead><tr><th>Creature type</th><th>Price multiplier</th></tr></thead>
+                <tbody>
+                  <tr><td>Giants, Monstrosities, Plants</td><td>No change</td></tr>
+                  <tr><td>Constructs, Elementals, Oozes, Undead</td><td>×1.5</td></tr>
+                  <tr><td>Aberrations, Dragons</td><td>×2</td></tr>
+                  <tr><td>Celestials, Fey, Fiends</td><td>×3</td></tr>
+                </tbody>
+              </table>
+              <table>
                 <caption>Schematic prices</caption>
                 <thead><tr><th>Item rarity</th><th>Typical price</th></tr></thead>
                 <tbody>
@@ -499,27 +521,8 @@
         <p class="inline-note">Search a creature or encounter, open its harvest list, then click the components the party collects. Monsters of Drakkenheim creatures use their book-listed components; other encounter creatures use campaign components based on the same categories.</p>
         <div class="crafting-filter-row crafting-harvest-filters">
           <label class="field-stack">
-            <span>Monster or encounter</span>
-            <input id="harvestMonsterSearch" type="search" placeholder="e.g. troll, ratling, Garmyr Hunters...">
-          </label>
-          <label class="field-stack">
-            <span>Encounter set</span>
-            <select id="harvestMonsterModeFilter">
-              <option value="all">All encounter creatures</option>
-              <option value="core">Core encounter tables</option>
-              <option value="mod">Monsters of Drakkenheim tables</option>
-            </select>
-          </label>
-          <label class="field-stack">
-            <span>Component rarity</span>
-            <select id="harvestMonsterRarityFilter">
-              <option value="all">All rarities</option>
-              <option>Common</option>
-              <option>Uncommon</option>
-              <option>Rare</option>
-              <option>Very Rare</option>
-              <option>Legendary</option>
-            </select>
+            <span>Monster</span>
+            <input id="harvestMonsterSearch" type="search" placeholder="e.g. troll, ratling, Garmyr...">
           </label>
         </div>
         <p id="harvestMonsterStatus" class="inline-note"></p>
@@ -1203,7 +1206,7 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.6.4</span>
+    <span>Aldor The Immense v2.6.7</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
@@ -1329,8 +1332,8 @@
 
 
 
-  <script src="harvest-data.js?v=2.6.4"></script>
-  <script src="recipes.js?v=2.6.4"></script>
-  <script src="script.js?v=2.6.4"></script>
+  <script src="harvest-data.js?v=2.6.7"></script>
+  <script src="recipes.js?v=2.6.7"></script>
+  <script src="script.js?v=2.6.7"></script>
 </body>
 </html>
