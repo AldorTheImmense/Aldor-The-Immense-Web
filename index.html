@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.4.48">
+  <link rel="stylesheet" href="style.css?v=2.6.4">
 </head>
 <body>
   <header class="app-header">
@@ -30,6 +30,7 @@
 
     <nav class="quick-nav" aria-label="Quick navigation">
       <button type="button" data-nav-tab="shop" data-nav-target="shop">Shop</button>
+      <button type="button" data-nav-tab="crafting" data-nav-target="crafting">Crafting</button>
       <button type="button" data-nav-tab="factions" data-nav-target="factions">Factions</button>
       <button type="button" data-nav-tab="map" data-nav-target="map">Map</button>
       <button type="button" data-nav-tab="tables" data-nav-target="delerium-card">Delerium</button>
@@ -348,11 +349,423 @@
             <summary class="section-header"><span>Rare Item</span><button id="regenRare" type="button">Regenerate</button></summary>
             <ul id="rareList" class="item-list"></ul>
           </details>
+
+          <details class="shop-section collapsible" open>
+            <summary class="section-header"><span>Recipes</span><button id="regenRecipes" type="button">Regenerate</button></summary>
+            <p class="inline-note recipe-shop-note">Aldor stocks 1d4 uncommon schematics and one rare schematic. Uncommon schematics cost 50 gp; rare schematics cost 500 gp.</p>
+            <ul id="recipesList" class="recipe-list"></ul>
+          </details>
         </div>
 
         <aside class="aldor-art" aria-label="Aldor artwork">
           <img src="assets/aldor-the-immense.png" alt="Aldor the Immense in his shop">
         </aside>
+      </div>
+    </section>
+
+
+    <section id="crafting" class="panel" aria-labelledby="crafting-tab">
+      <article class="card card-wide crafting-hero-card">
+        <div class="crafting-hero-row">
+          <div>
+            <h2>Crafting &amp; Harvesting</h2>
+            <p class="inline-note">Track harvested monster components, discover schematics, check which items the party can craft, and spend the required materials.</p>
+          </div>
+          <div class="crafting-stat-strip" aria-label="Crafting summary">
+            <span><strong id="craftingActiveComponentCount">0</strong> active components</span>
+            <span><strong id="craftingKnownRecipeCount">0</strong> known recipes</span>
+            <span><strong id="craftingReadyRecipeCount">0</strong> craftable now</span>
+          </div>
+        </div>
+        <div class="action-row compact-action-row crafting-page-actions">
+          <label class="field-stack crafting-workshop-field">
+            <span>Highest available workshop</span>
+            <select id="availableWorkshopRarity">
+              <option>Common</option>
+              <option selected>Uncommon</option>
+              <option>Rare</option>
+              <option>Very Rare</option>
+              <option>Legendary</option>
+            </select>
+          </label>
+          <button id="openCraftingExport" type="button">Export for Party</button>
+          <button id="showCraftingRules" type="button">Rules Reference</button>
+          <button id="showCraftingHistory" type="button">Activity History</button>
+          <button id="resetCraftingData" type="button">Reset Crafting Data</button>
+        </div>
+      </article>
+
+      <div class="crafting-top-grid">
+        <details id="crafting-rules-card" class="card crafting-rules-card collapsible">
+          <summary class="card-summary"><span>Appendix D Quick Reference</span></summary>
+          <div class="crafting-rules-body">
+            <div class="crafting-rule-grid">
+              <section>
+                <h3>Harvesting</h3>
+                <ul>
+                  <li>Begin within 10 minutes of the creature's death.</li>
+                  <li>Harvesting one component or extracting one animus takes 10 minutes.</li>
+                  <li>No ability check is required when the character has monster harvesting tools.</li>
+                  <li>Each character may harvest one component from a creature's corpse per encounter.</li>
+                  <li>A corpse normally provides only one of each listed component unless its anatomy clearly allows more.</li>
+                </ul>
+              </section>
+              <section>
+                <h3>Recipes &amp; research</h3>
+                <ul>
+                  <li>Recipes are learned from schematics, tool proficiencies, or research.</li>
+                  <li>During a long rest, a character can study components equal to their Intelligence modifier, minimum one.</li>
+                  <li>Research reveals one recipe that can use a studied component.</li>
+                  <li>If the party already holds every required component, researching any one of them reveals the full recipe immediately.</li>
+                </ul>
+              </section>
+              <section>
+                <h3>Crafting</h3>
+                <ul>
+                  <li>The party needs the recipe, all listed components, and a workshop of at least the item's rarity.</li>
+                  <li>A higher-rarity component or workshop may substitute for a lower-rarity one.</li>
+                  <li>Named-monster requirements may use that creature's actual component rarity even when it is lower than the finished item.</li>
+                  <li>Construction takes a few hours or roughly one day; the workshop supplies ordinary materials.</li>
+                </ul>
+              </section>
+            </div>
+
+            <div class="crafting-reference-tables">
+              <table>
+                <caption>Component rarity by monster CR</caption>
+                <thead><tr><th>Rarity</th><th>Challenge Rating</th></tr></thead>
+                <tbody>
+                  <tr><td>Common</td><td>1/4 to 1/2</td></tr>
+                  <tr><td>Uncommon</td><td>1 to 4</td></tr>
+                  <tr><td>Rare</td><td>5 to 10</td></tr>
+                  <tr><td>Very Rare</td><td>11 to 16</td></tr>
+                  <tr><td>Legendary</td><td>17+</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <caption>Schematic prices</caption>
+                <thead><tr><th>Item rarity</th><th>Typical price</th></tr></thead>
+                <tbody>
+                  <tr><td>Common</td><td>5 gp</td></tr>
+                  <tr><td>Uncommon</td><td>50 gp</td></tr>
+                  <tr><td>Rare</td><td>500 gp</td></tr>
+                  <tr><td>Very Rare</td><td>5,000 gp</td></tr>
+                  <tr><td>Legendary</td><td>50,000 gp</td></tr>
+                </tbody>
+              </table>
+              <table>
+                <caption>Animus vessels</caption>
+                <thead><tr><th>Animus rarity</th><th>Delerium vessel</th></tr></thead>
+                <tbody>
+                  <tr><td>Common</td><td>Chip</td></tr>
+                  <tr><td>Uncommon</td><td>Fragment</td></tr>
+                  <tr><td>Rare</td><td>Shard</td></tr>
+                  <tr><td>Very Rare</td><td>Crystal</td></tr>
+                  <tr><td>Legendary</td><td>Geode</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="inline-note">An animus vessel may instead be created in 1 hour by combining any three other components of the same rarity. Aberrations, celestials, constructs, dragons, elementals, fey, fiends, giants, monstrosities, plants, oozes, and undead normally possess an animus.</p>
+          </div>
+        </details>
+
+        <details class="card crafting-research-card collapsible">
+          <summary class="card-summary"><span>Recipe Discovery &amp; Research</span></summary>
+          <p class="inline-note">Select a harvested component to find recipes it may contribute to. Research normally occurs during a long rest.</p>
+          <label class="field-stack">
+            <span>Component to study</span>
+            <select id="researchComponentSelect"></select>
+          </label>
+          <div class="action-row compact-action-row">
+            <button id="researchRandomRecipe" type="button">Discover One Matching Recipe</button>
+            <button id="researchAllRecipes" type="button">Show All Matches</button>
+          </div>
+          <div id="researchResult" class="crafting-research-result empty-state">Add a component to the party inventory to begin research.</div>
+
+          <h3>Manual discovery</h3>
+          <div class="crafting-manual-discovery">
+            <select id="manualRecipeDiscoverySelect"></select>
+            <button id="discoverManualRecipe" type="button">Mark Recipe Known</button>
+          </div>
+
+          <h3>Instant discovery candidates</h3>
+          <p class="inline-note">After selecting a component to study, this shows unknown recipes that use it and whose full component requirements are already in the party inventory.</p>
+          <div id="instantDiscoveryList" class="instant-discovery-list"></div>
+        </details>
+      </div>
+
+      <details class="card card-wide crafting-harvest-card collapsible" open>
+        <summary class="card-summary"><span>Harvest from Encounter Creatures</span></summary>
+        <p class="inline-note">Search a creature or encounter, open its harvest list, then click the components the party collects. Monsters of Drakkenheim creatures use their book-listed components; other encounter creatures use campaign components based on the same categories.</p>
+        <div class="crafting-filter-row crafting-harvest-filters">
+          <label class="field-stack">
+            <span>Monster or encounter</span>
+            <input id="harvestMonsterSearch" type="search" placeholder="e.g. troll, ratling, Garmyr Hunters...">
+          </label>
+          <label class="field-stack">
+            <span>Encounter set</span>
+            <select id="harvestMonsterModeFilter">
+              <option value="all">All encounter creatures</option>
+              <option value="core">Core encounter tables</option>
+              <option value="mod">Monsters of Drakkenheim tables</option>
+            </select>
+          </label>
+          <label class="field-stack">
+            <span>Component rarity</span>
+            <select id="harvestMonsterRarityFilter">
+              <option value="all">All rarities</option>
+              <option>Common</option>
+              <option>Uncommon</option>
+              <option>Rare</option>
+              <option>Very Rare</option>
+              <option>Legendary</option>
+            </select>
+          </label>
+        </div>
+        <p id="harvestMonsterStatus" class="inline-note"></p>
+        <div id="harvestMonsterResults" class="harvest-monster-results"></div>
+      </details>
+
+      <details class="card card-wide crafting-inventory-card collapsible">
+        <summary class="card-summary"><span>Party Component Inventory</span></summary>
+        <div class="crafting-section-toolbar">
+          <p class="inline-note">Harvested components stack by name, source, rarity, and creature type. Manual entry remains available for exceptional components.</p>
+          <label class="check-row compact-check"><input id="showArchivedComponents" type="checkbox"><span>Show archived</span></label>
+        </div>
+
+        <details id="manualComponentEntry" class="manual-component-entry collapsible">
+          <summary class="card-summary"><span>Add or Edit a Component Manually</span></summary>
+          <form id="componentForm" class="component-entry-form">
+            <input id="componentEditId" type="hidden">
+            <label class="field-stack component-name-field">
+              <span>Component name</span>
+              <input id="componentName" type="text" placeholder="e.g. Troll blood" required>
+            </label>
+            <label class="field-stack">
+              <span>Category</span>
+              <select id="componentCategory">
+                <option>Animus</option>
+                <option>Bones</option>
+                <option>Dust</option>
+                <option>Fluid</option>
+                <option>Hair</option>
+                <option>Hide</option>
+                <option>Natural Weapon</option>
+                <option>Organ</option>
+              </select>
+            </label>
+            <label class="field-stack">
+              <span>Rarity</span>
+              <select id="componentRarity">
+                <option>Common</option>
+                <option selected>Uncommon</option>
+                <option>Rare</option>
+                <option>Very Rare</option>
+                <option>Legendary</option>
+              </select>
+            </label>
+            <label class="field-stack">
+              <span>Quantity</span>
+              <input id="componentQuantity" type="number" min="1" step="1" value="1">
+            </label>
+            <label class="field-stack">
+              <span>Source creature/object</span>
+              <input id="componentSource" type="text" placeholder="e.g. Troll">
+            </label>
+            <label class="field-stack">
+              <span>Creature type</span>
+              <select id="componentCreatureType">
+                <option value="">Not specified</option>
+                <option>Aberration</option>
+                <option>Beast</option>
+                <option>Celestial</option>
+                <option>Construct</option>
+                <option>Dragon</option>
+                <option>Elemental</option>
+                <option>Fey</option>
+                <option>Fiend</option>
+                <option>Giant</option>
+                <option>Humanoid</option>
+                <option>Monstrosity</option>
+                <option>Ooze</option>
+                <option>Plant</option>
+                <option>Undead</option>
+              </select>
+            </label>
+            <label class="field-stack">
+              <span>Value per component (gp)</span>
+              <input id="componentValue" type="number" min="0" step="1" placeholder="Optional">
+            </label>
+            <label class="field-stack">
+              <span>Date acquired</span>
+              <input id="componentDate" type="date">
+            </label>
+            <label class="field-stack">
+              <span>Location acquired</span>
+              <input id="componentLocation" type="text" placeholder="Optional">
+            </label>
+            <label class="field-stack component-notes-field">
+              <span>Notes</span>
+              <input id="componentNotes" type="text" placeholder="Damage type, special quality, intended use, etc.">
+            </label>
+            <div class="component-form-actions">
+              <button id="saveComponent" type="submit" class="primary">Add Component</button>
+              <button id="cancelComponentEdit" type="button" hidden>Cancel Edit</button>
+            </div>
+          </form>
+        </details>
+
+        <div class="crafting-filter-row">
+          <label class="field-stack">
+            <span>Search inventory</span>
+            <input id="componentSearch" type="search" placeholder="Name, source, location, notes...">
+          </label>
+          <label class="field-stack">
+            <span>Category</span>
+            <select id="componentCategoryFilter">
+              <option value="all">All categories</option>
+              <option>Animus</option>
+              <option>Bones</option>
+              <option>Dust</option>
+              <option>Fluid</option>
+              <option>Hair</option>
+              <option>Hide</option>
+              <option>Natural Weapon</option>
+              <option>Organ</option>
+            </select>
+          </label>
+          <label class="field-stack">
+            <span>Rarity</span>
+            <select id="componentRarityFilter">
+              <option value="all">All rarities</option>
+              <option>Common</option>
+              <option>Uncommon</option>
+              <option>Rare</option>
+              <option>Very Rare</option>
+              <option>Legendary</option>
+            </select>
+          </label>
+        </div>
+        <p id="componentInventoryStatus" class="inline-note"></p>
+        <div id="componentInventoryList" class="component-inventory-list"></div>
+      </details>
+
+      <details class="card card-wide crafting-library-card collapsible">
+        <summary class="card-summary"><span>Recipe Library</span></summary>
+        <div class="crafting-section-toolbar">
+          <p class="inline-note">Search, filter, learn, edit, and craft recipes from Common through Legendary.</p>
+          <button id="clearRecipeFilters" type="button">Clear Filters</button>
+        </div>
+        <div class="crafting-filter-row crafting-recipe-filters">
+          <label class="field-stack">
+            <span>Search recipes</span>
+            <input id="recipeLibrarySearch" type="search" placeholder="Item, component, source...">
+          </label>
+          <label class="field-stack">
+            <span>Rarity</span>
+            <select id="recipeRarityFilter">
+              <option value="all">All rarities</option>
+              <option>Common</option>
+              <option>Uncommon</option>
+              <option>Rare</option>
+              <option>Very Rare</option>
+              <option>Legendary</option>
+            </select>
+          </label>
+          <label class="field-stack">
+            <span>Knowledge</span>
+            <select id="recipeKnowledgeFilter">
+              <option value="all">Known and unknown</option>
+              <option value="known">Known only</option>
+              <option value="unknown">Unknown only</option>
+            </select>
+          </label>
+          <label class="field-stack">
+            <span>Craftability</span>
+            <select id="recipeCraftabilityFilter">
+              <option value="all">Any craftability</option>
+              <option value="ready">Can craft now</option>
+              <option value="components">All components owned</option>
+              <option value="partial">Partial components</option>
+            </select>
+          </label>
+        </div>
+        <div class="recipe-library-meta-row">
+          <p id="recipeLibraryStatus" class="inline-note"></p>
+          <div class="recipe-pagination-controls">
+            <button id="previousRecipePage" type="button">Previous</button>
+            <span id="recipePageStatus">Page 1 of 1</span>
+            <button id="nextRecipePage" type="button">Next</button>
+            <label>
+              <span class="visually-hidden">Recipes per page</span>
+              <select id="recipePageSize">
+                <option value="25">25 per page</option>
+                <option value="50" selected>50 per page</option>
+                <option value="100">100 per page</option>
+                <option value="all">Show all</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div id="craftingRecipeList" class="crafting-recipe-list"></div>
+      </details>
+
+      <div class="crafting-bottom-grid">
+        <details class="card crafting-custom-recipe-card collapsible">
+          <summary class="card-summary"><span>Add or Edit a Recipe</span></summary>
+          <form id="customRecipeForm" class="custom-recipe-form">
+            <input id="customRecipeEditId" type="hidden">
+            <label class="field-stack">
+              <span>Item name</span>
+              <input id="customRecipeName" type="text" required>
+            </label>
+            <label class="field-stack">
+              <span>Item rarity</span>
+              <select id="customRecipeRarity">
+                <option>Common</option>
+                <option selected>Uncommon</option>
+                <option>Rare</option>
+                <option>Very Rare</option>
+                <option>Legendary</option>
+              </select>
+            </label>
+            <label class="field-stack">
+              <span>Workshop rarity</span>
+              <select id="customRecipeWorkshop">
+                <option>Common</option>
+                <option selected>Uncommon</option>
+                <option>Rare</option>
+                <option>Very Rare</option>
+                <option>Legendary</option>
+              </select>
+            </label>
+            <label class="field-stack">
+              <span>Schematic price (gp)</span>
+              <input id="customRecipeSchematicPrice" type="number" min="0" step="1" value="50">
+            </label>
+            <label class="field-stack custom-recipe-components-field">
+              <span>Components — one per line as “Category | requirement”</span>
+              <textarea id="customRecipeComponents" rows="6" placeholder="Animus | Any Uncommon Animus&#10;Fluid | Monster blood from a Troll&#10;Organ | Heart from a Giant" required></textarea>
+            </label>
+            <label class="field-stack custom-recipe-note-field">
+              <span>Special conditions or notes</span>
+              <textarea id="customRecipeNote" rows="3" placeholder="Optional"></textarea>
+            </label>
+            <div class="action-row compact-action-row">
+              <button id="saveCustomRecipe" type="submit" class="primary">Save Recipe</button>
+              <button id="cancelCustomRecipeEdit" type="button" hidden>Cancel Edit</button>
+            </div>
+          </form>
+        </details>
+
+        <details id="crafting-history-card" class="card crafting-history-card collapsible">
+          <summary class="card-summary"><span>Crafting Activity History</span></summary>
+          <div class="action-row compact-action-row">
+            <button id="copyCraftingHistory" type="button">Copy History</button>
+            <button id="clearCraftingHistory" type="button">Clear History</button>
+          </div>
+          <ol id="craftingHistoryList" class="crafting-history-list"></ol>
+        </details>
       </div>
     </section>
 
@@ -781,6 +1194,7 @@
 
   <nav class="mobile-bottom-nav" aria-label="Mobile quick actions">
     <button type="button" data-nav-tab="shop" data-nav-target="shop">Shop</button>
+    <button type="button" data-nav-tab="crafting" data-nav-target="crafting">Crafting</button>
     <button type="button" data-nav-tab="factions" data-nav-target="factions">Factions</button>
     <button type="button" data-nav-tab="map" data-nav-target="map">Map</button>
     <button type="button" data-nav-tab="tables" data-nav-target="delerium-card">Delerium</button>
@@ -789,9 +1203,67 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.4.48</span>
+    <span>Aldor The Immense v2.6.4</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
+
+
+  <dialog id="craftRecipeDialog" class="craft-recipe-dialog">
+    <form method="dialog" id="craftRecipeDialogForm">
+      <div class="dialog-header">
+        <div><h2 id="craftRecipeDialogTitle">Craft Item</h2><p id="craftRecipeDialogSummary" class="inline-note"></p></div>
+        <button value="cancel" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <div id="craftRecipeSpendRows" class="craft-recipe-spend-rows"></div>
+      <p id="craftRecipeSpendStatus" class="inline-note"></p>
+      <div class="dialog-actions">
+        <button type="button" id="confirmCraftRecipe" class="primary">Craft &amp; Spend Selected Components</button>
+        <button value="cancel">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="craftingExportDialog" class="crafting-export-dialog">
+    <form method="dialog" id="craftingExportForm">
+      <div class="dialog-header">
+        <h2>Share Crafting Information</h2>
+        <button value="cancel" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <p class="inline-note">Build player-safe formatted text, then copy it directly into Discord, WhatsApp, Teams, or another chat.</p>
+      <label class="field-stack">
+        <span>Share</span>
+        <select id="craftingExportType">
+          <option value="recipe">An individual known recipe</option>
+          <option value="summary">A combined party summary</option>
+        </select>
+      </label>
+      <label id="craftingExportRecipeField" class="field-stack">
+        <span>Recipe</span>
+        <select id="craftingExportRecipe"></select>
+      </label>
+      <fieldset id="craftingExportSummaryField" class="crafting-export-options" hidden>
+        <legend>Include in party summary</legend>
+        <label><input id="craftingExportIncludeKnown" type="checkbox" checked> All known recipes</label>
+        <label><input id="craftingExportIncludeComponents" type="checkbox" checked> Current owned components</label>
+        <label><input id="craftingExportIncludePlan" type="checkbox"> Selected crafting plan</label>
+      </fieldset>
+      <label id="craftingExportPlanField" class="field-stack" hidden>
+        <span>Recipes for crafting plan</span>
+        <select id="craftingExportPlanRecipes" class="crafting-export-multi" size="8" multiple></select>
+        <small>Use Ctrl or Cmd to select multiple recipes.</small>
+      </label>
+      <p id="craftingExportStatus" class="inline-note"></p>
+      <label class="field-stack">
+        <span>Message preview</span>
+        <textarea id="craftingExportPreview" class="crafting-export-preview" rows="16" readonly></textarea>
+      </label>
+      <div class="dialog-actions">
+        <button type="button" id="copyCraftingExport" class="primary">Copy formatted text</button>
+        <button value="cancel">Close</button>
+      </div>
+    </form>
+  </dialog>
 
   <dialog id="inventoryDialog" class="inventory-dialog">
     <form method="dialog" id="inventoryForm">
@@ -846,7 +1318,7 @@
         <h2>Load Save Code</h2>
         <button value="close" class="icon-button" aria-label="Close">×</button>
       </div>
-      <p class="note">Paste a save code below. Loading it will replace the current shop inventory, custom item lists, faction reputation, faction clocks, clock sizes, and map data.</p>
+      <p class="note">Paste a save code below. Loading it will replace the current shop inventory, crafting data, custom item lists, faction reputation, faction clocks, clock sizes, and map data.</p>
       <textarea id="loadCodeText" class="code-box" spellcheck="false" placeholder="Paste save code here"></textarea>
       <div class="dialog-actions">
         <button type="button" id="loadSaveCode" class="primary">Load Code</button>
@@ -857,6 +1329,8 @@
 
 
 
-  <script src="script.js?v=2.4.48"></script>
+  <script src="harvest-data.js?v=2.6.4"></script>
+  <script src="recipes.js?v=2.6.4"></script>
+  <script src="script.js?v=2.6.4"></script>
 </body>
 </html>

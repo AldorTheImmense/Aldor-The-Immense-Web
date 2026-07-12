@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense - Changelog</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.4.48">
+  <link rel="stylesheet" href="style.css?v=2.6.4">
 </head>
 <body class="changelog-page">
   <header class="app-header">
@@ -26,6 +26,100 @@
   <main>
     <article class="changelog-card">
       <h1>Changelog</h1>
+
+      <h2>v2.6.4</h2>
+      <ul>
+        <li>Replaced downloadable crafting HTML exports with formatted text designed for direct sharing in chat.</li>
+        <li>Added a live message preview and one-click copy control.</li>
+        <li>Added a combined party summary that can include known recipes, current owned components, and an optional selected crafting plan in one message.</li>
+        <li>Retained focused sharing of a single known recipe and kept all exports player-safe and non-destructive.</li>
+        <li>Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.</li>
+      </ul>
+
+      <h2>v2.6.3</h2>
+      <ul>
+        <li>Added a compact Export for Party dialog rather than adding separate export buttons throughout the Crafting page.</li>
+        <li>Added standalone HTML exports for an individual known recipe, all known recipes, and the current owned component inventory.</li>
+        <li>Added selected crafting-plan exports with combined owned and missing component calculations across one or more known recipes.</li>
+        <li>Kept exports player-safe and non-destructive; generating a plan does not spend or change inventory.</li>
+        <li>Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.</li>
+      </ul>
+
+      <h2>v2.6.2</h2>
+      <ul>
+        <li>Separated crafting substitution from recipe-discovery matching.</li>
+        <li>Recipe research now considers only recipes whose item rarity exactly matches the studied component rarity.</li>
+        <li>Higher-rarity component substitution remains available when checking and spending components for crafting.</li>
+        <li>Updated README, cache-busting query strings, APP_VERSION, displayed version text, and changelog pages.</li>
+      </ul>
+
+      <h2>v2.6.1</h2>
+      <ul>
+        <li>Restored the full 302-recipe catalogue from v2.5.4.</li>
+        <li>Merged all 77 official Monsters of Drakkenheim recipes, using official data for matching entries while retaining every additional campaign recipe.</li>
+        <li>Retained 123 official harvestable creatures and 39 generated encounter-creature entries from v2.6.0.</li>
+        <li>Preserved recipe-source searching and all existing crafting, harvesting, inventory, research, editing, filtering, and component-spending functionality.</li>
+        <li>Updated application versioning and cache-busting.</li>
+      </ul>
+
+      <h2>v2.6.0</h2>
+      <ul>
+        <li>Rebuilt crafting and harvesting data from the supplied official Monsters of Drakkenheim data pack.</li>
+        <li>Replaced the expanded campaign recipe catalogue with all 77 official recipes, including 15 Very Rare and 7 Legendary recipes.</li>
+        <li>Loaded all 123 official harvestable creatures while retaining 39 generated entries for encounter creatures absent from the official pack.</li>
+        <li>Made recipe source text searchable and updated application versioning and cache-busting.</li>
+      </ul>
+
+      <h2>v2.5.4</h2>
+      <ul>
+        <li>Replaced generated data for 123 Monsters of Drakkenheim encounter creatures with their exact book-listed Harvestable Components, creature types, animus types, and rarity exceptions.</li>
+        <li>Fixed encounter-creature name alignment.</li>
+        <li>Made instant discovery component-specific; large crafting sections are collapsible and begin collapsed to reduce page length.</li>
+        <li>Condensed the component inventory and added selectable component spending when crafting.</li>
+        <li>Removed recipe provenance tags and filters.</li>
+        <li>Added editing and resetting for recipes throughout the library.</li>
+        <li>Removed failed-research language.</li>
+      </ul>
+
+      <h2>v2.5.3</h2>
+      <ul>
+        <li>Added an encounter-creature harvesting browser covering the core and Monsters of Drakkenheim random encounter tables.</li>
+        <li>Added one-click component harvesting, animus-aware creature data, and merging into the party component inventory.</li>
+        <li>Moved manual component entry into a secondary collapsed editor.</li>
+        <li>Removed the failed-research control and history action.</li>
+        <li>Added all Very Rare and Legendary Monsters of Drakkenheim recipes, plus missing Appendix D SRD armor, shield, weapon, and spell-scroll recipes.</li>
+        <li>Expanded recipe rarity filtering through Legendary and added the Partial components craftability filter.</li>
+        <li>Updated cache-busting query strings and the footer version number.</li>
+      </ul>
+
+      <h2>v2.5.2</h2>
+      <ul>
+        <li>Removed developer-only implementation guidance from the shop, crafting rules reference, and individual recipe displays.</li>
+        <li>Updated cache-busting query strings and the footer version number.</li>
+      </ul>
+
+      <h2>v2.5.1</h2>
+      <ul>
+        <li>Corrected the four Appendix D healing-potion recipes to use their proper 2014 names and rarities: Potion of Healing (Common), Potion of Greater Healing (Uncommon), Potion of Superior Healing (Rare), and Potion of Supreme Healing (Very Rare).</li>
+        <li>Expanded the Recipe Library rarity filter to cover Common through Very Rare.</li>
+        <li>Updated the uncommon and rare shop pools to use Potion of Greater Healing and Potion of Superior Healing.</li>
+        <li>Added migration for existing v2.5.0 local data and save codes so learned schematics and stocked items retain the corrected names.</li>
+        <li>Updated cache-busting query strings and the footer version number.</li>
+      </ul>
+
+      <h2>v2.5.0</h2>
+      <ul>
+        <li>Added a dedicated Crafting &amp; Harvesting page based on the supplied Appendix D rules.</li>
+        <li>Added condensed harvesting, research, animus vessel, component rarity, workshop rarity, schematic price, substitution, and crafting references.</li>
+        <li>Added a persistent party component inventory with detailed source records, quantity controls, archiving, and usage history.</li>
+        <li>Added a searchable recipe library for every default uncommon and rare shop item.</li>
+        <li>Added known/unknown tracking, recipe research, instant discovery, available-workshop checks, craftability analysis, and component spending.</li>
+        <li>Added custom recipe creation, editing, deletion, and persistence.</li>
+        <li>Generate Shop now stocks 1d4 uncommon schematics and one rare schematic at 50 gp and 500 gp.</li>
+        <li>Purchasing a schematic from Aldor marks it as known on the Crafting page.</li>
+        <li>Used supplied Monsters of Drakkenheim and Appendix D recipes where available, with clearly labelled generated recipes for remaining items.</li>
+        <li>Crafting data is stored locally and included in save-code export/import.</li>
+      </ul>
 
       <h2>v2.4.48</h2>
       <ul>
@@ -707,7 +801,7 @@
   </main>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.4.48</span>
+    <span>Aldor The Immense v2.6.4</span>
     <span><a href="index.html">Back to app</a></span>
   </footer>
 </body>
