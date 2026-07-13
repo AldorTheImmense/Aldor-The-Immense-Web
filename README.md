@@ -1,6 +1,6 @@
 # Aldor The Immense
 
-Current version: v2.6.25
+Current version: v2.6.26
 
 Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign, styled as a dark gothic DM screen for use during prep or at the table.
 
@@ -10,6 +10,12 @@ The site brings several common table tools into one place so a DM can quickly ge
 
 
 
+
+## v2.6.26 persistent harvest menus
+
+- Harvestable-creature menus now stay open after a component is added.
+- Open/closed menu state is retained across crafting-interface rerenders until the user manually closes the creature.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
 
 ## v2.6.25 structured creature-trait recipe matching
 

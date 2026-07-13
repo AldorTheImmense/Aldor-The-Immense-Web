@@ -1,3 +1,9 @@
+## v2.6.26
+
+- Kept harvestable-creature component menus open after adding components.
+- Preserved each creature menu's open/closed state across crafting-interface rerenders until manually closed.
+- Updated version labels and cache-busting to v2.6.26.
+
 ## v2.6.25
 
 - Added structured source-creature trait matching for descriptive recipe requirements.

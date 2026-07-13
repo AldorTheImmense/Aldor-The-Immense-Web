@@ -2743,7 +2743,7 @@ const STORAGE_KEYS = {
   crafting: "aldor.craftingState.v1"
 };
 
-const APP_VERSION = "2.6.25";
+const APP_VERSION = "2.6.26";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -4202,6 +4202,8 @@ function adjustCraftingComponentQuantity(id, delta) {
 }
 
 
+const openHarvestMonsterIds = new Set();
+
 function allHarvestMonsters() {
   return arrayOrFallback(window.ALDOR_HARVEST_DATA, []);
 }
@@ -4275,6 +4277,12 @@ function renderHarvestMonsterBrowser() {
     visible.forEach((monster) => {
       const card = document.createElement("details");
       card.className = "harvest-monster-card";
+      card.dataset.monsterId = monster.id;
+      card.open = openHarvestMonsterIds.has(monster.id);
+      card.addEventListener("toggle", () => {
+        if (card.open) openHarvestMonsterIds.add(monster.id);
+        else openHarvestMonsterIds.delete(monster.id);
+      });
       const summary = document.createElement("summary");
       const title = document.createElement("span");
       title.className = "harvest-monster-title";
