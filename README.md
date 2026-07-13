@@ -1,6 +1,6 @@
 # Aldor The Immense
 
-Current version: v2.6.24
+Current version: v2.6.25
 
 Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign, styled as a dark gothic DM screen for use during prep or at the table.
 
@@ -10,6 +10,14 @@ The site brings several common table tools into one place so a DM can quickly ge
 
 
 
+
+## v2.6.25 structured creature-trait recipe matching
+
+- Added explicit creature-trait matching for recipe qualifiers including blindsight, truesight, exceptional sight, poison/venom, aquatic, flying, swift, regeneration, spellcasting, teleportation, telepathy, magical voices, elemental affinities, resistances, and shapechanging.
+- Harvested components now inherit relevant traits from their source creature, so descriptive recipe requirements are enforced instead of being treated as flavour text.
+- Added conservative trait coverage across the current Drakkenheim and generated harvestable-creature catalogue.
+- Narrative preparation requirements such as “struck by magical lightning” and “willingly given” now require those words in a manually added component’s name, source, or notes rather than accepting an ordinary component automatically.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
 
 ## v2.6.24 poison-component and Fiend-hair alignment
 

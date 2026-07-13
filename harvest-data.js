@@ -1814,6 +1814,7 @@ window.ALDOR_HARVEST_DATA = [
         "category": "Hide",
         "name": "Skin"
       },
+      { "category": "Hide", "name": "Webbed Membrane" },
       {
         "category": "Dust",
         "name": "Aberrant Dust"
@@ -1870,6 +1871,7 @@ window.ALDOR_HARVEST_DATA = [
         "category": "Bones",
         "name": "Wurm Bones"
       },
+      { "category": "Bones", "name": "Dense Bones" },
       {
         "category": "Natural Weapon",
         "name": "Teeth"
@@ -2742,7 +2744,8 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Hide",
         "name": "Carapace"
-      }
+      },
+      { "category": "Bones", "name": "Dense Bones" }
     ]
   },
   {
@@ -3365,7 +3368,8 @@ window.ALDOR_HARVEST_DATA = [
       {
         "category": "Dust",
         "name": "Aberrant Dust"
-      }
+      },
+      { "category": "Bones", "name": "Dense Bones" }
     ]
   },
   {
@@ -5107,10 +5111,12 @@ window.ALDOR_HARVEST_DATA = [
         "category": "Organ",
         "name": "Demonic Heart"
       },
+      { "category": "Organ", "name": "Eyes" },
       {
         "category": "Natural Weapon",
         "name": "Pincers"
       },
+      { "category": "Organ", "name": "Arcane Gland" },
       {
         "category": "Hide",
         "name": "Demon Hide"
@@ -11028,6 +11034,7 @@ window.ALDOR_HARVEST_DATA = [
         "category": "Hide",
         "name": "Stone-like Hide"
       },
+      { "category": "Hide", "name": "Skin" },
       {
         "category": "Dust",
         "name": "Monstrosity Dust"

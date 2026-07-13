@@ -2743,7 +2743,7 @@ const STORAGE_KEYS = {
   crafting: "aldor.craftingState.v1"
 };
 
-const APP_VERSION = "2.6.24";
+const APP_VERSION = "2.6.25";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 const FACTION_LABELS = {
@@ -3785,15 +3785,131 @@ function requirementUnitCount(requirement) {
 }
 
 const CRAFTING_SOURCE_TRAIT_RULES = [
-  { pattern: /water elemental|aboleth|merrow|sea hag|giant crocodile|deep dreg|anomollusk|aquatic|fish|shark|octopus|kraken|manta/i, traits: ["aquatic", "water creature"] },
-  { pattern: /fire elemental|azer|efreeti|red dragon|fire giant|entropic flame|salamander|magma|flame|phoenix/i, traits: ["fire creature", "fire-aligned", "immune to fire"] },
-  { pattern: /winter troll|white dragon|silver dragon|frost giant|ice|frost|winter/i, traits: ["cold creature", "cold-aligned", "winter creature", "immune to cold"] },
-  { pattern: /blue dragon|bronze dragon|storm troll|air elemental|lightning|storm/i, traits: ["lightning creature", "deals lightning damage"] },
-  { pattern: /mimic|doppelganger|shapechanger/i, traits: ["shapechanger"] },
-  { pattern: /lob frog|sewer thing|spider|scorpion|snake|serpent|ettercap|wyvern|poison|venom|adder|cobra/i, traits: ["poisonous", "venomous", "poisonous creature", "venomous creature", "poisonous monstrosity", "venomous monstrosity"] },
-  { pattern: /wolf|worg|horse|griffon|harpy|air elemental|quickling|raptor/i, traits: ["swift creature"] },
-  { pattern: /celestial|deva|planetar|unicorn|couatl|angel/i, traits: ["radiant creature", "celestial blood", "radiant ichor"] },
-  { pattern: /construct|golem|guardian|reautomata|algorithm|animated armor|flying sword|homunculus/i, traits: ["force-wielding creature"] }
+  { pattern: /water elemental|aboleth|merrow|sea hag|giant crocodile|deep dreg|anomollusk|chuul|effulgent cnidarian|lob frog|aquatic|fish|shark|octopus|kraken|manta/i, traits: ["aquatic", "water creature"] },
+  { pattern: /fire elemental|azer|efreeti|entropic flame|magma mephit|magma troll|hell hound|flame|phoenix/i, traits: ["fire creature", "fire-aligned", "immune to fire"] },
+  { pattern: /winter troll|ice|frost|winter/i, traits: ["cold creature", "cold-aligned", "winter creature", "immune to cold"] },
+  { pattern: /storm troll|air elemental|lightning|storm/i, traits: ["lightning creature", "deals lightning damage"] },
+  { pattern: /mimic|doppelganger|skin walker|shapechanger/i, traits: ["shapechanger"] },
+  { pattern: /lob frog|sewer thing|eldritch crawler|phage|phase spider|chuul|imp|quasit|bone devil|hezrou|vrock|yuan-ti abomination|poison|venom|adder|cobra/i, traits: ["poisonous", "venomous", "poisonous creature", "venomous creature"] },
+  { pattern: /wolf|worg|griffon|harpy|hazewind harpy|roc|air elemental|invisible stalker|flying sword|quickling|raptor/i, traits: ["swift creature", "fast creature"] },
+  { pattern: /celestial|deva|planetar|angel/i, traits: ["radiant creature", "celestial blood", "radiant ichor"] },
+  { pattern: /construct|golem|guardian|reautomata|animated armor|flying sword|homunculus/i, traits: ["force-wielding creature"] }
+];
+
+// Explicit traits used by recipe qualifiers. These are deliberately conservative: a creature
+// only receives a trait when its normal or project-provided stat block clearly supports it.
+const CRAFTING_CREATURE_TRAITS = {
+  "Aboleth": ["aquatic", "telepathic creature", "exceptional sight"],
+  "Air Elemental": ["flying creature", "swift creature"],
+  "Ancient Bronze Dragon": ["flying creature", "lightning creature", "deals lightning damage", "exceptional sight", "spellcasting creature"],
+  "Ancient Gold Dragon": ["flying creature", "fire creature", "exceptional sight", "spellcasting creature"],
+  "Balor": ["flying creature", "truesight", "exceptional sight", "spellcasting creature", "teleporting creature", "creature with teleportation magic"],
+  "Banshee": ["flying creature", "magical voice", "creature with a magical voice"],
+  "Basilisk": ["exceptional sight", "gaze ability"],
+  "Blue Slaad": ["regenerating creature"],
+  "Bone Devil": ["flying creature", "poisonous creature", "venomous creature"],
+  "Chuul": ["aquatic", "poisonous creature", "venomous creature"],
+  "Cloaker": ["flying creature", "blindsight", "exceptional sight", "magical voice", "creature with a magical voice", "large flying creature"],
+  "Crater Wurm": ["burrowing creature"],
+  "Deva": ["flying creature", "spellcasting creature", "innate spellcasting"],
+  "Digipede": ["burrowing creature"],
+  "Disembodied Psyche": ["telepathic creature", "psychic creature"],
+  "Displacer Beast": ["stealthy monstrosity", "swift creature"],
+  "Djinni": ["flying creature", "spellcasting creature", "innate spellcasting"],
+  "Doppelganger": ["shapechanger", "telepathic creature"],
+  "Efreeti": ["flying creature", "fire creature", "immune to fire", "spellcasting creature", "innate spellcasting"],
+  "Eldritch Crawler": ["poisonous creature", "venomous creature", "burrowing creature"],
+  "Entropic Flame": ["fire creature", "immune to fire"],
+  "Erinyes": ["flying creature", "truesight", "exceptional sight", "spellcasting creature", "innate spellcasting"],
+  "Far Dweller": ["telepathic creature", "psychic creature", "spellcasting creature"],
+  "Fire Elemental": ["fire creature", "immune to fire"],
+  "Flying Sword": ["flying creature", "swift creature"],
+  "Gelatinous Cube": ["blindsight", "exceptional sight"],
+  "Gibbering Mouther": ["blindsight", "exceptional sight", "magical voice", "creature with a magical voice"],
+  "Glabrezu": ["truesight", "exceptional sight", "spellcasting creature", "innate spellcasting", "teleporting creature", "creature with teleportation magic"],
+  "Griffon": ["flying creature", "swift creature", "exceptional sight"],
+  "Harpy": ["flying creature", "swift creature", "magical voice", "creature with a magical voice"],
+  "Hazewind Harpy Crone": ["flying creature", "swift creature", "magical voice", "creature with a magical voice", "spellcasting creature"],
+  "Hazewind Harpy Hunter": ["flying creature", "swift creature", "exceptional sight"],
+  "Hazewind Harpy Valkyrie": ["flying creature", "swift creature", "magical voice", "creature with a magical voice"],
+  "Hell Hound": ["fire creature", "immune to fire", "exceptional sight"],
+  "Hezrou": ["poisonous creature", "venomous creature", "truesight", "exceptional sight"],
+  "Homunculus": ["flying creature", "telepathic creature"],
+  "Hydra": ["regenerating creature", "exceptional sight"],
+  "Imp": ["flying creature", "poisonous creature", "venomous creature", "shapechanger", "spellcasting creature", "innate spellcasting"],
+  "Invisible Stalker": ["flying creature", "blindsight", "exceptional sight", "stealthy monstrosity"],
+  "Iron Golem": ["poisonous creature", "immune to fire", "resistant creature"],
+  "Lob Frog": ["aquatic", "poisonous creature", "venomous creature"],
+  "Magma Mephit": ["flying creature", "fire creature", "immune to fire", "spellcasting creature", "innate spellcasting"],
+  "Magma Troll": ["fire creature", "immune to fire", "regenerating creature"],
+  "Marilith": ["truesight", "exceptional sight", "spellcasting creature", "innate spellcasting", "teleporting creature", "creature with teleportation magic"],
+  "Medusa": ["exceptional sight", "gaze ability"],
+  "Mimic": ["shapechanger"],
+  "Nalfeshnee": ["truesight", "exceptional sight", "spellcasting creature", "innate spellcasting", "teleporting creature", "creature with teleportation magic"],
+  "Night Hag": ["spellcasting creature", "innate spellcasting", "ethereal creature", "creature that can enter the ethereal plane", "shapechanger"],
+  "Ochre Jelly": ["blindsight", "exceptional sight"],
+  "Oni": ["flying creature", "shapechanger", "spellcasting creature", "innate spellcasting", "regenerating creature"],
+  "Phage": ["poisonous creature", "venomous creature"],
+  "Phase Spider": ["poisonous creature", "venomous creature", "ethereal creature", "creature that can enter the ethereal plane", "teleporting creature"],
+  "Planetar": ["flying creature", "truesight", "exceptional sight", "spellcasting creature", "innate spellcasting", "radiant creature"],
+  "Protean Abomination": ["blindsight", "exceptional sight", "regenerating creature"],
+  "Quasit": ["poisonous creature", "venomous creature", "shapechanger", "spellcasting creature", "innate spellcasting"],
+  "Roc": ["flying creature", "swift creature", "exceptional sight", "large flying creature"],
+  "Roper": ["exceptional sight", "stealthy monstrosity"],
+  "Sea Hag": ["aquatic", "spellcasting creature", "innate spellcasting", "gaze ability", "exceptional sight"],
+  "Sewer Thing": ["poisonous creature", "venomous creature", "regenerating creature"],
+  "Shadow": ["stealthy monstrosity"],
+  "Shield Guardian": ["resistant creature"],
+  "Storm Troll": ["lightning creature", "deals lightning damage", "regenerating creature"],
+  "Tarrasque": ["blindsight", "exceptional sight", "resistant creature"],
+  "Treant": ["spellcasting creature"],
+  "Troll": ["regenerating creature"],
+  "Vrock": ["flying creature", "poisonous creature", "venomous creature", "spellcasting creature", "innate spellcasting"],
+  "Water Elemental": ["aquatic", "water creature"],
+  "Will-o'-Wisp": ["flying creature", "lightning creature", "deals lightning damage", "stealthy monstrosity"],
+  "Winter Troll": ["cold creature", "cold-aligned", "immune to cold", "regenerating creature"],
+  "Worg": ["swift creature"],
+  "Wraith": ["flying creature", "stealthy monstrosity"],
+  "Yuan-ti Abomination": ["poisonous creature", "venomous creature", "shapechanger", "spellcasting creature", "innate spellcasting"]
+};
+
+const CRAFTING_REQUIREMENT_TRAIT_RULES = [
+  { pattern: /with blindsight or truesight/i, any: ["blindsight", "truesight"] },
+  { pattern: /with truesight/i, any: ["truesight"] },
+  { pattern: /with exceptional sight/i, any: ["exceptional sight"] },
+  { pattern: /with luminous sight/i, any: ["luminous sight", "radiant creature"] },
+  { pattern: /with the shapechanger trait|from a shapechanger/i, any: ["shapechanger"] },
+  { pattern: /poisonous creature/i, any: ["poisonous creature"] },
+  { pattern: /venomous creature/i, any: ["venomous creature"] },
+  { pattern: /poisonous monstrosity/i, any: ["poisonous monstrosity"] },
+  { pattern: /venomous monstrosity/i, any: ["venomous monstrosity"] },
+  { pattern: /aquatic creature/i, any: ["aquatic"] },
+  { pattern: /aquatic monstrosity/i, any: ["aquatic"] },
+  { pattern: /swift creature|fast fey or monstrosity/i, any: ["swift creature", "fast creature"] },
+  { pattern: /flying creature/i, any: ["flying creature"] },
+  { pattern: /flying monstrosity/i, any: ["flying creature"] },
+  { pattern: /large flying creature/i, any: ["large flying creature"] },
+  { pattern: /burrowing creature/i, any: ["burrowing creature"] },
+  { pattern: /regenerating creature/i, any: ["regenerating creature"] },
+  { pattern: /spellcasting creature/i, any: ["spellcasting creature"] },
+  { pattern: /innate spellcasting/i, any: ["innate spellcasting"] },
+  { pattern: /telepathic creature/i, any: ["telepathic creature"] },
+  { pattern: /teleporting creature|teleportation magic/i, any: ["teleporting creature", "creature with teleportation magic"] },
+  { pattern: /enter the ethereal plane/i, any: ["creature that can enter the ethereal plane", "ethereal creature"] },
+  { pattern: /magical voice/i, any: ["creature with a magical voice", "magical voice"] },
+  { pattern: /stealthy monstrosity/i, any: ["stealthy monstrosity"] },
+  { pattern: /resistant creature/i, any: ["resistant creature"] },
+  { pattern: /immune to fire|fire-immune creature/i, any: ["immune to fire"] },
+  { pattern: /immune to cold/i, any: ["immune to cold"] },
+  { pattern: /deals lightning damage|lightning creature/i, any: ["deals lightning damage", "lightning creature"] },
+  { pattern: /fire creature/i, any: ["fire creature"] },
+  { pattern: /radiant creature/i, any: ["radiant creature"] },
+  { pattern: /psychic aberration/i, any: ["psychic creature"] },
+  { pattern: /intelligent magical creature/i, any: ["intelligent magical creature", "spellcasting creature", "telepathic creature"] },
+  { pattern: /magical creature/i, any: ["magical creature", "spellcasting creature", "innate spellcasting"] },
+  // Narrative preparation conditions are only automatic when written into a manually-added component's notes/name/source.
+  { pattern: /struck by magical lightning/i, any: ["struck by magical lightning"] },
+  { pattern: /willingly given/i, any: ["willingly given"] }
 ];
 
 function componentSemanticAliases(component) {
@@ -3815,6 +3931,11 @@ function componentSemanticAliases(component) {
   CRAFTING_SOURCE_TRAIT_RULES.forEach((rule) => {
     if (rule.pattern.test(source)) aliases.push(...rule.traits);
   });
+  const explicitTraits = CRAFTING_CREATURE_TRAITS[source] || [];
+  aliases.push(...explicitTraits);
+  if (component?.creatureType === "Monstrosity" && aliases.includes("poisonous creature")) aliases.push("poisonous monstrosity");
+  if (component?.creatureType === "Monstrosity" && aliases.includes("venomous creature")) aliases.push("venomous monstrosity");
+  if (component?.creatureType && component.creatureType !== "Beast" && component.creatureType !== "Humanoid") aliases.push("magical creature");
   if (component?.creatureType === "Celestial") aliases.push("radiant creature", "celestial");
   if (component?.creatureType === "Construct") aliases.push("force-wielding creature", "construct");
   if (component?.creatureType === "Fey") aliases.push("fey");
@@ -3843,6 +3964,10 @@ function componentMatchesRequirement(component, requirement, recipe) {
   const haystack = componentSearchText(component);
 
   const hasNamedMatch = requirementHasNamedMatch(requirementText, haystack);
+
+  const traitRules = CRAFTING_REQUIREMENT_TRAIT_RULES.filter((rule) => rule.pattern.test(requirementText));
+  if (traitRules.some((rule) => !rule.any.some((trait) => haystack.includes(trait)))) return false;
+
   const creatureTypes = CRAFTING_CREATURE_TYPES.filter((type) => requirementText.includes(type.toLowerCase()));
   // Explicit named-creature alternatives take precedence over other creature-type words in the same requirement.
   // Example: a Winter Troll heart remains valid even though the recipe also lists White and Silver Dragons.

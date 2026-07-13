@@ -1,3 +1,10 @@
+## v2.6.25
+
+- Added structured source-creature trait matching for descriptive recipe requirements.
+- Added explicit support for blindsight, truesight, exceptional sight, poison/venom, aquatic, flying, swift, regeneration, spellcasting, teleportation, telepathy, magical voices, elemental affinities, resistance, and shapechanging qualifiers.
+- Prevented ordinary components from automatically satisfying narrative preparation conditions such as bark struck by magical lightning.
+- Updated version labels and cache-busting to v2.6.25.
+
 ## v2.6.24
 
 - Added **Poison Gland** harvests to Lob Frog, Sewer Thing, Eldritch Crawler, and Phage so poison-focused recipes can use components from creatures that visibly produce venom.
