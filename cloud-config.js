@@ -6,7 +6,7 @@
   Supabase secret key or service_role key in this file.
 */
 window.ALDOR_CLOUD_CONFIG = Object.freeze({
-  supabaseUrl: "https://dthtawbkyvrbekcrgflk.supabase.co/rest/v1/",
+  supabaseUrl: "https://dthtawbkyvrbekcrgflk.supabase.co",
   supabasePublishableKey: "sb_publishable_OZepw0PH9PQGcbOO_5LLwA_qjLmAK6I",
   tableName: "aldor_saves",
   saveSlot: "main"
