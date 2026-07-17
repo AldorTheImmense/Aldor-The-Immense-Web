@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.6.26">
+  <link rel="stylesheet" href="style.css?v=2.7.0">
 </head>
 <body>
   <header class="app-header">
@@ -20,6 +20,7 @@
       <div class="header-actions">
         <button id="showSaveCode" type="button">Copy Save Code</button>
         <button id="showLoadCode" type="button">Load Save Code</button>
+        <button id="cloudSyncButton" type="button">Cloud: Setup</button>
         <button id="conditionsButton" type="button">Conditions</button>
         <button id="soundToggle" type="button">Sound: Off</button>
         <button id="themeToggle" type="button">Dark mode</button>
@@ -1221,7 +1222,7 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.6.26</span>
+    <span>Aldor The Immense v2.7.0</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
@@ -1349,7 +1350,7 @@
         <h2>Load Save Code</h2>
         <button value="close" class="icon-button" aria-label="Close">×</button>
       </div>
-      <p class="note">Paste a save code below. Loading it will replace the current shop inventory, crafting data, custom item lists, faction reputation, faction clocks, clock sizes, and map data.</p>
+      <p class="note">Paste a save code below. Loading it will replace the current synced app data, including shop, crafting, faction, map, encounter-history, route-slot, and interface-preference data.</p>
       <textarea id="loadCodeText" class="code-box" spellcheck="false" placeholder="Paste save code here"></textarea>
       <div class="dialog-actions">
         <button type="button" id="loadSaveCode" class="primary">Load Code</button>
@@ -1358,10 +1359,73 @@
     </form>
   </dialog>
 
+  <dialog id="cloudSyncDialog" class="cloud-sync-dialog">
+    <form method="dialog">
+      <div class="dialog-header">
+        <div>
+          <h2>Cloud Sync</h2>
+          <p class="dialog-subtitle">One private campaign save shared across your devices.</p>
+        </div>
+        <button value="close" class="icon-button" aria-label="Close">×</button>
+      </div>
 
+      <p id="cloudSyncStatus" class="cloud-sync-status" role="status"></p>
 
-  <script src="harvest-data.js?v=2.6.26"></script>
-  <script src="recipes.js?v=2.6.26"></script>
-  <script src="script.js?v=2.6.26"></script>
+      <section id="cloudSetupRequired" class="cloud-sync-panel">
+        <h3>Setup required</h3>
+        <p>Cloud sync remains disabled until you create a Supabase project, run the supplied SQL, and add your Project URL and publishable key to <code>cloud-config.js</code>.</p>
+        <p>Magic-link sign-in also requires this app to be hosted at an HTTPS address. Full instructions are in <code>SUPABASE_SETUP.md</code>.</p>
+        <p><a class="header-link" href="SUPABASE_SETUP.md" target="_blank" rel="noopener">Open the setup guide</a></p>
+      </section>
+
+      <section id="cloudSignedOut" class="cloud-sync-panel" hidden>
+        <h3>Sign in</h3>
+        <p>Enter your email. Supabase will send a one-use magic link; no password is stored by Aldor.</p>
+        <label class="field-stack">
+          <span>Email address</span>
+          <input id="cloudEmail" type="email" autocomplete="email" placeholder="you@example.com">
+        </label>
+        <button id="cloudSendMagicLink" type="button" class="primary">Send Magic Link</button>
+      </section>
+
+      <section id="cloudSignedIn" class="cloud-sync-panel" hidden>
+        <div class="cloud-account-row">
+          <div>
+            <span class="cloud-account-label">Signed in as</span>
+            <strong id="cloudAccountEmail"></strong>
+          </div>
+          <button id="cloudSignOut" type="button">Sign Out</button>
+        </div>
+
+        <dl class="cloud-sync-times">
+          <div><dt>Local change</dt><dd id="cloudLocalUpdatedAt">Never</dd></div>
+          <div><dt>Cloud save</dt><dd id="cloudRemoteUpdatedAt">Never</dd></div>
+          <div><dt>Last sync</dt><dd id="cloudLastSyncedAt">Never</dd></div>
+        </dl>
+
+        <label class="check-row cloud-auto-sync">
+          <input id="cloudAutoSync" type="checkbox">
+          <span>Automatically upload local changes and check for newer cloud data when this app is opened or revisited.</span>
+        </label>
+
+        <div class="cloud-sync-actions">
+          <button id="cloudSaveNow" type="button" class="primary">Save This Device to Cloud</button>
+          <button id="cloudLoadNow" type="button">Load Cloud Save</button>
+          <button id="cloudCheckNow" type="button">Check for Updates</button>
+        </div>
+      </section>
+
+      <p class="note">Manual Save Codes remain available as an independent backup. When both copies have changed, automatic sync pauses rather than overwriting either copy.</p>
+      <div class="dialog-actions">
+        <button value="close">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="harvest-data.js?v=2.7.0"></script>
+  <script src="recipes.js?v=2.7.0"></script>
+  <script src="cloud-config.js?v=2.7.0"></script>
+  <script src="script.js?v=2.7.0"></script>
+  <script src="cloud-sync.js?v=2.7.0"></script>
 </body>
 </html>

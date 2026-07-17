@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense - Changelog</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.6.26">
+  <link rel="stylesheet" href="style.css?v=2.7.0">
 </head>
 <body class="changelog-page">
   <header class="app-header">
@@ -24,6 +24,19 @@
   </header>
 
   <main>
+
+
+    <section class="changelog-entry">
+      <h2>v2.7.0</h2>
+      <ul>
+        <li>Added optional Supabase cloud sync with email magic-link authentication.</li>
+        <li>Added manual cloud upload/download, automatic sync, update checks, timestamps, and conflict protection.</li>
+        <li>Expanded save payloads to include encounter history, saved map routes, map movement controls, and interface preferences while preserving older Save Code compatibility.</li>
+        <li>Added <code>cloud-config.js</code>, <code>SUPABASE_SETUP.md</code>, secure RLS SQL, and a GitHub Pages <code>.nojekyll</code> marker.</li>
+        <li>Cloud sync remains disabled until configured; local saves and manual Save Codes are unchanged.</li>
+        <li>Updated version labels and cache-busting to v2.7.0.</li>
+      </ul>
+    </section>
 
     <section class="changelog-entry">
       <h2>v2.6.26</h2>

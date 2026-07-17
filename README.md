@@ -1,6 +1,6 @@
 # Aldor The Immense
 
-Current version: v2.6.26
+Current version: v2.7.0
 
 Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign, styled as a dark gothic DM screen for use during prep or at the table.
 
@@ -10,6 +10,15 @@ The site brings several common table tools into one place so a DM can quickly ge
 
 
 
+
+## v2.7.0 optional secure cloud sync
+
+- Added optional Supabase-backed cloud saves for sharing one campaign state across devices.
+- Added email magic-link sign-in, manual upload/download controls, device-specific automatic sync, timestamps, and conflict protection.
+- Expanded save payloads to include encounter history, saved map routes, map movement controls, and user-interface preferences while retaining compatibility with existing v1 Save Codes.
+- Added `cloud-config.js` with safe placeholders and `SUPABASE_SETUP.md` containing hosting, SQL, Row Level Security, redirect, key, and first-sync instructions.
+- Cloud sync remains disabled until configured; local browser saves and manual Save Codes continue to work unchanged.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
 
 ## v2.6.26 persistent harvest menus
 
@@ -213,14 +222,14 @@ Campaign-generated creatures now provide the exact components named by recipes w
 - Draggable Conditions pop-out with Drakkenheim-specific condition references, search/filter, pinned conditions, quick reference mode, and a Drakkenheim Madness roller.
 - Dark gothic DM screen styling, collapsible sections, sticky navigation, improved mobile bottom action bar, themed empty states, subtle result animations, theme toggle, and optional sound toggle.
 
-## Local use
+## Local use and cloud sync
 
-You can also use the site without GitHub Pages:
+You can continue using the site without hosting:
 
 1. Download or clone the repository.
 2. Open `index.html` in a browser.
 
-Most data is stored locally in the user's browser. Save codes can be copied and loaded elsewhere when a DM wants to move shop, crafting, custom item, faction, and map state between devices.
+Local browser storage and manual Save Codes still work with no account or network service. Optional cross-device cloud sync requires a stable HTTPS deployment and a Supabase project. Follow `SUPABASE_SETUP.md` for the complete setup.
 
 
 ## Map routing notes

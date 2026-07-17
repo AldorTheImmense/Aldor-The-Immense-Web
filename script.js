@@ -2743,8 +2743,15 @@ const STORAGE_KEYS = {
   crafting: "aldor.craftingState.v1"
 };
 
-const APP_VERSION = "2.6.26";
+const APP_VERSION = "2.7.0";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
+
+function writeAppStorage(key, value) {
+  localStorage.setItem(key, value);
+  if (window.AldorCloudSync && typeof window.AldorCloudSync.markLocalChange === "function") {
+    window.AldorCloudSync.markLocalChange(key);
+  }
+}
 
 const FACTION_LABELS = {
   hoodedLanterns: "Hooded Lanterns",
@@ -3700,7 +3707,7 @@ function normaliseCraftingState(source) {
 }
 
 function saveCraftingState() {
-  localStorage.setItem(STORAGE_KEYS.crafting, JSON.stringify(craftingState));
+  writeAppStorage(STORAGE_KEYS.crafting, JSON.stringify(craftingState));
 }
 
 function loadCraftingState() {
@@ -5261,7 +5268,7 @@ function renderShop() {
 }
 
 function saveShop() {
-  localStorage.setItem(STORAGE_KEYS.shop, JSON.stringify({
+  writeAppStorage(STORAGE_KEYS.shop, JSON.stringify({
     potions: state.potions,
     scrolls: state.scrolls,
     uncommonShopItems: state.uncommonShopItems,
@@ -5294,7 +5301,7 @@ function mergeDefaultInventoryItems(savedItems, defaultItems) {
 }
 
 function saveInventoryLists() {
-  localStorage.setItem(STORAGE_KEYS.inventory, JSON.stringify({
+  writeAppStorage(STORAGE_KEYS.inventory, JSON.stringify({
     uncommonItems: state.uncommonItems,
     rareItems: state.rareItems
   }));
@@ -5344,7 +5351,8 @@ function buildSavePayload() {
 
   return {
     app: "Aldor The Immense",
-    version: 1,
+    version: 2,
+    appVersion: APP_VERSION,
     savedAt: new Date().toISOString(),
     shop: {
       potions: state.potions,
@@ -5377,7 +5385,19 @@ function buildSavePayload() {
       deepHazeVisible: deepHazeOverlay ? deepHazeOverlay.checked : true,
       routeLeg: currentMapRouteLeg(),
       routeVisibility: currentMapRouteVisibility(),
+      travelMode: byId("mapTravelMode")?.value || "streets",
+      travelPace: byId("mapTravelPace")?.value || "normal",
+      terrain: byId("mapTerrain")?.value || "mainRoad",
       floatingControlsPosition: normaliseMapFloatingControlsPosition(mapFloatingControlsPosition)
+    },
+    mapRouteSlots: loadMapRouteSlots(),
+    encounterHistory: clone(encounterHistory),
+    preferences: {
+      theme: localStorage.getItem(STORAGE_KEYS.theme) || "dark",
+      compactMode: localStorage.getItem(STORAGE_KEYS.compactMode) || "off",
+      sound: localStorage.getItem(STORAGE_KEYS.sound) || "off",
+      conditionsPinned: clone(pinnedConditions),
+      quickConditions: localStorage.getItem(STORAGE_KEYS.quickConditions) || "off"
     }
   };
 }
@@ -5422,6 +5442,7 @@ function applySavePayload(payload) {
   const loadedCrafting = payload.crafting || null;
   const factionTools = payload.factionTools || {};
   const mapTools = payload.mapTools || {};
+  const preferences = payload.preferences || {};
 
   state.potions = clone(arrayOrFallback(shop.potions, []));
   state.scrolls = clone(arrayOrFallback(shop.scrolls, []));
@@ -5451,18 +5472,39 @@ function applySavePayload(payload) {
   if (byId("showDeepHazeOverlay")) byId("showDeepHazeOverlay").checked = mapTools.deepHazeVisible !== false;
   if (byId("mapRouteLeg")) byId("mapRouteLeg").value = MAP_ROUTE_LEG_LABELS[mapTools.routeLeg] ? mapTools.routeLeg : "inbound";
   if (byId("mapRouteVisibility")) byId("mapRouteVisibility").value = MAP_ROUTE_VISIBILITY_LABELS[mapTools.routeVisibility] ? mapTools.routeVisibility : "all";
+  if (byId("mapTravelMode")) byId("mapTravelMode").value = MAP_MODE_LABELS[mapTools.travelMode] ? mapTools.travelMode : "streets";
+  if (byId("mapTravelPace")) byId("mapTravelPace").value = MAP_PACE_LABELS[mapTools.travelPace] ? mapTools.travelPace : "normal";
+  if (byId("mapTerrain")) byId("mapTerrain").value = MAP_TERRAIN_LABELS[mapTools.terrain] ? mapTools.terrain : "mainRoad";
   mapFloatingControlsPosition = normaliseMapFloatingControlsPosition(mapTools.floatingControlsPosition);
   normaliseMapToolsState();
+
+  if (Array.isArray(payload.mapRouteSlots)) saveMapRouteSlots(payload.mapRouteSlots);
+  if (Array.isArray(payload.encounterHistory)) encounterHistory = clone(payload.encounterHistory).slice(0, 50);
+
+  if (preferences.theme === "light" || preferences.theme === "dark") applyTheme(preferences.theme);
+  if (preferences.compactMode === "on" || preferences.compactMode === "off") applyCompactMode(preferences.compactMode === "on");
+  if (preferences.sound === "on" || preferences.sound === "off") setSoundEnabled(preferences.sound === "on");
+  if (Array.isArray(preferences.conditionsPinned)) {
+    pinnedConditions = [...new Set(preferences.conditionsPinned.map(String))];
+    savePinnedConditions();
+    sortConditionEntries();
+    renderConditionPins();
+  }
+  if (preferences.quickConditions === "on" || preferences.quickConditions === "off") {
+    setQuickConditionsMode(preferences.quickConditions === "on");
+  }
 
   saveShop();
   saveInventoryLists();
   saveCraftingState();
   saveFactionTools();
   saveMapTools();
+  saveEncounterHistory();
   renderShop();
   renderCrafting();
   renderFactionTools();
   renderMapTools();
+  renderEncounterHistory();
 }
 
 function loadSaveCodeFromTextarea() {
@@ -5882,11 +5924,11 @@ function normaliseFactionToolsState() {
 }
 
 function saveFactionTools() {
-  localStorage.setItem(STORAGE_KEYS.factionReputation, JSON.stringify(factionReputation));
-  localStorage.setItem(STORAGE_KEYS.factionClocks, JSON.stringify(factionClocks));
-  localStorage.setItem(STORAGE_KEYS.factionClockGoals, JSON.stringify(factionClockGoals));
-  localStorage.setItem(STORAGE_KEYS.factionClockResults, JSON.stringify(factionClockResults));
-  localStorage.setItem(STORAGE_KEYS.factionClockSizes, JSON.stringify(factionClockSizes));
+  writeAppStorage(STORAGE_KEYS.factionReputation, JSON.stringify(factionReputation));
+  writeAppStorage(STORAGE_KEYS.factionClocks, JSON.stringify(factionClocks));
+  writeAppStorage(STORAGE_KEYS.factionClockGoals, JSON.stringify(factionClockGoals));
+  writeAppStorage(STORAGE_KEYS.factionClockResults, JSON.stringify(factionClockResults));
+  writeAppStorage(STORAGE_KEYS.factionClockSizes, JSON.stringify(factionClockSizes));
 }
 
 function loadFactionTools() {
@@ -6264,7 +6306,7 @@ function normaliseMapToolsState() {
 }
 function saveMapTools() {
   const hazeCheckbox = byId("showDeepHazeOverlay");
-  localStorage.setItem(STORAGE_KEYS.mapTools, JSON.stringify({
+  writeAppStorage(STORAGE_KEYS.mapTools, JSON.stringify({
     routePoints: mapRoutePoints,
     routeSegments: mapRouteSegments,
     restSpots: mapRestSpots,
@@ -6362,7 +6404,7 @@ function loadMapRouteSlots() {
 }
 
 function saveMapRouteSlots(slots) {
-  localStorage.setItem(STORAGE_KEYS.mapRouteSlots, JSON.stringify(arrayOrFallback(slots, [])));
+  writeAppStorage(STORAGE_KEYS.mapRouteSlots, JSON.stringify(arrayOrFallback(slots, [])));
 }
 
 function mapRouteSlotSummary(slot) {
@@ -8800,7 +8842,7 @@ function historySummaryFromState(encounterState) {
 }
 
 function saveEncounterHistory() {
-  localStorage.setItem(STORAGE_KEYS.encounterHistory, JSON.stringify(encounterHistory.slice(0, 50)));
+  writeAppStorage(STORAGE_KEYS.encounterHistory, JSON.stringify(encounterHistory.slice(0, 50)));
 }
 
 function loadEncounterHistory() {
@@ -9126,7 +9168,7 @@ function applyTheme(theme) {
   document.documentElement.dataset.theme = nextTheme;
   const button = byId("themeToggle");
   if (button) button.textContent = nextTheme === "dark" ? "Light mode" : "Dark mode";
-  localStorage.setItem(STORAGE_KEYS.theme, nextTheme);
+  writeAppStorage(STORAGE_KEYS.theme, nextTheme);
 }
 
 function toggleTheme() {
@@ -9147,7 +9189,7 @@ function applyCompactMode(enabled) {
     button.textContent = active ? "Compact: On" : "Compact: Off";
     button.setAttribute("aria-pressed", active ? "true" : "false");
   }
-  localStorage.setItem(STORAGE_KEYS.compactMode, active ? "on" : "off");
+  writeAppStorage(STORAGE_KEYS.compactMode, active ? "on" : "off");
 }
 
 function toggleCompactMode() {
@@ -9182,7 +9224,7 @@ function setSoundEnabled(enabled) {
   soundEnabled = Boolean(enabled);
   const button = byId("soundToggle");
   if (button) button.textContent = soundEnabled ? "Sound: On" : "Sound: Off";
-  localStorage.setItem(STORAGE_KEYS.sound, soundEnabled ? "on" : "off");
+  writeAppStorage(STORAGE_KEYS.sound, soundEnabled ? "on" : "off");
 }
 
 function loadSoundPreference() {
@@ -9240,7 +9282,7 @@ function loadPinnedConditions() {
 }
 
 function savePinnedConditions() {
-  localStorage.setItem(STORAGE_KEYS.conditionsPinned, JSON.stringify(pinnedConditions));
+  writeAppStorage(STORAGE_KEYS.conditionsPinned, JSON.stringify(pinnedConditions));
 }
 
 function isConditionPinned(name) {
@@ -9314,7 +9356,7 @@ function setQuickConditionsMode(enabled) {
   const active = Boolean(enabled);
   if (checkbox) checkbox.checked = active;
   if (windowElement) windowElement.classList.toggle("quick-mode", active);
-  localStorage.setItem(STORAGE_KEYS.quickConditions, active ? "on" : "off");
+  writeAppStorage(STORAGE_KEYS.quickConditions, active ? "on" : "off");
   if (active) document.querySelectorAll(".condition-entry").forEach((entry) => { entry.open = true; });
   filterConditions();
 }

@@ -1,3 +1,12 @@
+## v2.7.0
+
+- Added optional Supabase cloud sync with email magic-link authentication.
+- Added manual cloud upload/download, automatic sync, update checks, timestamps, signed-in status, and explicit conflict handling.
+- Expanded save payloads to include encounter history, route slots, map mode/pace/terrain, and interface preferences while preserving old Save Code compatibility.
+- Added secure setup assets: `cloud-config.js`, `SUPABASE_SETUP.md`, RLS SQL, and `.nojekyll` for straightforward static hosting.
+- Kept cloud sync disabled until configured and preserved all local-save and manual Save Code behaviour.
+- Updated version labels and cache-busting to v2.7.0.
+
 ## v2.6.26
 
 - Kept harvestable-creature component menus open after adding components.

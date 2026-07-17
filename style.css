@@ -3086,3 +3086,129 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
 .shop-item-recipe-details summary { cursor: pointer; font-weight: 700; }
 .shop-item-recipe-details ul { margin-bottom: 0; }
 .shop-item-source { color: var(--muted); font-size: 0.86rem; }
+
+
+/* v2.7.0 cloud sync */
+.cloud-sync-dialog {
+  width: min(680px, calc(100vw - 28px));
+  max-height: min(780px, calc(100vh - 28px));
+}
+
+.cloud-sync-dialog form {
+  display: grid;
+  gap: 14px;
+}
+
+.dialog-subtitle {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.cloud-sync-status {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-soft);
+  font-weight: 650;
+}
+
+.cloud-sync-status[data-kind="warning"] {
+  border-color: #a9782c;
+}
+
+.cloud-sync-status[data-kind="error"] {
+  border-color: #a64949;
+}
+
+.cloud-sync-status[data-kind="success"] {
+  border-color: #4f8667;
+}
+
+.cloud-sync-panel {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-soft);
+}
+
+.cloud-sync-panel h3 {
+  margin-top: 0;
+}
+
+.cloud-sync-panel p:last-child {
+  margin-bottom: 0;
+}
+
+.cloud-account-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.cloud-account-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cloud-sync-times {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 14px;
+}
+
+.cloud-sync-times div {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+
+.cloud-sync-times dt {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cloud-sync-times dd {
+  margin: 4px 0 0;
+  font-size: 0.88rem;
+}
+
+.cloud-auto-sync {
+  align-items: flex-start;
+  margin: 12px 0;
+}
+
+.cloud-sync-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#cloudSyncButton.cloud-warning {
+  border-color: #b98532;
+  box-shadow: inset 0 0 0 1px rgba(185, 133, 50, 0.25);
+}
+
+@media (max-width: 620px) {
+  .cloud-sync-times {
+    grid-template-columns: 1fr;
+  }
+
+  .cloud-account-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .cloud-sync-actions button {
+    width: 100%;
+  }
+}
