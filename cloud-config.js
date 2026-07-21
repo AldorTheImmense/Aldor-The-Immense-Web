@@ -6,8 +6,8 @@
   Supabase secret key or service_role key in this file.
 */
 window.ALDOR_CLOUD_CONFIG = Object.freeze({
-  supabaseUrl: "https://dthtawbkyvrbekcrgflk.supabase.co",
-  supabasePublishableKey: "sb_publishable_OZepw0PH9PQGcbOO_5LLwA_qjLmAK6I",
+  supabaseUrl: "https://YOUR_PROJECT_REF.supabase.co",
+  supabasePublishableKey: "sb_publishable_REPLACE_ME",
   tableName: "aldor_saves",
   saveSlot: "main"
 });

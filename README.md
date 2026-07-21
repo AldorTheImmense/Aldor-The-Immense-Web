@@ -1,6 +1,21 @@
 # Aldor The Immense
 
-Current version: v2.7.0
+Current version: v2.7.7
+
+## v2.7.7 achievable Drakkenheim recipe audit
+
+- Rewrote all fifteen new delerium, skymetal, and processing recipes using only matcher-supported harvest requirements and justified special materials.
+- Removed undefined requirements such as “spellcasting creature” from the new recipe set.
+- Added recipe-level enforcement that every harvested component must come from a different creature; special materials and multiple delerium pieces are exempt.
+- Added backtracking allocation so the app finds a valid mixed-creature combination instead of failing because a greedy first choice blocks a later requirement.
+- Corrected exact material matching so a Delerium Fragment can satisfy the Rare ammunition recipe, while an Ignited Delerium Shard cannot be mistaken for an ordinary Delerium Shard.
+- Audited the recipes with exact-tier, campaign-appropriate harvest pools: Uncommon recipes pass with CR 4-or-lower creatures, Rare recipes with CR 6-or-lower creatures, and Very Rare recipes with CR 12-or-lower creatures.
+
+
+## v2.7.6 fragment-based ammunition recipe
+
+- Hardened Delerium-tipped Arrows now consume one Delerium Fragment rather than a 1,000 gp Refined Delerium Crystal.
+- The recipe continues to produce one arrow or bolt and also requires one Rare magical dust.
 
 Aldor The Immense is a browser-based helper for DMs running a Drakkenheim campaign, styled as a dark gothic DM screen for use during prep or at the table.
 
@@ -10,6 +25,46 @@ The site brings several common table tools into one place so a DM can quickly ge
 
 
 
+
+## v2.7.6 single-use ammunition recipe
+
+- Hardened Delerium-tipped Arrows now require only one Refined Delerium Crystal and one Rare magical dust.
+- The recipe explicitly produces a single arrow or bolt rather than a batch.
+
+## v2.7.4 rarity-balanced Drakkenheim recipes
+
+- Rebuilt all fifteen new delerium, skymetal, and material recipes using the same rarity and component patterns as the rest of the recipe catalogue.
+- Removed inappropriate high-CR named requirements such as Marilith fangs from Rare ammunition.
+- Uncommon recipes now use Uncommon harvests, Rare recipes use Rare harvests, Very Rare recipes use Very Rare harvests, and the Legendary staff now requires genuinely Legendary monster components.
+- Requirements deliberately span multiple creature families instead of drawing an entire recipe from one Glabrezu, Iron Golem, or other single creature.
+- Refined Delerium Dust now consumes three Raw Delerium Dust and is explicitly recorded as a crafted Rare magic item.
+- Exact crafted reagents now match by name, and creature-type requirements use the harvested creature's actual type rather than words appearing in the component name.
+
+## v2.7.3 recipe audit
+
+All newly added delerium and skymetal recipes now use only exact harvestable monster components and the app’s tracked special materials. Mundane base weapons, ammunition, armour, shields, alchemist’s fire, and fabricated fittings are not recipe ingredients.
+
+## v2.7.3 special material processing and crafting overrides
+
+- Moved location-found materials and intermediate material processing into a pop-out Special Materials dialog to reduce Crafting-page clutter.
+- Added Meteoric Iron Lucky Find results for meteor fragments, buried starstone, and meteoric iron veins.
+- Added a 15% per-shard chance for delerium search rewards to become Ignited Delerium Shards.
+- Added a 50% Ignited Delerium Shard discovery check whenever an arcane anomaly is generated, with DC 15 removal guidance and buttons for successful recovery or a failure-triggered anomaly.
+- Added raw delerium stock tracking and hazardous milling: fragments yield 1 Raw Delerium Dust, shards yield 3, and crystals yield 8; the input delerium is destroyed.
+- Added a Refined Delerium Crystal material recipe that consumes three shards plus suitable spellcasting-creature components and adds the finished crystal to inventory.
+- Refined Delerium Dust remains a Rare magic-item recipe and now adds its finished pouch to inventory when crafted.
+- Removed Delerium Geodes and Deep Haze-saturated Geodes from the crafting-material catalogue and replaced their recipe requirements with refined crystals and dust.
+- Craft & Spend Components can now open when components are missing. A manual override checkbox shows every owned component and permits deliberate case-by-case substitutions while still spending the selected inventory.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
+
+## v2.7.1 Drakkenheim delerium and skymetal recipes
+
+- Added 14 supplied magic items and complete crafting recipes: Bottled Comet, Comet Smasher, Delerium Crystal Focus, Delerium-Forged Blade, Flame Lance, Hardened Delerium-tipped Arrows, Hazewalker Plate, Purging Rod, Refined Delerium Dust, Skymetal Shield, Skymetal Staff, Spellpiercing Wand, Staff of Contaminated Power, and Starcrossed Bow.
+- Added a dedicated Materials Found in Drakkenheim catalogue for meteoric iron and location-found delerium materials.
+- Added Material as a first-class crafting component category with exact material-name matching.
+- Restored Legendary workshop and recipe support for the explicitly supplied Staff of Contaminated Power.
+- Verified every new recipe against the full harvest catalogue plus the location-material catalogue.
+- Updated APP_VERSION, displayed version text, cache-busting references, README, and changelogs.
 
 ## v2.7.0 optional secure cloud sync
 

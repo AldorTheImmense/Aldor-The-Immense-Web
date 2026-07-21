@@ -7564,3 +7564,184 @@ window.ALDOR_RECIPE_DATA = {
     "note": "Each component must come from a different monster."
   },
 };
+
+// v2.7.7 — Audited Drakkenheim recipes using only real harvest categories and justified special materials.
+Object.assign(window.ALDOR_RECIPE_DATA, {
+  "Rare::Bottled Comet": {
+    id: "rare-bottled-comet", name: "Bottled Comet", itemRarity: "Rare", workshopRarity: "Rare", schematicPrice: 500,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Material", text: "Ignited Delerium Shard" },
+      { category: "Animus", text: "Any Rare Animus from an Elemental" },
+      { category: "Fluid", text: "Contaminated Ichor from a Rare Aberration" }
+    ],
+    source: "Campaign item list — Drakkenheim delerium items",
+    note: "Produces one Bottled Comet. Harvested components must come from different creatures."
+  },
+  "Very Rare::Comet Smasher": {
+    id: "very-rare-comet-smasher", name: "Comet Smasher", itemRarity: "Very Rare", workshopRarity: "Very Rare", schematicPrice: 5000,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Material", text: "Refined Delerium Crystal" },
+      { category: "Animus", text: "Any Very Rare Animus" },
+      { category: "Bones", text: "Massive Bones from a Very Rare Monstrosity" },
+      { category: "Fluid", text: "Contaminated Ichor from a Very Rare Aberration or Ooze" }
+    ],
+    source: "Campaign item list — Drakkenheim delerium items",
+    note: "Harvested components must come from different creatures. The crystal forms the crackling head, while the monster reagents give it mass and contaminated force."
+  },
+  "Rare::Delerium Crystal Focus": {
+    id: "rare-delerium-crystal-focus", name: "Delerium Crystal Focus", itemRarity: "Rare", workshopRarity: "Rare", schematicPrice: 500,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Material", text: "Refined Delerium Crystal" },
+      { category: "Animus", text: "Any Rare Animus from an Aberration or Construct" },
+      { category: "Organ", text: "Arcane Core from a Rare Construct" },
+      { category: "Dust", text: "Any Rare Dust from an Elemental" }
+    ],
+    source: "Campaign item list — Drakkenheim delerium items",
+    note: "Harvested components must come from different creatures. No undefined spellcaster classification is used."
+  },
+  "Rare::Delerium-Forged Blade": {
+    id: "rare-delerium-forged-blade", name: "Delerium-Forged Blade", itemRarity: "Rare", workshopRarity: "Rare", schematicPrice: 500,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Material", text: "Meteoric Iron" },
+      { category: "Dust", text: "Refined Delerium Dust" },
+      { category: "Animus", text: "Any Rare Animus from an Aberration" },
+      { category: "Natural Weapon", text: "Any Rare natural weapon from a Construct or Monstrosity" }
+    ],
+    source: "Campaign item list — Drakkenheim skymetal items",
+    note: "Harvested components must come from different creatures. The meteoric iron and refined dust directly follow the item description."
+  },
+  "Uncommon::Flame Lance": {
+    id: "uncommon-flame-lance", name: "Flame Lance", itemRarity: "Uncommon", workshopRarity: "Uncommon", schematicPrice: 50,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Animus", text: "Any Uncommon Animus from a fire creature" },
+      { category: "Fluid", text: "Any Uncommon fluid from a fire creature" },
+      { category: "Organ", text: "Arcane Core from an Uncommon Construct" }
+    ],
+    source: "Campaign item list — Drakkenheim magic items",
+    note: "Harvested components must come from different creatures. This can be completed with early-campaign Uncommon harvests."
+  },
+  "Rare::Hardened Delerium-tipped Arrows": {
+    id: "rare-hardened-delerium-tipped-arrows", name: "Hardened Delerium-tipped Arrows", itemRarity: "Rare", workshopRarity: "Rare", schematicPrice: 500,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Material", text: "Delerium Fragment" },
+      { category: "Dust", text: "Raw Delerium Dust" }
+    ],
+    source: "Campaign item list — Drakkenheim delerium items",
+    note: "Produces one arrow or bolt. Both requirements are justified delerium materials; no monster must be killed for each single-use shot."
+  },
+  "Very Rare::Hazewalker Plate": {
+    id: "very-rare-hazewalker-plate", name: "Hazewalker Plate", itemRarity: "Very Rare", workshopRarity: "Very Rare", schematicPrice: 5000,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Animus", text: "Any Very Rare Animus" },
+      { category: "Hide", text: "Any Very Rare plates, carapace, or protective hide from a Construct or Monstrosity" },
+      { category: "Fluid", text: "Chemical Solution from a Very Rare Construct" },
+      { category: "Organ", text: "Glands from a Very Rare Aberration or Ooze" },
+      { category: "Dust", text: "Undead Dust from a Very Rare Undead" }
+    ],
+    source: "Campaign item list — Drakkenheim magic items",
+    note: "Harvested components must come from different creatures. The recipe is achievable using Very Rare creatures around CR 11–12 without requiring an Iron Golem."
+  },
+  "Uncommon::Purging Rod": {
+    id: "uncommon-purging-rod", name: "Purging Rod", itemRarity: "Uncommon", workshopRarity: "Uncommon", schematicPrice: 50,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Animus", text: "Any Uncommon Animus" },
+      { category: "Fluid", text: "Fey Sap from an Uncommon Fey" },
+      { category: "Fluid", text: "Ectoplasm from an Uncommon Undead" }
+    ],
+    source: "Campaign item list — Drakkenheim magic items",
+    note: "Harvested components must come from different creatures. The sap restores while the ectoplasm draws contamination out of the body."
+  },
+  "Rare::Refined Delerium Crystal": {
+    id: "rare-refined-delerium-crystal", name: "Refined Delerium Crystal", itemRarity: "Rare", workshopRarity: "Rare", schematicPrice: 500,
+    materialRecipe: true,
+    distinctCreatureSources: true,
+    outputComponent: { name: "Refined Delerium Crystal", category: "Material", rarity: "Rare", quantity: 1, source: "Crafted material", notes: "A purified crystal suitable for magical fabrication." },
+    components: [
+      { category: "Material", text: "Three Delerium Shards" },
+      { category: "Organ", text: "Arcane Core from a Rare Construct" },
+      { category: "Dust", text: "Any Rare Dust from an Elemental" }
+    ],
+    source: "Campaign material processing — Drakkenheim delerium",
+    note: "Produces one Refined Delerium Crystal. Harvested components must come from different creatures; the three non-creature shards may come from the same stockpile."
+  },
+  "Rare::Refined Delerium Dust": {
+    id: "rare-refined-delerium-dust", name: "Refined Delerium Dust", itemRarity: "Rare", workshopRarity: "Rare", schematicPrice: 500,
+    distinctCreatureSources: true,
+    outputComponent: { name: "Refined Delerium Dust", category: "Dust", rarity: "Rare", quantity: 1, source: "Crafted magic item", notes: "A one-ounce pouch of purified and magically charged delerium dust." },
+    components: [
+      { category: "Dust", text: "Three Raw Delerium Dust" },
+      { category: "Animus", text: "Any Rare Animus from an Aberration" },
+      { category: "Dust", text: "Any Rare Dust from an Elemental" }
+    ],
+    source: "Campaign item list — Drakkenheim delerium items",
+    note: "Produces one one-ounce pouch of Refined Delerium Dust. Harvested components must come from different creatures."
+  },
+  "Uncommon::Skymetal Shield": {
+    id: "uncommon-skymetal-shield", name: "Skymetal Shield", itemRarity: "Uncommon", workshopRarity: "Uncommon", schematicPrice: 50,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Material", text: "Meteoric Iron" },
+      { category: "Animus", text: "Any Uncommon Animus from a Construct" },
+      { category: "Fluid", text: "Any Uncommon fluid from an Elemental" }
+    ],
+    source: "Campaign item list — Drakkenheim skymetal items",
+    note: "Harvested components must come from different creatures. Meteoric iron is the only non-monster ingredient because it is explicit in the item description."
+  },
+  "Rare::Skymetal Staff": {
+    id: "rare-skymetal-staff", name: "Skymetal Staff", itemRarity: "Rare", workshopRarity: "Rare", schematicPrice: 500,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Material", text: "Meteoric Iron" },
+      { category: "Material", text: "Refined Delerium Crystal" },
+      { category: "Animus", text: "Any Rare Animus from an Aberration" },
+      { category: "Organ", text: "Brain from a Rare Undead or Monstrosity" }
+    ],
+    source: "Campaign item list — Drakkenheim skymetal items",
+    note: "Harvested components must come from different creatures. The brain and aberrant animus support the staff's psychic disruption."
+  },
+  "Uncommon::Spellpiercing Wand": {
+    id: "uncommon-spellpiercing-wand", name: "Spellpiercing Wand", itemRarity: "Uncommon", workshopRarity: "Uncommon", schematicPrice: 50,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Animus", text: "Any Uncommon Animus from a Fey or Aberration" },
+      { category: "Organ", text: "Eye from an Uncommon creature with exceptional sight" },
+      { category: "Organ", text: "Arcane Core from an Uncommon Construct" }
+    ],
+    source: "Campaign item list — Drakkenheim magic items",
+    note: "Harvested components must come from different creatures. The recipe uses only properties the app can test directly."
+  },
+  "Legendary::Staff of Contaminated Power": {
+    id: "legendary-staff-of-contaminated-power", name: "Staff of Contaminated Power", itemRarity: "Legendary", workshopRarity: "Legendary", schematicPrice: 50000,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Material", text: "Three Refined Delerium Crystals" },
+      { category: "Dust", text: "Refined Delerium Dust" },
+      { category: "Animus", text: "Any Legendary Animus from an Aberration" },
+      { category: "Organ", text: "Soul core or brain from a Legendary Undead or Aberration" },
+      { category: "Fluid", text: "Any Legendary fluid from a Fiend or Construct" },
+      { category: "Hide", text: "Plates, scales, or hide from a Legendary Construct, Dragon, or Fiend" }
+    ],
+    source: "Campaign item list — Drakkenheim delerium items",
+    note: "Harvested components must come from different creatures. The Legendary recipe remains an endgame undertaking without naming mandatory individual monsters."
+  },
+  "Rare::Starcrossed Bow": {
+    id: "rare-starcrossed-bow", name: "Starcrossed Bow", itemRarity: "Rare", workshopRarity: "Rare", schematicPrice: 500,
+    distinctCreatureSources: true,
+    components: [
+      { category: "Material", text: "Refined Delerium Crystal" },
+      { category: "Animus", text: "Any Rare Animus from an Elemental" },
+      { category: "Organ", text: "Eye from a Rare creature with exceptional sight" },
+      { category: "Dust", text: "Any Rare Dust from a Construct" }
+    ],
+    source: "Campaign item list — Drakkenheim delerium items",
+    note: "Harvested components must come from different creatures. The recipe is achievable using CR 5 Rare creatures rather than a late-campaign celestial."
+  }
+});

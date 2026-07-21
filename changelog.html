@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense - Changelog</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.7.0">
+  <link rel="stylesheet" href="style.css?v=2.7.7">
 </head>
 <body class="changelog-page">
   <header class="app-header">
@@ -24,7 +24,35 @@
   </header>
 
   <main>
+    <section class="panel"><h2>v2.7.7 — Achievable Mixed-Creature Recipes</h2><ul><li>Rewrote all fifteen new recipes using only harvest requirements the app can match and special materials justified by the item text.</li><li>Removed undefined classifications such as “spellcasting creature” from the new recipe set.</li><li>Enforced one harvested component per source creature and added backtracking allocation so valid combinations are found and preselected reliably.</li><li>Kept manual override available for explicit case-by-case substitutions.</li><li>Corrected exact Delerium material matching, including ordinary versus Ignited Shards and explicit lower-rarity Delerium Fragments.</li><li>Verified Uncommon recipes with CR 4-or-lower harvests, Rare recipes with CR 6-or-lower harvests, and Very Rare recipes with CR 12-or-lower harvests.</li></ul></section>
+    <section class="panel"><h2>v2.7.6 — Fragment-Based Delerium Ammunition</h2><ul><li>Replaced the Refined Delerium Crystal requirement for Hardened Delerium-tipped Arrows with one Delerium Fragment.</li><li>Retained one Rare magical dust as the stabilising component.</li><li>The recipe still creates one arrow or bolt.</li></ul></section>
+    <section class="panel"><h2>v2.7.5 — Single-Use Ammunition Recipe</h2><ul><li>Simplified Hardened Delerium-tipped Arrows to one Refined Delerium Crystal and one Rare magical dust.</li><li>Clarified that the recipe creates one arrow or bolt rather than a batch.</li></ul></section>
+    <section class="panel"><h2>v2.7.4 — Rarity-Balanced Drakkenheim Recipes</h2><ul><li>Rebuilt all fifteen new recipes using the same rarity and mixed-source conventions as the existing recipe library.</li><li>Removed inappropriate requirements such as Very Rare Marilith fangs from Rare ammunition and stopped overusing single named creatures.</li><li>Uncommon, Rare, Very Rare, and Legendary recipes now use obtainable harvests from their corresponding tiers.</li><li>Refined Delerium Dust now consumes three Raw Delerium Dust and is recorded as a crafted Rare magic item.</li><li>Exact crafted reagents can no longer be replaced by arbitrary dust, and creature-type requirements now check the source creature's actual type.</li></ul></section>
 
+
+
+    <section class="changelog-entry">
+      <h2>v2.7.3</h2>
+      <ul>
+        <li>Added a pop-out Special Materials workflow for location finds, raw delerium stock, hazardous milling, and intermediate material recipes.</li>
+        <li>Added Meteoric Iron Lucky Finds, a 15% per-shard ignition chance during delerium searches, and a 50% ignited-shard discovery chance beside arcane anomalies.</li>
+        <li>Fragments now mill into 1 Raw Delerium Dust, shards into 3, and crystals into 8, destroying the input.</li>
+        <li>Added Refined Delerium Crystal processing and finished-material inventory output for it and Refined Delerium Dust.</li>
+        <li>Removed Delerium Geodes and Deep Haze-saturated Geodes as crafting components and adjusted affected recipes.</li>
+        <li>Added manual component override mode to Craft &amp; Spend, including opening the dialog when automatic component requirements are missing.</li>
+        <li>Updated version labels and cache-busting to v2.7.6.</li>
+      </ul>
+
+      <h2>v2.7.1</h2>
+      <ul>
+        <li>Added 14 new Drakkenheim magic-item recipes, including delerium and skymetal items.</li>
+        <li>Added a location-material catalogue for meteoric iron and recovered delerium materials.</li>
+        <li>Added Material as a crafting category with exact material-name matching.</li>
+        <li>Restored Legendary workshop and recipe support for Staff of Contaminated Power.</li>
+        <li>Verified every new recipe against all available harvests and location materials.</li>
+        <li>Updated version labels and cache-busting to v2.7.1.</li>
+      </ul>
+    </section>
 
     <section class="changelog-entry">
       <h2>v2.7.0</h2>

@@ -1327,9 +1327,9 @@ const DEFAULT_DATA = {
     "Nothing but broken refuse.",
     "Nothing but broken refuse.",
     "Nothing but broken refuse.",
-    "Nothing but broken refuse.",
-    "Nothing but broken refuse.",
-    "Nothing but broken refuse.",
+    "A strangely heavy meteor fragment protrudes from the rubble. Gain 1 Meteoric Iron.",
+    "A buried deposit of starstone contains 1d2 usable pieces of Meteoric Iron.",
+    "A narrow meteoric iron vein can be worked for 1d2 pieces of Meteoric Iron.",
     "1d4 sets of tools.",
     "5d6 gold pieces.",
     "1d6 potions of healing.",
@@ -2743,7 +2743,7 @@ const STORAGE_KEYS = {
   crafting: "aldor.craftingState.v1"
 };
 
-const APP_VERSION = "2.7.0";
+const APP_VERSION = "2.7.7";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 function writeAppStorage(key, value) {
@@ -3604,7 +3604,7 @@ CRAFTING_NAMED_TERMS.sort((a, b) => b.length - a.length);
 const CRAFTING_DAMAGE_TERMS = ["acid", "cold", "fire", "force", "lightning", "necrotic", "poison", "radiant", "thunder"];
 const CRAFTING_PART_TERMS = [
   "animus", "bark", "bile", "blade", "blood", "bone", "bones", "brain", "carapace", "chemical solution",
-  "claw", "claws", "dust", "ectoplasm", "eye", "eyes", "fang", "fangs", "feather", "feathers", "flesh",
+  "claw", "claws", "core", "dust", "ectoplasm", "eye", "eyes", "fang", "fangs", "feather", "feathers", "flesh",
   "flower", "fluid", "fur", "gland", "glands", "goopy ooze", "gut", "guts", "hair", "heart", "hide",
   "horn", "horns", "ichor", "leaf", "leaves", "mandible", "mandibles", "membrane", "mucus", "needle",
   "needles", "organ", "organs", "plate", "plates", "rib", "ribs", "sap", "scale", "scales", "shell",
@@ -3644,7 +3644,9 @@ function normaliseCraftingCategory(category) {
     "natural weapon": "Natural Weapon",
     "natural weapons": "Natural Weapon",
     organ: "Organ",
-    organs: "Organ"
+    organs: "Organ",
+    material: "Material",
+    materials: "Material"
   };
   return map[value] || String(category || "Organ").trim() || "Organ";
 }
@@ -3698,11 +3700,9 @@ function normaliseCraftingState(source) {
       timestamp: String(entry?.timestamp || new Date().toISOString()),
       message: String(entry?.message || "Crafting activity")
     })),
-    availableWorkshopRarity: value.availableWorkshopRarity === "Legendary"
-      ? "Very Rare"
-      : (CRAFTING_RARITY_ORDER[value.availableWorkshopRarity] !== undefined
-        ? value.availableWorkshopRarity
-        : defaults.availableWorkshopRarity)
+    availableWorkshopRarity: CRAFTING_RARITY_ORDER[value.availableWorkshopRarity] !== undefined
+      ? value.availableWorkshopRarity
+      : defaults.availableWorkshopRarity
   };
 }
 
@@ -3747,7 +3747,6 @@ function allCraftingRecipes() {
     _key: `custom:${recipe.id}`
   }));
   return [...staticRecipes, ...customRecipes]
-    .filter((recipe) => recipe.itemRarity !== "Legendary")
     .sort((a, b) => {
     const rarityDifference = (CRAFTING_RARITY_ORDER[a.itemRarity] ?? 99) - (CRAFTING_RARITY_ORDER[b.itemRarity] ?? 99);
     return rarityDifference || a.name.localeCompare(b.name);
@@ -3788,7 +3787,13 @@ function setCraftingRecipeKnown(recipe, known, historyMessage = true) {
 
 function requirementUnitCount(requirement) {
   const text = String(requirement?.text || "").toLowerCase();
-  return /\btwo\b/.test(text) ? 2 : 1;
+  const numeric = text.match(/^\s*(\d+)\b/);
+  if (numeric) return Math.max(1, Math.min(20, Number(numeric[1]) || 1));
+  const words = { two: 2, three: 3, four: 4, five: 5, six: 6 };
+  for (const [word, count] of Object.entries(words)) {
+    if (new RegExp(`\\b${word}\\b`).test(text)) return count;
+  }
+  return 1;
 }
 
 const CRAFTING_SOURCE_TRAIT_RULES = [
@@ -3970,15 +3975,31 @@ function componentMatchesRequirement(component, requirement, recipe) {
   const requirementText = String(requirement.text || "").toLowerCase();
   const haystack = componentSearchText(component);
 
-  const hasNamedMatch = requirementHasNamedMatch(requirementText, haystack);
+  let requiredMaterialName = "";
+  if (normaliseCraftingCategory(requirement.category) === "Material") {
+    const namedMaterials = [
+      "meteoric iron", "ignited delerium shard", "refined delerium crystal",
+      "delerium fragment", "delerium shard", "delerium crystal"
+    ].filter((name) => requirementText.includes(name)).sort((a, b) => b.length - a.length);
+    requiredMaterialName = namedMaterials[0] || "";
+    if (requiredMaterialName && String(component.name || "").trim().toLowerCase() !== requiredMaterialName) return false;
+  }
+
+  const exactNamedReagents = ["refined delerium dust", "raw delerium dust"];
+  const requiredExactReagent = exactNamedReagents.find((name) => requirementText.includes(name));
+  if (requiredExactReagent && String(component.name || "").trim().toLowerCase() !== requiredExactReagent) return false;
+  const hasExactNamedReagent = Boolean(requiredExactReagent);
+  const hasNamedMaterialMatch = Boolean(requiredMaterialName);
+  const hasNamedMatch = requirementHasNamedMatch(requirementText, haystack) || hasExactNamedReagent || hasNamedMaterialMatch;
 
   const traitRules = CRAFTING_REQUIREMENT_TRAIT_RULES.filter((rule) => rule.pattern.test(requirementText));
   if (traitRules.some((rule) => !rule.any.some((trait) => haystack.includes(trait)))) return false;
 
   const creatureTypes = CRAFTING_CREATURE_TYPES.filter((type) => requirementText.includes(type.toLowerCase()));
   // Explicit named-creature alternatives take precedence over other creature-type words in the same requirement.
-  // Example: a Winter Troll heart remains valid even though the recipe also lists White and Silver Dragons.
-  if (!hasNamedMatch && creatureTypes.length && !creatureTypes.some((type) => haystack.includes(type.toLowerCase()))) return false;
+  // Otherwise, test the harvested creature's actual type rather than words appearing in a component name.
+  // This prevents an "Elemental Fluid" taken from a Construct or Ooze from counting as a component from an Elemental.
+  if (!hasNamedMatch && creatureTypes.length && !creatureTypes.includes(String(component.creatureType || ""))) return false;
 
   const damageTerms = CRAFTING_DAMAGE_TERMS.filter((term) => requirementText.includes(term));
   if (damageTerms.length && !damageTerms.some((term) => haystack.includes(term))) return false;
@@ -3995,7 +4016,8 @@ function componentMatchesRequirement(component, requirement, recipe) {
     Hair: ["hair"],
     Hide: ["hide"],
     "Natural Weapon": ["natural weapon"],
-    Organ: ["organ", "organs"]
+    Organ: ["organ", "organs"],
+    Material: ["material", "materials"]
   };
   const genericTerms = genericByCategory[normaliseCraftingCategory(requirement.category)] || [];
   const specificPartTerms = partTerms.filter((term) => !genericTerms.includes(term));
@@ -4018,43 +4040,136 @@ function componentMatchesRequirement(component, requirement, recipe) {
   return true;
 }
 
+function craftingCreatureSourceKey(component) {
+  if (!component?.creatureType) return "";
+  return String(component.source || "").trim().toLowerCase();
+}
+
+function recipeRequiresDistinctCreatureSources(recipe) {
+  return Boolean(recipe?.distinctCreatureSources);
+}
+
 function allocateRecipeComponents(recipe) {
-  const quantities = new Map(craftingState.components.map((component) => [component.id, Math.max(0, Number(component.quantity) || 0)]));
-  const requirementResults = [];
-  const used = new Map();
+  const components = craftingState.components.filter((component) => component.quantity > 0);
+  const baseQuantities = new Map(components.map((component) => [component.id, Math.max(0, Number(component.quantity) || 0)]));
+  const units = [];
 
-  arrayOrFallback(recipe.components, []).forEach((requirement) => {
+  arrayOrFallback(recipe.components, []).forEach((requirement, requirementIndex) => {
     const unitCount = requirementUnitCount(requirement);
-    const matched = [];
-    const usedSources = new Set();
-    const requiresDifferent = /\bdifferent\b/i.test(requirement.text || "");
-
-    for (let unit = 0; unit < unitCount; unit += 1) {
-      const candidate = craftingState.components.find((component) => {
-        if ((quantities.get(component.id) || 0) <= 0) return false;
-        if (!componentMatchesRequirement(component, requirement, recipe)) return false;
-        if (requiresDifferent) {
-          const sourceKey = String(component.source || component.name || component.id).toLowerCase();
-          if (usedSources.has(sourceKey)) return false;
-        }
-        return true;
-      });
-
-      if (!candidate) break;
-      quantities.set(candidate.id, (quantities.get(candidate.id) || 0) - 1);
-      used.set(candidate.id, (used.get(candidate.id) || 0) + 1);
-      matched.push(candidate.id);
-      if (requiresDifferent) usedSources.add(String(candidate.source || candidate.name || candidate.id).toLowerCase());
+    for (let unitIndex = 0; unitIndex < unitCount; unitIndex += 1) {
+      units.push({ requirement, requirementIndex, unitIndex });
     }
-
-    requirementResults.push({
-      requirement,
-      required: unitCount,
-      matched,
-      complete: matched.length === unitCount
-    });
   });
 
+  const candidateMap = new Map(units.map((unit) => [
+    `${unit.requirementIndex}:${unit.unitIndex}`,
+    components.filter((component) => componentMatchesRequirement(component, unit.requirement, recipe))
+  ]));
+
+  const completeAssignments = new Map();
+  const quantities = new Map(baseQuantities);
+  const usedCreatureSources = new Set();
+  const usedRequirementSources = new Map();
+  const unassigned = new Set(units.map((unit) => `${unit.requirementIndex}:${unit.unitIndex}`));
+  const unitByKey = new Map(units.map((unit) => [`${unit.requirementIndex}:${unit.unitIndex}`, unit]));
+
+  function sourceAvailable(component, unit) {
+    const sourceKey = craftingCreatureSourceKey(component);
+    if (recipeRequiresDistinctCreatureSources(recipe) && sourceKey && usedCreatureSources.has(sourceKey)) return false;
+    if (/\bdifferent\b/i.test(unit.requirement.text || "") && sourceKey) {
+      const requirementSources = usedRequirementSources.get(unit.requirementIndex);
+      if (requirementSources?.has(sourceKey)) return false;
+    }
+    return true;
+  }
+
+  function availableCandidates(unitKey) {
+    const unit = unitByKey.get(unitKey);
+    return arrayOrFallback(candidateMap.get(unitKey), []).filter((component) =>
+      (quantities.get(component.id) || 0) > 0 && sourceAvailable(component, unit)
+    );
+  }
+
+  function solve() {
+    if (!unassigned.size) return true;
+    let nextKey = "";
+    let nextCandidates = null;
+    for (const unitKey of unassigned) {
+      const candidates = availableCandidates(unitKey);
+      if (!candidates.length) return false;
+      if (!nextCandidates || candidates.length < nextCandidates.length) {
+        nextKey = unitKey;
+        nextCandidates = candidates;
+        if (candidates.length === 1) break;
+      }
+    }
+
+    const unit = unitByKey.get(nextKey);
+    unassigned.delete(nextKey);
+    for (const component of nextCandidates) {
+      const sourceKey = craftingCreatureSourceKey(component);
+      quantities.set(component.id, (quantities.get(component.id) || 0) - 1);
+      completeAssignments.set(nextKey, component.id);
+      if (recipeRequiresDistinctCreatureSources(recipe) && sourceKey) usedCreatureSources.add(sourceKey);
+      if (/\bdifferent\b/i.test(unit.requirement.text || "") && sourceKey) {
+        if (!usedRequirementSources.has(unit.requirementIndex)) usedRequirementSources.set(unit.requirementIndex, new Set());
+        usedRequirementSources.get(unit.requirementIndex).add(sourceKey);
+      }
+
+      if (solve()) return true;
+
+      quantities.set(component.id, (quantities.get(component.id) || 0) + 1);
+      completeAssignments.delete(nextKey);
+      if (recipeRequiresDistinctCreatureSources(recipe) && sourceKey) usedCreatureSources.delete(sourceKey);
+      if (/\bdifferent\b/i.test(unit.requirement.text || "") && sourceKey) {
+        const set = usedRequirementSources.get(unit.requirementIndex);
+        set?.delete(sourceKey);
+        if (set && !set.size) usedRequirementSources.delete(unit.requirementIndex);
+      }
+    }
+    unassigned.add(nextKey);
+    return false;
+  }
+
+  const solved = units.length > 0 && solve();
+  const assignmentMap = solved ? completeAssignments : new Map();
+
+  if (!solved) {
+    const greedyQuantities = new Map(baseQuantities);
+    const greedyCreatureSources = new Set();
+    const greedyRequirementSources = new Map();
+    units.forEach((unit) => {
+      const unitKey = `${unit.requirementIndex}:${unit.unitIndex}`;
+      const candidate = arrayOrFallback(candidateMap.get(unitKey), []).find((component) => {
+        if ((greedyQuantities.get(component.id) || 0) <= 0) return false;
+        const sourceKey = craftingCreatureSourceKey(component);
+        if (recipeRequiresDistinctCreatureSources(recipe) && sourceKey && greedyCreatureSources.has(sourceKey)) return false;
+        if (/\bdifferent\b/i.test(unit.requirement.text || "") && sourceKey && greedyRequirementSources.get(unit.requirementIndex)?.has(sourceKey)) return false;
+        return true;
+      });
+      if (!candidate) return;
+      assignmentMap.set(unitKey, candidate.id);
+      greedyQuantities.set(candidate.id, (greedyQuantities.get(candidate.id) || 0) - 1);
+      const sourceKey = craftingCreatureSourceKey(candidate);
+      if (recipeRequiresDistinctCreatureSources(recipe) && sourceKey) greedyCreatureSources.add(sourceKey);
+      if (/\bdifferent\b/i.test(unit.requirement.text || "") && sourceKey) {
+        if (!greedyRequirementSources.has(unit.requirementIndex)) greedyRequirementSources.set(unit.requirementIndex, new Set());
+        greedyRequirementSources.get(unit.requirementIndex).add(sourceKey);
+      }
+    });
+  }
+
+  const requirementResults = arrayOrFallback(recipe.components, []).map((requirement, requirementIndex) => {
+    const required = requirementUnitCount(requirement);
+    const matched = [];
+    for (let unitIndex = 0; unitIndex < required; unitIndex += 1) {
+      const componentId = assignmentMap.get(`${requirementIndex}:${unitIndex}`);
+      if (componentId) matched.push(componentId);
+    }
+    return { requirement, required, matched, complete: matched.length === required };
+  });
+  const used = new Map();
+  requirementResults.forEach((result) => result.matched.forEach((id) => used.set(id, (used.get(id) || 0) + 1)));
   const missing = requirementResults.filter((result) => !result.complete);
   return {
     complete: missing.length === 0 && requirementResults.length > 0,
@@ -4261,6 +4376,171 @@ function addHarvestedComponent(monsterId, componentIndex, { deferRender = false 
   return true;
 }
 
+const CRAFTING_LOCATION_MATERIALS = [
+  { name: "Meteoric Iron", rarity: "Rare", source: "Drakkenheim exploration", notes: "Skymetal recovered from a meteor fragment, buried starstone, or meteoric iron vein." },
+  { name: "Ignited Delerium Shard", rarity: "Rare", source: "Unstable delerium", notes: "A delerium shard already burning with unstable octarine energy." }
+];
+
+const CRAFTING_RAW_DELERIUM = [
+  { name: "Delerium Fragment", rarity: "Uncommon", notes: "A fragment available for milling or refinement." },
+  { name: "Delerium Shard", rarity: "Rare", notes: "A shard available for milling or refinement." },
+  { name: "Delerium Crystal", rarity: "Very Rare", notes: "A crystal available for hazardous milling." }
+];
+
+function addCraftingInventoryMaterial({ name, rarity = "Rare", quantity = 1, source = "Special materials", notes = "", category = "Material" }, { deferRender = false } = {}) {
+  const amount = Math.max(1, Number(quantity) || 1);
+  const existing = craftingState.components.find((component) =>
+    component.name.toLowerCase() === String(name).toLowerCase()
+    && normaliseCraftingCategory(component.category) === normaliseCraftingCategory(category)
+    && component.rarity === rarity
+    && component.source === source
+  );
+  if (existing) existing.quantity += amount;
+  else craftingState.components.push({
+    id: craftingUniqueId("component"), name, category: normaliseCraftingCategory(category), rarity,
+    quantity: amount, source, creatureType: "", value: 0,
+    date: new Date().toISOString().slice(0, 10), location: "", notes, archivedAt: ""
+  });
+  if (!deferRender) {
+    saveCraftingState();
+    renderCrafting();
+  }
+}
+
+function addLocationMaterial(index) {
+  const material = CRAFTING_LOCATION_MATERIALS[Number(index)];
+  if (!material) return;
+  addCraftingInventoryMaterial(material, { deferRender: true });
+  recordCraftingHistory(`Added special material: ${material.name}.`);
+  saveCraftingState();
+  renderCrafting();
+  renderSpecialMaterials();
+}
+
+function addRawDelerium(index) {
+  const material = CRAFTING_RAW_DELERIUM[Number(index)];
+  if (!material) return;
+  addCraftingInventoryMaterial({ ...material, source: "Recovered delerium" }, { deferRender: true });
+  recordCraftingHistory(`Recorded 1 ${material.name}.`);
+  saveCraftingState();
+  renderCrafting();
+  renderSpecialMaterials();
+}
+
+function renderMaterialCards(hostId, materials, onAdd) {
+  const host = byId(hostId);
+  if (!host) return;
+  host.innerHTML = "";
+  materials.forEach((material, index) => {
+    const card = document.createElement("article");
+    card.className = "harvest-monster-card";
+    const heading = document.createElement("h3");
+    heading.textContent = `${material.name} (${material.rarity})`;
+    const note = document.createElement("p");
+    note.className = "inline-note";
+    note.textContent = material.notes;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Add to Party Inventory";
+    button.addEventListener("click", () => onAdd(index));
+    card.append(heading, note, button);
+    host.appendChild(card);
+  });
+}
+
+function renderLocationMaterials() {
+  renderMaterialCards("locationMaterialResults", CRAFTING_LOCATION_MATERIALS, addLocationMaterial);
+  renderMaterialCards("rawDeleriumStockResults", CRAFTING_RAW_DELERIUM, addRawDelerium);
+}
+
+function consumeInventoryMaterial(name, quantity) {
+  let remaining = Math.max(0, Number(quantity) || 0);
+  const matching = craftingState.components.filter((component) => component.quantity > 0 && component.name.toLowerCase() === name.toLowerCase());
+  if (matching.reduce((sum, component) => sum + component.quantity, 0) < remaining) return false;
+  matching.forEach((component) => {
+    if (remaining <= 0) return;
+    const spent = Math.min(component.quantity, remaining);
+    component.quantity -= spent;
+    remaining -= spent;
+  });
+  const depleted = craftingState.components.filter((component) => component.quantity <= 0);
+  depleted.forEach((component) => {
+    craftingState.components = craftingState.components.filter((entry) => entry.id !== component.id);
+    component.archivedAt = new Date().toISOString();
+    craftingState.archivedComponents.unshift(component);
+  });
+  return true;
+}
+
+function millDeleriumIntoDust() {
+  const type = byId("deleriumMillType")?.value || "Delerium Fragment";
+  const quantity = Math.max(1, Number(byId("deleriumMillQuantity")?.value) || 1);
+  const yields = { "Delerium Fragment": 1, "Delerium Shard": 3, "Delerium Crystal": 8 };
+  const yieldPer = yields[type] || 0;
+  const status = byId("deleriumMillStatus");
+  if (!consumeInventoryMaterial(type, quantity)) {
+    if (status) status.textContent = `The party does not have ${quantity} ${type}${quantity === 1 ? "" : "s"} available.`;
+    return;
+  }
+  const dust = quantity * yieldPer;
+  addCraftingInventoryMaterial({ name: "Raw Delerium Dust", rarity: "Rare", quantity: dust, source: "Milled delerium", notes: "Produced by grinding delerium against itself. Milling is extraordinarily hazardous outside an antimagic field." }, { deferRender: true });
+  recordCraftingHistory(`Destroyed ${quantity} ${type}${quantity === 1 ? "" : "s"} to mill ${dust} Raw Delerium Dust.`);
+  saveCraftingState();
+  renderCrafting();
+  renderSpecialMaterials();
+  if (status) status.textContent = `Milled ${dust} Raw Delerium Dust. The ${type}${quantity === 1 ? " was" : "s were"} destroyed.`;
+  playUiSound("success");
+}
+
+function materialCraftingRecipes() {
+  return allCraftingRecipes().filter((recipe) => recipe.materialRecipe);
+}
+
+function renderMaterialRecipes() {
+  const host = byId("materialRecipeResults");
+  if (!host) return;
+  host.innerHTML = "";
+  materialCraftingRecipes().forEach((recipe) => {
+    const status = recipeCraftingStatus(recipe);
+    const card = document.createElement("article");
+    card.className = "harvest-monster-card";
+    const heading = document.createElement("h3");
+    heading.textContent = `${recipe.name} (${recipe.itemRarity})`;
+    const list = document.createElement("ul");
+    list.className = "recipe-components";
+    recipe.components.forEach((requirement) => {
+      const item = document.createElement("li");
+      item.textContent = `[${normaliseCraftingCategory(requirement.category)}] ${requirement.text}`;
+      list.appendChild(item);
+    });
+    const actions = document.createElement("div");
+    actions.className = "action-row";
+    const knowledge = document.createElement("button");
+    knowledge.type = "button";
+    knowledge.textContent = status.known ? "Mark Unknown" : "Mark Known";
+    knowledge.addEventListener("click", () => { setCraftingRecipeKnown(recipe, !status.known); renderSpecialMaterials(); });
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Craft & Spend Components";
+    button.disabled = !status.known || !status.workshopOkay;
+    button.title = button.disabled ? craftabilityLabel(recipe, status) : "Open crafting selections";
+    button.addEventListener("click", () => openCraftRecipeDialog(recipe));
+    actions.append(knowledge, button);
+    card.append(heading, list, actions);
+    host.appendChild(card);
+  });
+}
+
+function renderSpecialMaterials() {
+  renderLocationMaterials();
+  renderMaterialRecipes();
+}
+
+function openSpecialMaterialsDialog() {
+  renderSpecialMaterials();
+  byId("specialMaterialsDialog")?.showModal();
+}
+
 function renderHarvestMonsterBrowser() {
   const list = byId("harvestMonsterResults");
   const status = byId("harvestMonsterStatus");
@@ -4465,21 +4745,31 @@ function matchingComponentsForRequirement(recipe, requirement) {
 function selectedCraftingSpend() {
   const dialog = byId("craftRecipeDialog");
   const recipe = craftingRecipeByKey(craftingPendingRecipeKey);
-  if (!dialog || !recipe) return { valid: false, recipe: null, used: new Map(), errors: ["No recipe selected."] };
+  const override = Boolean(byId("craftRecipeOverride")?.checked);
+  if (!dialog || !recipe) return { valid: false, recipe: null, used: new Map(), errors: ["No recipe selected."], override };
   const used = new Map();
   const errors = [];
   const sourceSets = new Map();
+  const usedCreatureSources = new Set();
   dialog.querySelectorAll("[data-craft-requirement-index]").forEach((select) => {
     const requirementIndex = Number(select.dataset.craftRequirementIndex);
     const requirement = recipe.components[requirementIndex];
     const component = craftingState.components.find((entry) => entry.id === select.value);
-    if (!component || !componentMatchesRequirement(component, requirement, recipe)) {
+    if (!component) {
+      errors.push(`Choose a component for ${requirement?.text || "each requirement"}.`);
+      return;
+    }
+    if (!override && !componentMatchesRequirement(component, requirement, recipe)) {
       errors.push(`Choose a valid component for ${requirement?.text || "each requirement"}.`);
       return;
     }
     used.set(component.id, (used.get(component.id) || 0) + 1);
-    if (/\bdifferent\b/i.test(requirement.text || "")) {
-      const sourceKey = String(component.source || component.name || component.id).toLowerCase();
+    const sourceKey = craftingCreatureSourceKey(component);
+    if (!override && recipeRequiresDistinctCreatureSources(recipe) && sourceKey) {
+      if (usedCreatureSources.has(sourceKey)) errors.push("Each harvested component in this recipe must come from a different creature.");
+      usedCreatureSources.add(sourceKey);
+    }
+    if (!override && /\bdifferent\b/i.test(requirement.text || "") && sourceKey) {
       if (!sourceSets.has(requirementIndex)) sourceSets.set(requirementIndex, new Set());
       const set = sourceSets.get(requirementIndex);
       if (set.has(sourceKey)) errors.push(`${requirement.text} requires different creature sources.`);
@@ -4490,7 +4780,7 @@ function selectedCraftingSpend() {
     const component = craftingState.components.find((entry) => entry.id === id);
     if (!component || quantity > component.quantity) errors.push(`${component?.name || "A component"} is selected ${quantity} times but only ${component?.quantity || 0} are available.`);
   });
-  return { valid: errors.length === 0, recipe, used, errors };
+  return { valid: errors.length === 0, recipe, used, errors, override };
 }
 
 function validateCraftRecipeSelections() {
@@ -4498,7 +4788,9 @@ function validateCraftRecipeSelections() {
   const status = byId("craftRecipeSpendStatus");
   const button = byId("confirmCraftRecipe");
   if (status) {
-    status.textContent = selection.valid ? "The selected components satisfy the recipe." : selection.errors[0] || "Choose a component for every requirement.";
+    status.textContent = selection.valid
+      ? (selection.override ? "Override enabled: the selected components will be spent despite recipe mismatches." : "The selected components satisfy the recipe.")
+      : selection.errors[0] || "Choose a component for every requirement.";
     status.classList.toggle("recipe-requirement-owned", selection.valid);
     status.classList.toggle("recipe-requirement-missing", !selection.valid);
   }
@@ -4506,16 +4798,12 @@ function validateCraftRecipeSelections() {
   return selection;
 }
 
-function openCraftRecipeDialog(recipe) {
-  const status = recipeCraftingStatus(recipe);
-  if (!status.known || !status.workshopOkay || !status.componentsReady) return;
-  craftingPendingRecipeKey = craftingRecipeIdentity(recipe);
-  const dialog = byId("craftRecipeDialog");
+function populateCraftRecipeRows(recipe) {
   const rows = byId("craftRecipeSpendRows");
-  if (!dialog || !rows) return;
-  byId("craftRecipeDialogTitle").textContent = `Craft ${recipe.name}`;
-  byId("craftRecipeDialogSummary").textContent = `Choose exactly which inventory records will be spent at the ${recipe.workshopRarity} Workshop.`;
+  if (!rows) return;
+  const override = Boolean(byId("craftRecipeOverride")?.checked);
   rows.innerHTML = "";
+  const recommendedAllocation = override ? null : allocateRecipeComponents(recipe);
   const remaining = new Map(craftingState.components.map((component) => [component.id, component.quantity]));
   recipe.components.forEach((requirement, requirementIndex) => {
     const group = document.createElement("fieldset");
@@ -4523,7 +4811,6 @@ function openCraftRecipeDialog(recipe) {
     const legend = document.createElement("legend");
     legend.innerHTML = `<span class="recipe-component-category">[${escapeHtml(normaliseCraftingCategory(requirement.category))}]</span> ${escapeHtml(requirement.text)}`;
     group.appendChild(legend);
-    const usedSources = new Set();
     const unitCount = requirementUnitCount(requirement);
     for (let unitIndex = 0; unitIndex < unitCount; unitIndex += 1) {
       const label = document.createElement("label");
@@ -4534,25 +4821,20 @@ function openCraftRecipeDialog(recipe) {
       select.dataset.craftRequirementIndex = String(requirementIndex);
       select.dataset.craftUnitIndex = String(unitIndex);
       select.innerHTML = '<option value="">Choose a component…</option>';
-      const candidates = matchingComponentsForRequirement(recipe, requirement);
+      const candidates = (override ? craftingState.components.filter((component) => component.quantity > 0) : matchingComponentsForRequirement(recipe, requirement)).slice().sort((a, b) => a.name.localeCompare(b.name));
       candidates.forEach((component) => {
         const option = document.createElement("option");
         option.value = component.id;
-        option.textContent = `${component.name} ×${component.quantity}${component.source ? ` — ${component.source}` : ""} (${component.rarity})`;
+        const matchLabel = override && !componentMatchesRequirement(component, requirement, recipe) ? " — override" : "";
+        option.textContent = `${component.name} ×${component.quantity}${component.source ? ` — ${component.source}` : ""} (${component.rarity})${matchLabel}`;
         select.appendChild(option);
       });
-      const preferred = candidates.find((component) => {
-        if ((remaining.get(component.id) || 0) <= 0) return false;
-        if (/\bdifferent\b/i.test(requirement.text || "")) {
-          const sourceKey = String(component.source || component.name || component.id).toLowerCase();
-          if (usedSources.has(sourceKey)) return false;
-        }
-        return true;
-      });
+      const recommendedId = recommendedAllocation?.requirementResults?.[requirementIndex]?.matched?.[unitIndex] || "";
+      const preferred = candidates.find((component) => component.id === recommendedId)
+        || candidates.find((component) => (remaining.get(component.id) || 0) > 0);
       if (preferred) {
         select.value = preferred.id;
         remaining.set(preferred.id, (remaining.get(preferred.id) || 0) - 1);
-        usedSources.add(String(preferred.source || preferred.name || preferred.id).toLowerCase());
       }
       select.addEventListener("change", validateCraftRecipeSelections);
       label.append(caption, select);
@@ -4560,8 +4842,23 @@ function openCraftRecipeDialog(recipe) {
     }
     rows.appendChild(group);
   });
-  dialog.showModal();
   validateCraftRecipeSelections();
+}
+
+function openCraftRecipeDialog(recipe) {
+  const status = recipeCraftingStatus(recipe);
+  if (!status.known || !status.workshopOkay) return;
+  craftingPendingRecipeKey = craftingRecipeIdentity(recipe);
+  const dialog = byId("craftRecipeDialog");
+  if (!dialog) return;
+  byId("craftRecipeDialogTitle").textContent = `Craft ${recipe.name}`;
+  byId("craftRecipeDialogSummary").textContent = status.componentsReady
+    ? `Choose exactly which inventory records will be spent at the ${recipe.workshopRarity} Workshop.`
+    : `One or more requirements are missing. Enable the override to make a deliberate case-by-case substitution.`;
+  const override = byId("craftRecipeOverride");
+  if (override) override.checked = false;
+  populateCraftRecipeRows(recipe);
+  dialog.showModal();
 }
 
 function completeSelectedCraftRecipe() {
@@ -4581,7 +4878,10 @@ function completeSelectedCraftRecipe() {
     component.archivedAt = new Date().toISOString();
     craftingState.archivedComponents.unshift(component);
   });
-  recordCraftingHistory(`Crafted ${selection.recipe.name} at a ${selection.recipe.workshopRarity} Workshop; spent ${spending.join(", ")}.`);
+  if (selection.recipe.outputComponent) {
+    addCraftingInventoryMaterial(selection.recipe.outputComponent, { deferRender: true });
+  }
+  recordCraftingHistory(`Crafted ${selection.recipe.name} at a ${selection.recipe.workshopRarity} Workshop${selection.override ? " using a manual component override" : ""}; spent ${spending.join(", ")}.${selection.recipe.outputComponent ? ` Added ${selection.recipe.outputComponent.quantity || 1} × ${selection.recipe.outputComponent.name} to inventory.` : ""}`);
   saveCraftingState();
   byId("craftRecipeDialog")?.close();
   craftingPendingRecipeKey = "";
@@ -4819,7 +5119,7 @@ function renderCraftingRecipeLibrary() {
   const knowledge = byId("recipeKnowledgeFilter")?.value || "all";
   const craftability = byId("recipeCraftabilityFilter")?.value || "all";
 
-  const filteredRecipes = allCraftingRecipes().map((recipe) => ({ recipe, status: recipeCraftingStatus(recipe) })).filter(({ recipe, status }) => {
+  const filteredRecipes = allCraftingRecipes().filter((recipe) => !recipe.materialRecipe).map((recipe) => ({ recipe, status: recipeCraftingStatus(recipe) })).filter(({ recipe, status }) => {
     if (search && !recipeSearchText(recipe).includes(search)) return false;
     if (rarity !== "all" && recipe.itemRarity !== rarity) return false;
     if (knowledge === "known" && !status.known) return false;
@@ -4909,8 +5209,8 @@ function renderCraftingRecipeLibrary() {
       const craftButton = document.createElement("button");
       craftButton.type = "button";
       craftButton.textContent = "Craft & Spend Components";
-      craftButton.disabled = !status.ready;
-      craftButton.title = status.ready ? `Craft ${recipe.name}` : craftabilityLabel(recipe, status);
+      craftButton.disabled = !status.known || !status.workshopOkay;
+      craftButton.title = craftButton.disabled ? craftabilityLabel(recipe, status) : (status.componentsReady ? `Craft ${recipe.name}` : "Open selections; use the override for a case-by-case ruling");
       craftButton.addEventListener("click", () => craftRecipe(recipe));
       const editButton = document.createElement("button");
       editButton.type = "button";
@@ -5234,6 +5534,7 @@ function renderCrafting() {
   if (byId("availableWorkshopRarity")) byId("availableWorkshopRarity").value = craftingState.availableWorkshopRarity;
   renderCraftingStats();
   renderHarvestMonsterBrowser();
+  renderLocationMaterials();
   renderComponentInventory();
   renderResearchSelectors();
   renderInstantDiscoveries();
@@ -5804,6 +6105,19 @@ function parseDeleriumCheckRolls() {
     .filter((value) => Number.isFinite(value));
 }
 
+function applyIgnitedShardChance(rewardText) {
+  return String(rewardText).replace(/(\d+) delerium shards?( worth 500 gp(?: each)?)/gi, (_match, countText, suffix) => {
+    const count = Number(countText) || 0;
+    let ignited = 0;
+    for (let i = 0; i < count; i += 1) if (Math.random() < 0.15) ignited += 1;
+    const normal = count - ignited;
+    const parts = [];
+    if (normal) parts.push(`${normal} delerium shard${normal === 1 ? "" : "s"}${suffix}`);
+    if (ignited) parts.push(`${ignited} Ignited Delerium Shard${ignited === 1 ? "" : "s"} (15% ignition result)`);
+    return parts.join("\n");
+  });
+}
+
 function calculateDeleriumSearch() {
   const rolls = parseDeleriumCheckRolls();
   if (!rolls.length) {
@@ -5843,8 +6157,9 @@ function calculateDeleriumSearch() {
     rollLines.push("Crater's Edge: +1 automatic success.");
   }
 
-  const reward = generateDeleriumReward(area, successes);
-  const extractionTime = formatDeleriumExtractionTime(reward);
+  const baseReward = generateDeleriumReward(area, successes);
+  const reward = applyIgnitedShardChance(baseReward);
+  const extractionTime = formatDeleriumExtractionTime(baseReward);
   const foundTarget = successes >= requiredSuccesses;
   const randomEncounter = failures >= failureThreshold;
   byId("deleriumOutput").textContent = [
@@ -9096,6 +9411,37 @@ function readManualD100(inputId) {
   return roll;
 }
 
+function renderAnomalyShardDiscovery() {
+  const host = byId("arcaneAnomalyShardDiscovery");
+  if (!host) return;
+  host.innerHTML = "";
+  if (Math.random() >= 0.5) {
+    host.textContent = "No ignited shard is found near this anomaly.";
+    host.className = "inline-note";
+    return;
+  }
+  host.className = "anomaly-shard-discovery";
+  const text = document.createElement("p");
+  text.innerHTML = "<strong>Nearby discovery:</strong> An Ignited Delerium Shard crackles within the unstable residue. Removing it requires a DC 15 Arcana check; failure triggers another arcane anomaly.";
+  const actions = document.createElement("div");
+  actions.className = "action-row";
+  const success = document.createElement("button");
+  success.type = "button";
+  success.textContent = "Removal Succeeded — Add Shard";
+  success.addEventListener("click", () => {
+    addCraftingInventoryMaterial(CRAFTING_LOCATION_MATERIALS[1], { deferRender: true });
+    recordCraftingHistory("Recovered an Ignited Delerium Shard from an arcane anomaly.");
+    saveCraftingState(); renderCrafting(); renderSpecialMaterials();
+    success.disabled = true; success.textContent = "Shard Added";
+  });
+  const failure = document.createElement("button");
+  failure.type = "button";
+  failure.textContent = "Removal Failed — Trigger Anomaly";
+  failure.addEventListener("click", generateArcaneAnomaly);
+  actions.append(success, failure);
+  host.append(text, actions);
+}
+
 function generateArcaneAnomaly() {
   renderD100TableResult({
     table: DEFAULT_DATA.arcaneAnomalies,
@@ -9104,6 +9450,7 @@ function generateArcaneAnomaly() {
     rollOutputId: "arcaneAnomalyRoll",
     effectOutputId: "arcaneAnomalyOutput"
   });
+  renderAnomalyShardDiscovery();
 }
 
 function resolveManualArcaneAnomaly() {
@@ -9116,6 +9463,7 @@ function resolveManualArcaneAnomaly() {
     rollOutputId: "arcaneAnomalyRoll",
     effectOutputId: "arcaneAnomalyOutput"
   });
+  renderAnomalyShardDiscovery();
 }
 
 function generateMutation() {
@@ -9648,6 +9996,12 @@ function bindEvents() {
   byId("copyCraftingHistory").addEventListener("click", copyCraftingHistory);
   byId("clearCraftingHistory").addEventListener("click", clearCraftingHistory);
   byId("resetCraftingData").addEventListener("click", resetAllCraftingData);
+  byId("openSpecialMaterials")?.addEventListener("click", openSpecialMaterialsDialog);
+  byId("millDeleriumDust")?.addEventListener("click", millDeleriumIntoDust);
+  byId("craftRecipeOverride")?.addEventListener("change", () => {
+    const recipe = craftingRecipeByKey(craftingPendingRecipeKey);
+    if (recipe) populateCraftRecipeRows(recipe);
+  });
   byId("openCraftingExport").addEventListener("click", openCraftingExportDialog);
   byId("craftingExportType").addEventListener("change", refreshCraftingExportPreview);
   byId("craftingExportRecipe").addEventListener("change", refreshCraftingExportPreview);

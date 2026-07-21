@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.7.0">
+  <link rel="stylesheet" href="style.css?v=2.7.7">
 </head>
 <body>
   <header class="app-header">
@@ -386,8 +386,10 @@
               <option selected>Uncommon</option>
               <option>Rare</option>
               <option>Very Rare</option>
+              <option>Legendary</option>
             </select>
           </label>
+          <button id="openSpecialMaterials" type="button">Special Materials</button>
           <button id="openCraftingExport" type="button">Export for Party</button>
           <button id="showCraftingRules" type="button">Rules Reference</button>
           <button id="showCraftingHistory" type="button">Activity History</button>
@@ -555,6 +557,7 @@
                 <option>Hide</option>
                 <option>Natural Weapon</option>
                 <option>Organ</option>
+                <option>Material</option>
               </select>
             </label>
             <label class="field-stack">
@@ -564,6 +567,7 @@
                 <option selected>Uncommon</option>
                 <option>Rare</option>
                 <option>Very Rare</option>
+                <option>Legendary</option>
                 </select>
             </label>
             <label class="field-stack">
@@ -634,6 +638,7 @@
               <option>Hide</option>
               <option>Natural Weapon</option>
               <option>Organ</option>
+              <option>Material</option>
             </select>
           </label>
           <label class="field-stack">
@@ -644,6 +649,7 @@
               <option>Uncommon</option>
               <option>Rare</option>
               <option>Very Rare</option>
+              <option>Legendary</option>
             </select>
           </label>
         </div>
@@ -726,6 +732,7 @@
                 <option selected>Uncommon</option>
                 <option>Rare</option>
                 <option>Very Rare</option>
+                <option>Legendary</option>
                 </select>
             </label>
             <label class="field-stack">
@@ -735,6 +742,7 @@
                 <option selected>Uncommon</option>
                 <option>Rare</option>
                 <option>Very Rare</option>
+                <option>Legendary</option>
                 </select>
             </label>
             <label class="field-stack">
@@ -1188,6 +1196,7 @@
                 </div>
                 <p id="arcaneAnomalyRoll" class="output-line empty-state">No arcane anomaly rolled yet.</p>
                 <div id="arcaneAnomalyOutput" class="description-output compact-output empty-state">Roll or enter a d100 result to reveal the effect.</div>
+                <div id="arcaneAnomalyShardDiscovery" class="inline-note"></div>
               </div>
 
               <div class="mini-table-section">
@@ -1222,10 +1231,50 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.7.0</span>
+    <span>Aldor The Immense v2.7.7</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
+
+  <dialog id="specialMaterialsDialog" class="crafting-export-dialog special-materials-dialog">
+    <form method="dialog">
+      <div class="dialog-header">
+        <div><h2>Special Materials</h2><p class="inline-note">Track location-found materials and process delerium without adding more permanent sections to the Crafting page.</p></div>
+        <button value="cancel" class="icon-button" aria-label="Close">×</button>
+      </div>
+
+      <section class="special-material-section">
+        <h3>Materials found in Drakkenheim</h3>
+        <p class="inline-note">Meteoric iron is recovered through exploration and Lucky Finds. Ignited shards may appear during delerium searches or beside arcane anomalies.</p>
+        <div id="locationMaterialResults" class="harvest-monster-results"></div>
+      </section>
+
+      <section class="special-material-section">
+        <h3>Record raw delerium</h3>
+        <p class="inline-note">Add recovered pieces here when they are available for milling or refinement.</p>
+        <div id="rawDeleriumStockResults" class="harvest-monster-results"></div>
+      </section>
+
+      <section class="special-material-section">
+        <h3>Mill raw delerium dust</h3>
+        <p class="inline-note"><strong>Hazard:</strong> grinding delerium against itself is extraordinarily dangerous unless performed within an antimagic field. Milling destroys the selected delerium.</p>
+        <div class="material-process-grid">
+          <label class="field-stack"><span>Delerium type</span><select id="deleriumMillType"><option value="Delerium Fragment">Fragment — 1 Raw Dust</option><option value="Delerium Shard">Shard — 3 Raw Dust</option><option value="Delerium Crystal">Crystal — 8 Raw Dust</option></select></label>
+          <label class="field-stack"><span>Quantity to destroy</span><input id="deleriumMillQuantity" type="number" min="1" value="1" inputmode="numeric"></label>
+          <button id="millDeleriumDust" type="button">Mill into Raw Delerium Dust</button>
+        </div>
+        <p id="deleriumMillStatus" class="inline-note"></p>
+      </section>
+
+      <section class="special-material-section">
+        <h3>Material recipes</h3>
+        <p class="inline-note">These recipes create intermediate crafting materials. Crafting them adds the finished material to the party component inventory.</p>
+        <div id="materialRecipeResults" class="crafting-recipe-list"></div>
+      </section>
+
+      <div class="dialog-actions"><button value="close">Close</button></div>
+    </form>
+  </dialog>
 
   <dialog id="craftRecipeDialog" class="craft-recipe-dialog">
     <form method="dialog" id="craftRecipeDialogForm">
@@ -1233,6 +1282,8 @@
         <div><h2 id="craftRecipeDialogTitle">Craft Item</h2><p id="craftRecipeDialogSummary" class="inline-note"></p></div>
         <button value="cancel" class="icon-button" aria-label="Close">×</button>
       </div>
+      <label class="check-row craft-override-toggle"><input id="craftRecipeOverride" type="checkbox"><span>Override recipe matching and show every owned component</span></label>
+      <p class="inline-note">Use the override only for a deliberate case-by-case ruling. Selected components will still be spent normally.</p>
       <div id="craftRecipeSpendRows" class="craft-recipe-spend-rows"></div>
       <p id="craftRecipeSpendStatus" class="inline-note"></p>
       <div class="dialog-actions">
@@ -1422,10 +1473,10 @@
     </form>
   </dialog>
 
-  <script src="harvest-data.js?v=2.7.0"></script>
-  <script src="recipes.js?v=2.7.0"></script>
-  <script src="cloud-config.js?v=2.7.0"></script>
-  <script src="script.js?v=2.7.0"></script>
-  <script src="cloud-sync.js?v=2.7.0"></script>
+  <script src="harvest-data.js?v=2.7.7"></script>
+  <script src="recipes.js?v=2.7.7"></script>
+  <script src="cloud-config.js?v=2.7.7"></script>
+  <script src="script.js?v=2.7.7"></script>
+  <script src="cloud-sync.js?v=2.7.7"></script>
 </body>
 </html>

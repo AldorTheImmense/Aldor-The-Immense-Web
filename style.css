@@ -3212,3 +3212,56 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--haze); }
     width: 100%;
   }
 }
+
+/* v2.7.2 special-material processing and manual crafting overrides */
+.special-materials-dialog {
+  width: min(980px, calc(100vw - 28px));
+  max-height: 90vh;
+}
+
+.special-materials-dialog form {
+  display: grid;
+  gap: 16px;
+}
+
+.special-material-section {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-soft, rgba(127, 127, 127, 0.06));
+}
+
+.special-material-section h3 {
+  margin-top: 0;
+}
+
+.material-process-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(150px, 0.45fr) auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.craft-override-toggle {
+  margin: 10px 0 4px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.anomaly-shard-discovery {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.anomaly-shard-discovery p {
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  .material-process-grid {
+    grid-template-columns: 1fr;
+  }
+}
