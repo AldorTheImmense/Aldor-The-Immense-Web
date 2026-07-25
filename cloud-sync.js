@@ -106,8 +106,8 @@
     const value = config();
     return /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(value.supabaseUrl)
       && value.supabasePublishableKey.length > 20
-      && !value.supabaseUrl.includes("https://dthtawbkyvrbekcrgflk.supabase.co")
-      && !value.supabasePublishableKey.includes("sb_publishable_OZepw0PH9PQGcbOO_5LLwA_qjLmAK6I");
+      && !value.supabaseUrl.includes("YOUR_PROJECT_REF")
+      && !value.supabasePublishableKey.includes("REPLACE_ME");
   }
 
   function canUseRedirectAuth() {
