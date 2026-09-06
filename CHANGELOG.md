@@ -1,3 +1,40 @@
+## v2.9.0 — DM Notes Workspace
+
+- Added a collapsible left-side board drawer that overlays the canvas instead of reducing usable board space.
+- Added custom card colours, distinct card types, status badges, collapsible cards, focus view, fit-to-content, quick notes, editable/custom templates, and save-card-as-template.
+- Added visual group/frame regions, board background styles, optional grid snapping, Shift-drag multi-select, group movement, alignment/distribution tools, and selection actions.
+- Added context menus across cards, images, frames, boards, and empty space, including explicit shared-card versus independent-duplicate workflows and Current Session pinning.
+- Added board-link portal cards, Back/Forward navigation, and card quick links into Aldor's Map, Factions, Encounters, Delerium, Other Tables, Crafting, and Shop pages.
+- Added non-destructive image fit/crop controls, portrait crop preset, captions, clipboard image paste, and optional card portraits/thumbnails with adjustable crop focus.
+- Added undo/redo plus PNG export and browser Print / Save as PDF export for the current board.
+- Migrates existing v2.8.1 pinboard state automatically and keeps DM Notes inside Save Codes / the existing cloud save payload.
+- Updated APP_VERSION, displayed version text, README, changelog, and cache-busting.
+- `cloud-config.js` and `cloud-sync.js` remain excluded and untouched.
+
+## v2.8.1 — Visual DM Pinboards
+
+- Replaced the document-style DM Notes layout with freeform visual boards containing draggable, resizable cards and images.
+- Converted folders into boards and added a permanent Current Session board; one card can appear on several boards while remaining one shared note.
+- Added labelled connections between cards and images with solid, dashed/uncertain, conflict, and directional-arrow styles.
+- Added pan, pointer-centred mouse-wheel zoom, zoom buttons, Fit Board, 100% reset, global search with jump-to-card, favourites, and card visual styles.
+- Added a focused Run Session mode that opens the Current Session board and keeps quick jumps to Map, Encounters, Factions, and Notes.
+- Added image uploads with automatic compression and an overall DM Notes storage guard. Compressed image data remains inside the DM Notes save state so Save Codes and the existing Cloud Sync carry it between devices.
+- Added automatic migration from v2.8.0 folders, notes, templates, blocks, favourites, tags, and Current Session pins into the new board/card model.
+- Left `cloud-config.js` and `cloud-sync.js` unchanged and omitted both from the update ZIP.
+- Updated APP_VERSION, displayed version text, README, changelog, and cache-busting for changed app assets.
+
+## v2.8.0 — Modular DM Notes
+
+- Added a new DM Notes page with a two-pane notebook layout for prep and at-the-table use.
+- Added editable nested folders plus starter categories for Party, Factions & NPCs, Quests / Missions, Items, Sessions, and General Notes.
+- Added Blank, PC, NPC, Faction, Quest / Mission, Item, and Session note templates.
+- Added modular Text, Heading, Checklist, NPC / Dialogue, Encounter, Travel / Route, Important, and Reference blocks with per-note block ordering.
+- Added global search, tags, favourites, note/folder ordering, folder rename/delete controls, and deliberate note deletion.
+- Added Current Session pins and a compact Run Session mode with fast navigation to the Map, Encounters, Factions, and DM Notes.
+- Added debounced local autosave and DM Notes to Save Codes and the existing cloud-sync save payload.
+- Left `cloud-config.js` and `cloud-sync.js` unchanged; the update ZIP intentionally omits both files so an existing configured deployment is preserved.
+- Updated APP_VERSION, displayed version text, README, changelog, and cache-busting for changed app assets.
+
 ## v2.7.7 — Achievable Mixed-Creature Recipes
 
 - Rewrote all fifteen newly added recipes around component names, categories, creature types, and traits the app can actually match.

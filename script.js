@@ -2743,7 +2743,7 @@ const STORAGE_KEYS = {
   crafting: "aldor.craftingState.v1"
 };
 
-const APP_VERSION = "2.7.7";
+const APP_VERSION = "2.9.0";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 function writeAppStorage(key, value) {
@@ -5667,6 +5667,9 @@ function buildSavePayload() {
       rareItems: state.rareItems
     },
     crafting: craftingState,
+    dmNotes: window.AldorDMNotes && typeof window.AldorDMNotes.exportState === "function"
+      ? window.AldorDMNotes.exportState()
+      : null,
     factionTools: {
       reputation: factionReputation,
       clocks: factionClocks,
@@ -5741,6 +5744,7 @@ function applySavePayload(payload) {
   const shop = payload.shop || {};
   const inventoryLists = payload.inventoryLists || {};
   const loadedCrafting = payload.crafting || null;
+  const loadedDmNotes = payload.dmNotes || null;
   const factionTools = payload.factionTools || {};
   const mapTools = payload.mapTools || {};
   const preferences = payload.preferences || {};
@@ -5754,6 +5758,9 @@ function applySavePayload(payload) {
   state.uncommonItems = normaliseInventoryItemNames(clone(arrayOrFallback(inventoryLists.uncommonItems, state.uncommonItems)), "Uncommon");
   state.rareItems = normaliseInventoryItemNames(clone(arrayOrFallback(inventoryLists.rareItems, state.rareItems)), "Rare");
   craftingState = normaliseCraftingState(loadedCrafting || craftingState);
+  if (loadedDmNotes && window.AldorDMNotes && typeof window.AldorDMNotes.importState === "function") {
+    window.AldorDMNotes.importState(loadedDmNotes);
+  }
 
   factionReputation = { ...defaultFactionReputation(), ...(factionTools.reputation || {}) };
   factionClocks = { ...defaultFactionClocks(), ...(factionTools.clocks || {}) };
@@ -10163,6 +10170,7 @@ function init() {
   loadFactionTools();
   loadMapTools();
   bindEvents();
+  if (window.AldorDMNotes && typeof window.AldorDMNotes.init === "function") window.AldorDMNotes.init();
   enhanceConditionsWindow();
   renderShop();
   renderCrafting();

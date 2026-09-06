@@ -1,6 +1,44 @@
 # Aldor The Immense
 
-Current version: v2.7.7
+Current version: v2.9.0
+
+## v2.9.0 DM Notes workspace
+
+- Expanded DM Notes into a more complete visual workspace while keeping boards spatial and usable on one screen.
+- Added a collapsible overlay board drawer on the left so every board remains one click away without reducing the board canvas.
+- Added editable card types, custom card colours, status badges, collapsible cards, large focus/edit view, fit-to-content, quick notes, custom templates, and save-card-as-template.
+- Added group/frame regions, board background styles, optional grid snapping, multi-select with Shift-drag, group movement, alignment/distribution tools, and selection actions.
+- Added right-click menus for cards, images, frames, boards, and empty board space. Cards can be shared to another board or duplicated as independent copies.
+- Improved Current Session workflow with one-click/right-click session pinning and multi-select session pinning.
+- Added board-link portal cards plus Back/Forward board navigation and optional quick links from cards to Map, Factions, Encounters, Delerium, Other Tables, Crafting, and Shop.
+- Added standalone image crop/fill controls, portrait crop preset, captions, direct clipboard image paste, and optional cropped card portraits/thumbnails.
+- Added undo/redo for board edits and export of the current board as PNG or via the browser Print / Save as PDF flow.
+- Existing v2.8.1 pinboards migrate automatically to the new state model. Save Codes and the existing cloud save payload continue to include DM Notes.
+- `cloud-config.js` and `cloud-sync.js` are still deliberately excluded from the release ZIP and are not modified by this release.
+
+## v2.8.1 visual DM pinboards
+
+- Replaced the previous folder/document DM Notes interface with a spatial pinboard designed for campaign prep and one-screen session use.
+- Boards are fully user-created and can represent the Party, factions, locations, quests, individual sessions, mysteries, or any other category.
+- Cards are draggable and resizable, support Blank/PC/NPC/Faction/Quest/Item/Session templates, tags, favourites, visual styles, and a large freeform notes area.
+- A single card can be shown on multiple boards, so (for example) an NPC can live on their faction board and the Current Session board without maintaining two copies.
+- Cards and uploaded images can be connected with labelled solid, dashed/uncertain, conflict, or directional-arrow lines.
+- Added image uploads to boards. Images are compressed in-browser and stored inside the DM Notes state so they remain portable through existing Save Codes and Cloud Sync.
+- Added drag-to-pan, pointer-centred wheel zoom, zoom controls, Fit Board, 100% reset, global search/jump, and a Current Session / Run Session mode with quick navigation to Map, Encounters, and Factions.
+- Existing v2.8.0 DM Notes data is migrated automatically into boards/cards on first load.
+- `cloud-config.js` and `cloud-sync.js` remain untouched and are deliberately not included in the release ZIP.
+
+## v2.8.0 modular DM Notes
+
+- Added a new top-level **DM Notes** page designed for campaign prep and single-screen use during sessions.
+- Added user-created folders and nested subfolders, with starter categories for Party, Factions & NPCs, Quests / Missions, Items, Sessions, and General Notes.
+- Added unlimited notes with optional Blank, PC, NPC, Faction, Quest / Mission, Item, and Session templates.
+- Added modular note blocks: Text, Heading, Checklist, NPC / Dialogue, Encounter, Travel / Route, Important callout, and Reference-to-another-note.
+- Added folder/note reordering, folder renaming/deletion, block reordering/deletion, note tags, favourites, and global note search.
+- Added **Current Session** pinning and a compact **Run Session** mode with quick jumps to Notes, Map, Encounters, and Factions.
+- Added debounced autosave to browser storage and included the full DM Notes state in manual Save Codes and the existing cloud-sync payload.
+- Preserved the existing `cloud-config.js` and `cloud-sync.js` implementation; this release does not replace or modify either file.
+- The update ZIP intentionally omits `cloud-config.js` and `cloud-sync.js`, so deploying it over an existing v2.7.7 site will not overwrite your configured cloud files.
 
 ## v2.7.7 achievable Drakkenheim recipe audit
 
