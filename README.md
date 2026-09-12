@@ -1,6 +1,14 @@
 # Aldor The Immense
 
-Current version: v3.0.3
+Current version: v3.0.4
+
+### v3.0.4 DM Notes formatting and image layout
+
+- Added Quote and Code block styles to the DM Notes formatting menu.
+- Formatting now applies to the current text selection/block and the style menu tracks the selected block style.
+- Note images are now movable in document flow: drag an image between paragraphs, align it left/centre/right, and resize it. Left/right images wrap text rather than covering it.
+- Existing note images are upgraded in place to the new image-block format; existing note content and hierarchy are preserved.
+- `cloud-config.js` and `cloud-sync.js` remain excluded from update archives and are not modified.
 
 ### v3.0.3 Nested DM Notes
 

@@ -16,6 +16,8 @@
   let contextTarget = null;
   let savedRange = null;
   let draggingPageId = null;
+  let selectedImageId = null;
+  let draggingImageId = null;
   const collapsedPageIds = new Set();
 
   function nowIso() {
@@ -519,6 +521,7 @@
     if (!title || !body || !sectionSelect || !parentSelect || !pin || !updated) return;
 
     title.value = page.title;
+    clearImageSelection();
     body.innerHTML = sanitizeHtml(page.bodyHtml || "");
     title.dataset.pageId = page.id;
     body.dataset.pageId = page.id;
@@ -658,8 +661,22 @@
   }
 
   function applyBlockFormat(tag) {
-    const valid = ["p", "h2", "h3"].includes(tag) ? tag : "p";
+    const valid = ["p", "h2", "h3", "blockquote", "pre"].includes(tag) ? tag : "p";
     execEditorCommand("formatBlock", valid);
+    syncFormatSelect();
+  }
+
+  function syncFormatSelect() {
+    const select = byId("dmNoteFormat");
+    const body = byId("dmNoteBody");
+    const selection = window.getSelection();
+    if (!select || !body || !selection || !selection.rangeCount) return;
+    let node = selection.getRangeAt(0).startContainer;
+    if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+    if (!(node instanceof Element) || !body.contains(node)) return;
+    const block = node.closest("p,h2,h3,blockquote,pre,div,li");
+    const tag = block?.tagName?.toLowerCase();
+    select.value = ["h2", "h3", "blockquote", "pre"].includes(tag) ? tag : "p";
   }
 
   function insertChecklist() {
@@ -753,7 +770,8 @@
       const image = await compressImageFile(file);
       const candidate = deepClone(state);
       const candidatePage = candidate.pages.find((item) => item.id === page.id);
-      const imageHtml = `<p><img src="${image.dataUrl}" alt="${escapeAttr(file.name || "Note image")}"></p>`;
+      const imageId = uid("note-image");
+      const imageHtml = `<figure class="dm-note-image dm-image-center dm-image-medium" data-dm-image-id="${imageId}" contenteditable="false" draggable="true"><img src="${image.dataUrl}" alt="${escapeAttr(file.name || "Note image")}"></figure><p><br></p>`;
       candidatePage.bodyHtml += imageHtml;
       if (stateBytes(candidate) > MAX_STATE_BYTES) throw new Error("That image would make DM Notes too large for reliable browser/cloud storage. Try a smaller image.");
       restoreEditorRange();
@@ -766,6 +784,83 @@
       window.alert(error?.message || "Could not add that image.");
       saveNow(false);
     }
+  }
+
+  function selectedImageFigure() {
+    const body = byId("dmNoteBody");
+    if (!body || !selectedImageId) return null;
+    return body.querySelector(`[data-dm-image-id="${CSS.escape(selectedImageId)}"]`);
+  }
+
+  function clearImageSelection() {
+    const body = byId("dmNoteBody");
+    body?.querySelectorAll(".dm-note-image.is-selected").forEach((figure) => figure.classList.remove("is-selected"));
+    selectedImageId = null;
+    const toolbar = byId("dmNoteImageToolbar");
+    if (toolbar) toolbar.hidden = true;
+  }
+
+  function selectImageFigure(figure) {
+    if (!figure) return clearImageSelection();
+    const body = byId("dmNoteBody");
+    body?.querySelectorAll(".dm-note-image.is-selected").forEach((item) => item.classList.remove("is-selected"));
+    figure.classList.add("is-selected");
+    if (!figure.dataset.dmImageId) figure.dataset.dmImageId = uid("note-image");
+    selectedImageId = figure.dataset.dmImageId;
+    const toolbar = byId("dmNoteImageToolbar");
+    if (toolbar) toolbar.hidden = false;
+  }
+
+  function setSelectedImageAlign(align) {
+    const figure = selectedImageFigure();
+    if (!figure || !["left", "center", "right"].includes(align)) return;
+    figure.classList.remove("dm-image-left", "dm-image-center", "dm-image-right");
+    figure.classList.add(`dm-image-${align}`);
+    saveEditorToState();
+  }
+
+  function resizeSelectedImage(direction) {
+    const figure = selectedImageFigure();
+    if (!figure) return;
+    const sizes = ["small", "medium", "large"];
+    let current = sizes.findIndex((size) => figure.classList.contains(`dm-image-${size}`));
+    if (current < 0) current = 1;
+    current += direction === "larger" ? 1 : -1;
+    current = Math.max(0, Math.min(sizes.length - 1, current));
+    sizes.forEach((size) => figure.classList.remove(`dm-image-${size}`));
+    figure.classList.add(`dm-image-${sizes[current]}`);
+    saveEditorToState();
+  }
+
+  function deleteSelectedImage() {
+    const figure = selectedImageFigure();
+    if (!figure) return;
+    const next = figure.nextElementSibling;
+    figure.remove();
+    if (next?.matches("p") && !next.textContent.trim() && !next.querySelector("img")) {
+      // Keep a single empty paragraph available for typing after the image.
+      if (next.previousElementSibling?.matches("p") && !next.previousElementSibling.textContent.trim()) next.remove();
+    }
+    clearImageSelection();
+    saveEditorToState();
+  }
+
+  function moveDraggedImage(event) {
+    if (!draggingImageId) return;
+    const body = byId("dmNoteBody");
+    const figure = body?.querySelector(`[data-dm-image-id="${CSS.escape(draggingImageId)}"]`);
+    if (!body || !figure) return;
+    event.preventDefault();
+    let target = event.target.closest?.("p,div,h2,h3,blockquote,pre,ul,ol,figure");
+    if (!target || target === body || !body.contains(target)) {
+      body.appendChild(figure);
+    } else if (target !== figure && !figure.contains(target)) {
+      const rect = target.getBoundingClientRect();
+      if (event.clientY < rect.top + rect.height / 2) target.before(figure);
+      else target.after(figure);
+    }
+    saveEditorToState();
+    selectImageFigure(figure);
   }
 
   function handlePaste(event) {
@@ -787,7 +882,7 @@
     blocked.forEach((node) => node.remove());
     template.content.querySelectorAll("*").forEach((element) => {
       const tag = element.tagName.toLowerCase();
-      const allowedTags = new Set(["p", "div", "br", "strong", "b", "em", "i", "u", "ul", "ol", "li", "h1", "h2", "h3", "blockquote", "a", "img", "span"]);
+      const allowedTags = new Set(["p", "div", "br", "strong", "b", "em", "i", "u", "ul", "ol", "li", "h1", "h2", "h3", "blockquote", "pre", "code", "a", "img", "span", "figure"]);
       if (!allowedTags.has(tag)) {
         element.replaceWith(...element.childNodes);
         return;
@@ -799,7 +894,8 @@
         if (tag === "img" && ["src", "alt"].includes(name)) keep = true;
         if (tag === "span" && name === "data-dm-check") keep = true;
         if (tag === "span" && name === "contenteditable") keep = true;
-        if (name === "class" && ["span", "div"].includes(tag)) keep = true;
+        if (tag === "figure" && ["data-dm-image-id", "contenteditable", "draggable"].includes(name)) keep = true;
+        if (name === "class" && ["span", "div", "figure"].includes(tag)) keep = true;
         if (!keep) element.removeAttribute(attr.name);
       });
       if (tag === "a") {
@@ -812,8 +908,37 @@
         const src = element.getAttribute("src") || "";
         if (!/^data:image\//i.test(src)) element.remove();
       }
+      if (tag === "figure" && element.classList.contains("dm-note-image")) {
+        element.classList.remove("is-selected");
+        if (!element.getAttribute("data-dm-image-id")) element.setAttribute("data-dm-image-id", uid("note-image"));
+        element.setAttribute("contenteditable", "false");
+        element.setAttribute("draggable", "true");
+        const alignClasses = ["dm-image-left", "dm-image-center", "dm-image-right"];
+        if (!alignClasses.some((name) => element.classList.contains(name))) element.classList.add("dm-image-center");
+        const sizeClasses = ["dm-image-small", "dm-image-medium", "dm-image-large"];
+        if (!sizeClasses.some((name) => element.classList.contains(name))) element.classList.add("dm-image-medium");
+      }
       if (tag === "span" && element.hasAttribute("data-dm-check")) {
         element.setAttribute("contenteditable", "false");
+      }
+    });
+
+    // Upgrade images created by earlier notebook versions into movable,
+    // non-overlapping image blocks without changing the image data itself.
+    Array.from(template.content.querySelectorAll("img")).forEach((img) => {
+      if (img.closest("figure.dm-note-image")) return;
+      const figure = document.createElement("figure");
+      figure.className = "dm-note-image dm-image-center dm-image-medium";
+      figure.setAttribute("data-dm-image-id", uid("note-image"));
+      figure.setAttribute("contenteditable", "false");
+      figure.setAttribute("draggable", "true");
+      const parent = img.parentElement;
+      if (parent?.tagName?.toLowerCase() === "p" && parent.textContent.trim() === "" && parent.querySelectorAll("img").length === 1) {
+        parent.replaceWith(figure);
+        figure.appendChild(img);
+      } else {
+        img.replaceWith(figure);
+        figure.appendChild(img);
       }
     });
     return template.innerHTML;
@@ -846,10 +971,16 @@
 
     byId("dmNoteTitle")?.addEventListener("input", saveEditorToState);
     byId("dmNoteBody")?.addEventListener("input", saveEditorToState);
-    byId("dmNoteBody")?.addEventListener("keyup", captureEditorRange);
-    byId("dmNoteBody")?.addEventListener("mouseup", captureEditorRange);
+    byId("dmNoteBody")?.addEventListener("keyup", () => { captureEditorRange(); syncFormatSelect(); });
+    byId("dmNoteBody")?.addEventListener("mouseup", () => { captureEditorRange(); syncFormatSelect(); });
     byId("dmNoteBody")?.addEventListener("paste", handlePaste);
     byId("dmNoteBody")?.addEventListener("click", (event) => {
+      const figure = event.target.closest?.(".dm-note-image");
+      if (figure) {
+        selectImageFigure(figure);
+        return;
+      }
+      clearImageSelection();
       const check = event.target.closest?.("[data-dm-check]");
       if (!check) return;
       const checked = check.getAttribute("data-dm-check") === "true";
@@ -857,14 +988,28 @@
       check.textContent = checked ? "☐" : "☑";
       saveEditorToState();
     });
+    byId("dmNoteBody")?.addEventListener("dragstart", (event) => {
+      const figure = event.target.closest?.(".dm-note-image");
+      if (!figure) return;
+      if (!figure.dataset.dmImageId) figure.dataset.dmImageId = uid("note-image");
+      draggingImageId = figure.dataset.dmImageId;
+      event.dataTransfer?.setData("text/x-aldor-note-image", draggingImageId);
+      if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
+      selectImageFigure(figure);
+    });
+    byId("dmNoteBody")?.addEventListener("dragover", (event) => {
+      if (draggingImageId) event.preventDefault();
+    });
+    byId("dmNoteBody")?.addEventListener("drop", (event) => moveDraggedImage(event));
+    byId("dmNoteBody")?.addEventListener("dragend", () => { draggingImageId = null; });
     byId("dmNoteSection")?.addEventListener("change", (event) => changePageSection(event.target.value));
     byId("dmNoteParent")?.addEventListener("change", (event) => changePageParent(event.target.value));
     byId("dmNotePin")?.addEventListener("click", () => activePage() && togglePin(activePage().id));
     byId("dmNoteMore")?.addEventListener("click", (event) => { event.stopPropagation(); openPageActionsMenu(); });
 
+    byId("dmNoteFormat")?.addEventListener("mousedown", captureEditorRange);
     byId("dmNoteFormat")?.addEventListener("change", (event) => {
       applyBlockFormat(event.target.value);
-      event.target.value = "p";
     });
     document.querySelectorAll("[data-dm-command]").forEach((button) => {
       button.addEventListener("mousedown", (event) => event.preventDefault());
@@ -881,6 +1026,13 @@
       event.target.value = "";
       if (file) await insertImageFile(file);
     });
+    document.querySelectorAll("[data-dm-image-align]").forEach((button) => {
+      button.addEventListener("click", () => setSelectedImageAlign(button.dataset.dmImageAlign));
+    });
+    document.querySelectorAll("[data-dm-image-size]").forEach((button) => {
+      button.addEventListener("click", () => resizeSelectedImage(button.dataset.dmImageSize));
+    });
+    byId("dmNoteImageDelete")?.addEventListener("click", deleteSelectedImage);
 
 
     byId("dmNotebookContextMenu")?.addEventListener("click", (event) => {

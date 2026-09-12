@@ -1,3 +1,11 @@
+## v3.0.4 — DM Notes formatting and image layout
+
+- Added Quote and Code styles to the DM Notes style picker.
+- Improved formatting so the selected text/block is changed to the chosen style.
+- Added in-flow image positioning: images can be dragged between paragraphs, aligned left/centre/right, and resized without covering note text.
+- Existing note images are migrated in place and all existing sections, nested pages, note content, images, pins and ordering are preserved.
+- cloud-config.js and cloud-sync.js remain excluded and untouched.
+
 ## v3.0.3 — Nested DM Notes
 
 - Removed the DM Notes Board/Trello view and its status controls to keep the notebook simpler.

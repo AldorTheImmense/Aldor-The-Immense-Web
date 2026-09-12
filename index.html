@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=3.0.3">
+  <link rel="stylesheet" href="style.css?v=3.0.4">
 </head>
 <body>
   <svg class="app-icon-sprite" aria-hidden="true" focusable="false">
@@ -73,7 +73,7 @@
     <a class="sidebar-link sidebar-anchor" href="changelog.html"><span class="sidebar-text-icon">ⓘ</span><span>Changelog</span></a>
   </div>
 
-  <div class="sidebar-version"><span>v3.0.3</span><small>Drakkenheim Edition</small></div>
+  <div class="sidebar-version"><span>v3.0.4</span><small>Drakkenheim Edition</small></div>
 </aside>
 
 <div id="sidebarBackdrop" class="sidebar-backdrop" hidden></div>
@@ -1043,6 +1043,8 @@
                   <option value="p">Normal</option>
                   <option value="h2">Heading 1</option>
                   <option value="h3">Heading 2</option>
+                  <option value="blockquote">Quote</option>
+                  <option value="pre">Code</option>
                 </select>
                 <button type="button" data-dm-command="bold" title="Bold"><strong>B</strong></button>
                 <button type="button" data-dm-command="italic" title="Italic"><em>I</em></button>
@@ -1056,6 +1058,17 @@
                 <input id="dmNoteImageInput" type="file" accept="image/*" hidden>
                 <button id="dmNoteAddLink" type="button">Link</button>
                 <button type="button" data-dm-command="removeFormat" title="Clear formatting">Clear</button>
+              </div>
+              <div id="dmNoteImageToolbar" class="dm-note-image-toolbar" hidden aria-label="Selected image controls">
+                <span>Image</span>
+                <button type="button" data-dm-image-align="left" title="Align left and wrap text">Left</button>
+                <button type="button" data-dm-image-align="center" title="Centre image">Centre</button>
+                <button type="button" data-dm-image-align="right" title="Align right and wrap text">Right</button>
+                <span class="dm-note-toolbar-divider" aria-hidden="true"></span>
+                <button type="button" data-dm-image-size="smaller" title="Make image smaller">−</button>
+                <button type="button" data-dm-image-size="larger" title="Make image larger">+</button>
+                <span class="dm-note-image-hint">Drag the image to move it between paragraphs.</span>
+                <button id="dmNoteImageDelete" type="button" class="danger" title="Remove image">Remove</button>
               </div>
 
               <div id="dmNoteBody" class="dm-note-body" contenteditable="true" spellcheck="true" data-placeholder="Start writing…"></div>
@@ -1497,7 +1510,7 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v3.0.3</span>
+    <span>Aldor The Immense v3.0.4</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
@@ -1740,11 +1753,11 @@
     </form>
   </dialog>
 
-  <script src="harvest-data.js?v=3.0.3"></script>
-  <script src="recipes.js?v=3.0.3"></script>
+  <script src="harvest-data.js?v=3.0.4"></script>
+  <script src="recipes.js?v=3.0.4"></script>
   <script src="cloud-config.js?v=2.7.7"></script>
-  <script src="dm-notes.js?v=3.0.3"></script>
-  <script src="script.js?v=3.0.3"></script>
+  <script src="dm-notes.js?v=3.0.4"></script>
+  <script src="script.js?v=3.0.4"></script>
   <script src="cloud-sync.js?v=2.7.7"></script>
 </body>
 </html>
