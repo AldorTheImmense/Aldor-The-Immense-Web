@@ -1,3 +1,8 @@
+# v3.0.6
+
+- DM Notes: Section/Parent controls, formatting toolbar, and selected-image controls now stay visible while scrolling long notes.
+- Existing DM Notes data is unchanged; this is a UI-only update.
+
 ## v3.0.4 — DM Notes formatting and image layout
 
 - Added Quote and Code styles to the DM Notes style picker.

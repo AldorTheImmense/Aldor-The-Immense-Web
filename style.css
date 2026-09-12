@@ -4938,9 +4938,8 @@ body.dm-notes-workspace #notes .dm-notebook-page {
 }
 
 .dm-note-toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 3;
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -6362,4 +6361,62 @@ body { padding-bottom: 0 !important; }
   .dm-note-body .dm-note-image.dm-image-left.dm-image-large,
   .dm-note-body .dm-note-image.dm-image-right.dm-image-large { width: 100%; }
   .dm-note-image-hint { display: none; }
+}
+
+
+/* v3.0.5 — keep DM Notes editing controls visible while the note scrolls */
+.dm-note-sticky-controls {
+  position: sticky;
+  top: 0;
+  z-index: 12;
+  margin: 0 -0.4rem;
+  padding: 0 0.4rem 0.45rem;
+  background: linear-gradient(180deg, rgba(13, 12, 16, 0.995) 0%, rgba(13, 12, 16, 0.985) 88%, rgba(13, 12, 16, 0) 100%);
+}
+
+.dm-note-sticky-controls .dm-note-meta-row {
+  margin: 0;
+  padding-top: 0.65rem;
+  background: rgba(13, 12, 16, 0.985);
+}
+
+.dm-note-sticky-controls .dm-note-toolbar {
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.24);
+}
+
+.dm-note-sticky-controls .dm-note-image-toolbar {
+  margin-top: 0.4rem;
+}
+
+:root[data-theme="light"] .dm-note-sticky-controls {
+  background: linear-gradient(180deg, rgba(244, 233, 208, 0.995) 0%, rgba(244, 233, 208, 0.985) 88%, rgba(244, 233, 208, 0) 100%);
+}
+
+:root[data-theme="light"] .dm-note-sticky-controls .dm-note-meta-row {
+  background: rgba(244, 233, 208, 0.985);
+}
+
+/* v3.0.6 — make the notebook itself the scroll container so sticky controls actually stick */
+@media (min-width: 761px) {
+  body.dm-notes-workspace .dm-notebook-shell {
+    height: calc(100dvh - var(--app-topbar-height) - 7.25rem);
+    min-height: 34rem;
+  }
+
+  body.dm-notes-workspace .dm-notebook-main {
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+  }
+
+  body.dm-notes-workspace .dm-note-editor {
+    min-height: 100%;
+  }
+
+  body.dm-notes-workspace .dm-note-sticky-controls {
+    top: 0;
+    z-index: 30;
+  }
 }

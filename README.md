@@ -1,6 +1,6 @@
 # Aldor The Immense
 
-Current version: v3.0.4
+Current version: v3.0.6
 
 ### v3.0.4 DM Notes formatting and image layout
 
