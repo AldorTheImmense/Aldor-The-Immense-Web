@@ -2,7 +2,7 @@
   "use strict";
 
   const STORAGE_KEY = "aldor.dmNotes.v1";
-  const STATE_VERSION = 5;
+  const STATE_VERSION = 6;
   const MAX_STATE_BYTES = 4_300_000;
   const IMAGE_TARGET_BYTES = 550_000;
   const STATUS_LABELS = { notes: "Notes", todo: "To Do", done: "Done" };
@@ -16,6 +16,7 @@
   let contextTarget = null;
   let savedRange = null;
   let draggingPageId = null;
+  const collapsedPageIds = new Set();
 
   function nowIso() {
     return new Date().toISOString();
@@ -34,7 +35,6 @@
       pages: [],
       activeSectionId: section.id,
       activePageId: null,
-      viewMode: "notes",
       sidebarCollapsed: false
     };
   }
@@ -44,10 +44,10 @@
   }
 
   function normalizeState(raw) {
-    // v2.10.0 deliberately starts DM Notes clean. The older spatial-board
-    // formats (v1-v4) are not migrated because the user requested all of the
-    // pre-filled/board content be removed rather than carried into the simpler notebook.
-    if (!raw || typeof raw !== "object" || Number(raw.version) !== STATE_VERSION) {
+    // v3.0.3 upgrades the v2.10+/v3.0 notebook format in place. Existing
+    // sections, pages, note HTML, images, pins and ordering are preserved.
+    const version = Number(raw?.version);
+    if (!raw || typeof raw !== "object" || ![5, STATE_VERSION].includes(version)) {
       return defaultState();
     }
 
@@ -62,8 +62,11 @@
       pages: Array.isArray(raw.pages) ? raw.pages.map((page, index) => ({
         id: String(page.id || uid("page")),
         sectionId: String(page.sectionId || ""),
+        parentId: page.parentId ? String(page.parentId) : null,
         title: String(page.title || "Untitled page"),
         bodyHtml: sanitizeHtml(String(page.bodyHtml || "")),
+        // Kept for backwards compatibility with existing saves. Board mode is
+        // no longer exposed, but no information is discarded during migration.
         status: cleanStatus(page.status),
         pinned: Boolean(page.pinned),
         createdAt: String(page.createdAt || nowIso()),
@@ -72,7 +75,6 @@
       })) : [],
       activeSectionId: raw.activeSectionId ? String(raw.activeSectionId) : null,
       activePageId: raw.activePageId ? String(raw.activePageId) : null,
-      viewMode: raw.viewMode === "board" ? "board" : "notes",
       sidebarCollapsed: Boolean(raw.sidebarCollapsed)
     };
 
@@ -84,6 +86,28 @@
 
     const sectionIds = new Set(normalized.sections.map((section) => section.id));
     normalized.pages = normalized.pages.filter((page) => sectionIds.has(page.sectionId));
+    const pageMap = new Map(normalized.pages.map((page) => [page.id, page]));
+
+    // Parent links must stay within a section, cannot point to self, and cannot
+    // form a cycle. Invalid legacy links are safely promoted to top-level pages.
+    normalized.pages.forEach((page) => {
+      if (!page.parentId) return;
+      const parent = pageMap.get(page.parentId);
+      if (!parent || parent.id === page.id || parent.sectionId !== page.sectionId) {
+        page.parentId = null;
+        return;
+      }
+      const seen = new Set([page.id]);
+      let cursor = parent;
+      while (cursor) {
+        if (seen.has(cursor.id)) {
+          page.parentId = null;
+          break;
+        }
+        seen.add(cursor.id);
+        cursor = cursor.parentId ? pageMap.get(cursor.parentId) : null;
+      }
+    });
 
     if (!sectionIds.has(normalized.activeSectionId)) {
       normalized.activeSectionId = normalized.sections.slice().sort((a, b) => a.order - b.order)[0].id;
@@ -95,14 +119,51 @@
   }
 
   function firstPageId(sectionId, source = state) {
-    return source.pages
-      .filter((page) => page.sectionId === sectionId)
-      .sort(pageSort)[0]?.id || null;
+    return hierarchyPages(sectionId, source)[0]?.page.id || null;
   }
 
   function pageSort(a, b) {
     if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
     return (Number(a.order) || 0) - (Number(b.order) || 0) || String(b.updatedAt).localeCompare(String(a.updatedAt));
+  }
+
+  function hierarchyPages(sectionId, source = state, respectCollapsed = true) {
+    const pages = source.pages.filter((page) => page.sectionId === sectionId);
+    const byParent = new Map();
+    pages.forEach((page) => {
+      const key = page.parentId || null;
+      if (!byParent.has(key)) byParent.set(key, []);
+      byParent.get(key).push(page);
+    });
+    byParent.forEach((items) => items.sort(pageSort));
+    const result = [];
+    const visit = (parentId, depth, ancestors = new Set()) => {
+      (byParent.get(parentId) || []).forEach((page) => {
+        if (ancestors.has(page.id)) return;
+        result.push({ page, depth });
+        if (respectCollapsed && collapsedPageIds.has(page.id)) return;
+        const next = new Set(ancestors);
+        next.add(page.id);
+        visit(page.id, depth + 1, next);
+      });
+    };
+    visit(null, 0);
+    return result;
+  }
+
+  function childPages(pageId, source = state) {
+    return source.pages.filter((page) => page.parentId === pageId).sort(pageSort);
+  }
+
+  function descendantIds(pageId, source = state) {
+    const found = new Set();
+    const walk = (id) => childPages(id, source).forEach((child) => {
+      if (found.has(child.id)) return;
+      found.add(child.id);
+      walk(child.id);
+    });
+    walk(pageId);
+    return found;
   }
 
   function loadState() {
@@ -112,9 +173,9 @@
     } catch (_error) {
       parsed = null;
     }
-    const wasLegacy = parsed && Number(parsed.version) !== STATE_VERSION;
+    const previousVersion = Number(parsed?.version);
     state = normalizeState(parsed);
-    if (wasLegacy) saveNow(true, "Previous board notes cleared");
+    if (previousVersion === 5) saveNow(true, "Notes upgraded · content preserved");
   }
 
   function stateBytes(value = state) {
@@ -180,7 +241,6 @@
     state.sections.push(section);
     state.activeSectionId = section.id;
     state.activePageId = null;
-    state.viewMode = "notes";
     saveNow(true);
     renderAll();
     return section;
@@ -220,6 +280,7 @@
     const page = {
       id: uid("page"),
       sectionId: section.id,
+      parentId: options.parentId && pageById(options.parentId)?.sectionId === section.id ? String(options.parentId) : null,
       title: String(options.title || "Untitled page"),
       bodyHtml: "",
       status: cleanStatus(options.status),
@@ -231,7 +292,6 @@
     state.pages.push(page);
     state.activeSectionId = section.id;
     state.activePageId = page.id;
-    state.viewMode = "notes";
     saveNow(true);
     renderAll();
     setTimeout(() => {
@@ -251,12 +311,11 @@
       pinned: false,
       createdAt: nowIso(),
       updatedAt: nowIso(),
-      order: nextPageOrder(source.sectionId, source.status)
+      order: state.pages.filter((page) => page.sectionId === source.sectionId && (page.parentId || null) === (source.parentId || null)).length
     };
     state.pages.push(copy);
     state.activeSectionId = copy.sectionId;
     state.activePageId = copy.id;
-    state.viewMode = "notes";
     saveNow(true);
     renderAll();
   }
@@ -266,6 +325,10 @@
     if (!page) return;
     if (!window.confirm(`Delete “${page.title || "Untitled page"}”?`)) return;
     const sectionId = page.sectionId;
+    state.pages.forEach((item) => {
+      if (item.parentId === pageId) item.parentId = page.parentId || null;
+    });
+    collapsedPageIds.delete(pageId);
     state.pages = state.pages.filter((item) => item.id !== pageId);
     if (state.activePageId === pageId) state.activePageId = firstPageId(sectionId);
     saveNow(true);
@@ -277,16 +340,8 @@
     if (!page) return;
     state.activeSectionId = page.sectionId;
     state.activePageId = page.id;
-    state.viewMode = "notes";
     saveNow(false);
     renderAll();
-  }
-
-  function setView(mode) {
-    state.viewMode = mode === "board" ? "board" : "notes";
-    saveNow(false);
-    renderMain();
-    renderViewButtons();
   }
 
   function setSidebarCollapsed(collapsed) {
@@ -300,7 +355,6 @@
     renderSections();
     renderPages();
     renderSidebarState();
-    renderViewButtons();
     renderMain();
   }
 
@@ -342,20 +396,20 @@
     if (!list || !heading) return;
     list.innerHTML = "";
     const query = String(byId("dmNotebookSearch")?.value || "").trim().toLowerCase();
-    let pages;
+    let entries;
     if (query) {
       heading.textContent = "Search Results";
-      pages = state.pages.filter((page) => {
+      entries = state.pages.filter((page) => {
         const section = sectionById(page.sectionId);
         const haystack = `${page.title} ${plainText(page.bodyHtml)} ${section?.name || ""}`.toLowerCase();
         return haystack.includes(query);
-      }).sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt)));
+      }).sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt))).map((page) => ({ page, depth: 0 }));
     } else {
       heading.textContent = activeSection()?.name || "Pages";
-      pages = state.pages.filter((page) => page.sectionId === state.activeSectionId).sort(pageSort);
+      entries = hierarchyPages(state.activeSectionId);
     }
 
-    if (!pages.length) {
+    if (!entries.length) {
       const empty = document.createElement("div");
       empty.className = "dm-notebook-list-empty";
       empty.textContent = query ? "No matching notes." : "No pages in this section.";
@@ -363,14 +417,30 @@
       return;
     }
 
-    pages.forEach((page) => {
+    entries.forEach(({ page, depth }) => {
       const row = document.createElement("button");
       row.type = "button";
       row.className = `dm-notebook-page-row${page.id === state.activePageId ? " is-active" : ""}`;
       row.draggable = !query;
+      row.style.setProperty("--dm-page-depth", String(depth));
+      const children = childPages(page.id);
+      const hasChildren = !query && children.length > 0;
+      const disclosure = hasChildren
+        ? `<span class="dm-page-disclosure" data-page-toggle="${escapeAttr(page.id)}" aria-label="${collapsedPageIds.has(page.id) ? "Expand" : "Collapse"} child notes">${collapsedPageIds.has(page.id) ? "▸" : "▾"}</span>`
+        : `<span class="dm-page-disclosure dm-page-disclosure-spacer" aria-hidden="true"></span>`;
       const sectionName = query ? `<span class="dm-page-section-name">${escapeHtml(sectionById(page.sectionId)?.name || "")}</span>` : "";
-      row.innerHTML = `<span class="dm-page-row-title">${page.pinned ? "★ " : ""}${escapeHtml(page.title || "Untitled page")}</span>${sectionName}<small>${escapeHtml(STATUS_LABELS[page.status])}</small>`;
-      row.addEventListener("click", () => openPage(page.id));
+      row.innerHTML = `${disclosure}<span class="dm-page-row-main"><span class="dm-page-row-title">${page.pinned ? "★ " : ""}${escapeHtml(page.title || "Untitled page")}</span>${sectionName}</span>`;
+      row.addEventListener("click", (event) => {
+        const toggle = event.target.closest?.("[data-page-toggle]");
+        if (toggle) {
+          event.stopPropagation();
+          const id = toggle.getAttribute("data-page-toggle");
+          if (collapsedPageIds.has(id)) collapsedPageIds.delete(id); else collapsedPageIds.add(id);
+          renderPages();
+          return;
+        }
+        openPage(page.id);
+      });
       row.addEventListener("contextmenu", (event) => {
         event.preventDefault();
         showContextMenu(event.clientX, event.clientY, "page", page.id);
@@ -401,14 +471,18 @@
     const source = pageById(sourceId);
     const target = pageById(targetId);
     if (!source || !target || source.sectionId !== target.sectionId) return;
-    const ordered = state.pages.filter((page) => page.sectionId === source.sectionId).sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
-    const without = ordered.filter((page) => page.id !== sourceId);
+    // Reordering is deliberately limited to siblings so dragging a note cannot
+    // accidentally change its hierarchy. Use Parent Note to nest/unnest pages.
+    if ((source.parentId || null) !== (target.parentId || null)) return;
+    const siblings = state.pages
+      .filter((page) => page.sectionId === source.sectionId && (page.parentId || null) === (source.parentId || null))
+      .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+    const without = siblings.filter((page) => page.id !== sourceId);
     const index = without.findIndex((page) => page.id === targetId);
     without.splice(Math.max(0, index), 0, source);
     without.forEach((page, idx) => { page.order = idx; });
     saveNow(true);
     renderPages();
-    if (state.viewMode === "board") renderBoard();
   }
 
   function renderSidebarState() {
@@ -419,26 +493,11 @@
     rail.hidden = !state.sidebarCollapsed;
   }
 
-  function renderViewButtons() {
-    byId("dmNotebookNotesView")?.classList.toggle("is-active", state.viewMode === "notes");
-    byId("dmNotebookBoardView")?.classList.toggle("is-active", state.viewMode === "board");
-  }
 
   function renderMain() {
     const editor = byId("dmNoteEditor");
-    const board = byId("dmKanbanView");
     const empty = byId("dmNotebookEmpty");
-    if (!editor || !board || !empty) return;
-
-    if (state.viewMode === "board") {
-      editor.hidden = true;
-      empty.hidden = true;
-      board.hidden = false;
-      renderBoard();
-      return;
-    }
-
-    board.hidden = true;
+    if (!editor || !empty) return;
     const page = activePage();
     if (!page) {
       editor.hidden = true;
@@ -453,19 +512,28 @@
   function renderEditor(page) {
     const title = byId("dmNoteTitle");
     const body = byId("dmNoteBody");
-    const status = byId("dmNoteStatus");
     const sectionSelect = byId("dmNoteSection");
+    const parentSelect = byId("dmNoteParent");
     const pin = byId("dmNotePin");
     const updated = byId("dmNoteUpdated");
-    if (!title || !body || !status || !sectionSelect || !pin || !updated) return;
+    if (!title || !body || !sectionSelect || !parentSelect || !pin || !updated) return;
 
     title.value = page.title;
     body.innerHTML = sanitizeHtml(page.bodyHtml || "");
     title.dataset.pageId = page.id;
     body.dataset.pageId = page.id;
-    status.value = cleanStatus(page.status);
     sectionSelect.innerHTML = state.sections.slice().sort((a, b) => a.order - b.order).map((section) => `<option value="${escapeAttr(section.id)}">${escapeHtml(section.name)}</option>`).join("");
     sectionSelect.value = page.sectionId;
+
+    const excluded = descendantIds(page.id);
+    excluded.add(page.id);
+    const parentOptions = hierarchyPages(page.sectionId, state, false)
+      .filter(({ page: candidate }) => !excluded.has(candidate.id))
+      .map(({ page: candidate, depth }) => `<option value="${escapeAttr(candidate.id)}">${escapeHtml(`${"— ".repeat(depth)}${candidate.title || "Untitled page"}`)}</option>`)
+      .join("");
+    parentSelect.innerHTML = `<option value="">No parent (top level)</option>${parentOptions}`;
+    parentSelect.value = page.parentId || "";
+
     pin.textContent = page.pinned ? "★" : "☆";
     pin.classList.toggle("is-pinned", page.pinned);
     pin.title = page.pinned ? "Unpin page" : "Pin page";
@@ -473,61 +541,6 @@
     updated.textContent = Number.isNaN(date.getTime()) ? "" : `Updated ${date.toLocaleDateString([], { day: "numeric", month: "short" })} ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
   }
 
-  function renderBoard() {
-    const section = activeSection();
-    byId("dmKanbanSectionName").textContent = section?.name || "Board";
-    const buckets = { notes: [], todo: [], done: [] };
-    state.pages.filter((page) => page.sectionId === state.activeSectionId).sort(pageSort).forEach((page) => buckets[cleanStatus(page.status)].push(page));
-    const mapping = {
-      notes: ["dmKanbanNotes", "dmKanbanCountNotes"],
-      todo: ["dmKanbanTodo", "dmKanbanCountTodo"],
-      done: ["dmKanbanDone", "dmKanbanCountDone"]
-    };
-    Object.entries(mapping).forEach(([status, ids]) => {
-      const list = byId(ids[0]);
-      const count = byId(ids[1]);
-      if (!list || !count) return;
-      count.textContent = String(buckets[status].length);
-      list.innerHTML = "";
-      buckets[status].forEach((page) => list.appendChild(makeKanbanCard(page)));
-    });
-  }
-
-  function makeKanbanCard(page) {
-    const card = document.createElement("article");
-    card.className = "dm-kanban-card";
-    card.draggable = true;
-    card.dataset.pageId = page.id;
-    const excerpt = plainText(page.bodyHtml).trim().replace(/\s+/g, " ").slice(0, 180);
-    card.innerHTML = `<div class="dm-kanban-card-title">${page.pinned ? "★ " : ""}${escapeHtml(page.title || "Untitled page")}</div>${excerpt ? `<p>${escapeHtml(excerpt)}${plainText(page.bodyHtml).trim().length > 180 ? "…" : ""}</p>` : "<p class=\"muted\">Empty note</p>"}`;
-    card.addEventListener("click", () => openPage(page.id));
-    card.addEventListener("contextmenu", (event) => {
-      event.preventDefault();
-      showContextMenu(event.clientX, event.clientY, "page", page.id);
-    });
-    card.addEventListener("dragstart", (event) => {
-      draggingPageId = page.id;
-      event.dataTransfer.effectAllowed = "move";
-      event.dataTransfer.setData("text/plain", page.id);
-      card.classList.add("is-dragging");
-    });
-    card.addEventListener("dragend", () => {
-      draggingPageId = null;
-      card.classList.remove("is-dragging");
-    });
-    return card;
-  }
-
-  function movePageToStatus(pageId, status) {
-    const page = pageById(pageId);
-    if (!page) return;
-    page.status = cleanStatus(status);
-    page.order = nextPageOrder(page.sectionId, page.status);
-    touchPage(page);
-    saveNow(true);
-    renderPages();
-    renderBoard();
-  }
 
   function touchPage(page) {
     if (page) page.updatedAt = nowIso();
@@ -550,9 +563,27 @@
     const page = activePage();
     if (!page || !sectionById(sectionId) || page.sectionId === sectionId) return;
     page.sectionId = sectionId;
+    page.parentId = null;
     page.order = nextPageOrder(sectionId, page.status);
     touchPage(page);
     state.activeSectionId = sectionId;
+    saveNow(true);
+    renderAll();
+  }
+
+  function changePageParent(parentId) {
+    const page = activePage();
+    if (!page) return;
+    const nextParentId = parentId ? String(parentId) : null;
+    if (nextParentId === page.id) return;
+    if (nextParentId) {
+      const parent = pageById(nextParentId);
+      if (!parent || parent.sectionId !== page.sectionId || descendantIds(page.id).has(parent.id)) return;
+    }
+    if ((page.parentId || null) === nextParentId) return;
+    page.parentId = nextParentId;
+    page.order = state.pages.filter((item) => item.sectionId === page.sectionId && (item.parentId || null) === nextParentId && item.id !== page.id).length;
+    touchPage(page);
     saveNow(true);
     renderAll();
   }
@@ -575,7 +606,7 @@
       actions.push(["rename-section", "Rename Section"], ["new-page-here", "New Page Here"], ["delete-section", "Delete Section", "danger"]);
     } else if (type === "page") {
       const page = pageById(id);
-      actions.push(["open-page", "Open"], ["toggle-pin", page?.pinned ? "Unpin" : "Pin"], ["duplicate-page", "Duplicate"], ["delete-page", "Delete", "danger"]);
+      actions.push(["open-page", "Open"], ["new-child-page", "New Child Page"], ["toggle-pin", page?.pinned ? "Unpin" : "Pin"], ...(page?.parentId ? [["make-top-level", "Move to Top Level"]] : []), ["duplicate-page", "Duplicate"], ["delete-page", "Delete", "danger"]);
     }
     menu.innerHTML = actions.map(([action, label, cls]) => `<button type="button" data-action="${action}"${cls ? ` class="${cls}"` : ""}>${escapeHtml(label)}</button>`).join("");
     menu.hidden = false;
@@ -601,7 +632,9 @@
     else if (action === "new-page-here") createPage({ sectionId: target.id });
     else if (action === "delete-section") deleteSection(target.id);
     else if (action === "open-page") openPage(target.id);
+    else if (action === "new-child-page") { const parent = pageById(target.id); if (parent) createPage({ sectionId: parent.sectionId, parentId: parent.id }); }
     else if (action === "toggle-pin") togglePin(target.id);
+    else if (action === "make-top-level") { const page = pageById(target.id); if (page) { page.parentId = null; page.order = nextPageOrder(page.sectionId, page.status); touchPage(page); saveNow(true); renderAll(); } }
     else if (action === "duplicate-page") duplicatePage(target.id);
     else if (action === "delete-page") deletePage(target.id);
   }
@@ -809,8 +842,6 @@
     byId("dmNotebookNewPage")?.addEventListener("click", () => createPage());
     byId("dmNotebookPageAdd")?.addEventListener("click", () => createPage());
     byId("dmNotebookEmptyNewPage")?.addEventListener("click", () => createPage());
-    byId("dmNotebookNotesView")?.addEventListener("click", () => setView("notes"));
-    byId("dmNotebookBoardView")?.addEventListener("click", () => setView("board"));
     byId("dmNotebookSearch")?.addEventListener("input", () => renderPages());
 
     byId("dmNoteTitle")?.addEventListener("input", saveEditorToState);
@@ -826,16 +857,8 @@
       check.textContent = checked ? "☐" : "☑";
       saveEditorToState();
     });
-    byId("dmNoteStatus")?.addEventListener("change", (event) => {
-      const page = activePage();
-      if (!page) return;
-      page.status = cleanStatus(event.target.value);
-      page.order = nextPageOrder(page.sectionId, page.status);
-      touchPage(page);
-      saveNow(true);
-      renderPages();
-    });
     byId("dmNoteSection")?.addEventListener("change", (event) => changePageSection(event.target.value));
+    byId("dmNoteParent")?.addEventListener("change", (event) => changePageParent(event.target.value));
     byId("dmNotePin")?.addEventListener("click", () => activePage() && togglePin(activePage().id));
     byId("dmNoteMore")?.addEventListener("click", (event) => { event.stopPropagation(); openPageActionsMenu(); });
 
@@ -859,22 +882,6 @@
       if (file) await insertImageFile(file);
     });
 
-    document.querySelectorAll(".dm-kanban-list").forEach((list) => {
-      list.addEventListener("dragover", (event) => {
-        event.preventDefault();
-        list.classList.add("is-drop-target");
-      });
-      list.addEventListener("dragleave", () => list.classList.remove("is-drop-target"));
-      list.addEventListener("drop", (event) => {
-        event.preventDefault();
-        list.classList.remove("is-drop-target");
-        const pageId = draggingPageId || event.dataTransfer.getData("text/plain");
-        movePageToStatus(pageId, list.dataset.status);
-      });
-    });
-    document.querySelectorAll("[data-add-status]").forEach((button) => {
-      button.addEventListener("click", () => createPage({ status: button.dataset.addStatus }));
-    });
 
     byId("dmNotebookContextMenu")?.addEventListener("click", (event) => {
       const button = event.target.closest("button[data-action]");

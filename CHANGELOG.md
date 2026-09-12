@@ -1,3 +1,12 @@
+## v3.0.3 — Nested DM Notes
+
+- Removed the DM Notes Board/Trello view and its status controls to keep the notebook simpler.
+- Added parent/child note hierarchy inside each section with visible sidebar indentation and collapsible child trees.
+- Added a Parent note selector to the editor, plus right-click New Child Page and Move to Top Level actions.
+- Kept drag reordering for sibling notes without allowing a drag to accidentally change hierarchy.
+- Migrates existing DM Notes state from v5 to v6 without clearing content; sections, note HTML, embedded images, pins and ordering are retained.
+- `cloud-config.js` and `cloud-sync.js` remain excluded and untouched.
+
 ## v3.0.2 — Dashboard Artwork
 
 - Added thematic artwork to every Home dashboard navigation card, matching the approved dashboard mock-up more closely.

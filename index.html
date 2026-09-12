@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=3.0.2">
+  <link rel="stylesheet" href="style.css?v=3.0.3">
 </head>
 <body>
   <svg class="app-icon-sprite" aria-hidden="true" focusable="false">
@@ -73,7 +73,7 @@
     <a class="sidebar-link sidebar-anchor" href="changelog.html"><span class="sidebar-text-icon">ⓘ</span><span>Changelog</span></a>
   </div>
 
-  <div class="sidebar-version"><span>v3.0.2</span><small>Drakkenheim Edition</small></div>
+  <div class="sidebar-version"><span>v3.0.3</span><small>Drakkenheim Edition</small></div>
 </aside>
 
 <div id="sidebarBackdrop" class="sidebar-backdrop" hidden></div>
@@ -974,16 +974,12 @@
         <header class="dm-notebook-topbar">
           <div class="dm-notebook-heading">
             <h2>DM Notes</h2>
-            <p class="inline-note">A simple campaign notebook with an optional board view.</p>
+            <p class="inline-note">A simple campaign notebook with sections and nested pages.</p>
           </div>
           <div class="dm-notebook-actions">
             <button id="dmNotebookSidebarToggle" type="button">☰ Notes</button>
             <button id="dmNotebookNewSection" type="button">New Section</button>
             <button id="dmNotebookNewPage" type="button" class="primary">New Page</button>
-            <div class="dm-view-switch" role="group" aria-label="DM Notes view">
-              <button id="dmNotebookNotesView" type="button" class="is-active">Notebook</button>
-              <button id="dmNotebookBoardView" type="button">Board</button>
-            </div>
             <span id="dmNotebookSaveStatus" class="dm-notebook-save-status">Saved locally</span>
           </div>
         </header>
@@ -1034,11 +1030,9 @@
                 <label>Section
                   <select id="dmNoteSection"></select>
                 </label>
-                <label>Board status
-                  <select id="dmNoteStatus">
-                    <option value="notes">Notes</option>
-                    <option value="todo">To Do</option>
-                    <option value="done">Done</option>
+                <label>Parent note
+                  <select id="dmNoteParent" aria-label="Parent note">
+                    <option value="">No parent (top level)</option>
                   </select>
                 </label>
                 <span id="dmNoteUpdated" class="dm-note-updated"></span>
@@ -1067,31 +1061,6 @@
               <div id="dmNoteBody" class="dm-note-body" contenteditable="true" spellcheck="true" data-placeholder="Start writing…"></div>
             </article>
 
-            <section id="dmKanbanView" class="dm-kanban-view" hidden aria-label="DM Notes board view">
-              <div class="dm-kanban-heading">
-                <div>
-                  <h3 id="dmKanbanSectionName">Board</h3>
-                  <p class="inline-note">Drag notes between columns. Click a card to open the full note.</p>
-                </div>
-              </div>
-              <div class="dm-kanban-columns">
-                <section class="dm-kanban-column" data-status="notes">
-                  <header><strong>Notes</strong><span id="dmKanbanCountNotes">0</span></header>
-                  <div id="dmKanbanNotes" class="dm-kanban-list" data-status="notes"></div>
-                  <button type="button" class="dm-kanban-add" data-add-status="notes">+ Add note</button>
-                </section>
-                <section class="dm-kanban-column" data-status="todo">
-                  <header><strong>To Do</strong><span id="dmKanbanCountTodo">0</span></header>
-                  <div id="dmKanbanTodo" class="dm-kanban-list" data-status="todo"></div>
-                  <button type="button" class="dm-kanban-add" data-add-status="todo">+ Add note</button>
-                </section>
-                <section class="dm-kanban-column" data-status="done">
-                  <header><strong>Done</strong><span id="dmKanbanCountDone">0</span></header>
-                  <div id="dmKanbanDone" class="dm-kanban-list" data-status="done"></div>
-                  <button type="button" class="dm-kanban-add" data-add-status="done">+ Add note</button>
-                </section>
-              </div>
-            </section>
           </div>
         </div>
 
@@ -1528,7 +1497,7 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v3.0.2</span>
+    <span>Aldor The Immense v3.0.3</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
@@ -1771,11 +1740,11 @@
     </form>
   </dialog>
 
-  <script src="harvest-data.js?v=3.0.2"></script>
-  <script src="recipes.js?v=3.0.2"></script>
+  <script src="harvest-data.js?v=3.0.3"></script>
+  <script src="recipes.js?v=3.0.3"></script>
   <script src="cloud-config.js?v=2.7.7"></script>
-  <script src="dm-notes.js?v=3.0.2"></script>
-  <script src="script.js?v=3.0.2"></script>
+  <script src="dm-notes.js?v=3.0.3"></script>
+  <script src="script.js?v=3.0.3"></script>
   <script src="cloud-sync.js?v=2.7.7"></script>
 </body>
 </html>

@@ -2743,7 +2743,7 @@ const STORAGE_KEYS = {
   crafting: "aldor.craftingState.v1"
 };
 
-const APP_VERSION = "3.0.2";
+const APP_VERSION = "3.0.3";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 function writeAppStorage(key, value) {

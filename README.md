@@ -1,6 +1,15 @@
 # Aldor The Immense
 
-Current version: v3.0.2
+Current version: v3.0.3
+
+### v3.0.3 Nested DM Notes
+
+- Removed the optional Trello/Board mode from DM Notes so the feature is now focused entirely on the notebook workflow.
+- Added parent/child pages within each section. Choose a **Parent note** in the note metadata to nest a page beneath another page.
+- Child pages are indented in the sidebar and parent pages get expand/collapse chevrons. Nesting can be several levels deep.
+- Added **New Child Page** and **Move to Top Level** right-click actions.
+- Existing v2.10/v3.0.x note content is migrated in place: sections, titles, rich-text content, images, pins and ordering are preserved. No DM Notes reset occurs in this update.
+- `cloud-config.js` and `cloud-sync.js` remain excluded from the update archive and are not modified.
 
 ### v3.0.2 Dashboard artwork
 The Home dashboard now gives every navigation card a thematic Drakkenheim image. Appropriate card artwork is loaded from the Dungeons of Drakkenheim assets exposed by 5e.tools, while the existing local map image remains in use for Map & Travel.

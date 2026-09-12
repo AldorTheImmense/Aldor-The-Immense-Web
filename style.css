@@ -6156,3 +6156,59 @@ body { padding-bottom: 0 !important; }
   background: radial-gradient(circle at center, rgba(18,13,28,0.03), rgba(5,8,13,0.22));
   pointer-events: none;
 }
+
+
+/* v3.0.3 — nested DM Notes hierarchy */
+.dm-notebook-page-row {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.22rem;
+  padding-left: calc(0.45rem + (var(--dm-page-depth, 0) * 1rem));
+  position: relative;
+}
+
+.dm-notebook-page-row[style*="--dm-page-depth: 1"],
+.dm-notebook-page-row[style*="--dm-page-depth: 2"],
+.dm-notebook-page-row[style*="--dm-page-depth: 3"],
+.dm-notebook-page-row[style*="--dm-page-depth: 4"],
+.dm-notebook-page-row[style*="--dm-page-depth: 5"] {
+  border-left-color: color-mix(in srgb, var(--border-soft) 55%, transparent);
+}
+
+.dm-page-disclosure {
+  width: 1rem;
+  min-width: 1rem;
+  display: inline-grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1;
+  border-radius: 0.2rem;
+}
+
+.dm-page-disclosure:not(.dm-page-disclosure-spacer):hover {
+  color: var(--text);
+  background: var(--accent-soft);
+}
+
+.dm-page-disclosure-spacer {
+  opacity: 0;
+}
+
+.dm-page-row-main {
+  min-width: 0;
+  display: grid;
+  gap: 0.12rem;
+}
+
+.dm-note-meta-row label:has(#dmNoteParent) select {
+  min-width: min(24rem, 42vw);
+}
+
+@media (max-width: 760px) {
+  .dm-note-meta-row label:has(#dmNoteParent),
+  .dm-note-meta-row label:has(#dmNoteParent) select {
+    width: 100%;
+    min-width: 0;
+  }
+}
