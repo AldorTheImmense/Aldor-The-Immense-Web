@@ -5,41 +5,98 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aldor The Immense</title>
   <link rel="icon" href="assets/AldorIcon.ico">
-  <link rel="stylesheet" href="style.css?v=2.9.0">
+  <link rel="stylesheet" href="style.css?v=3.0.2">
 </head>
 <body>
-  <header class="app-header">
-    <div class="header-main">
-      <div class="title-row">
-        <img src="assets/AldorIcon.ico" alt="" class="app-icon">
-        <div class="brand-copy">
-          <h1>Aldor The Immense</h1>
-          <p>A Drakkenheim DM Tool</p>
-        </div>
-      </div>
-      <div class="header-actions">
-        <button id="showSaveCode" type="button">Copy Save Code</button>
-        <button id="showLoadCode" type="button">Load Save Code</button>
-        <button id="cloudSyncButton" type="button">Cloud: Setup</button>
-        <button id="conditionsButton" type="button">Conditions</button>
-        <button id="soundToggle" type="button">Sound: Off</button>
-        <button id="themeToggle" type="button">Dark mode</button>
-        <button id="compactModeToggle" type="button">Compact: Off</button>
-      </div>
+  <svg class="app-icon-sprite" aria-hidden="true" focusable="false">
+  <symbol id="icon-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5v9a1.5 1.5 0 0 1-1.5 1.5H15v-6H9v6H4.5A1.5 1.5 0 0 1 3 19.5z"/></symbol>
+  <symbol id="icon-note" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v5h4M9 12h7M9 16h7"/></symbol>
+  <symbol id="icon-factions" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M3 20c.4-4 2.3-6 5-6s4.6 2 5 6M13 20c.2-3.1 1.6-4.8 3.8-4.8 2.1 0 3.6 1.6 4.2 4.8"/></symbol>
+  <symbol id="icon-map" viewBox="0 0 24 24"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zM9 3v16M15 5v16"/></symbol>
+  <symbol id="icon-swords" viewBox="0 0 24 24"><path d="m4 4 16 16M14 4l6 6M4 14l6 6M16 2l6 6-4 4M2 16l6 6 4-4"/></symbol>
+  <symbol id="icon-hammer" viewBox="0 0 24 24"><path d="m4 20 8-8M10 6l3-3 8 8-3 3M7 9l8 8"/></symbol>
+  <symbol id="icon-harvest" viewBox="0 0 24 24"><path d="M5 20c6-1 11-6 14-16M7 15c-3 0-5-2-5-5 3 0 5 2 5 5ZM12 10c-1-3 1-6 4-7 1 3-1 6-4 7Z"/></symbol>
+  <symbol id="icon-components" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v5c0 1.7 3.1 3 7 3s7-1.3 7-3V5M5 10v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5M5 15v4c0 1.7 3.1 3 7 3s7-1.3 7-3v-4"/></symbol>
+  <symbol id="icon-shop" viewBox="0 0 24 24"><path d="M4 9h16v12H4zM3 9l2-6h14l2 6M8 21v-7h8v7"/></symbol>
+  <symbol id="icon-delerium" viewBox="0 0 24 24"><path d="m12 2 3 6 6 3-6 3-3 8-3-8-6-3 6-3z"/></symbol>
+  <symbol id="icon-table" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 4v16M14 4v16"/></symbol>
+  <symbol id="icon-cloud" viewBox="0 0 24 24"><path d="M7 19h11a4 4 0 0 0 .7-7.9A6 6 0 0 0 7.3 9.4 4.8 4.8 0 0 0 7 19Z"/></symbol>
+  <symbol id="icon-save" viewBox="0 0 24 24"><path d="M5 3h12l3 3v15H4V3zM8 3v6h8V3M8 21v-8h8v8"/></symbol>
+  <symbol id="icon-load" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></symbol>
+  <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 5 5"/></symbol>
+  <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+</svg>
+
+<aside class="app-sidebar" id="appSidebar" aria-label="Main navigation">
+  <div class="sidebar-brand">
+    <img src="assets/AldorIcon.ico" alt="" class="sidebar-brand-icon">
+    <div class="sidebar-brand-copy">
+      <strong>Aldor<br>the Immense</strong>
+      <span>Drakkenheim DM tools</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <button class="sidebar-link is-active" type="button" data-nav-tab="home" data-nav-target="home" data-search-terms="home dashboard overview">
+      <svg><use href="#icon-home"/></svg><span>Home</span>
+    </button>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Session</div>
+      <button class="sidebar-link" type="button" data-nav-tab="notes" data-nav-target="notes" data-search-terms="dm notes notebook pages session prep"><svg><use href="#icon-note"/></svg><span>DM Notes</span></button>
+      <button class="sidebar-link" type="button" data-nav-tab="factions" data-nav-target="factions" data-search-terms="factions reputation clocks"><svg><use href="#icon-factions"/></svg><span>Factions</span></button>
+      <button class="sidebar-link" type="button" data-nav-tab="map" data-nav-target="map" data-search-terms="map travel route drakkenheim"><svg><use href="#icon-map"/></svg><span>Map &amp; Travel</span></button>
+      <button class="sidebar-link" type="button" data-nav-tab="tables" data-nav-target="encounters-card" data-search-terms="encounters random encounter"><svg><use href="#icon-swords"/></svg><span>Encounters</span></button>
     </div>
 
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Crafting</div>
+      <button class="sidebar-link" type="button" data-nav-tab="crafting" data-nav-target="recipe-library-card" data-search-terms="recipes schematics crafting"><svg><use href="#icon-hammer"/></svg><span>Recipes</span></button>
+      <button class="sidebar-link" type="button" data-nav-tab="crafting" data-nav-target="harvesting-card" data-search-terms="harvesting monster creature components"><svg><use href="#icon-harvest"/></svg><span>Harvesting</span></button>
+      <button class="sidebar-link" type="button" data-nav-tab="crafting" data-nav-target="components-card" data-search-terms="components inventory harvested materials"><svg><use href="#icon-components"/></svg><span>Components</span></button>
+      <button class="sidebar-link" type="button" data-nav-tab="shop" data-nav-target="shop" data-search-terms="shop aldor items potions scrolls"><svg><use href="#icon-shop"/></svg><span>Shop</span></button>
+    </div>
 
-    <nav class="quick-nav" aria-label="Quick navigation">
-      <button type="button" data-nav-tab="shop" data-nav-target="shop">Shop</button>
-      <button type="button" data-nav-tab="crafting" data-nav-target="crafting">Crafting</button>
-      <button type="button" data-nav-tab="factions" data-nav-target="factions">Factions</button>
-      <button type="button" data-nav-tab="notes" data-nav-target="notes">DM Notes</button>
-      <button type="button" data-nav-tab="map" data-nav-target="map">Map</button>
-      <button type="button" data-nav-tab="tables" data-nav-target="delerium-card">Delerium</button>
-      <button type="button" data-nav-tab="tables" data-nav-target="encounters-card">Encounters</button>
-      <button type="button" data-nav-tab="tables" data-nav-target="other-tables-card">Other Tables</button>
-    </nav>
-  </header>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Reference</div>
+      <button class="sidebar-link" type="button" data-nav-tab="tables" data-nav-target="delerium-card" data-search-terms="delerium contamination search"><svg><use href="#icon-delerium"/></svg><span>Delerium</span></button>
+      <button class="sidebar-link" type="button" data-nav-tab="tables" data-nav-target="other-tables-card" data-search-terms="tables locations ruins anomalies mutations reference"><svg><use href="#icon-table"/></svg><span>Tables &amp; Reference</span></button>
+    </div>
+  </nav>
+
+  <div class="sidebar-data">
+    <div class="sidebar-group-label">Data</div>
+    <button id="showSaveCode" class="sidebar-link" type="button"><svg><use href="#icon-save"/></svg><span>Copy Save Code</span></button>
+    <button id="showLoadCode" class="sidebar-link" type="button"><svg><use href="#icon-load"/></svg><span>Load Save Code</span></button>
+    <button id="cloudSyncButton" class="sidebar-link" type="button"><svg><use href="#icon-cloud"/></svg><span>Cloud: Setup</span></button>
+    <a class="sidebar-link sidebar-anchor" href="changelog.html"><span class="sidebar-text-icon">ⓘ</span><span>Changelog</span></a>
+  </div>
+
+  <div class="sidebar-version"><span>v3.0.2</span><small>Drakkenheim Edition</small></div>
+</aside>
+
+<div id="sidebarBackdrop" class="sidebar-backdrop" hidden></div>
+
+<header class="app-topbar">
+  <button id="appSidebarToggle" class="topbar-icon-button" type="button" aria-label="Toggle navigation"><svg><use href="#icon-menu"/></svg></button>
+  <label class="app-search-box" for="appGlobalSearch">
+    <svg><use href="#icon-search"/></svg>
+    <input id="appGlobalSearch" type="search" placeholder="Search tools…" autocomplete="off" list="appSearchOptions">
+    <kbd>Ctrl K</kbd>
+  </label>
+  <datalist id="appSearchOptions">
+    <option value="DM Notes"><option value="Factions"><option value="Map & Travel"><option value="Encounters">
+    <option value="Recipes"><option value="Harvesting"><option value="Components"><option value="Shop">
+    <option value="Delerium"><option value="Tables & Reference">
+  </datalist>
+  <div class="topbar-actions">
+    <button id="conditionsButton" class="topbar-utility" type="button">Conditions</button>
+    <button id="soundToggle" class="topbar-utility" type="button">Sound: Off</button>
+    <button id="themeToggle" class="topbar-utility" type="button">Dark mode</button>
+    <button id="compactModeToggle" class="topbar-utility" type="button">Compact: Off</button>
+  </div>
+</header>
 
   <div id="conditionsWindow" class="floating-window conditions-window" role="dialog" aria-modal="false" aria-labelledby="conditionsWindowTitle" hidden>
     <div id="conditionsWindowHandle" class="floating-window-header">
@@ -323,7 +380,114 @@
 
 
   <main>
-    <section id="shop" class="panel active-panel" aria-labelledby="shop-tab">
+    <section id="home" class="panel active-panel" aria-label="Aldor dashboard">
+      <div class="dashboard-layout">
+        <div class="dashboard-main">
+          <section class="dashboard-hero">
+            <div>
+              <span class="dashboard-eyebrow">Drakkenheim campaign workspace</span>
+              <h2>Welcome back</h2>
+              <p>Everything you need for prep and play, with the specialist tools kept one click away.</p>
+            </div>
+            <div class="dashboard-hero-badge">
+              <strong>Drakkenheim</strong>
+              <span>The haze remembers.</span>
+            </div>
+          </section>
+
+          <section class="dashboard-section">
+            <div class="dashboard-section-heading">
+              <div><h2>Continue your session</h2><p>Open the tools you are most likely to need at the table.</p></div>
+            </div>
+            <div class="dashboard-card-grid dashboard-card-grid-four">
+              <button class="dashboard-launch-card dashboard-card-notes" type="button" data-nav-tab="notes" data-nav-target="notes">
+                <span class="dashboard-card-visual"><svg><use href="#icon-note"/></svg></span>
+                <span class="dashboard-card-copy"><strong>DM Notes</strong><span>Your campaign notebook and current prep.</span></span><svg class="dashboard-arrow"><use href="#icon-chevron"/></svg>
+              </button>
+              <button class="dashboard-launch-card dashboard-card-factions" type="button" data-nav-tab="factions" data-nav-target="factions">
+                <span class="dashboard-card-visual"><svg><use href="#icon-factions"/></svg></span>
+                <span class="dashboard-card-copy"><strong>Factions</strong><span>Reputation, clocks and faction state.</span></span><svg class="dashboard-arrow"><use href="#icon-chevron"/></svg>
+              </button>
+              <button class="dashboard-launch-card dashboard-card-map" type="button" data-nav-tab="map" data-nav-target="map">
+                <span class="dashboard-card-visual"><svg><use href="#icon-map"/></svg></span>
+                <span class="dashboard-card-copy"><strong>Map &amp; Travel</strong><span>Routes, time and exploration tracking.</span></span><svg class="dashboard-arrow"><use href="#icon-chevron"/></svg>
+              </button>
+              <button class="dashboard-launch-card dashboard-card-encounters" type="button" data-nav-tab="tables" data-nav-target="encounters-card">
+                <span class="dashboard-card-visual"><svg><use href="#icon-swords"/></svg></span>
+                <span class="dashboard-card-copy"><strong>Encounters</strong><span>Random encounters and lucky finds.</span></span><svg class="dashboard-arrow"><use href="#icon-chevron"/></svg>
+              </button>
+            </div>
+          </section>
+
+          <section class="dashboard-section">
+            <div class="dashboard-section-heading">
+              <div><h2>Prepare for what’s next</h2><p>Campaign tools for between-session prep.</p></div>
+            </div>
+            <div class="dashboard-card-grid dashboard-card-grid-four">
+              <button class="dashboard-launch-card dashboard-card-crafting" type="button" data-nav-tab="crafting" data-nav-target="recipe-library-card">
+                <span class="dashboard-card-visual"><svg><use href="#icon-hammer"/></svg></span>
+                <span class="dashboard-card-copy"><strong>Crafting</strong><span>Recipes, schematics and crafting requirements.</span></span><svg class="dashboard-arrow"><use href="#icon-chevron"/></svg>
+              </button>
+              <button class="dashboard-launch-card dashboard-card-harvest" type="button" data-nav-tab="crafting" data-nav-target="harvesting-card">
+                <span class="dashboard-card-visual"><svg><use href="#icon-harvest"/></svg></span>
+                <span class="dashboard-card-copy"><strong>Harvesting</strong><span>Find creatures and collect their components.</span></span><svg class="dashboard-arrow"><use href="#icon-chevron"/></svg>
+              </button>
+              <button class="dashboard-launch-card dashboard-card-components" type="button" data-nav-tab="crafting" data-nav-target="components-card">
+                <span class="dashboard-card-visual"><svg><use href="#icon-components"/></svg></span>
+                <span class="dashboard-card-copy"><strong>Components</strong><span>Review the party’s harvested inventory.</span></span><svg class="dashboard-arrow"><use href="#icon-chevron"/></svg>
+              </button>
+              <button class="dashboard-launch-card dashboard-card-reference" type="button" data-nav-tab="tables" data-nav-target="other-tables-card">
+                <span class="dashboard-card-visual"><svg><use href="#icon-table"/></svg></span>
+                <span class="dashboard-card-copy"><strong>Reference</strong><span>Delerium, locations, anomalies and mutations.</span></span><svg class="dashboard-arrow"><use href="#icon-chevron"/></svg>
+              </button>
+            </div>
+          </section>
+
+          <div class="dashboard-bottom-grid">
+            <section class="dashboard-section dashboard-recent-section">
+              <div class="dashboard-section-heading compact-heading">
+                <div><h2>Recent notes</h2></div>
+                <button class="dashboard-text-button" type="button" data-nav-tab="notes" data-nav-target="notes">View all →</button>
+              </div>
+              <div id="dashboardRecentNotes" class="dashboard-recent-notes"><p class="dashboard-empty-copy">No notes yet. Create one when you are ready.</p></div>
+            </section>
+
+            <section class="dashboard-section dashboard-actions-section">
+              <div class="dashboard-section-heading compact-heading"><div><h2>Quick actions</h2></div></div>
+              <div class="dashboard-quick-actions">
+                <button type="button" data-dashboard-action="new-note"><svg><use href="#icon-note"/></svg><span>New Note</span></button>
+                <button type="button" data-dashboard-action="random-encounter"><svg><use href="#icon-swords"/></svg><span>Roll Encounter</span></button>
+                <button type="button" data-nav-tab="map" data-nav-target="map"><svg><use href="#icon-map"/></svg><span>Open Map</span></button>
+                <button type="button" data-nav-tab="factions" data-nav-target="factions"><svg><use href="#icon-factions"/></svg><span>Faction Status</span></button>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <aside class="dashboard-rail">
+          <section class="dashboard-side-card campaign-card">
+            <span class="dashboard-side-kicker">Current campaign</span>
+            <h2>Drakkenheim</h2>
+            <p>Ruins, factions, delerium and everything your campaign needs in one workspace.</p>
+            <button type="button" data-nav-tab="map" data-nav-target="map">Open campaign map</button>
+          </section>
+
+          <section class="dashboard-side-card">
+            <h2>Quick tools</h2>
+            <div class="dashboard-tool-list">
+              <button type="button" data-dashboard-action="random-encounter"><svg><use href="#icon-swords"/></svg><span>Random Encounter</span></button>
+              <button type="button" data-dashboard-action="arcane-anomaly"><span class="dashboard-tool-glyph">✦</span><span>Arcane Anomaly</span></button>
+              <button type="button" data-nav-tab="tables" data-nav-target="delerium-card"><svg><use href="#icon-delerium"/></svg><span>Delerium Search</span></button>
+              <button type="button" data-open-conditions><span class="dashboard-tool-glyph">◈</span><span>Conditions</span></button>
+            </div>
+          </section>
+
+          <blockquote class="dashboard-quote">“All knowledge is a risk.<br>All power leaves a stain.”<cite>— Drakkenheim</cite></blockquote>
+        </aside>
+      </div>
+    </section>
+
+    <section id="shop" class="panel" aria-labelledby="shop-tab">
       <div class="toolbar">
         <button id="generateShop" class="primary" type="button">Generate Shop</button>
         <button id="clearInventory" type="button">Clear Inventory</button>
@@ -519,7 +683,7 @@
         </details>
       </div>
 
-      <details class="card card-wide crafting-harvest-card collapsible" open>
+      <details id="harvesting-card" class="card card-wide crafting-harvest-card collapsible" open>
         <summary class="card-summary"><span>Harvest from Encounter Creatures</span></summary>
         <p class="inline-note">Search a creature or encounter, open its harvest list, then click the components the party collects. Monsters of Drakkenheim creatures use their book-listed components; other encounter creatures use campaign components based on the same categories.</p>
         <div class="crafting-filter-row crafting-harvest-filters">
@@ -532,7 +696,7 @@
         <div id="harvestMonsterResults" class="harvest-monster-results"></div>
       </details>
 
-      <details class="card card-wide crafting-inventory-card collapsible">
+      <details id="components-card" class="card card-wide crafting-inventory-card collapsible">
         <summary class="card-summary"><span>Party Component Inventory</span></summary>
         <div class="crafting-section-toolbar">
           <p class="inline-note">Harvested components stack by name, source, rarity, and creature type. Manual entry remains available for exceptional components.</p>
@@ -658,7 +822,7 @@
         <div id="componentInventoryList" class="component-inventory-list"></div>
       </details>
 
-      <details class="card card-wide crafting-library-card collapsible">
+      <details id="recipe-library-card" class="card card-wide crafting-library-card collapsible">
         <summary class="card-summary"><span>Recipe Library</span></summary>
         <div class="crafting-section-toolbar">
           <p class="inline-note">Search, filter, learn, edit, and craft recipes from Common through Very Rare.</p>
@@ -806,114 +970,132 @@
 
 
     <section id="notes" class="panel" aria-labelledby="notes-tab">
-      <div class="dm-board-page">
-        <div class="dm-board-topbar">
-          <div class="dm-board-heading">
+      <div class="dm-notebook-page">
+        <header class="dm-notebook-topbar">
+          <div class="dm-notebook-heading">
             <h2>DM Notes</h2>
-            <p class="inline-note">Visual campaign boards for prep and live-session reference.</p>
+            <p class="inline-note">A simple campaign notebook with an optional board view.</p>
           </div>
+          <div class="dm-notebook-actions">
+            <button id="dmNotebookSidebarToggle" type="button">☰ Notes</button>
+            <button id="dmNotebookNewSection" type="button">New Section</button>
+            <button id="dmNotebookNewPage" type="button" class="primary">New Page</button>
+            <div class="dm-view-switch" role="group" aria-label="DM Notes view">
+              <button id="dmNotebookNotesView" type="button" class="is-active">Notebook</button>
+              <button id="dmNotebookBoardView" type="button">Board</button>
+            </div>
+            <span id="dmNotebookSaveStatus" class="dm-notebook-save-status">Saved locally</span>
+          </div>
+        </header>
 
-          <div class="dm-board-controls">
-            <button id="dmBoardSidebarToggle" type="button">Boards</button>
-            <button id="dmBoardBack" type="button" title="Back" aria-label="Back">←</button>
-            <button id="dmBoardForward" type="button" title="Forward" aria-label="Forward">→</button>
-            <span class="dm-board-divider" aria-hidden="true"></span>
-            <button id="dmBoardNewCard" type="button" class="primary">New Card</button>
-            <button id="dmBoardQuickNote" type="button">Quick Note</button>
-            <button id="dmBoardAddImage" type="button">Add Image</button>
-            <input id="dmBoardImageInput" type="file" accept="image/*" hidden>
-            <button id="dmBoardConnect" type="button">Connect</button>
-            <button id="dmBoardRunSession" type="button">Run Session</button>
-            <div class="dm-board-more-wrap">
-              <button id="dmBoardMoreToggle" type="button" aria-expanded="false">Tools ▾</button>
-              <div id="dmBoardMoreMenu" class="dm-board-more-menu" hidden>
-                <button id="dmBoardAddFrame" type="button">Add Group / Frame</button>
-                <button id="dmBoardAddPortal" type="button">Add Board Link</button>
-                <button id="dmBoardTemplates" type="button">Templates</button>
-                <button id="dmBoardSettings" type="button">Board Appearance</button>
-                <button id="dmBoardFavourites" type="button">★ Favourites</button>
-                <button id="dmBoardSnapToggle" type="button">Snap to Grid: Off</button>
-                <hr>
-                <button id="dmBoardUndo" type="button">Undo</button>
-                <button id="dmBoardRedo" type="button">Redo</button>
-                <hr>
-                <button id="dmBoardExportPng" type="button">Export Board as PNG</button>
-                <button id="dmBoardPrintPdf" type="button">Print / Save as PDF</button>
+        <div class="dm-notebook-shell">
+          <aside id="dmNotebookSidebar" class="dm-notebook-sidebar" aria-label="DM Notes sections and pages">
+            <div class="dm-notebook-sidebar-top">
+              <div class="dm-notebook-search-wrap">
+                <input id="dmNotebookSearch" type="search" placeholder="Search all notes…" autocomplete="off" aria-label="Search DM notes">
               </div>
+              <button id="dmNotebookSidebarClose" type="button" class="icon-button" aria-label="Collapse notes sidebar">×</button>
             </div>
-          </div>
 
-          <div class="dm-board-secondary-controls">
-            <div class="dm-board-search-wrap">
-              <input id="dmBoardSearch" type="search" placeholder="Search cards, tags, boards…" autocomplete="off" aria-label="Search DM notes">
-              <div id="dmBoardSearchResults" class="dm-board-search-results" hidden></div>
+            <div class="dm-notebook-sidebar-block">
+              <div class="dm-notebook-sidebar-label">
+                <strong>Sections</strong>
+                <button id="dmNotebookSectionAdd" type="button" class="dm-mini-button" title="New section" aria-label="New section">+</button>
+              </div>
+              <div id="dmNotebookSectionList" class="dm-notebook-section-list"></div>
             </div>
-            <div class="dm-board-view-controls" aria-label="Board view controls">
-              <button id="dmBoardZoomOut" type="button" title="Zoom out">−</button>
-              <span id="dmBoardZoomLabel">100%</span>
-              <button id="dmBoardZoomIn" type="button" title="Zoom in">+</button>
-              <button id="dmBoardFit" type="button">Fit Board</button>
-              <button id="dmBoardResetView" type="button">100%</button>
-            </div>
-            <span id="dmBoardSaveStatus" class="dm-board-save-status">Saved locally</span>
-          </div>
-          <div id="dmBoardConnectStatus" class="dm-board-connect-status" aria-live="polite"></div>
-        </div>
 
-        <div id="dmBoardSessionBar" class="dm-board-session-bar" hidden>
-          <strong>Current Session</strong>
-          <span>Right-click any campaign card to add it here. Shared cards remain linked to the same underlying note.</span>
-          <div class="dm-session-jumps">
-            <button type="button" data-dm-jump="notes">Notes</button>
-            <button type="button" data-dm-jump="map">Map</button>
-            <button type="button" data-dm-jump="encounters">Encounters</button>
-            <button type="button" data-dm-jump="factions">Factions</button>
-            <button id="dmBoardExitSession" type="button">Exit Session Mode</button>
-          </div>
-        </div>
-
-        <div id="dmBoardViewport" class="dm-board-viewport bg-cork" aria-label="DM notes pinboard">
-          <aside id="dmBoardSidebar" class="dm-board-sidebar" aria-label="DM note boards">
-            <div class="dm-board-sidebar-header">
-              <strong>Boards</strong>
-              <button id="dmBoardSidebarClose" type="button" class="icon-button" aria-label="Collapse boards">×</button>
-            </div>
-            <div id="dmBoardList" class="dm-board-list"></div>
-            <div class="dm-board-sidebar-actions">
-              <button id="dmBoardNewBoard" type="button" class="primary">+ New Board</button>
-              <button id="dmBoardRename" type="button">Rename</button>
-              <button id="dmBoardDelete" type="button" class="danger-button">Delete</button>
+            <div class="dm-notebook-sidebar-block dm-notebook-pages-block">
+              <div class="dm-notebook-sidebar-label">
+                <strong id="dmNotebookPagesHeading">Pages</strong>
+                <button id="dmNotebookPageAdd" type="button" class="dm-mini-button" title="New page" aria-label="New page">+</button>
+              </div>
+              <div id="dmNotebookPageList" class="dm-notebook-page-list"></div>
             </div>
           </aside>
-          <button id="dmBoardSidebarRail" type="button" class="dm-board-sidebar-rail" aria-label="Open boards">Boards</button>
 
-          <div id="dmBoardWorld" class="dm-board-world">
-            <svg id="dmBoardConnections" class="dm-board-connections" viewBox="0 0 4200 3000" preserveAspectRatio="none" aria-hidden="true"></svg>
-            <div id="dmBoardFrames" class="dm-board-frames"></div>
-            <div id="dmBoardElements" class="dm-board-elements"></div>
-          </div>
+          <button id="dmNotebookSidebarRail" type="button" class="dm-notebook-sidebar-rail" aria-label="Open notes sidebar">Notes</button>
 
-          <div id="dmBoardMarquee" class="dm-board-marquee" hidden></div>
-          <div id="dmBoardSelectionToolbar" class="dm-board-selection-toolbar" hidden>
-            <span id="dmBoardSelectionCount">0 selected</span>
-            <button type="button" data-align="left">Align Left</button>
-            <button type="button" data-align="top">Align Top</button>
-            <button type="button" data-align="hcenter">Centre X</button>
-            <button type="button" data-align="vcenter">Centre Y</button>
-            <button type="button" data-align="distributeH">Distribute ↔</button>
-            <button type="button" data-align="distributeV">Distribute ↕</button>
-            <button id="dmBoardSelectionSession" type="button">Add to Session</button>
-            <button id="dmBoardSelectionDelete" type="button" class="danger-button">Delete</button>
-          </div>
+          <div class="dm-notebook-main">
+            <div id="dmNotebookEmpty" class="dm-notebook-empty">
+              <h3>No notes yet</h3>
+              <p>Create a page and start writing. Sections are just simple folders for keeping things organised.</p>
+              <button id="dmNotebookEmptyNewPage" type="button" class="primary">Create First Page</button>
+            </div>
 
-          <div id="dmBoardEmpty" class="dm-board-empty">
-            <h3>This board is empty</h3>
-            <p>Add a card or image. Double-click empty board space to make a quick note.</p>
-            <button type="button" class="primary" id="dmBoardEmptyNewCard">Add First Card</button>
+            <article id="dmNoteEditor" class="dm-note-editor" hidden>
+              <div class="dm-note-title-row">
+                <input id="dmNoteTitle" class="dm-note-title-input" type="text" placeholder="Untitled page" aria-label="Note title">
+                <button id="dmNotePin" type="button" class="dm-note-icon-action" title="Pin page" aria-label="Pin page">☆</button>
+                <button id="dmNoteMore" type="button" class="dm-note-icon-action" title="Page actions" aria-label="Page actions">⋯</button>
+              </div>
+
+              <div class="dm-note-meta-row">
+                <label>Section
+                  <select id="dmNoteSection"></select>
+                </label>
+                <label>Board status
+                  <select id="dmNoteStatus">
+                    <option value="notes">Notes</option>
+                    <option value="todo">To Do</option>
+                    <option value="done">Done</option>
+                  </select>
+                </label>
+                <span id="dmNoteUpdated" class="dm-note-updated"></span>
+              </div>
+
+              <div class="dm-note-toolbar" role="toolbar" aria-label="Note formatting">
+                <select id="dmNoteFormat" aria-label="Text style">
+                  <option value="p">Normal</option>
+                  <option value="h2">Heading 1</option>
+                  <option value="h3">Heading 2</option>
+                </select>
+                <button type="button" data-dm-command="bold" title="Bold"><strong>B</strong></button>
+                <button type="button" data-dm-command="italic" title="Italic"><em>I</em></button>
+                <button type="button" data-dm-command="underline" title="Underline"><u>U</u></button>
+                <span class="dm-note-toolbar-divider" aria-hidden="true"></span>
+                <button type="button" data-dm-command="insertUnorderedList" title="Bulleted list">• List</button>
+                <button type="button" data-dm-command="insertOrderedList" title="Numbered list">1. List</button>
+                <button id="dmNoteChecklist" type="button" title="Insert checklist item">☐ Checklist</button>
+                <span class="dm-note-toolbar-divider" aria-hidden="true"></span>
+                <button id="dmNoteAddImage" type="button">Add Image</button>
+                <input id="dmNoteImageInput" type="file" accept="image/*" hidden>
+                <button id="dmNoteAddLink" type="button">Link</button>
+                <button type="button" data-dm-command="removeFormat" title="Clear formatting">Clear</button>
+              </div>
+
+              <div id="dmNoteBody" class="dm-note-body" contenteditable="true" spellcheck="true" data-placeholder="Start writing…"></div>
+            </article>
+
+            <section id="dmKanbanView" class="dm-kanban-view" hidden aria-label="DM Notes board view">
+              <div class="dm-kanban-heading">
+                <div>
+                  <h3 id="dmKanbanSectionName">Board</h3>
+                  <p class="inline-note">Drag notes between columns. Click a card to open the full note.</p>
+                </div>
+              </div>
+              <div class="dm-kanban-columns">
+                <section class="dm-kanban-column" data-status="notes">
+                  <header><strong>Notes</strong><span id="dmKanbanCountNotes">0</span></header>
+                  <div id="dmKanbanNotes" class="dm-kanban-list" data-status="notes"></div>
+                  <button type="button" class="dm-kanban-add" data-add-status="notes">+ Add note</button>
+                </section>
+                <section class="dm-kanban-column" data-status="todo">
+                  <header><strong>To Do</strong><span id="dmKanbanCountTodo">0</span></header>
+                  <div id="dmKanbanTodo" class="dm-kanban-list" data-status="todo"></div>
+                  <button type="button" class="dm-kanban-add" data-add-status="todo">+ Add note</button>
+                </section>
+                <section class="dm-kanban-column" data-status="done">
+                  <header><strong>Done</strong><span id="dmKanbanCountDone">0</span></header>
+                  <div id="dmKanbanDone" class="dm-kanban-list" data-status="done"></div>
+                  <button type="button" class="dm-kanban-add" data-add-status="done">+ Add note</button>
+                </section>
+              </div>
+            </section>
           </div>
-          <div class="dm-board-help">Drag empty space to pan · Shift-drag to select · Wheel to zoom · Right-click cards/images/board for actions · Double-click cards to focus</div>
-          <div id="dmBoardContextMenu" class="dm-board-context-menu" hidden></div>
         </div>
+
+        <div id="dmNotebookContextMenu" class="dm-notebook-context-menu" hidden></div>
       </div>
     </section>
 
@@ -1346,7 +1528,7 @@
   </nav>
 
   <footer class="app-footer">
-    <span>Aldor The Immense v2.9.0</span>
+    <span>Aldor The Immense v3.0.2</span>
     <span><a href="changelog.html">View changelog</a></span>
   </footer>
 
@@ -1526,217 +1708,6 @@
   </dialog>
 
 
-  <dialog id="dmNewCardDialog" class="code-dialog dm-board-dialog">
-    <form method="dialog">
-      <div class="dialog-header">
-        <div><h2>New DM Card</h2><p class="dialog-subtitle">Choose a template, then change anything you like.</p></div>
-        <button value="cancel" class="icon-button" aria-label="Close">×</button>
-      </div>
-      <label class="field-stack"><span>Title</span><input id="dmNewCardTitle" type="text" placeholder="River, Session 18, Return to Emberwood…"></label>
-      <label class="field-stack"><span>Board</span><select id="dmNewCardBoard"></select></label>
-      <label class="field-stack"><span>Template</span><select id="dmNewCardTemplate"></select></label>
-      <div class="dialog-actions">
-        <button id="dmCreateCard" type="button" class="primary">Create Card</button>
-        <button value="cancel">Cancel</button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog id="dmNewBoardDialog" class="code-dialog dm-board-dialog">
-    <form method="dialog">
-      <div class="dialog-header">
-        <div><h2>New DM Board</h2><p class="dialog-subtitle">Boards can represent factions, locations, sessions, mysteries, or anything else.</p></div>
-        <button value="cancel" class="icon-button" aria-label="Close">×</button>
-      </div>
-      <label class="field-stack"><span>Name</span><input id="dmNewBoardName" type="text" placeholder="Amethyst Academy, Session 19, Campaign Mysteries…"></label>
-      <div class="dialog-actions">
-        <button id="dmCreateBoard" type="button" class="primary">Create Board</button>
-        <button value="cancel">Cancel</button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog id="dmCardDialog" class="code-dialog dm-card-dialog">
-    <form method="dialog">
-      <div class="dialog-header">
-        <div><h2>Edit Card</h2><p id="dmCardUpdated" class="dialog-subtitle"></p></div>
-        <button id="dmCardClose" value="cancel" class="icon-button" aria-label="Close">×</button>
-      </div>
-      <div class="dm-card-editor-grid">
-        <label class="field-stack dm-card-editor-title"><span>Title</span><input id="dmCardTitle" type="text" placeholder="Untitled Card"></label>
-        <label class="field-stack"><span>Type</span><select id="dmCardType"></select></label>
-        <label class="field-stack"><span>Colour</span><input id="dmCardColor" type="color"></label>
-        <label class="field-stack"><span>Status</span><input id="dmCardStatus" type="text" list="dmCardStatusOptions" placeholder="Active, Dead, Complete…"></label>
-      </div>
-      <datalist id="dmCardStatusOptions"><option value="Active"><option value="Complete"><option value="Failed"><option value="Dead"><option value="Missing"><option value="Hidden"><option value="Hostile"><option value="Friendly"><option value="Unknown"></datalist>
-      <label class="field-stack"><span>Notes</span><textarea id="dmCardBody" rows="14" placeholder="Write anything you need at the table…"></textarea></label>
-      <div class="dm-card-meta-grid">
-        <label class="field-stack"><span>Tags <span class="muted">(comma-separated)</span></span><input id="dmCardTags" type="text" placeholder="River, Academy, Session 18"></label>
-        <label class="field-stack"><span>Board link</span><select id="dmCardBoardLink"></select></label>
-        <label class="field-stack"><span>Aldor quick links <span class="muted">(Ctrl/Cmd-click for several)</span></span><select id="dmCardAppLinks" multiple size="4"></select></label>
-      </div>
-      <fieldset class="dm-card-portrait-fieldset">
-        <legend>Portrait / thumbnail</legend>
-        <div class="dm-card-portrait-editor">
-          <div id="dmCardPortraitPreview" class="dm-card-portrait-preview"><span>No portrait</span></div>
-          <div class="dm-card-portrait-controls">
-            <input id="dmCardPortraitInput" type="file" accept="image/*" hidden>
-            <div class="dialog-actions compact-actions">
-              <button id="dmCardPortraitUpload" type="button">Upload Portrait</button>
-              <button id="dmCardPortraitRemove" type="button">Remove</button>
-            </div>
-            <label class="field-stack"><span>Horizontal focus</span><input id="dmCardPortraitX" type="range" min="0" max="100" value="50"></label>
-            <label class="field-stack"><span>Vertical focus</span><input id="dmCardPortraitY" type="range" min="0" max="100" value="50"></label>
-            <label class="dm-board-favourite-check"><input id="dmCardPortraitShow" type="checkbox"> <span>Show portrait on card</span></label>
-          </div>
-        </div>
-      </fieldset>
-      <label class="dm-board-favourite-check"><input id="dmCardFavourite" type="checkbox"> <span>Favourite card</span></label>
-      <fieldset class="dm-card-board-membership">
-        <legend>Show this same card on</legend>
-        <div id="dmCardBoards" class="dm-card-board-checks"></div>
-      </fieldset>
-      <div class="dialog-actions split-actions">
-        <button id="dmCardDelete" type="button" class="danger-button">Delete Card Everywhere</button>
-        <button id="dmCardSaveTemplate" type="button">Save as Template</button>
-        <button id="dmCardFocus" type="button">Focus View</button>
-        <button value="cancel">Close</button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog id="dmCardFocusDialog" class="code-dialog dm-card-focus-dialog">
-    <form method="dialog">
-      <div class="dialog-header">
-        <div><h2 id="dmCardFocusTitle">Card</h2><p id="dmCardFocusMeta" class="dialog-subtitle"></p></div>
-        <button value="cancel" class="icon-button" aria-label="Close">×</button>
-      </div>
-      <textarea id="dmCardFocusBody" rows="24" aria-label="Card notes"></textarea>
-      <div class="dialog-actions">
-        <button id="dmCardFocusDetails" type="button">Edit Details</button>
-        <button value="cancel">Close</button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog id="dmTemplateDialog" class="code-dialog dm-card-dialog">
-    <form method="dialog">
-      <div class="dialog-header">
-        <div><h2>Card Templates</h2><p class="dialog-subtitle">Built-in templates are editable. Create as many of your own as you need.</p></div>
-        <button value="cancel" class="icon-button" aria-label="Close">×</button>
-      </div>
-      <div class="dm-template-toolbar">
-        <label class="field-stack"><span>Template</span><select id="dmTemplateSelect"></select></label>
-        <button id="dmTemplateNew" type="button">New Template</button>
-        <button id="dmTemplateDelete" type="button" class="danger-button">Delete</button>
-      </div>
-      <div class="dm-card-editor-grid">
-        <label class="field-stack dm-card-editor-title"><span>Name</span><input id="dmTemplateName" type="text"></label>
-        <label class="field-stack"><span>Card type</span><select id="dmTemplateType"></select></label>
-        <label class="field-stack"><span>Default colour</span><input id="dmTemplateColor" type="color"></label>
-        <label class="field-stack"><span>Default status</span><input id="dmTemplateStatus" type="text"></label>
-      </div>
-      <label class="field-stack"><span>Default tags</span><input id="dmTemplateTags" type="text" placeholder="comma, separated"></label>
-      <label class="field-stack"><span>Starter content</span><textarea id="dmTemplateBody" rows="16"></textarea></label>
-      <div class="dialog-actions">
-        <button id="dmTemplateSave" type="button" class="primary">Save Template</button>
-        <button value="cancel">Close</button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog id="dmBoardSettingsDialog" class="code-dialog dm-board-dialog">
-    <form method="dialog">
-      <div class="dialog-header">
-        <div><h2>Board Appearance</h2><p id="dmBoardSettingsName" class="dialog-subtitle"></p></div>
-        <button value="cancel" class="icon-button" aria-label="Close">×</button>
-      </div>
-      <label class="field-stack"><span>Background</span>
-        <select id="dmBoardBackground">
-          <option value="cork">Corkboard</option>
-          <option value="dark">Dark tabletop</option>
-          <option value="paper">Paper</option>
-          <option value="grid">Grid</option>
-          <option value="plain">Plain</option>
-        </select>
-      </label>
-      <label class="dm-board-favourite-check"><input id="dmBoardSnap" type="checkbox"> <span>Snap cards, images and frames to grid while moving</span></label>
-      <label class="field-stack"><span>Grid size</span><input id="dmBoardGridSize" type="number" min="10" max="100" step="5"></label>
-      <div class="dialog-actions"><button id="dmBoardSettingsSave" type="button" class="primary">Save</button><button value="cancel">Cancel</button></div>
-    </form>
-  </dialog>
-
-  <dialog id="dmFrameDialog" class="code-dialog dm-board-dialog">
-    <form method="dialog">
-      <div class="dialog-header">
-        <div><h2>Group / Frame</h2><p class="dialog-subtitle">Use frames to visually group related cards without changing their data.</p></div>
-        <button value="cancel" class="icon-button" aria-label="Close">×</button>
-      </div>
-      <label class="field-stack"><span>Label</span><input id="dmFrameLabel" type="text" placeholder="Amethyst Academy, Possible Routes…"></label>
-      <label class="field-stack"><span>Colour</span><input id="dmFrameColor" type="color"></label>
-      <div class="dialog-actions split-actions"><button id="dmFrameDelete" type="button" class="danger-button">Delete Frame</button><span></span><button id="dmFrameSave" type="button" class="primary">Save</button><button value="cancel">Cancel</button></div>
-    </form>
-  </dialog>
-
-  <dialog id="dmShareCardDialog" class="code-dialog dm-board-dialog">
-    <form method="dialog">
-      <div class="dialog-header"><div><h2>Add Same Card to Another Board</h2><p class="dialog-subtitle">Edits remain shared between every placement of this card.</p></div><button value="cancel" class="icon-button" aria-label="Close">×</button></div>
-      <label class="field-stack"><span>Board</span><select id="dmShareCardBoard"></select></label>
-      <div class="dialog-actions"><button id="dmShareCardSave" type="button" class="primary">Add Card</button><button value="cancel">Cancel</button></div>
-    </form>
-  </dialog>
-
-  <dialog id="dmBoardLinkDialog" class="code-dialog dm-board-dialog">
-    <form method="dialog">
-      <div class="dialog-header"><div><h2>Add Board Link</h2><p class="dialog-subtitle">Creates a portal card that opens another board.</p></div><button value="cancel" class="icon-button" aria-label="Close">×</button></div>
-      <label class="field-stack"><span>Target board</span><select id="dmBoardLinkTarget"></select></label>
-      <label class="field-stack"><span>Card title</span><input id="dmBoardLinkTitle" type="text" placeholder="Open Amethyst Academy"></label>
-      <div class="dialog-actions"><button id="dmBoardLinkCreate" type="button" class="primary">Create Link</button><button value="cancel">Cancel</button></div>
-    </form>
-  </dialog>
-
-  <dialog id="dmConnectionDialog" class="code-dialog dm-board-dialog">
-    <form method="dialog">
-      <div class="dialog-header">
-        <div><h2>Connection</h2><p id="dmConnectionEndpoints" class="dialog-subtitle"></p></div>
-        <button value="cancel" class="icon-button" aria-label="Close">×</button>
-      </div>
-      <label class="field-stack"><span>Label <span class="muted">(optional)</span></span><input id="dmConnectionLabel" type="text" placeholder="works for, suspects, leads to, possible route…"></label>
-      <label class="field-stack"><span>Line style</span>
-        <select id="dmConnectionStyle">
-          <option value="solid">Solid relationship</option>
-          <option value="dashed">Dashed / uncertain</option>
-          <option value="conflict">Conflict</option>
-          <option value="arrow">Directional arrow</option>
-        </select>
-      </label>
-      <div class="dialog-actions split-actions">
-        <button id="dmConnectionDelete" type="button" class="danger-button">Delete Connection</button><span></span>
-        <button id="dmConnectionSave" type="button" class="primary">Save</button><button value="cancel">Cancel</button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog id="dmImageDialog" class="code-dialog dm-board-dialog">
-    <form method="dialog">
-      <div class="dialog-header">
-        <div><h2>Board Image</h2><p class="dialog-subtitle">Cropping is non-destructive; move the focus point or switch between fit and fill.</p></div>
-        <button value="cancel" class="icon-button" aria-label="Close">×</button>
-      </div>
-      <div id="dmImageCropPreview" class="dm-image-crop-preview"></div>
-      <label class="field-stack"><span>Caption</span><input id="dmImageCaption" type="text" placeholder="River portrait, Reed Manor map…"></label>
-      <label class="dm-board-favourite-check"><input id="dmImageCaptionVisible" type="checkbox"> <span>Show caption on board</span></label>
-      <label class="field-stack"><span>Display</span><select id="dmImageFit"><option value="contain">Fit whole image</option><option value="cover">Crop / fill frame</option></select></label>
-      <label class="field-stack"><span>Horizontal crop focus</span><input id="dmImagePosX" type="range" min="0" max="100" value="50"></label>
-      <label class="field-stack"><span>Vertical crop focus</span><input id="dmImagePosY" type="range" min="0" max="100" value="50"></label>
-      <div class="dialog-actions"><button id="dmImagePortrait" type="button">Portrait Crop (3:4)</button></div>
-      <div class="dialog-actions split-actions">
-        <button id="dmImageDelete" type="button" class="danger-button">Remove Image</button><span></span>
-        <button id="dmImageSave" type="button" class="primary">Save</button><button value="cancel">Cancel</button>
-      </div>
-    </form>
-  </dialog>
-
   <dialog id="cloudSyncDialog" class="cloud-sync-dialog">
     <form method="dialog">
       <div class="dialog-header">
@@ -1800,11 +1771,11 @@
     </form>
   </dialog>
 
-  <script src="harvest-data.js?v=2.9.0"></script>
-  <script src="recipes.js?v=2.9.0"></script>
+  <script src="harvest-data.js?v=3.0.2"></script>
+  <script src="recipes.js?v=3.0.2"></script>
   <script src="cloud-config.js?v=2.7.7"></script>
-  <script src="dm-notes.js?v=2.9.0"></script>
-  <script src="script.js?v=2.9.0"></script>
+  <script src="dm-notes.js?v=3.0.2"></script>
+  <script src="script.js?v=3.0.2"></script>
   <script src="cloud-sync.js?v=2.7.7"></script>
 </body>
 </html>

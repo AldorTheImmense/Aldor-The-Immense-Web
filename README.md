@@ -1,6 +1,49 @@
 # Aldor The Immense
 
-Current version: v2.9.0
+Current version: v3.0.2
+
+### v3.0.2 Dashboard artwork
+The Home dashboard now gives every navigation card a thematic Drakkenheim image. Appropriate card artwork is loaded from the Dungeons of Drakkenheim assets exposed by 5e.tools, while the existing local map image remains in use for Map & Travel.
+
+## v3.0.0 Unified DM Dashboard
+
+- Rebuilt the app shell around a persistent collapsible left navigation, slim top toolbar, and a new Home dashboard inspired by the approved visual mockup.
+- Grouped tools into **Session**, **Crafting**, **Reference**, and **Data** so specialist controls no longer compete with the main workflow.
+- Added a dashboard with direct cards for DM Notes, Factions, Map & Travel, Encounters, Crafting, Harvesting, Components, and Reference.
+- Added live Recent Notes, quick actions for a new note / encounter / map / faction status, and quick tools for encounters, arcane anomalies, delerium search, and conditions.
+- Added a global tool search (`Ctrl+K`) plus collapsible desktop navigation and slide-out mobile navigation.
+- Restyled the existing tool pages to sit inside the same quieter dark campaign workspace while preserving their underlying functionality.
+- Kept the v2.10 DM Notes notebook and its existing saved data format unchanged.
+- `cloud-config.js` and `cloud-sync.js` remain excluded from the update archive and are not modified.
+
+## v2.10.0 Simplified DM Notebook
+
+- Rebuilt DM Notes around a much simpler OneNote-style notebook instead of the freeform conspiracy-board workspace.
+- DM Notes now has user-created **Sections** on the left, a simple **Page** list, and one large rich-text note editor.
+- Added a lightweight optional **Board** view for the current section with three Trello-style columns: Notes, To Do, and Done. Notes can be dragged between columns.
+- Notes support headings, bold/italic/underline, bullets, numbered lists, checklists, links, uploaded images, and pasted clipboard images.
+- Added page pinning, page duplication, page moving between sections, right-click page/section actions, global note search, page-list drag reordering, and a collapsible notes sidebar.
+- The full-width DM Notes workspace introduced in v2.9.2 is retained.
+- **All v2.9.x DM Notes board/card data is intentionally cleared on first upgrade to v2.10.0.** This removes the incorrect campaign seed and starts the new notebook clean as requested. Older board data is not migrated into the new notebook model.
+- DM Notes remains part of Save Codes and the existing cloud-save payload through the same `AldorDMNotes` integration.
+- `cloud-config.js` and `cloud-sync.js` remain excluded from the update archive and are not modified.
+
+
+## v2.9.2 DM Notes Full-Width Workspace
+
+- DM Notes now expands to the full browser width instead of inheriting the app's normal 1360px content limit.
+- The change is scoped only to the DM Notes page; Shop, Crafting, Factions, Map, tables, and other pages keep their existing constrained layout.
+- The Boards drawer remains an overlay and does not consume canvas width.
+
+## v2.9.1 Campaign-Prefilled DM Boards
+
+- Added a one-time Drakkenheim campaign starter pack to DM Notes based on the campaign information already captured in prior Aldor/Drakkenheim work.
+- Pre-populates Party, Factions & NPCs, Quests / Missions, Items, Sessions, General Notes, Current Session, and a new Locations board.
+- Added an experimental campaign seed using the information then available; that seed was later removed in v2.10.0 because the source context was not complete enough to pre-fill campaign notes reliably.
+- Uses shared cards across boards where useful, including Current Session reference cards and cross-board NPC/location references.
+- Unknown or uncertain details are explicitly left blank or labelled as not recorded rather than being invented.
+- Existing v2.9.0 DM Notes are merged safely: matching existing cards are preserved rather than overwritten, and the campaign seed is applied only during the state-version migration.
+- `cloud-config.js` and `cloud-sync.js` remain excluded from the update archive and are not replaced.
 
 ## v2.9.0 DM Notes workspace
 

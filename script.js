@@ -2743,7 +2743,7 @@ const STORAGE_KEYS = {
   crafting: "aldor.craftingState.v1"
 };
 
-const APP_VERSION = "2.9.0";
+const APP_VERSION = "3.0.2";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 function writeAppStorage(key, value) {
@@ -9495,27 +9495,140 @@ function resolveManualMutation() {
   });
 }
 
-function showTab(tabName) {
+const APP_SIDEBAR_STORAGE_KEY = "aldor.appSidebarCollapsed.v1";
+
+function updateActiveNavigation(tabName, targetId = tabName) {
   document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === tabName));
+  document.querySelectorAll(".sidebar-link[data-nav-tab]").forEach((button) => {
+    const directMatch = button.dataset.navTab === tabName && button.dataset.navTarget === targetId;
+    const rootMatch = targetId === tabName && button.dataset.navTab === tabName && button.dataset.navTarget === tabName;
+    button.classList.toggle("is-active", directMatch || rootMatch);
+  });
+}
+
+function showTab(tabName, targetId = tabName) {
   document.querySelectorAll(".panel").forEach((panel) => panel.classList.toggle("active-panel", panel.id === tabName));
+  document.body.classList.toggle("dm-notes-workspace", tabName === "notes");
+  document.body.classList.toggle("home-workspace", tabName === "home");
+  updateActiveNavigation(tabName, targetId);
+  if (tabName === "home") renderDashboard();
 }
 
 function navigateToSection(tabName, targetId) {
-  showTab(tabName);
+  showTab(tabName, targetId);
   requestAnimationFrame(() => {
     const target = byId(targetId);
     if (!target) return;
     if (target.tagName.toLowerCase() === "details") target.open = true;
 
-    const header = document.querySelector(".app-header");
+    const header = document.querySelector(".app-topbar, .app-header");
     const headerOffset = header ? header.offsetHeight : 0;
-    const margin = 12;
+    const margin = 16;
     const targetTop = target.getBoundingClientRect().top + window.scrollY - headerOffset - margin;
     window.scrollTo({
       top: Math.max(0, targetTop),
       behavior: "smooth"
     });
   });
+  closeMobileSidebar();
+}
+
+function isCompactSidebarViewport() {
+  return window.matchMedia("(max-width: 860px)").matches;
+}
+
+function applyAppSidebarState() {
+  let collapsed = false;
+  try { collapsed = localStorage.getItem(APP_SIDEBAR_STORAGE_KEY) === "1"; } catch (_error) { collapsed = false; }
+  document.body.classList.toggle("sidebar-collapsed", collapsed && !isCompactSidebarViewport());
+}
+
+function toggleAppSidebar() {
+  if (isCompactSidebarViewport()) {
+    const open = !document.body.classList.contains("sidebar-open");
+    document.body.classList.toggle("sidebar-open", open);
+    const backdrop = byId("sidebarBackdrop");
+    if (backdrop) backdrop.hidden = !open;
+    return;
+  }
+  const collapsed = !document.body.classList.contains("sidebar-collapsed");
+  document.body.classList.toggle("sidebar-collapsed", collapsed);
+  try { localStorage.setItem(APP_SIDEBAR_STORAGE_KEY, collapsed ? "1" : "0"); } catch (_error) { /* localStorage unavailable */ }
+}
+
+function closeMobileSidebar() {
+  if (!isCompactSidebarViewport()) return;
+  document.body.classList.remove("sidebar-open");
+  const backdrop = byId("sidebarBackdrop");
+  if (backdrop) backdrop.hidden = true;
+}
+
+function formatDashboardRelativeTime(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const seconds = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
+  if (seconds < 60) return "just now";
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return date.toLocaleDateString([], { day: "numeric", month: "short" });
+}
+
+function renderDashboard() {
+  const container = byId("dashboardRecentNotes");
+  if (!container) return;
+  let pages = [];
+  try {
+    const notesState = window.AldorDMNotes?.exportState?.();
+    if (Array.isArray(notesState?.pages)) {
+      pages = notesState.pages.slice().sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || ""))).slice(0, 5);
+    }
+  } catch (_error) {
+    pages = [];
+  }
+  if (!pages.length) {
+    container.innerHTML = '<p class="dashboard-empty-copy">No notes yet. Create one when you are ready.</p>';
+    return;
+  }
+  container.innerHTML = pages.map((page) => `
+    <button class="dashboard-recent-row" type="button" data-dashboard-note-id="${escapeHtml(page.id)}">
+      <span class="dashboard-recent-icon"><svg><use href="#icon-note"/></svg></span>
+      <span class="dashboard-recent-title">${escapeHtml(page.title || "Untitled page")}</span>
+      <span class="dashboard-recent-time">${escapeHtml(formatDashboardRelativeTime(page.updatedAt))}</span>
+    </button>`).join("");
+}
+
+function runDashboardAction(action) {
+  if (action === "new-note") {
+    navigateToSection("notes", "notes");
+    requestAnimationFrame(() => window.AldorDMNotes?.createPage?.());
+    return;
+  }
+  if (action === "random-encounter") {
+    navigateToSection("tables", "encounters-card");
+    requestAnimationFrame(() => byId("generateEncounter")?.click());
+    return;
+  }
+  if (action === "arcane-anomaly") {
+    navigateToSection("tables", "other-tables-card");
+    requestAnimationFrame(() => byId("generateArcaneAnomaly")?.click());
+  }
+}
+
+function navigateFromGlobalSearch() {
+  const input = byId("appGlobalSearch");
+  const query = String(input?.value || "").trim().toLowerCase();
+  if (!query) return;
+  const items = Array.from(document.querySelectorAll(".sidebar-link[data-nav-tab][data-nav-target]"));
+  const match = items.find((item) => `${item.textContent} ${item.dataset.searchTerms || ""}`.toLowerCase().includes(query));
+  if (match) {
+    navigateToSection(match.dataset.navTab, match.dataset.navTarget);
+    input.value = "";
+    input.blur();
+  }
 }
 
 function applyTheme(theme) {
@@ -9950,6 +10063,36 @@ function bindEvents() {
   document.querySelectorAll("[data-nav-tab][data-nav-target]").forEach((button) => {
     button.addEventListener("click", () => navigateToSection(button.dataset.navTab, button.dataset.navTarget));
   });
+  byId("appSidebarToggle")?.addEventListener("click", toggleAppSidebar);
+  byId("sidebarBackdrop")?.addEventListener("click", closeMobileSidebar);
+  window.addEventListener("resize", () => {
+    if (!isCompactSidebarViewport()) closeMobileSidebar();
+    applyAppSidebarState();
+  });
+  byId("appGlobalSearch")?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      navigateFromGlobalSearch();
+    } else if (event.key === "Escape") {
+      event.currentTarget.value = "";
+      event.currentTarget.blur();
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+      event.preventDefault();
+      byId("appGlobalSearch")?.focus();
+    }
+  });
+  document.querySelectorAll("[data-dashboard-action]").forEach((button) => {
+    button.addEventListener("click", () => runDashboardAction(button.dataset.dashboardAction));
+  });
+  byId("dashboardRecentNotes")?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-dashboard-note-id]");
+    if (!button) return;
+    navigateToSection("notes", "notes");
+    requestAnimationFrame(() => window.AldorDMNotes?.openPage?.(button.dataset.dashboardNoteId));
+  });
 
   byId("themeToggle").addEventListener("click", toggleTheme);
   byId("compactModeToggle").addEventListener("click", toggleCompactMode);
@@ -10163,6 +10306,7 @@ function init() {
   loadTheme();
   loadCompactMode();
   loadSoundPreference();
+  applyAppSidebarState();
   loadInventoryLists();
   loadShop();
   loadCraftingState();
@@ -10171,6 +10315,8 @@ function init() {
   loadMapTools();
   bindEvents();
   if (window.AldorDMNotes && typeof window.AldorDMNotes.init === "function") window.AldorDMNotes.init();
+  showTab("home", "home");
+  renderDashboard();
   enhanceConditionsWindow();
   renderShop();
   renderCrafting();

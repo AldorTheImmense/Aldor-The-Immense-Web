@@ -1,3 +1,52 @@
+## v3.0.2 — Dashboard Artwork
+
+- Added thematic artwork to every Home dashboard navigation card, matching the approved dashboard mock-up more closely.
+- Uses Dungeons of Drakkenheim artwork served by 5e.tools where appropriate for DM Notes, Factions, Encounters, Crafting, Harvesting, Components, and Reference.
+- Kept the existing local Drakkenheim map artwork for Map & Travel.
+- Added consistent dark overlays so card labels and icons remain readable.
+- cloud-config.js and cloud-sync.js remain excluded and untouched.
+
+## v3.0.0 — Unified DM Dashboard
+
+- Replaced the old top-heavy navigation with a persistent collapsible left sidebar and slim top toolbar.
+- Added a new Home dashboard matching the approved dark fantasy workspace direction, with session tools, prep tools, recent notes, quick actions, and campaign quick tools.
+- Grouped navigation into Session, Crafting, Reference, and Data categories.
+- Added direct sidebar links into Recipes, Harvesting, Components, Shop, Delerium, Tables/Reference, Factions, Map, Encounters, and DM Notes.
+- Added global tool search with Ctrl+K and Enter navigation.
+- Added responsive slide-out navigation for smaller screens and a compact collapsed desktop sidebar.
+- Added dashboard actions that can create a note, roll a random encounter, roll an arcane anomaly, open conditions, and jump directly into campaign tools.
+- Preserved the v2.10.0 DM Notes data model and all existing specialist tool functionality.
+- Updated APP_VERSION, displayed version text, README, changelog, and cache-busting to v3.0.0.
+- `cloud-config.js` and `cloud-sync.js` remain excluded and untouched.
+
+## v2.10.0 — Simplified DM Notebook
+
+- Replaced the spatial DM pinboard with a simpler OneNote-style notebook: Sections, Pages, and one large rich-text editor.
+- Added an optional lightweight Trello-style Board view for the active section with Notes, To Do, and Done columns and drag-between-column status changes.
+- Added rich note formatting, checklists, links, image upload, clipboard image paste, page pinning, duplication, moving between sections, global search, page reordering, and right-click actions.
+- Kept the DM Notes page full-width and made its sidebar collapsible.
+- Intentionally reset legacy v2.9.x DM Notes data on upgrade rather than migrating the campaign-prefilled/spatial-board content.
+- Save Codes and existing Cloud Sync continue to include DM Notes through the existing save payload.
+- `cloud-config.js` and `cloud-sync.js` remain excluded and untouched.
+
+## v2.9.2 — DM Notes Full-Width Workspace
+
+- Removed the normal 1360px content-width restriction while the DM Notes page is active.
+- DM Notes now uses almost the full viewport width with only a small edge gutter.
+- Kept the wider layout scoped to DM Notes so every other Aldor page retains its existing dimensions.
+- The Boards drawer continues to overlay the board instead of shrinking the canvas.
+- `cloud-config.js` and `cloud-sync.js` remain excluded and untouched.
+
+## v2.9.1 — Campaign-Prefilled DM Boards
+
+- Added a one-time Drakkenheim campaign seed for DM Notes.
+- Pre-filled Party, Factions & NPCs, Quests / Missions, Items, Sessions, General Notes, Current Session, and a new Locations board using previously captured campaign information.
+- Added known PC, NPC, faction, location, quest/thread, value/timer, Black Ivory Inn, continuity, and tracker cards plus useful relationship connections and board frames.
+- Added shared reference cards to Current Session without assuming uncertain old quests are still active; uncertain statuses are clearly marked for review.
+- Existing user-authored cards with matching titles are preserved rather than overwritten during migration.
+- The seed runs only when migrating an older DM Notes state to the new state version, avoiding duplicate campaign cards on later loads.
+- cloud-config.js and cloud-sync.js remain excluded and untouched.
+
 ## v2.9.0 — DM Notes Workspace
 
 - Added a collapsible left-side board drawer that overlays the canvas instead of reducing usable board space.
