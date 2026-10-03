@@ -1,3 +1,13 @@
+# v3.0.8
+
+- Reverted the v3.0.7 standard-mode Dreg/Haze Hulk randomisation.
+- In Monsters of Drakkenheim mode only, generic Delerium Dregs and Haze Hulks can occasionally be substituted with variants without rewriting the authored encounter description.
+- Dreg pool: Bloated, Chitinous, Crystalline, Displacer, Eldritch, Frenzied, Gutwretch, Lambent, Lurking, Spined, Tentacled.
+- Hulk pool: Cyclopean, Gutbuster, Hunter, Juggernaut.
+- Generic Dregs use a 10% per-creature substitution chance; generic Haze Hulks use 20%.
+- Explicitly named variants already present in MoD encounters remain untouched.
+- No DM Notes content/storage changes.
+
 # v3.0.6
 
 - DM Notes: Section/Parent controls, formatting toolbar, and selected-image controls now stay visible while scrolling long notes.

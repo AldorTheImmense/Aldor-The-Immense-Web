@@ -2743,7 +2743,7 @@ const STORAGE_KEYS = {
   crafting: "aldor.craftingState.v1"
 };
 
-const APP_VERSION = "3.0.6";
+const APP_VERSION = "3.0.8";
 const MAP_ROUTE_EXPORT_SIZE = 6020;
 
 function writeAppStorage(key, value) {
@@ -9041,12 +9041,85 @@ function randomiseEncounterCounts(description) {
   );
 }
 
+const MOD_DREG_VARIANTS = [
+  "Bloated",
+  "Chitinous",
+  "Crystalline",
+  "Displacer",
+  "Eldritch",
+  "Frenzied",
+  "Gutwretch",
+  "Lambent",
+  "Lurking",
+  "Spined",
+  "Tentacled"
+];
+const MOD_HAZE_HULK_VARIANTS = ["Cyclopean", "Gutbuster", "Hunter", "Juggernaut"];
+const MOD_DREG_VARIANT_CHANCE = 0.10;
+const MOD_HAZE_HULK_VARIANT_CHANCE = 0.20;
+
+function rollMoDVariantSubstitutions(total, variants, chance) {
+  const counts = new Map();
+  for (let index = 0; index < total; index += 1) {
+    if (Math.random() >= chance) continue;
+    const variant = randomFrom(variants);
+    counts.set(variant, (counts.get(variant) || 0) + 1);
+  }
+  return counts;
+}
+
+function formatMoDVariantSubstitutions(counts, singularLabel, pluralLabel) {
+  return [...counts.entries()]
+    .map(([variant, count]) => `${count} ${variant} ${count === 1 ? singularLabel : pluralLabel}`)
+    .join(", ");
+}
+
+function countGenericEncounterCreatures(description, creaturePattern) {
+  let total = 0;
+  const numericPattern = new RegExp(`\\b(\\d+)\\s*(?:\\([^)]*\\)\\s*)?(?:aquatic\\s+)?${creaturePattern}\\b`, "gi");
+  for (const match of String(description).matchAll(numericPattern)) total += Number(match[1]) || 0;
+
+  const singularPattern = new RegExp(`\\b(?:a|an|one|a single)\\s+(?:aquatic\\s+)?${creaturePattern}\\b`, "gi");
+  for (const _match of String(description).matchAll(singularPattern)) total += 1;
+  return total;
+}
+
+function addMoDGenericVariantSubstitutions(description, tableName) {
+  if (!isMonstersOfDrakkenheimMode(tableName)) return description;
+
+  // Only generic Delerium Dregs and generic Haze Hulks are eligible. Named variants
+  // already authored into the MoD encounter text are left exactly as written.
+  const dregCount = countGenericEncounterCreatures(description, "delerium dregs?");
+  const hulkCount = countGenericEncounterCreatures(description, "haze hulks?");
+  const substitutions = [];
+
+  if (dregCount > 0) {
+    const rolled = rollMoDVariantSubstitutions(dregCount, MOD_DREG_VARIANTS, MOD_DREG_VARIANT_CHANCE);
+    const formatted = formatMoDVariantSubstitutions(rolled, "Dreg", "Dregs");
+    if (formatted) substitutions.push(`Dreg substitutions: ${formatted}.`);
+  }
+
+  if (hulkCount > 0) {
+    const rolled = rollMoDVariantSubstitutions(hulkCount, MOD_HAZE_HULK_VARIANTS, MOD_HAZE_HULK_VARIANT_CHANCE);
+    const formatted = formatMoDVariantSubstitutions(rolled, "Hulk", "Hulks");
+    if (formatted) substitutions.push(`Hulk substitutions: ${formatted}.`);
+  }
+
+  if (!substitutions.length) return description;
+  return `${description}\n\nVariant substitutions (replace the same number of generic creatures):\n${substitutions.join("\n")}`;
+}
+
 function getEncounterDescription(name, tableName) {
   const activeDescription = lookupEncounterDescription(activeEncounterDescriptions(tableName), name);
-  if (activeDescription) return randomiseEncounterCounts(activeDescription);
+  if (activeDescription) {
+    const rolledDescription = randomiseEncounterCounts(activeDescription);
+    return addMoDGenericVariantSubstitutions(rolledDescription, tableName);
+  }
 
   const fallbackDescription = lookupEncounterDescription(DEFAULT_DATA.encounterDescriptions, name);
-  return fallbackDescription ? randomiseEncounterCounts(fallbackDescription) : "No description found for this encounter.";
+  if (!fallbackDescription) return "No description found for this encounter.";
+  const rolledFallback = randomiseEncounterCounts(fallbackDescription);
+  return addMoDGenericVariantSubstitutions(rolledFallback, tableName);
 }
 
 function getEncounterDifficulty(encounter, tableName) {

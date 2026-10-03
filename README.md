@@ -1,6 +1,17 @@
 # Aldor The Immense
 
-Current version: v3.0.6
+Current version: v3.0.8
+
+### v3.0.8 MoD encounter variants
+
+- Reverted the v3.0.7 behaviour that added random Dreg/Haze Hulk variants to standard encounter mode.
+- In **Monsters of Drakkenheim** mode only, generic **Delerium Dregs** and **Haze Hulks** can now be substituted with variants while the authored encounter description remains intact.
+- Dreg substitutions draw from Bloated, Chitinous, Crystalline, Displacer, Eldritch, Frenzied, Gutwretch, Lambent, Lurking, Spined, and Tentacled Dregs.
+- Hulk substitutions draw from Cyclopean, Gutbuster, Hunter, and Juggernaut Hulks.
+- Each generic Dreg has a 10% substitution chance; each generic Haze Hulk has a 20% substitution chance.
+- Existing explicitly named variants in MoD encounter text are never rerolled or replaced.
+- No DM Notes content/storage changes.
+
 
 ### v3.0.4 DM Notes formatting and image layout
 
